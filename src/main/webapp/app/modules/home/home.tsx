@@ -1,19 +1,19 @@
-import './home.scss';
+import "./home.scss";
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Translate } from 'react-jhipster';
-import { connect } from 'react-redux';
-import { Row, Col, Alert } from 'reactstrap';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Translate } from "react-jhipster";
+import { connect } from "react-redux";
+import { Row, Col, Alert } from "reactstrap";
 
-import { IRootState } from 'app/shared/reducers';
-import { getSession } from 'app/shared/reducers/authentication';
+import { IRootState } from "app/shared/reducers";
+import { getCategory } from "app/shared/reducers/category";
 
 export interface IHomeProp extends StateProps, DispatchProps {}
 
 export class Home extends React.Component<IHomeProp> {
   componentDidMount() {
-    this.props.getSession();
+    this.props.getCategory();
   }
 
   render() {
@@ -91,7 +91,7 @@ export class Home extends React.Component<IHomeProp> {
           </ul>
 
           <p>
-            <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>{' '}
+            <Translate contentKey="home.like">If you like JHipster, do not forget to give us a star on</Translate>{" "}
             <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">
               Github
             </a>
@@ -111,7 +111,7 @@ const mapStateToProps = storeState => ({
   isAuthenticated: storeState.authentication.isAuthenticated
 });
 
-const mapDispatchToProps = { getSession };
+const mapDispatchToProps = { getCategory };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
