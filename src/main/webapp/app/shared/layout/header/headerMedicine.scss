@@ -1,0 +1,24 @@
+.top-header-wrapper {
+  font-size: 14px;
+  color: white;
+  background-color: #222175;
+}
+
+.top-header-title {
+  padding: 0.7rem 0;
+  margin-left: 1.2rem;
+  cursor: pointer;
+}
+
+.main-header-wrapper {
+  color: white;
+  background-color: rgba(34, 33, 117, 0.8);
+  padding: 0.8rem 0;
+}
+
+.main-header-cart-icon svg {
+  color: white;
+  width: 3.6rem;
+  height: 3.6rem;
+  fill: #fff;
+}
