@@ -33,7 +33,7 @@ export class App extends React.Component<IAppProps> {
             <Header />
           </div>
           <div className="site-content">
-            <div className="container view-container" id="app-view-container">
+            <div className="view-container" id="app-view-container">
               <ErrorBoundary>
                 <AppRoutes />
               </ErrorBoundary>

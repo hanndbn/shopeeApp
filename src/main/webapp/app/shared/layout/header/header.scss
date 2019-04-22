@@ -54,3 +54,27 @@
   justify-content: center;
   min-width: 100px;
 }
+
+.search-input::placeholder {
+  font-size: 15px;
+}
+
+.search-input::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  font-size: 15px;
+}
+
+.search-input::-moz-placeholder {
+  /* Firefox 19+ */
+  font-size: 15px;
+}
+
+.search-input:-ms-input-placeholder {
+  /* IE 10+ */
+  font-size: 15px;
+}
+
+.search-input:-moz-placeholder {
+  /* Firefox 18- */
+  font-size: 15px;
+}

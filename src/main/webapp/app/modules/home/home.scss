@@ -1,10 +1,68 @@
-/* ==========================================================================
-Main page styles
-========================================================================== */
-.hipster {
-  display: inline-block;
+.service-wrapper {
+  padding: 10px;
+  width: 300px;
+  margin-top: -100px;
+  z-index: 999;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: white;
+}
+
+.service-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  padding: 15px 0 30px;
+}
+
+.service-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.service-icon {
   width: 100%;
-  height: 497px;
-  background: url('../../../static/images/logo-jhipster-react.svg') no-repeat center top;
-  background-size: contain;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.server-more {
+  width: 100%;
+  align-self: flex-end;
+  margin-bottom: 30px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.server-link {
+  border: 1px solid white;
+  padding: 2px 5px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.feature-wrapper {
+  background-color: #f9f9f9;
+  padding-top: 30px;
+  margin-top: 30px;
+}
+
+.feature-header {
+  font-size: 25px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.feature-hr {
+  background: #007c9d;
+  width: 120px;
+  margin: 10px auto;
 }

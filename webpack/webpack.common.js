@@ -1,52 +1,53 @@
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-const path = require('path');
+const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+const path = require("path");
 
-const utils = require('./utils.js');
+const utils = require("./utils.js");
 
 const getTsLoaderRule = env => {
   const rules = [
     {
-      loader: 'cache-loader',
+      loader: "cache-loader",
       options: {
-        cacheDirectory: path.resolve('target/cache-loader')
+        cacheDirectory: path.resolve("target/cache-loader")
       }
     },
     {
-      loader: 'thread-loader',
+      loader: "thread-loader",
       options: {
         // there should be 1 cpu for the fork-ts-checker-webpack-plugin
-        workers: require('os').cpus().length - 1
+        workers: require("os").cpus().length - 1
       }
     },
     {
-      loader: 'ts-loader',
+      loader: "ts-loader",
       options: {
         transpileOnly: true,
         happyPackMode: true
       }
     }
   ];
-  if (env === 'development') {
+  if (env === "development") {
     rules.unshift({
-      loader: 'react-hot-loader/webpack'
+      loader: "react-hot-loader/webpack"
     });
   }
   return rules;
 };
 
 module.exports = options => ({
-  cache: options.env !== 'production',
+  cache: options.env !== "production",
   resolve: {
     extensions: [
-      '.js', '.jsx', '.ts', '.tsx', '.json'
+      ".js", ".jsx", ".ts", ".tsx", ".json"
     ],
-    modules: ['node_modules'],
+    modules: ["node_modules"],
     alias: {
-      app: utils.root('src/main/webapp/app/')
+      app: utils.root("src/main/webapp/app/"),
+      static: utils.root("src/main/webapp/static/")
     }
   },
   module: {
@@ -54,28 +55,28 @@ module.exports = options => ({
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./src/main/webapp/app')],
-        exclude: [utils.root('node_modules')]
+        include: [utils.root("./src/main/webapp/app")],
+        exclude: [utils.root("node_modules")]
       },
       {
         test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-        loader: 'file-loader',
+        loader: "file-loader",
         options: {
-          digest: 'hex',
-          hash: 'sha512',
-          name: 'content/[hash].[ext]'
+          digest: "hex",
+          hash: "sha512",
+          name: "content/[hash].[ext]"
         }
       },
       {
-        enforce: 'pre',
+        enforce: "pre",
         test: /\.jsx?$/,
-        loader: 'source-map-loader'
+        loader: "source-map-loader"
       },
       {
         test: /\.tsx?$/,
-        enforce: 'pre',
-        loader: 'tslint-loader',
-        exclude: [utils.root('node_modules')]
+        enforce: "pre",
+        loader: "tslint-loader",
+        exclude: [utils.root("node_modules")]
       }
     ]
   },
@@ -87,19 +88,19 @@ module.exports = options => ({
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
+          name: "vendors",
+          chunks: "all"
         }
       }
     }
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
+      "process.env": {
         NODE_ENV: `'${options.env}'`,
         BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
         VERSION: `0.1`,
-        DEBUG_INFO_ENABLED: options.env === 'development',
+        DEBUG_INFO_ENABLED: options.env === "development",
         // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
         // If this URL is left empty (""), then it will be relative to the current context.
         // If you use an API server, in `prod` mode, you will need to enable CORS
@@ -109,29 +110,29 @@ module.exports = options => ({
     }),
     new ForkTsCheckerWebpackPlugin({ tslint: true }),
     new CopyWebpackPlugin([
-      { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
-      { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
-      { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
-      { from: './src/main/webapp//swagger-ui/', to: 'swagger-ui' },
-      { from: './src/main/webapp/static/', to: 'content' },
-      { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
-      { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },
+      { from: "./node_modules/swagger-ui/dist/css", to: "swagger-ui/dist/css" },
+      { from: "./node_modules/swagger-ui/dist/lib", to: "swagger-ui/dist/lib" },
+      { from: "./node_modules/swagger-ui/dist/swagger-ui.min.js", to: "swagger-ui/dist/swagger-ui.min.js" },
+      { from: "./src/main/webapp//swagger-ui/", to: "swagger-ui" },
+      { from: "./src/main/webapp/static/", to: "content" },
+      { from: "./src/main/webapp/favicon.ico", to: "favicon.ico" },
+      { from: "./src/main/webapp/manifest.webapp", to: "manifest.webapp" }
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
       // { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
     ]),
     new HtmlWebpackPlugin({
-      template: './src/main/webapp/index.html',
-      chunksSortMode: 'dependency',
-      inject: 'body'
+      template: "./src/main/webapp/index.html",
+      chunksSortMode: "dependency",
+      inject: "body"
     }),
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [
-                    { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" },
-                    { pattern: "./src/main/webapp/i18n/vi/*.json", fileName: "./i18n/vi.json" }
-                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
-                ]
+          { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" },
+          { pattern: "./src/main/webapp/i18n/vi/*.json", fileName: "./i18n/vi.json" }
+          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
+        ]
       }
-    }),
+    })
   ]
 });

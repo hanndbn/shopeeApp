@@ -9,6 +9,7 @@ export interface IHeaderState {}
 
 export default class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {};
+
   render() {
     return (
       <div className="">
