@@ -9,6 +9,7 @@ import Carousel from "app/modules/carousel/carousel";
 import { IRootState } from "app/shared/reducers";
 import FeatureItem from "app/modules/home/Feature/feature";
 import HospitalContainer from "app/modules/home/Hospital/hospitalContainer";
+import CarouselListItemContainer from "app/modules/home/CarouselItem/carouselListItemContainer";
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -26,24 +27,29 @@ export class Home extends React.Component<IHomeProp> {
         <Carousel />
         <hr />
         <div className="container">
-          <div className="row justify-content-between">
-            {servicesData &&
-              servicesData.map((service, idx) => (
-                <div className="service-wrapper" style={{ backgroundColor: service.backgroundColor }} key={idx}>
-                  <div className="service-content">
-                    <div className="service-icon">
-                      <img src={service.iconImage} />
+          <div className="row">
+            <div className="col-12 d-flex justify-content-between">
+              {servicesData &&
+                servicesData.map((service, idx) => (
+                  <div className="service-wrapper" style={{ backgroundColor: service.backgroundColor }} key={idx}>
+                    <div className="service-content">
+                      <div className="service-icon">
+                        <img src={service.iconImage} />
+                      </div>
+                      <div className="service-title">{service.title}</div>
+                      <div dangerouslySetInnerHTML={{ __html: service.description }} />
                     </div>
-                    <div className="service-title">{service.title}</div>
-                    <div dangerouslySetInnerHTML={{ __html: service.description }} />
+                    <div className="server-more">
+                      <div className="server-link">Xem Thêm</div>
+                    </div>
                   </div>
-                  <div className="server-more">
-                    <div className="server-link">Xem Thêm</div>
-                  </div>
-                </div>
-              ))}
+                ))}
+            </div>
           </div>
         </div>
+        <CarouselListItemContainer />
+        <CarouselListItemContainer />
+        <CarouselListItemContainer />
         <FeatureItem />
         <HospitalContainer />
       </div>

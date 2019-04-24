@@ -2,8 +2,13 @@
   font-size: 1.6rem;
   background-color: #007c9d;
   color: white;
-  padding: 0.5rem 0;
+  //padding: 0.5rem 0;
   border-bottom: 1px solid whitesmoke;
+}
+
+.top-header-wrapper {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ffffff73;
 }
 
 .header-catalogue {
@@ -28,8 +33,10 @@
 }
 
 .search-input-wrapper {
+  //background-color: #007c9d;
   background-color: #007c9d;
-  padding: 1rem 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   position: relative;
   display: flex;
   justify-content: flex-end;
@@ -46,7 +53,7 @@
   border-color: #eb833f;
   color: white;
   position: absolute;
-  right: 0.3rem;
+  right: 1.8rem;
   border-radius: 5px;
   height: 3.5rem;
   display: flex;
@@ -77,4 +84,14 @@
 .search-input:-moz-placeholder {
   /* Firefox 18- */
   font-size: 15px;
+}
+
+.hotline-tile {
+  font-size: 12px;
+}
+
+.hotline-value {
+  color: #ffff00;
+  font-size: 15px;
+  letter-spacing: 0.1rem;
 }

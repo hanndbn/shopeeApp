@@ -38,7 +38,7 @@ const Feature = () => {
     fade: false,
     slidesToShow: 4,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
