@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 
 import Login from "app/modules/login/login";
@@ -13,6 +13,9 @@ import Entities from "app/entities";
 import PrivateRoute from "app/shared/auth/private-route";
 import ErrorBoundaryRoute from "app/shared/error/error-boundary-route";
 import { AUTHORITIES } from "app/config/constants";
+import Carousel from "app/modules/carousel/carousel";
+import MedicineHome from "app/modules/medicine/Home/medicineHome";
+import ItemDetail from "app/modules/medicine/ItemDetail/itemDetail";
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -30,7 +33,17 @@ const Routes = () => (
   <div className="view-routes">
     <ErrorBoundaryRoute path="/login" component={Login} />
     <Switch>
-      <ErrorBoundaryRoute path="/" component={Home} />
+      <ErrorBoundaryRoute exact path="/" component={Home} />
+      <Route
+        path="/medicine"
+        render={({ match: { url } }) => (
+          <>
+            <Route path={`${url}/`} component={Carousel} exact />
+            <Route path={`${url}/home`} component={MedicineHome} />
+            <Route path={`${url}/item-detail`} component={ItemDetail} />
+          </>
+        )}
+      />
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       <ErrorBoundaryRoute path="/register" component={Register} />
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />

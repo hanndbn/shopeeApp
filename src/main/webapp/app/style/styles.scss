@@ -27,11 +27,12 @@ body {
   display: block;
   /*min-width: 1000px;*/
   font-family: Roboto, sans-serif;
-  background: #f3f4f6;
+  //background: #f3f4f6;
   font-size: 14px;
   line-height: 1.8em;
   letter-spacing: 0.01em;
   color: rgba(39, 48, 57, 0.85);
+  background-color: #f2f3f7;
 }
 
 body::after {
@@ -55,5 +56,5 @@ body::after {
 }
 
 .site-content {
-  background-color: #f2f3f7;
+  margin-top: 20px;
 }
