@@ -19,6 +19,15 @@ div {
   box-sizing: border-box;
 }
 
+.tmp-logo {
+  color: white;
+  font-family: fantasy;
+  font-size: 30px;
+  display: flex;
+  color: white;
+  align-items: center;
+}
+
 body {
   font-weight: 400;
   //font-family: SF Pro Text, SF Pro Icons, AOS Icons, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -38,7 +47,7 @@ body {
 body::after {
   content: "";
   display: block;
-  height: 100px;
+  height: 500px;
 }
 
 .site-footer {
@@ -46,7 +55,7 @@ body::after {
   background-color: white;
   bottom: 0;
   width: 100%;
-  height: 50px;
+  height: 450px;
 }
 
 @media (min-width: 1300px) {

@@ -1,0 +1,85 @@
+.medicine-item-detail-container {
+  background-color: white;
+  padding: 10px;
+}
+
+.medicine-item-detail-left-wrapper {
+  border-right: 1px solid #e8e8e8;
+}
+
+.medicine-item-detail-title {
+  font-size: 2rem;
+  min-height: 2.7rem;
+  font-weight: 700;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.medicine-item-detail-price {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.medicine-item-detail-price-value {
+  color: #e5101d;
+  font-size: 1.8rem;
+}
+
+.big_1wHm {
+  width: 10rem;
+  height: 1.5rem;
+  fill: #c7c7cd;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.bgd_4cGr polygon:nth-child(-n + 4) {
+  fill: #f5a623 !important;
+}
+
+.QuantityInput_3yLO {
+  display: flex;
+  align-items: center;
+}
+
+.btn_2GYy {
+  width: 1.6rem;
+  height: 1.6rem;
+  background-color: #c7c7cd;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 1.6rem;
+  line-height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input_297o {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 2.4rem;
+  margin: 0 1.2rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 3px;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.medicine-item-detail-cart {
+  padding: 8px 15px;
+  background-color: #ec7323;
+  color: white;
+  border-radius: 5px;
+}
+
+.medicine-item-detail-chat {
+  margin-left: 15px;
+  padding: 8px 15px;
+  border: 1px solid #f13742;
+  color: #f13742;
+  border-radius: 5px;
+}

@@ -10,6 +10,7 @@ import { IRootState } from "app/shared/reducers";
 import FeatureItem from "app/modules/home/Feature/feature";
 import HospitalContainer from "app/modules/home/Hospital/hospitalContainer";
 import CarouselListItemContainer from "app/modules/home/CarouselItem/carouselListItemContainer";
+import Header from "app/shared/layout/header/header";
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -24,6 +25,7 @@ export class Home extends React.Component<IHomeProp> {
     const { servicesData } = this.props;
     return (
       <div className="">
+        <Header />
         <Carousel />
         <hr />
         <div className="container">

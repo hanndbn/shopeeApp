@@ -16,6 +16,8 @@ import { AUTHORITIES } from "app/config/constants";
 import Carousel from "app/modules/carousel/carousel";
 import MedicineHome from "app/modules/medicine/Home/medicineHome";
 import ItemDetail from "app/modules/medicine/ItemDetail/itemDetail";
+import TuvanHome from "app/modules/tuvan/home/tuvanHome";
+import BanhangHome from "app/modules/banhang/home/banhangHome";
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -39,6 +41,26 @@ const Routes = () => (
         render={({ match: { url } }) => (
           <>
             <Route path={`${url}/`} component={Carousel} exact />
+            <Route path={`${url}/home`} component={MedicineHome} />
+            <Route path={`${url}/item-detail`} component={ItemDetail} />
+          </>
+        )}
+      />
+      <Route
+        path="/tu-van"
+        render={({ match: { url } }) => (
+          <>
+            <Route path={`${url}/`} component={TuvanHome} exact />
+            <Route path={`${url}/home`} component={MedicineHome} />
+            <Route path={`${url}/item-detail`} component={ItemDetail} />
+          </>
+        )}
+      />
+      <Route
+        path="/ban-hang"
+        render={({ match: { url } }) => (
+          <>
+            <Route path={`${url}/`} component={BanhangHome} exact />
             <Route path={`${url}/home`} component={MedicineHome} />
             <Route path={`${url}/item-detail`} component={ItemDetail} />
           </>
