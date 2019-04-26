@@ -2,6 +2,7 @@ import "./header.scss";
 
 import React from "react";
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
+import { Link } from "react-router-dom";
 
 export interface IHeaderProps {}
 
@@ -35,10 +36,12 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
             <div className="container">
               <div className="row">
                 <div className="col-2 d-flex justify-content-center align-items-center">
-                  <div className="tmp-logo">DuongNhatPlus</div>
+                  <Link to={"/"} className="tmp-logo">
+                    DuongNhatPlus
+                  </Link>
                 </div>
                 <div className="col-10 search-input-wrapper">
-                  <input className="search-input form-control" placeholder="Tìm kiếm bệnh viện, bác sĩ, đặt xe" />
+                  <input className="search-input form-control" placeholder="Tìm kiếm..." />
                   <div className="btn btn-search-input">Search</div>
                 </div>
               </div>
