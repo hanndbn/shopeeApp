@@ -279,7 +279,7 @@ export class Home extends React.Component<IHomeProp> {
           </div>
         </div>
         <div className="container">
-          <div className="row">
+          <div className="row bg-white">
             <div className="col-12 d-flex align-items-center">
               <div className="carousel-list-item-title">Tin tức sự kiện</div>
               <div className="carousel-list-item-hr" />

@@ -3,7 +3,6 @@ import { DropdownItem } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink as Link } from "react-router-dom";
 import { Translate, translate } from "react-jhipster";
-// import { NavDropdown } from '../header-components';
 
 const accountMenuItemsAuthenticated = (
   <>

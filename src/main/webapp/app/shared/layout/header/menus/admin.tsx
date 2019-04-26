@@ -2,7 +2,6 @@ import React from "react";
 import { DropdownItem } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink as Link } from "react-router-dom";
-// import { NavDropdown } from '../header-components';
 import { Translate, translate } from "react-jhipster";
 
 const adminMenuItems = (
@@ -44,13 +43,6 @@ const databaseItem = (
   </DropdownItem>
 );
 
-export const AdminMenu = ({ showSwagger, showDatabase }) => (
-  <NavDropdown icon="user-plus" name={translate("global.menu.admin.main")} style={{ width: "140%" }} id="admin-menu">
-    {adminMenuItems}
-    {showSwagger && swaggerItem}
-
-    {showDatabase && databaseItem}
-  </NavDropdown>
-);
+export const AdminMenu = ({ showSwagger, showDatabase }) => <div>1</div>;
 
 export default AdminMenu;

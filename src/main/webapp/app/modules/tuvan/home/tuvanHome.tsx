@@ -99,15 +99,15 @@ export class TuvanHome extends React.Component<IHomeProp> {
             </div>
             <div className="hot-line-wrapper">
               <div className="hot-line-title">TỔNG ĐÀI</div>
-              <div className="hot-line-value">1900 1517</div>
+              <div className="hot-line-value">1900 0000</div>
             </div>
             <div className="hot-line-wrapper">
               <div className="hot-line-title">CẤP CỨU 24/24</div>
-              <div className="hot-line-value">0243 728 0000</div>
+              <div className="hot-line-value">0000 0000 0000</div>
             </div>
             <div className="hot-line-wrapper">
               <div className="hot-line-title">Địa chỉ</div>
-              <div className="hot-line-value">165 Thái Hà, Đống Đa, Hà Nội</div>
+              <div className="hot-line-value">00 Thái Hà, Đống Đa, Hà Nội</div>
             </div>
           </div>
         </div>
@@ -591,8 +591,8 @@ export class TuvanHome extends React.Component<IHomeProp> {
               </div>
               <div className="container">
                 <div className="row">
-                  <div className="text-div text-readmore">
-                    <a className="" title="Đội ngũ bác sĩ">
+                  <div className="text-div text-readmore text-center">
+                    <a className="text-center" title="Đội ngũ bác sĩ">
                       Xem thêm
                     </a>
                   </div>
@@ -603,7 +603,7 @@ export class TuvanHome extends React.Component<IHomeProp> {
         </div>
         <div className="container g-margin-top-30">
           <div className="row">
-            <div className="col-12 d-flex align-items-div">
+            <div className="col-12 d-flex align-items-center">
               <div className="carousel-list-item-title">Cơ sở vật chất</div>
               <div className="carousel-list-item-hr" />
             </div>

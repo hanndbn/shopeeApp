@@ -36,7 +36,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
             <div className="container">
               <div className="row">
                 <div className="col-2 d-flex justify-content-center align-items-center">
-                  <Link to={"/"} className="tmp-logo">
+                  <Link to="/" className="tmp-logo">
                     SKYDLN
                   </Link>
                 </div>

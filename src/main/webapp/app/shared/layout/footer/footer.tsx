@@ -11,17 +11,18 @@ const Footer = props => (
         <div className="d_flex">
           <div className="foot1_col3">
             <h2>
-              <b className="ttu">Công ty CP TNHH Dương Nhật Plus</b>
+              <b className="ttu">Công ty CP TNHH SKYDLN</b>
             </h2>
             <p>
               <br />
-              ĐKKD số: 0102624215-001 – Sở Kế hoạch và Đầu tư thành phố Hà Nội cấp ngày 11/02/2009 <br />
-              Giấy phép hoạt động cơ sở khám chữa bệnh số 26/BYT-GPHD do Bộ y tế cấp ngày 21/02/2017 <br />
+              ĐKKD số: 0000 – Sở Kế hoạch và Đầu tư thành phố Hà Nội cấp <br />
+              Giấy phép hoạt động cơ sở khám chữa bệnh số 00/BYT-GPHD do Bộ y tế cấp
+              <br />
             </p>
             <p>
-              Email: contact@duongnhatplus.vn <br />
-              Hỗ trợ chăm sóc khách hàng: <a href="tel:1900 5588 92">1900 1931</a> <br />
-              Email: cskh@duongnhatplus.com <br />
+              Email: contact@skydln.vn <br />
+              Hỗ trợ chăm sóc khách hàng: <a href="tel:1900 0000">1900 0000</a> <br />
+              Email: cskh@skydln.com <br />
             </p>
           </div>
           <div className="foot1_col2">
