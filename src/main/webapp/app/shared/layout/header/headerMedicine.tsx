@@ -9,6 +9,7 @@ export interface IHeaderState {}
 
 export default class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {};
+
   render() {
     return (
       <div className="">
@@ -34,7 +35,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
                 </div>
               </div>
               <div className="col-8 d-flex align-items-center">
-                <input type="text" className="form-control search-input" placeholder={"Tìm kiếm"} />
+                <input type="text" className="form-control search-input" placeholder="Tìm kiếm" />
               </div>
               <div className="col-2 d-flex align-items-center justify-content-end main-header-cart-icon">
                 <svg viewBox="0 0 24 24" width="1em" height="1em" className="iconCart_17T7">

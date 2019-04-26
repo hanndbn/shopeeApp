@@ -26,7 +26,14 @@
   max-width: 300px;
   width: 250px;
   height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   //background-color: red;
+}
+
+.carousel-list-item-summary img {
+  width: 100%;
 }
 
 .carousel-list-item-detail {

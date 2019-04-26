@@ -12,7 +12,7 @@
     "forin": true,
     "indent": [true, "spaces", 2],
     "label-position": true,
-    "max-line-length": [true, 180],
+    "max-line-length": [true, 1500],
     "member-access": false,
     "member-ordering": [
       true,
@@ -104,7 +104,7 @@
     "forin": true,
     "indent": [true, "spaces", 2],
     "label-position": true,
-    "max-line-length": [true, 180],
+    "max-line-length": [true, 1500],
     "member-access": false,
     "member-ordering": [
       true,

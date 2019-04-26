@@ -70,12 +70,12 @@ const CarouselListItemContainer = () => {
       <div className="container">
         <div className="row">
           <div className="col-12 d-flex align-items-center">
-            <div className="carousel-list-item-title">DỊCH VỤ NỔI BẬT</div>
+            <div className="carousel-list-item-title">Bệnh viện hàng đầu</div>
             <div className="carousel-list-item-hr" />
           </div>
           <div className="col-12 d-flex">
             <div className="carousel-list-item-summary">
-              <img src={carousel1} />
+              <img src="content/images/temp/benh_vien_108_zing_9.jpg" />
             </div>
             <div className="carousel-list-item-detail">
               <div className="row h-100">

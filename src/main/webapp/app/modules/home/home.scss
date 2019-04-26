@@ -47,4 +47,128 @@
   padding: 2px 5px;
   cursor: pointer;
   width: fit-content;
+  color: white;
+}
+
+.server-link:hover {
+  text-decoration: none;
+  color: white;
+}
+
+ul li .thumb {
+  position: relative;
+  width: 530px;
+  height: auto;
+  margin: auto;
+  margin-right: 30px;
+}
+
+.home-thumb-img {
+  width: 100%;
+  display: none;
+}
+
+ul li .thumb a img {
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #b7b8b6;
+  border-radius: 0.5rem;
+  margin-right: 30px;
+}
+
+ul li .text h4 {
+  color: #007c9d;
+}
+
+.s-carousel__header {
+  display: flex;
+  margin-top: 50px;
+  justify-content: space-between;
+}
+
+.u-margin--5__top {
+  margin-top: 5px;
+}
+
+.u-font--16 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.u-margin--0 {
+  margin: 0px;
+}
+
+.u-font--bold,
+.btn,
+.c-applink__input .country-code,
+.card-testimonial .user-name,
+.c-footer__title,
+.c-copyright {
+  font-weight: 700;
+}
+
+.u-font--24 {
+  font-size: 24px;
+}
+
+.s-carousel__header .cta {
+  display: flex;
+  align-items: flex-end;
+}
+
+.u-t-c--blue_6 {
+  color: #14bef0;
+}
+
+.u-font--16 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.u-font--bold,
+.btn,
+.c-applink__input .country-code,
+.card-testimonial .user-name,
+.c-footer__title,
+.c-copyright {
+  font-weight: 700;
+}
+
+.s-carousel__cards {
+  margin-left: -10px;
+}
+
+.u-d__flex {
+  display: flex;
+}
+
+.outline-none {
+  outline: none;
+}
+
+.u-margin--10__right {
+  margin-right: 10px;
+}
+
+.u-margin--10__left {
+  margin-left: 10px;
+}
+
+.s-carousel__cards .card {
+  position: relative;
+}
+
+.card__img--280x280 {
+  width: 280px;
+  height: 280px;
+}
+
+.card__img {
+  border-radius: 4px;
+  vertical-align: bottom;
+  margin: 2px;
+  width: 100%;
+  height: 100%;
 }

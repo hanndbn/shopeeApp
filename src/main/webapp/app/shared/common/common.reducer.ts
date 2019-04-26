@@ -15,25 +15,29 @@ const initialState = {
       title: "Đặt Lịch Khám",
       description: "Chỉ 1 bước đơn giản.<br/>Không mất thời gian chờ đợi",
       backgroundColor: "#00b04c",
-      iconImage: icon1
+      iconImage: icon1,
+      url: "/tu-van"
     },
     {
       title: "Kết nối với Bác sĩ",
       description: "Được tư vấn trực tiếp từ những bác sĩ đầu ngành",
       backgroundColor: "#0dc59b",
-      iconImage: icon1
+      iconImage: icon1,
+      url: "/tu-van"
     },
     {
       title: "Mua Thuốc và Sản phẩm sức khỏe ",
       description: "Uy tín, Chất lượng",
       backgroundColor: "#0db2c4",
-      iconImage: icon1
+      iconImage: icon1,
+      url: "/ban-hang"
     },
     {
       title: "Giao hàng và Vận chuyển",
       description: "Nhanh chóng, tiện lợi",
       backgroundColor: "#0d92c4",
-      iconImage: icon1
+      iconImage: icon1,
+      url: "/ban-hang"
     }
   ],
   loading: false,

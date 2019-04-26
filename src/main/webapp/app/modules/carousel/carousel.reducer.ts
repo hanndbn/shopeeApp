@@ -6,6 +6,7 @@ import { Storage } from "react-jhipster";
 const ACTION_TYPES = {
   GET_CAROUSEL_DATA: "Carousel/GET_CAROUSEL_DATA",
   SET_CAROUSEL_DATA_BAN_HANG: "Carousel/SET_CAROUSEL_DATA_BAN_HANG",
+  SET_CAROUSEL_DATA_TU_VAN: "Carousel/SET_CAROUSEL_DATA_TU_VAN",
   RESET: "Carousel/RESET"
 };
 
@@ -50,10 +51,22 @@ export default (state: CarouselState = initialState, action): CarouselState => {
         ...state,
         carouselData: [
           {
-            imageUrl: "https://cf.shopee.sg/file/dd2709711cb69b05049d0161b2054996"
+            imageUrl: "content/images/temp/businessbanner.jpg"
           },
           {
-            imageUrl: "https://cf.shopee.sg/file/769078b40e93f84afb277c354dc38015"
+            imageUrl: "content/images/temp/FILE_EE53ED-6D353A-974A4C-9F6564-B766B7-7E963B.jpg"
+          }
+        ]
+      };
+    case ACTION_TYPES.SET_CAROUSEL_DATA_TU_VAN:
+      return {
+        ...state,
+        carouselData: [
+          {
+            imageUrl: "content/images/temp/picture6.jpg"
+          },
+          {
+            imageUrl: "content/images/temp/healthy-girl-at-doctor-1920x500.jpg"
           }
         ]
       };
@@ -80,4 +93,8 @@ export const reset = () => ({
 
 export const setCarouselBanHang = () => ({
   type: ACTION_TYPES.SET_CAROUSEL_DATA_BAN_HANG
+});
+
+export const setCarouselBanHangTuVan = () => ({
+  type: ACTION_TYPES.SET_CAROUSEL_DATA_TU_VAN
 });

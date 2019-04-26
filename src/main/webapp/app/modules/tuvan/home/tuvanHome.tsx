@@ -8,14 +8,17 @@ import { IRootState } from "app/shared/reducers";
 import Carousel from "app/modules/carousel/carousel";
 import Header from "app/shared/layout/header/header";
 import Slider from "react-slick";
+import { setCarouselBanHang, setCarouselBanHangTuVan } from "app/modules/carousel/carousel.reducer";
 
 // import { getCategory } from "app/shared/reducers/category";
 
-export interface IHomeProp extends StateProps, DispatchProps {}
+export interface IHomeProp extends StateProps, DispatchProps {
+  setCarousel: Function;
+}
 
 export class TuvanHome extends React.Component<IHomeProp> {
   componentDidMount() {
-    // this.props.getCategory();
+    this.props.setCarousel();
   }
 
   render() {
@@ -67,23 +70,23 @@ export class TuvanHome extends React.Component<IHomeProp> {
                   data-src="https://benhvienthucuc.vn/wp-content/themes/benh-vien-thu-cuc-vn/assets/images/sec15_1.jpg"
                   alt="Các gói khám sức khỏe"
                 />
-                <div className="text-center text-uppercase">Các gói khám sức khỏe</div>
+                <div className="text-div text-uppercase">Các gói khám sức khỏe</div>
               </div>
               <div>
                 <img className="owl-lazy" src="https://benhvienthucuc.vn/wp-content/themes/benh-vien-thu-cuc-vn/assets/images/sec15_2.jpg" alt="Các gói khám sức khỏe" />
-                <div className="text-center text-uppercase">Tầm soát ung thư</div>
+                <div className="text-div text-uppercase">Tầm soát ung thư</div>
               </div>
               <div>
                 <img className="owl-lazy" src="https://benhvienthucuc.vn/wp-content/themes/benh-vien-thu-cuc-vn/assets/images/sec15_3.jpg" alt="Các gói khám sức khỏe" />
-                <div className="text-center text-uppercase">Bảo hiểm</div>
+                <div className="text-div text-uppercase">Bảo hiểm</div>
               </div>
               <div>
                 <img className="owl-lazy" src="https://benhvienthucuc.vn/wp-content/themes/benh-vien-thu-cuc-vn/assets/images/sec15_4.jpg" alt="Các gói khám sức khỏe" />
-                <div className="text-center text-uppercase">Đặt hẹn khám bệnh</div>
+                <div className="text-div text-uppercase">Đặt hẹn khám bệnh</div>
               </div>
               <div>
                 <img className="owl-lazy" src="https://benhvienthucuc.vn/wp-content/themes/benh-vien-thu-cuc-vn/assets/images/sec15_5.jpg" alt="Các gói khám sức khỏe" />
-                <div className="text-center text-uppercase">Thẻ khám bệnh gia đình</div>
+                <div className="text-div text-uppercase">Thẻ khám bệnh gia đình</div>
               </div>
             </div>
           </div>
@@ -112,7 +115,7 @@ export class TuvanHome extends React.Component<IHomeProp> {
           <div id="featured-services">
             <div className="container">
               <div className="row">
-                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center text-title-home">
+                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-div text-title-home">
                   Dịch vụ nổi bật
                   <hr />
                 </div>
@@ -216,7 +219,7 @@ export class TuvanHome extends React.Component<IHomeProp> {
           <div id="list-doctor">
             <div id="doctor-hometitle" className="container">
               <div className="row">
-                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center text-title-home">
+                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-div text-title-home">
                   Đội ngũ bác sĩ
                   <hr />
                 </div>
@@ -227,7 +230,7 @@ export class TuvanHome extends React.Component<IHomeProp> {
                 <div className="bhoechie-tab-container">
                   <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab">
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-ynhi.png" alt="bs-ynhi" />
@@ -248,10 +251,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-quynh.png" alt="bs-quynh" />
@@ -272,10 +275,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-thanh.png" alt="bs-thanh" />
@@ -297,10 +300,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-hui.png" alt="bs-hui" />
@@ -326,10 +329,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-lim.png" alt="bs-lim" />
@@ -356,10 +359,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content active">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-zee.png" alt="bs-zee" />
@@ -385,10 +388,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-lanphuong.png" alt="bs-zee" />
@@ -410,10 +413,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-chung.png" alt="bs-chung" />
@@ -432,10 +435,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-binh.png" alt="bs-binh" />
@@ -456,10 +459,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-hang.png" alt="bs-hang" />
@@ -479,10 +482,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-huyen.png" alt="bs-huyen1" />
@@ -516,10 +519,10 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                     <div className="bhoechie-tab-content">
-                      <center>
+                      <div>
                         <div className="row">
                           <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 img-doctor">
                             <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-huong.png" alt="bs-huong" />
@@ -541,45 +544,45 @@ export class TuvanHome extends React.Component<IHomeProp> {
                             </p>
                           </div>
                         </div>
-                      </center>
+                      </div>
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-menu">
                     <div className="list-group">
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-ynhi1.png" alt="bs-ynhi1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-quynh1.jpg" alt="bs-quynh1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-thanh1.jpg" alt="bs-thanh1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-hui1.jpg" alt="bs-hui1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-lim1.jpg" alt="bs-lim1" />
                       </a>
-                      <a className="list-group-item text-center active">
+                      <a className="list-group-item text-div active">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-zee1.jpg" alt="bs-zee1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-lanphuong1.png" alt="bs-lanphuong1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-chung1.jpg" alt="bs-chung1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-binh1.jpg" alt="bs-binh1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-hang1.jpg" alt="bs-hang1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-huyen1.png" alt="bs-huyen1" />
                       </a>
-                      <a className="list-group-item text-center">
+                      <a className="list-group-item text-div">
                         <img src="https://benhvienthucuc.com/wp-content/themes/bvthucuc/assets/images/bs-huong1.png" alt="bs-huong1" />
                       </a>
                     </div>
@@ -588,7 +591,7 @@ export class TuvanHome extends React.Component<IHomeProp> {
               </div>
               <div className="container">
                 <div className="row">
-                  <div className="text-center text-readmore">
+                  <div className="text-div text-readmore">
                     <a className="" title="Đội ngũ bác sĩ">
                       Xem thêm
                     </a>
@@ -600,7 +603,7 @@ export class TuvanHome extends React.Component<IHomeProp> {
         </div>
         <div className="container g-margin-top-30">
           <div className="row">
-            <div className="col-12 d-flex align-items-center">
+            <div className="col-12 d-flex align-items-div">
               <div className="carousel-list-item-title">Cơ sở vật chất</div>
               <div className="carousel-list-item-hr" />
             </div>
@@ -625,7 +628,11 @@ const mapStateToProps = ({ common }: IRootState) => ({
   servicesData: common.servicesData
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  setCarousel: () => {
+    dispatch(setCarouselBanHangTuVan());
+  }
+});
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
