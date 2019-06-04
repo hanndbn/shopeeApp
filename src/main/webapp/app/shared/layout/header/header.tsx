@@ -15,35 +15,55 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     return (
       <div className="">
         <div className="header-wrapper">
-          <div className="top-header-wrapper">
-            <div className="container">
-              <div className="row">
-                <div className="col-8 d-flex align-items-center g-font-size-14">
-                  <div className="g-margin-right-20">Tải ứng dụng</div>
-                  <div className="g-margin-right-20">Chăm sóc khách hàng</div>
-                  <div className="g-margin-right-20">
-                    <span className="hotline-tile">Hotline: </span>
-                    <span className="hotline-value">0985 584 989</span>
-                  </div>
-                </div>
-                <div className="col-4 d-flex align-items-center justify-content-end">
-                  <div className="text-right">Đăng Nhập</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="search-input-wrapper">
-            <div className="container">
-              <div className="row">
-                <div className="col-2 d-flex justify-content-center align-items-center">
-                  <Link to="/" className="tmp-logo">
-                    SKYDLN
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-12">
+                <nav className="navbar navbar-expand-lg">
+                  <Link to="/" className="navbar-brand" href="#">
+                    <img className="logo-image" src="http://pyramids.com.vn/wp-content/themes/pyramids/images/logofooter.png" />
                   </Link>
-                </div>
-                <div className="col-10 search-input-wrapper">
-                  <input className="search-input form-control" placeholder="Tìm kiếm..." />
-                  <div className="btn btn-search-input">Search</div>
-                </div>
+                  <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                  >
+                    <span className="navbar-toggler-icon" />
+                  </button>
+                  <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav header-menu-wrapper">
+                      <li className="nav-item active">
+                        <a className="nav-link" href="#">
+                          <span className="nav-text">Home</span>
+                          <span className="sr-only">(current)</span>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a className="nav-link" href="#">
+                          <span className="nav-text">Giới thiệu</span>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a className="nav-link" href="#">
+                          <span className="nav-text">Dự án</span>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a className="nav-link" href="#">
+                          <span className="nav-text">Tin tức</span>
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a className="nav-link" href="#">
+                          <span className="nav-text">Liên hệ</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </nav>
               </div>
             </div>
           </div>

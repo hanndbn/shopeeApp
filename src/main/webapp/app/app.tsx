@@ -1,5 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import "./app.scss";
+import "bootstrap";
 
 import React from "react";
 import { connect } from "react-redux";
@@ -15,6 +16,7 @@ import ErrorBoundary from "app/shared/error/error-boundary";
 import { AUTHORITIES } from "app/config/constants";
 import AppRoutes from "app/routes";
 import Footer from "app/shared/layout/footer/footer";
+import Header from "app/shared/layout/header/header";
 
 export interface IAppProps extends StateProps, DispatchProps {}
 
@@ -29,7 +31,9 @@ export class App extends React.Component<IAppProps> {
       <Router>
         <div className="site">
           {/*<ToastContainer position={toast.POSITION.TOP_LEFT as ToastPosition} className="toastify-container" toastClassName="toastify-toast" />*/}
-          <div className="site-header" />
+          <div className="site-header">
+            <Header />
+          </div>
           <div className="site-content">
             <div className="view-container" id="app-view-container">
               <ErrorBoundary>
