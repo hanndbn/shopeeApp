@@ -14,6 +14,8 @@ import settings, { SettingsState } from "app/modules/account/settings/settings.r
 import passwordReset, { PasswordResetState } from "app/modules/account/password-reset/password-reset.reducer";
 import carousel, { CarouselState } from "app/modules/carousel/carousel.reducer";
 import common, { CommonState } from "app/shared/common/common.reducer";
+import projects, { ProjectsState } from "app/modules/projects/projects.reducer";
+import projectDetail, { ProjectDetailState } from "app/modules/projectDetail/projectDetail.reducer";
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -29,6 +31,8 @@ export interface IRootState {
   readonly password: PasswordState;
   readonly settings: SettingsState;
   readonly carousel: CarouselState;
+  readonly projects: ProjectsState;
+  readonly projectDetail: ProjectDetailState;
   readonly common: CommonState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
@@ -46,6 +50,8 @@ const rootReducer = combineReducers<IRootState>({
   password,
   settings,
   carousel,
+  projects,
+  projectDetail,
   common,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar

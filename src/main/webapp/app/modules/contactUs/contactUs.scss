@@ -1,0 +1,49 @@
+.contact-us-container {
+  margin-top: 100px;
+  .mapouter,
+  .gmap_canvas,
+  iframe {
+    width: 100%;
+    height: 400px;
+  }
+  .dec-text {
+    font-size: 22px;
+    text-transform: uppercase;
+    font-weight: 700;
+    position: relative;
+    text-align: left;
+    font-family: "futurastd-bold";
+    width: 100%;
+    padding-bottom: 20px;
+  }
+  p {
+    font-family: sans-serif;
+    letter-spacing: 2px;
+    font-size: 15px;
+    line-height: 24px;
+    padding-bottom: 10px;
+    text-align: left;
+  }
+  .contact-list {
+    width: 100%;
+    margin-top: 30px;
+    li {
+      list-style: none;
+      width: 100%;
+      margin-bottom: 10px;
+      text-align: left;
+      font-family: arial;
+      span {
+        width: 100%;
+        margin-bottom: 6px;
+        color: #ccc;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      div {
+        font-size: 14px;
+      }
+    }
+  }
+}

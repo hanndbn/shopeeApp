@@ -1,7 +1,7 @@
-import { FAILURE, SUCCESS, REQUEST } from "app/shared/reducers/action-type.util";
-import axios from "axios";
+import { FAILURE, REQUEST, SUCCESS } from "app/shared/reducers/action-type.util";
 // import { BASE_IMG_URL, GET_CAROUSEL_DATA } from 'app/config/constants';
-import { Storage } from "react-jhipster";
+import axios from "axios";
+import { GET_CAROUSEL_DATA_URL } from "app/config/constants";
 
 const ACTION_TYPES = {
   GET_CAROUSEL_DATA: "Carousel/GET_CAROUSEL_DATA",
@@ -11,14 +11,7 @@ const ACTION_TYPES = {
 };
 
 const initialState = {
-  carouselData: [
-    {
-      imageUrl: "content/images/temp/healthy-girl-at-doctor-1920x500.jpg"
-    },
-    {
-      imageUrl: "content/images/temp/picture6.jpg"
-    }
-  ],
+  carouselData: [],
   loading: false,
   requestFailure: false,
   errorMessage: null
@@ -43,32 +36,9 @@ export default (state: CarouselState = initialState, action): CarouselState => {
     case FAILURE(ACTION_TYPES.GET_CAROUSEL_DATA):
       return {
         ...initialState,
+        loading: false,
         requestFailure: true,
         errorMessage: action.error
-      };
-    case ACTION_TYPES.SET_CAROUSEL_DATA_BAN_HANG:
-      return {
-        ...state,
-        carouselData: [
-          {
-            imageUrl: "content/images/temp/businessbanner.jpg"
-          },
-          {
-            imageUrl: "content/images/temp/FILE_EE53ED-6D353A-974A4C-9F6564-B766B7-7E963B.jpg"
-          }
-        ]
-      };
-    case ACTION_TYPES.SET_CAROUSEL_DATA_TU_VAN:
-      return {
-        ...state,
-        carouselData: [
-          {
-            imageUrl: "content/images/temp/picture6.jpg"
-          },
-          {
-            imageUrl: "content/images/temp/healthy-girl-at-doctor-1920x500.jpg"
-          }
-        ]
       };
     case ACTION_TYPES.RESET:
       return {
@@ -79,22 +49,13 @@ export default (state: CarouselState = initialState, action): CarouselState => {
   }
 };
 
-// export const requestCarouselData = history => async (dispatch, getState) => {
-//   const lang = `?lang=${getState().locale && getState().locale.currentLocale ? getState().locale.currentLocale : 'en'}`;
-//   await dispatch({
-//     type: ACTION_TYPES.GET_CAROUSEL_DATA,
-//     payload: axios.get(GET_CAROUSEL_DATA + lang)
-//   });
-// };
+export const requestCarouselData = history => async (dispatch, getState) => {
+  await dispatch({
+    type: ACTION_TYPES.GET_CAROUSEL_DATA,
+    payload: axios.get(GET_CAROUSEL_DATA_URL)
+  });
+};
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
-});
-
-export const setCarouselBanHang = () => ({
-  type: ACTION_TYPES.SET_CAROUSEL_DATA_BAN_HANG
-});
-
-export const setCarouselBanHangTuVan = () => ({
-  type: ACTION_TYPES.SET_CAROUSEL_DATA_TU_VAN
 });

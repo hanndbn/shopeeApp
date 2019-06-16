@@ -5,7 +5,7 @@ import "bootstrap";
 import React from "react";
 import { connect } from "react-redux";
 import { Card } from "reactstrap";
-import { HashRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import { IRootState } from "app/shared/reducers";
 import { getSession } from "app/shared/reducers/authentication";
@@ -17,8 +17,13 @@ import { AUTHORITIES } from "app/config/constants";
 import AppRoutes from "app/routes";
 import Footer from "app/shared/layout/footer/footer";
 import Header from "app/shared/layout/header/header";
+import Loader from "app/shared/layout/loader/loader";
+import { animationDisplayLoading } from "app/shared/common/common.reducer";
 
-export interface IAppProps extends StateProps, DispatchProps {}
+export interface IAppProps extends StateProps, DispatchProps {
+  location: any;
+  setLoading: Function;
+}
 
 export class App extends React.Component<IAppProps> {
   componentDidMount() {
@@ -27,9 +32,11 @@ export class App extends React.Component<IAppProps> {
   }
 
   render() {
+    const { displayLoading } = this.props;
     return (
       <Router>
         <div className="site">
+          {displayLoading && <Loader />}
           {/*<ToastContainer position={toast.POSITION.TOP_LEFT as ToastPosition} className="toastify-container" toastClassName="toastify-toast" />*/}
           <div className="site-header">
             <Header />
@@ -50,16 +57,22 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, applicationProfile, locale }: IRootState) => ({
+const mapStateToProps = ({ authentication, applicationProfile, locale, common }: IRootState) => ({
   currentLocale: locale.currentLocale,
   isAuthenticated: authentication.isAuthenticated,
   isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   ribbonEnv: applicationProfile.ribbonEnv,
   isInProduction: applicationProfile.inProduction,
-  isSwaggerEnabled: applicationProfile.isSwaggerEnabled
+  isSwaggerEnabled: applicationProfile.isSwaggerEnabled,
+  displayLoading: common.displayLoading
 });
 
-const mapDispatchToProps = { setLocale, getSession, getProfile };
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  animationDisplayLoading,
+  setLocale,
+  getSession,
+  getProfile
+});
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

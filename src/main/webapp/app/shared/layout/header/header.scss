@@ -1,10 +1,17 @@
 .header-wrapper {
   padding: 0 50px;
-  background-color: #0d92c4;
-  color: white;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100%;
   .logo-image {
-    height: 28px;
+    height: 40px;
   }
+}
+
+.site-header {
+  z-index: 2;
+  position: relative;
 }
 
 .header-menu-wrapper {
@@ -13,10 +20,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   flex: 1;
   .nav-item {
-    padding: 1rem 1rem;
+    padding: 1.25rem 1.25rem;
   }
   .nav-link {
     font-size: 13px;
@@ -26,6 +33,7 @@
     letter-spacing: 1px;
     .nav-text {
       position: relative;
+      color: white;
     }
     &.active,
     &:hover .nav-text:after {
@@ -46,6 +54,22 @@
       -webkit-transition: width 0.25s cubic-bezier(0.27, 0.62, 0.43, 1.01);
       -moz-transition: width 0.25s cubic-bezier(0.27, 0.62, 0.43, 1.01);
       transition: width 0.25s cubic-bezier(0.27, 0.62, 0.43, 1.01);
+    }
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .site-header {
+    .header-wrapper {
+      padding: 0;
+      .navbar {
+        background-image: url(https://ambient.elated-themes.com/wp-content/uploads/2017/03/footer-image-new.jpg);
+        color: white;
+        z-index: 3;
+      }
+      .navbar-toggler-icon {
+        color: white;
+      }
     }
   }
 }

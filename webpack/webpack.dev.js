@@ -41,6 +41,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     stats: options.stats,
     hot: true,
     contentBase: "./target/www",
+    historyApiFallback: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",

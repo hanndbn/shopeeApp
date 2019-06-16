@@ -3,7 +3,6 @@ import "./carousel.scss";
 // import logo from 'static/images/logo/oe-logo.png'
 import { connect } from "react-redux";
 import Slider from "react-slick";
-import { Link } from "react-router-dom";
 import { IRootState } from "app/shared/reducers";
 import * as carouselAction from "app/modules/carousel/carousel.reducer";
 import _ from "lodash";
@@ -33,16 +32,17 @@ export class Carousel extends React.Component<ICarouselProp> {
 
   render() {
     const { carouselData } = this.props;
+    const carouselDataSorted = carouselData ? _.orderBy(carouselData.map(carousel => carousel.acf), ["display_order"], ["asc"]) : [];
     const settings = {
       dots: true,
       infinite: true,
-      speed: 700,
-      autoplaySpeed: 3000,
-      pauseOnHover: true,
+      speed: 2000,
+      autoplaySpeed: 10000,
+      pauseOnHover: false,
       pauseOnFocus: true,
       lazyLoad: "ondemand",
       cssEase: "linear",
-      fade: false,
+      fade: true,
       slidesToShow: 1,
       slidesToScroll: 1,
       autoplay: true,
@@ -70,52 +70,22 @@ export class Carousel extends React.Component<ICarouselProp> {
         <div className="">
           <div className="">
             <Slider {...settings}>
-              {carouselData &&
-                carouselData.map(
-                  (carousel, idx) =>
-                    carousel && (
-                      <div key={idx}>
-                        <div className="carousel-container no-gutters">
-                          <div className="col-12">
-                            <img className="carousel-img" src={carousel.imageUrl} />
+              {carouselDataSorted.map((carousel, idx) => (
+                <div key={idx}>
+                  <div className="carousel-container no-gutters">
+                    <div className="col-12 d-flex flex-wrap">
+                      <img className="carousel-img" src={carousel.imageurl} />
+                      <div className="carousel-text-wrapper">
+                        <div className="carousel-text">
+                          <div>
+                            <div>{carousel.display_title}</div>
                           </div>
-                          {/*<div className="col-12 col-sm-5 position-relative">*/}
-                          {/*<div className="listItem-carousel-buttons">*/}
-                          {/*<div className="carousel-title">*/}
-                          {/*<img className="carousel-logo" src={carousel.imageUrlLine1 ? BASE_IMG_URL + carousel.imageUrlLine1 : ''} />*/}
-                          {/*{carousel.description ? (*/}
-                          {/*<div*/}
-                          {/*style={{*/}
-                          {/*fontSize: `${27 / LAYOUT_CONFIG.FONT_SIZE_GLOBAL}em`,*/}
-                          {/*color: _.toString(carousel.textColor),*/}
-                          {/*fontWeight: 600,*/}
-                          {/*marginTop: '1.25em',*/}
-                          {/*marginBottom: '1em'*/}
-                          {/*}}*/}
-                          {/*>*/}
-                          {/*{carousel.description}*/}
-                          {/*</div>*/}
-                          {/*) : (*/}
-                          {/*''*/}
-                          {/*)}*/}
-                          {/*</div>*/}
-                          {/*<div className="text-center">*/}
-                          {/*<Link*/}
-                          {/*className="btn carousel-btn"*/}
-                          {/*to={{*/}
-                          {/*pathname: carousel.url,*/}
-                          {/*state: { reset: true }*/}
-                          {/*}}*/}
-                          {/*>*/}
-                          {/*{translateUtil('Shop Now')}*/}
-                          {/*</Link>*/}
-                          {/*</div>*/}
-                          {/*</div>*/}
-                          {/*</div>*/}
                         </div>
                       </div>
-                    )
-                )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </Slider>
           </div>
         </div>
@@ -131,7 +101,7 @@ const mapStateToProps = ({ carousel }: IRootState) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   requestCarouselData: () => {
     dispatch(carouselAction.reset());
-    // dispatch(carouselAction.requestCarouselData(ownProps.history));
+    dispatch(carouselAction.requestCarouselData(ownProps.history));
   },
   reset: () => {
     dispatch(carouselAction.reset());

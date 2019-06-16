@@ -5,13 +5,13 @@ html {
 
 body {
   min-height: 100%;
-  overflow-y: hidden;
+  //overflow-y: hidden;
 }
 
 html,
 body {
   width: auto !important;
-  overflow-x: hidden !important;
+  //overflow-x: hidden !important;
 }
 
 div {
@@ -46,7 +46,7 @@ body {
   line-height: 1.8em;
   letter-spacing: 0.01em;
   color: rgba(39, 48, 57, 0.85);
-  background-color: #f2f3f7;
+  background-color: white;
 }
 
 body::after {
@@ -60,11 +60,55 @@ body::after {
   background-color: white;
   bottom: 0;
   width: 100%;
-  height: 450px;
+}
+
+.g-z-index-2 {
+  position: relative;
+  z-index: 2;
+}
+
+.footer-container {
+  padding: 30px 20px;
+  color: white;
+  background-color: rgb(0, 124, 157);
 }
 
 @media (min-width: 1300px) {
   .container {
     max-width: 1280px;
   }
+}
+
+.arrow-carousel {
+  width: 50px;
+  outline: 0;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  top: 0;
+  cursor: pointer;
+}
+
+.prev-arrow-carousel {
+  left: 0;
+}
+
+.next-arrow-carousel {
+  right: 0;
+}
+
+.next-arrow-icon {
+  background: url(https://m.media-amazon.com/images/G/01/AUIClients/AmazonUICarousel-arrows-c495a9b59afd9b35a08c12513d40b8c7e7771499._V2_.png) no-repeat -80px 0;
+  width: 100%;
+  height: 100px;
+  transform: scale(0.5);
+}
+
+.prev-arrow-icon {
+  background: url(https://m.media-amazon.com/images/G/01/AUIClients/AmazonUICarousel-arrows-c495a9b59afd9b35a08c12513d40b8c7e7771499._V2_.png) no-repeat 0 0;
+  width: 100%;
+  height: 100px;
+  transform: scale(0.5);
 }

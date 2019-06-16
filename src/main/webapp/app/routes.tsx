@@ -13,6 +13,11 @@ import Entities from "app/entities";
 import PrivateRoute from "app/shared/auth/private-route";
 import ErrorBoundaryRoute from "app/shared/error/error-boundary-route";
 import { AUTHORITIES } from "app/config/constants";
+import ProjectDetail from "app/modules/projectDetail/projectDetail";
+import ContactUs from "app/modules/contactUs/contactUs";
+import Projects from "app/modules/projects/projects";
+import About from "app/modules/about/about";
+import News from "app/modules/news/news";
 
 // tslint:disable:space-in-parens
 const Account = Loadable({
@@ -31,6 +36,11 @@ const Routes = () => (
     <ErrorBoundaryRoute path="/login" component={Login} />
     <Switch>
       <ErrorBoundaryRoute exact path="/" component={Home} />
+      <ErrorBoundaryRoute path="/project-detail" component={ProjectDetail} />
+      <ErrorBoundaryRoute path="/contact-us" component={ContactUs} />
+      <ErrorBoundaryRoute path="/about-me" component={About} />
+      <ErrorBoundaryRoute path="/tin-tuc" component={News} />
+      <ErrorBoundaryRoute path="/projects" component={Projects} />
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       <ErrorBoundaryRoute path="/register" component={Register} />
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
