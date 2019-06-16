@@ -1,45 +1,45 @@
-import React from "react";
-import { DropdownItem } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NavLink as Link } from "react-router-dom";
-import { Translate } from "react-jhipster";
+import React from 'react';
+import { DropdownItem } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink as Link } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 
 const adminMenuItems = (
   <>
     <DropdownItem tag={Link} to="/admin/user-management">
-      <FontAwesomeIcon icon="user" /> <Translate contentKey="global.menu.admin.userManagement">User management</Translate>
+      <FontAwesomeIcon icon="user"/> <Translate contentKey="global.menu.admin.userManagement">User management</Translate>
     </DropdownItem>
     <DropdownItem tag={Link} to="/admin/tracker">
-      <FontAwesomeIcon icon="eye" /> <Translate contentKey="global.menu.admin.tracker">User tracker</Translate>
+      <FontAwesomeIcon icon="eye"/> <Translate contentKey="global.menu.admin.tracker">User tracker</Translate>
     </DropdownItem>
     <DropdownItem tag={Link} to="/admin/metrics">
-      <FontAwesomeIcon icon="tachometer-alt" /> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>
+      <FontAwesomeIcon icon="tachometer-alt"/> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate>
     </DropdownItem>
     <DropdownItem tag={Link} to="/admin/health">
-      <FontAwesomeIcon icon="heart" /> <Translate contentKey="global.menu.admin.health">Health</Translate>
+      <FontAwesomeIcon icon="heart"/> <Translate contentKey="global.menu.admin.health">Health</Translate>
     </DropdownItem>
     <DropdownItem tag={Link} to="/admin/configuration">
-      <FontAwesomeIcon icon="list" /> <Translate contentKey="global.menu.admin.configuration">Configuration</Translate>
+      <FontAwesomeIcon icon="list"/> <Translate contentKey="global.menu.admin.configuration">Configuration</Translate>
     </DropdownItem>
     <DropdownItem tag={Link} to="/admin/audits">
-      <FontAwesomeIcon icon="bell" /> <Translate contentKey="global.menu.admin.audits">Audits</Translate>
+      <FontAwesomeIcon icon="bell"/> <Translate contentKey="global.menu.admin.audits">Audits</Translate>
     </DropdownItem>
     {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
     <DropdownItem tag={Link} to="/admin/logs">
-      <FontAwesomeIcon icon="tasks" /> <Translate contentKey="global.menu.admin.logs">Logs</Translate>
+      <FontAwesomeIcon icon="tasks"/> <Translate contentKey="global.menu.admin.logs">Logs</Translate>
     </DropdownItem>
   </>
 );
 
 const swaggerItem = (
   <DropdownItem tag={Link} to="/admin/docs">
-    <FontAwesomeIcon icon="book" /> <Translate contentKey="global.menu.admin.apidocs">API</Translate>
+    <FontAwesomeIcon icon="book"/> <Translate contentKey="global.menu.admin.apidocs">API</Translate>
   </DropdownItem>
 );
 
 const databaseItem = (
   <DropdownItem tag="a" href="./h2-console" target="_tab">
-    <FontAwesomeIcon icon="hdd" /> <Translate contentKey="global.menu.admin.database">Database</Translate>
+    <FontAwesomeIcon icon="hdd"/> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );
 

@@ -1,10 +1,10 @@
-import React from "react";
-import "./contactUs.scss";
+import React from 'react';
+import './contactUs.scss';
 // import logo from 'static/images/logo/oe-logo.png'
-import { connect } from "react-redux";
-import { IRootState } from "app/shared/reducers";
-import * as carouselAction from "app/modules/carousel/carousel.reducer";
-import { animationDisplayLoading, reset } from "app/shared/common/common.reducer";
+import { connect } from 'react-redux';
+import { IRootState } from 'app/shared/reducers';
+import * as carouselAction from 'app/modules/carousel/carousel.reducer';
+import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 
 export interface ICarouselProp extends StateProps, DispatchProps {
   requestCarouselData: Function;
@@ -50,7 +50,7 @@ export class ContactUs extends React.Component<ICarouselProp> {
                 </ul>
                 <a href="#" className=" btn anim-button   trans-btn   transition  fl-l showform">
                   <span>Write us</span>
-                  <i className="fa fa-eye" />
+                  <i className="fa fa-eye"/>
                 </a>
               </div>
             </div>
@@ -68,11 +68,11 @@ export class ContactUs extends React.Component<ICarouselProp> {
               marginHeight={0}
               marginWidth={0}
             />
-            <a href="https://www.emojilib.com" />
+            <a href="https://www.emojilib.com"/>
           </div>
           <style
             dangerouslySetInnerHTML={{
-              __html: ".mapouter{position:relative;text-align:right;height:250px;width:700px;}.gmap_canvas {overflow:hidden;background:none!important;height:250px;width:700px;}"
+              __html: '.mapouter{position:relative;text-align:right;height:250px;width:700px;}.gmap_canvas {overflow:hidden;background:none!important;height:250px;width:700px;}'
             }}
           />
         </div>

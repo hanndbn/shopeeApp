@@ -1,9 +1,9 @@
-import "./loader.scss";
+import './loader.scss';
 
-import React from "react";
-import { connect } from "react-redux";
-import { Alert, Col, Row } from "reactstrap";
-import { IRootState } from "app/shared/reducers";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Alert, Col, Row } from 'reactstrap';
+import { IRootState } from 'app/shared/reducers';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -20,12 +20,12 @@ export class Loader extends React.Component<INewsProp> {
     const { listItem } = this.props;
     return (
       <div>
-        <div className="loader" style={{ display: "block" }}>
+        <div className="loader" style={{ display: 'block' }}>
           <div className="tm-loader">
-            <div id="circle" />
+            <div id="circle"/>
           </div>
         </div>
-        <div className="loader-cover" />
+        <div className="loader-cover"/>
       </div>
     );
   }
@@ -36,7 +36,8 @@ const mapStateToProps = ({ common }: IRootState) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: async () => {}
+  initScreen: async () => {
+  }
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;

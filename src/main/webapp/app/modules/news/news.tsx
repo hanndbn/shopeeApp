@@ -1,10 +1,10 @@
-import "./news.scss";
+import './news.scss';
 
-import React from "react";
-import { connect } from "react-redux";
-import { Alert, Col, Row } from "reactstrap";
-import { IRootState } from "app/shared/reducers";
-import { animationDisplayLoading, reset } from "app/shared/common/common.reducer";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Alert, Col, Row } from 'reactstrap';
+import { IRootState } from 'app/shared/reducers';
+import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 
 // import { getCategory } from "app/shared/reducers/category";
 

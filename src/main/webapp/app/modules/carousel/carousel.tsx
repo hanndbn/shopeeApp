@@ -1,21 +1,21 @@
-import React from "react";
-import "./carousel.scss";
+import React from 'react';
+import './carousel.scss';
 // import logo from 'static/images/logo/oe-logo.png'
-import { connect } from "react-redux";
-import Slider from "react-slick";
-import { IRootState } from "app/shared/reducers";
-import * as carouselAction from "app/modules/carousel/carousel.reducer";
-import _ from "lodash";
+import { connect } from 'react-redux';
+import Slider from 'react-slick';
+import { IRootState } from 'app/shared/reducers';
+import * as carouselAction from 'app/modules/carousel/carousel.reducer';
+import _ from 'lodash';
 
 const NextArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay next-arrow-carousel">
-    <i className="next-arrow" />
+    <i className="next-arrow"/>
   </div>
 );
 
 const PrevArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay prev-arrow-carousel">
-    <i className="prev-arrow" />
+    <i className="prev-arrow"/>
   </div>
 );
 
@@ -32,7 +32,7 @@ export class Carousel extends React.Component<ICarouselProp> {
 
   render() {
     const { carouselData } = this.props;
-    const carouselDataSorted = carouselData ? _.orderBy(carouselData.map(carousel => carousel.acf), ["display_order"], ["asc"]) : [];
+    const carouselDataSorted = carouselData ? _.orderBy(carouselData.map(carousel => carousel.acf), ['display_order'], ['asc']) : [];
     const settings = {
       dots: true,
       infinite: true,
@@ -40,14 +40,14 @@ export class Carousel extends React.Component<ICarouselProp> {
       autoplaySpeed: 10000,
       pauseOnHover: false,
       pauseOnFocus: true,
-      lazyLoad: "ondemand",
-      cssEase: "linear",
+      lazyLoad: 'ondemand',
+      cssEase: 'linear',
       fade: true,
       slidesToShow: 1,
       slidesToScroll: 1,
       autoplay: true,
-      nextArrow: <NextArrow />,
-      prevArrow: <PrevArrow />,
+      nextArrow: <NextArrow/>,
+      prevArrow: <PrevArrow/>,
       responsive: [
         {
           breakpoint: 320,
@@ -71,21 +71,22 @@ export class Carousel extends React.Component<ICarouselProp> {
           <div className="">
             <Slider {...settings}>
               {carouselDataSorted.map((carousel, idx) => (
-                <div key={idx}>
-                  <div className="carousel-container no-gutters">
-                    <div className="col-12 d-flex flex-wrap">
-                      <img className="carousel-img" src={carousel.imageurl} />
-                      <div className="carousel-text-wrapper">
-                        <div className="carousel-text">
-                          <div>
-                            <div>{carousel.display_title}</div>
+                  <div key={idx}>
+                    <div className="carousel-container no-gutters">
+                      <div className="col-12 d-flex flex-wrap">
+                        <img className="carousel-img" src={carousel.imageurl}/>
+                        <div className="carousel-text-wrapper">
+                          <div className="carousel-text">
+                            <div>
+                              <div>{carousel.display_title}</div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </Slider>
           </div>
         </div>

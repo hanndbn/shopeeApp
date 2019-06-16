@@ -145,10 +145,6 @@
     "node": ">=8.9.0"
   },
   "lint-staged": {
-    "src/**/*.{json,ts,tsx,css,scss}": [
-      "prettier --write",
-      "git add"
-    ]
   },
   "scripts": {
     "prettier:format": "prettier --write \"src/**/*.{json,ts,tsx,css,scss}\"",

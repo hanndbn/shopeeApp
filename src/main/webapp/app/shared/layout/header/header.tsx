@@ -1,17 +1,18 @@
-import "./header.scss";
+import './header.scss';
 
-import React from "react";
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
-import { Link } from "react-router-dom";
-import { IRootState } from "app/shared/reducers";
-import { reset } from "app/shared/common/common.reducer";
-import { connect } from "react-redux";
+import React from 'react';
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { IRootState } from 'app/shared/reducers';
+import { reset } from 'app/shared/common/common.reducer';
+import { connect } from 'react-redux';
 
 export interface IHeaderProps {
   headerBackground: any;
 }
 
-export interface IHeaderState {}
+export interface IHeaderState {
+}
 
 class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {};
@@ -26,7 +27,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
               <div className="col-12">
                 <nav className="navbar navbar-expand-lg">
                   <Link to="/" className="navbar-brand" href="#">
-                    <img className="logo-image" src="http://pyramids.com.vn/wp-content/themes/pyramids/images/logofooter.png" />
+                    <img className="logo-image" src="http://pyramids.com.vn/wp-content/themes/pyramids/images/logofooter.png"/>
                   </Link>
                   <button
                     className="navbar-toggler"
@@ -40,7 +41,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
                     <span className="navbar-toggler-icon">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30" focusable="false">
                         <title>Menu</title>
-                        <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeMiterlimit="10" d="M4 7h22M4 15h22M4 23h22" />
+                        <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeMiterlimit="10" d="M4 7h22M4 15h22M4 23h22"/>
                       </svg>
                     </span>
                   </button>

@@ -1,13 +1,13 @@
-import { FAILURE, REQUEST, SUCCESS } from "app/shared/reducers/action-type.util";
+import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 // import { BASE_IMG_URL, GET_CAROUSEL_DATA } from 'app/config/constants';
-import axios from "axios";
-import { GET_CAROUSEL_DATA_URL } from "app/config/constants";
+import axios from 'axios';
+import { GET_CAROUSEL_DATA_URL } from 'app/config/constants';
 
 const ACTION_TYPES = {
-  GET_CAROUSEL_DATA: "Carousel/GET_CAROUSEL_DATA",
-  SET_CAROUSEL_DATA_BAN_HANG: "Carousel/SET_CAROUSEL_DATA_BAN_HANG",
-  SET_CAROUSEL_DATA_TU_VAN: "Carousel/SET_CAROUSEL_DATA_TU_VAN",
-  RESET: "Carousel/RESET"
+  GET_CAROUSEL_DATA: 'Carousel/GET_CAROUSEL_DATA',
+  SET_CAROUSEL_DATA_BAN_HANG: 'Carousel/SET_CAROUSEL_DATA_BAN_HANG',
+  SET_CAROUSEL_DATA_TU_VAN: 'Carousel/SET_CAROUSEL_DATA_TU_VAN',
+  RESET: 'Carousel/RESET'
 };
 
 const initialState = {

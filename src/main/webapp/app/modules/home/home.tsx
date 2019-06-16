@@ -1,12 +1,12 @@
-import "./home.scss";
+import './home.scss';
 
-import React from "react";
-import { connect } from "react-redux";
-import { Alert, Col, Row } from "reactstrap";
-import Carousel from "app/modules/carousel/carousel";
-import { IRootState } from "app/shared/reducers";
-import { animationDisplayLoading, reset, setHeaderBackground } from "app/shared/common/common.reducer";
-import Projects from "app/modules/projects/projects";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Alert, Col, Row } from 'reactstrap';
+import Carousel from 'app/modules/carousel/carousel';
+import { IRootState } from 'app/shared/reducers';
+import { animationDisplayLoading, reset, setHeaderBackground } from 'app/shared/common/common.reducer';
+import Projects from 'app/modules/projects/projects';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -23,8 +23,8 @@ export class Home extends React.Component<IHomeProp> {
     const { listItem } = this.props;
     return (
       <div className="">
-        <Carousel />
-        <Projects />
+        <Carousel/>
+        <Projects/>
       </div>
     );
   }
@@ -37,7 +37,7 @@ const mapStateToProps = ({ common }: IRootState) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
     await dispatch(reset());
-    dispatch(setHeaderBackground("transparent"));
+    dispatch(setHeaderBackground('transparent'));
     await dispatch(animationDisplayLoading());
   }
 });

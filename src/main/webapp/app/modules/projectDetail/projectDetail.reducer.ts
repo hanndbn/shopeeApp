@@ -1,13 +1,13 @@
-import { FAILURE, REQUEST, SUCCESS } from "app/shared/reducers/action-type.util";
+import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 // import { BASE_IMG_URL, GET_PROJECT_DETAIL_DATA } from 'app/config/constants';
-import axios from "axios";
-import { GET_PROJECT_DETAIL_DATA_URL } from "app/config/constants";
+import axios from 'axios';
+import { GET_PROJECT_DETAIL_DATA_URL } from 'app/config/constants';
 
 const ACTION_TYPES = {
-  GET_PROJECT_DETAIL_DATA: "ProjectDetail/GET_PROJECT_DETAIL_DATA",
-  SET_PROJECT_DETAIL_DATA_BAN_HANG: "ProjectDetail/SET_PROJECT_DETAIL_DATA_BAN_HANG",
-  SET_PROJECT_DETAIL_DATA_TU_VAN: "ProjectDetail/SET_PROJECT_DETAIL_DATA_TU_VAN",
-  RESET: "ProjectDetail/RESET"
+  GET_PROJECT_DETAIL_DATA: 'ProjectDetail/GET_PROJECT_DETAIL_DATA',
+  SET_PROJECT_DETAIL_DATA_BAN_HANG: 'ProjectDetail/SET_PROJECT_DETAIL_DATA_BAN_HANG',
+  SET_PROJECT_DETAIL_DATA_TU_VAN: 'ProjectDetail/SET_PROJECT_DETAIL_DATA_TU_VAN',
+  RESET: 'ProjectDetail/RESET'
 };
 
 const initialState = {

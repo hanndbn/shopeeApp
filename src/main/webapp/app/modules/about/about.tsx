@@ -1,10 +1,10 @@
-import "./about.scss";
+import './about.scss';
 
-import React from "react";
-import { connect } from "react-redux";
-import { Alert, Col, Row } from "reactstrap";
-import { IRootState } from "app/shared/reducers";
-import { animationDisplayLoading, reset } from "app/shared/common/common.reducer";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Alert, Col, Row } from 'reactstrap';
+import { IRootState } from 'app/shared/reducers';
+import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -22,7 +22,7 @@ export class About extends React.Component<IAboutProp> {
     return (
       <div className="about-container">
         <div className="card">
-          <img className="card-img-top" src={"http://kconcept.vn/images/folio/thumbs/155924619096823.jpg"} />
+          <img className="card-img-top" src={'http://kconcept.vn/images/folio/thumbs/155924619096823.jpg'}/>
         </div>
         <div className="row no-gutters small-container">
           <div className="col-6 offset-6">

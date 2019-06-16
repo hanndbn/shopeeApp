@@ -352,7 +352,7 @@
   font-family: "futurastd-bold";
   src: url("./futurastd-bold.eot");
   src: url("./futurastd-bold_iefix.eot") format("embedded-opentype"), url("./futurastd-bold.woff") format("woff"), url("./futurastd-bold.ttf") format("truetype"),
-    url("./futurastd-bold.svg#FuturaPT-Book") format("svg");
+  url("./futurastd-bold.svg#FuturaPT-Book") format("svg");
 }
 
 @font-face {

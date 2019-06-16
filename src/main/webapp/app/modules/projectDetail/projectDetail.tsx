@@ -1,23 +1,23 @@
-import "./projectDetail.scss";
+import './projectDetail.scss';
 
-import React from "react";
-import { connect } from "react-redux";
-import { Alert, Col, Row } from "reactstrap";
-import { IRootState } from "app/shared/reducers";
-import { animationDisplayLoading, reset } from "app/shared/common/common.reducer";
-import { requestProjectDetailData } from "app/modules/projectDetail/projectDetail.reducer";
-import { paramObj } from "app/shared/util/util";
-import Slider from "react-slick";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Alert, Col, Row } from 'reactstrap';
+import { IRootState } from 'app/shared/reducers';
+import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
+import { requestProjectDetailData } from 'app/modules/projectDetail/projectDetail.reducer';
+import { paramObj } from 'app/shared/util/util';
+import Slider from 'react-slick';
 
 const NextArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay next-arrow-carousel">
-    <i className="next-arrow-icon" />
+    <i className="next-arrow-icon"/>
   </div>
 );
 
 const PrevArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay prev-arrow-carousel">
-    <i className="prev-arrow-icon" />
+    <i className="prev-arrow-icon"/>
   </div>
 );
 
@@ -28,14 +28,14 @@ const Settings = {
   autoplaySpeed: 3000,
   pauseOnHover: true,
   pauseOnFocus: true,
-  lazyLoad: "ondemand",
-  cssEase: "linear",
+  lazyLoad: 'ondemand',
+  cssEase: 'linear',
   fade: true,
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
-  nextArrow: <NextArrow />,
-  prevArrow: <PrevArrow />,
+  nextArrow: <NextArrow/>,
+  prevArrow: <PrevArrow/>,
   responsive: [
     {
       breakpoint: 320,
@@ -68,13 +68,14 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
     const currentParams = paramObj(this.props.location.search);
     const prevParams = paramObj(prevProps.location.search);
-    if (currentParams["id"] !== prevParams["id"]) {
+    if (currentParams['id'] !== prevParams['id']) {
       this.props.initScreen();
     }
     return null;
   }
 
-  componentDidUpdate(prevProps, prevState) {}
+  componentDidUpdate(prevProps, prevState) {
+  }
 
   render() {
     const { projectDetailData } = this.props;
@@ -90,7 +91,7 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
               <div className="left-panel">
                 <h3>{project.project_name}</h3>
                 <div className="w-100 d-flex">
-                  <div className="separator" />
+                  <div className="separator"/>
                 </div>
                 <p>{project.description}</p>
                 <h4>Info</h4>
@@ -111,28 +112,30 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
               </div>
             </div>
             <div className="col-md-12 col-lg-9">
-              {project.display_slide ? (
+              {project.display_slide ?
                 <Slider {...Settings}>
                   {project.list_images &&
-                    project.list_images.map((img, idx) => (
-                      <div key={idx}>
-                        <div key={idx} className="card">
-                          <img className="card-img-top" src={img.guid} />
-                        </div>
+                  project.list_images.map((img, idx) => (
+                    <div key={idx}>
+                      <div key={idx} className="card">
+                        <img className="card-img-top" src={img.guid}/>
                       </div>
-                    ))}
+                    </div>
+                  ))}
                 </Slider>
-              ) : (
+                :
                 <>
                   {project.list_images &&
-                    project.list_images.map((img, idx) => (
-                      <div key={idx} className="card">
-                        <img className="card-img-top" src={img.guid} />
-                      </div>
-                    ))}
+                  project.list_images.map((img, idx) => (
+                    <div key={idx} className="card">
+                      <img className="card-img-top" src={img.guid}/>
+                    </div>
+                  ))}
                 </>
-              )}
+              }
+
             </div>
+
           </div>
         </div>
       </div>
@@ -149,7 +152,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(reset());
     dispatch(animationDisplayLoading());
     const params = paramObj(ownProps.location.search);
-    const projectId = params["id"] ? params["id"] : "";
+    const projectId = params['id'] ? params['id'] : '';
     dispatch(requestProjectDetailData(projectId));
   }
 });
