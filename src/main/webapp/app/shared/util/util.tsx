@@ -5,3 +5,5 @@ export const paramObj = search => {
   const parsed = decodeURIComponent(search.replace(/[?]/g, '')).replace(/\+/g, ' ');
   return qs.parse(parsed);
 };
+
+export const checkDisplayToTop = () => document.body.scrollTop > 20 || document.documentElement.scrollTop > 20;

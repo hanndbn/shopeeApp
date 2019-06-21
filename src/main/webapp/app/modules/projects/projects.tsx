@@ -7,6 +7,7 @@ import { IRootState } from 'app/shared/reducers';
 import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 import { Link } from 'react-router-dom';
 import { requestProjectsData } from 'app/modules/projects/projects.reducer';
+import Category from 'app/modules/category/category';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -31,30 +32,7 @@ export class Projects extends React.Component<IHomeProp> {
     });
     return (
       <div className="projects-container list-item-container">
-        <div className="container-fluid">
-          <div className="row category-container">
-            <div className="col-12 d-flex flex-wrap justify-content-center g-margin-bottom-20">
-              <div className="category-item">Tất cả</div>
-              <div className="category-item">Kiến trúc</div>
-              <div className="category-item">Nội thất</div>
-              <div className="category-item">Cửa hàng</div>
-            </div>
-            <div className="col-12 d-flex flex-wrap justify-content-center">
-              <div className="sub-category-item">
-                <span className="text">Biệt thự</span>
-              </div>
-              <div className="sub-category-item">
-                <span className="text">Nhà phố</span>
-              </div>
-              <div className="sub-category-item">
-                <span className="text">Văn phòng</span>
-              </div>
-              <div className="sub-category-item">
-                <span className="text">Thương mại</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Category/>
         <div className="container-fluid">
           <div className="row">
             {projects.map((project, idx) => (
@@ -87,7 +65,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
     dispatch(reset());
     dispatch(requestProjectsData(ownProps.history));
-    dispatch(animationDisplayLoading());
   }
 });
 

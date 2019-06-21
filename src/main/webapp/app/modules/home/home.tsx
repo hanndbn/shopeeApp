@@ -7,20 +7,37 @@ import Carousel from 'app/modules/carousel/carousel';
 import { IRootState } from 'app/shared/reducers';
 import { animationDisplayLoading, reset, setHeaderBackground } from 'app/shared/common/common.reducer';
 import Projects from 'app/modules/projects/projects';
+import { checkDisplayToTop } from 'app/shared/util/util';
+import $ from 'jquery';
 
 // import { getCategory } from "app/shared/reducers/category";
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
+  location: any;
 }
 
 export class Home extends React.Component<IHomeProp> {
   componentDidMount() {
     this.props.initScreen();
+    $('#header-wrapper').attr('class', 'header-wrapper fixed-header');
+    $(window).scroll(() => {
+      if (window.location.pathname === '/') {
+        if (checkDisplayToTop()) {
+          $('#header-wrapper').attr('class', 'header-wrapper fixed-header header-scroll');
+        } else {
+          $('#header-wrapper').attr('class', 'header-wrapper fixed-header');
+        }
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    $('#header-wrapper').attr('class', 'header-wrapper');
   }
 
   render() {
-    const { listItem } = this.props;
+    const { } = this.props;
     return (
       <div className="">
         <Carousel/>
@@ -31,14 +48,11 @@ export class Home extends React.Component<IHomeProp> {
 }
 
 const mapStateToProps = ({ common }: IRootState) => ({
-  listItem: common.listItem
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
-    await dispatch(reset());
     dispatch(setHeaderBackground('transparent'));
-    await dispatch(animationDisplayLoading());
   }
 });
 

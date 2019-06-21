@@ -2,5 +2,10 @@
   //margin-top: 60px;
   .category-container {
     margin-bottom: 30px;
+    height: 100px;
+  }
+
+  .sub-category-wrapper {
+    animation: animation-right-left 0.75s backwards;
   }
 }

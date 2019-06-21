@@ -3,6 +3,7 @@
   background-color: white;
   //margin-bottom: 30px;
   .category-item {
+    font-family: "Titillium Web", serif;
     padding: 0 20px;
     font-weight: 600;
     font-size: 21px;
@@ -82,7 +83,7 @@
       padding-left: 0;
       .card-title {
         cursor: pointer;
-        font-family: "Titillium Web", serif;
+        font-family: "futurastd-bold", sans-serif;
         font-size: 18px;
         font-weight: 400;
         line-height: 28px;
@@ -90,7 +91,7 @@
       }
       p {
         font-size: 13px;
-        font-family: "Titillium Web", serif;
+        font-family: "futurastd-bold", sans-serif;
         font-weight: 400;
         text-transform: uppercase;
         letter-spacing: 1px;

@@ -18,7 +18,7 @@ export class News extends React.Component<INewsProp> {
   }
 
   render() {
-    const { listItem } = this.props;
+    const { } = this.props;
     return (
       <div className="new-container">
         <div className="alert-warning">This page is building</div>
@@ -28,7 +28,6 @@ export class News extends React.Component<INewsProp> {
 }
 
 const mapStateToProps = ({ common }: IRootState) => ({
-  listItem: common.listItem
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

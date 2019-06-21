@@ -17,7 +17,7 @@ export class Loader extends React.Component<INewsProp> {
   }
 
   render() {
-    const { listItem } = this.props;
+    const {} = this.props;
     return (
       <div>
         <div className="loader" style={{ display: 'block' }}>
@@ -31,9 +31,7 @@ export class Loader extends React.Component<INewsProp> {
   }
 }
 
-const mapStateToProps = ({ common }: IRootState) => ({
-  listItem: common.listItem
-});
+const mapStateToProps = ({ common }: IRootState) => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {

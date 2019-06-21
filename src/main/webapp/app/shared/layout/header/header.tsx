@@ -21,13 +21,14 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
     const { headerBackground } = this.props;
     return (
       <div className="">
-        <div className="header-wrapper" style={{ background: headerBackground }}>
+        {/*<div className="header-wrapper" style={{ background: headerBackground }}>*/}
+        <div className="header-wrapper" id="header-wrapper">
           <div className="">
             <div className="row">
               <div className="col-12">
-                <nav className="navbar navbar-expand-lg">
+                <nav className="navbar navbar-custom navbar-expand-lg">
                   <Link to="/" className="navbar-brand" href="#">
-                    <img className="logo-image" src="http://pyramids.com.vn/wp-content/themes/pyramids/images/logofooter.png"/>
+                    <img className="logo-image" src="content/images/logo/logo.jpg"/>
                   </Link>
                   <button
                     className="navbar-toggler"

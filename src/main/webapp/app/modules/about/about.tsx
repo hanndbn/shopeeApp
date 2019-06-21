@@ -18,7 +18,7 @@ export class About extends React.Component<IAboutProp> {
   }
 
   render() {
-    const { listItem } = this.props;
+    const { } = this.props;
     return (
       <div className="about-container">
         <div className="card">
@@ -46,13 +46,11 @@ export class About extends React.Component<IAboutProp> {
 }
 
 const mapStateToProps = ({ common }: IRootState) => ({
-  listItem: common.listItem
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
     dispatch(reset());
-    dispatch(animationDisplayLoading());
   }
 });
 

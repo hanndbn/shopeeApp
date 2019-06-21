@@ -87,7 +87,6 @@ const mapStateToProps = ({ carousel }: IRootState) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   requestCarouselData: () => {
-    dispatch(reset());
     dispatch(animationDisplayLoading());
   },
   reset: () => {

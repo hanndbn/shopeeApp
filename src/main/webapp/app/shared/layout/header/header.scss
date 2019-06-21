@@ -1,11 +1,37 @@
 .header-wrapper {
+  position: relative;
   padding: 0 50px;
-  position: fixed;
   top: 0;
   z-index: 1;
   width: 100%;
-  .logo-image {
-    height: 40px;
+  transition: all ease-in 0.4s;
+  border-bottom: 1px solid #80808085;
+  &.fixed-header {
+    position: fixed;
+    border: none;
+    &.header-scroll {
+      background-color: white;
+      border-bottom: 1px solid #80808085;
+      .nav-link {
+        .nav-text {
+          color: black;
+        }
+      }
+    }
+    .nav-link {
+      .nav-text {
+        color: white;
+      }
+    }
+  }
+  .navbar-custom {
+    padding: 0 1rem;
+  }
+  .navbar-brand {
+    padding: 0;
+    .logo-image {
+      height: 70px;
+    }
   }
 }
 
@@ -15,12 +41,12 @@
 }
 
 .header-menu-wrapper {
-  //font-family: "Titillium Web", serif;
+  font-family: "futurastd-bold", sans-serif;
   font-weight: 600;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex: 1;
   .nav-item {
     padding: 1.25rem 1.25rem;
@@ -33,7 +59,7 @@
     letter-spacing: 1px;
     .nav-text {
       position: relative;
-      color: white;
+      color: black;
     }
     &.active,
     &:hover .nav-text:after {

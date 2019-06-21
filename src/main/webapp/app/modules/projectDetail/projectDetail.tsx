@@ -4,7 +4,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Alert, Col, Row } from 'reactstrap';
 import { IRootState } from 'app/shared/reducers';
-import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 import { requestProjectDetailData } from 'app/modules/projectDetail/projectDetail.reducer';
 import { paramObj } from 'app/shared/util/util';
 import Slider from 'react-slick';
@@ -68,7 +67,7 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
     const currentParams = paramObj(this.props.location.search);
     const prevParams = paramObj(prevProps.location.search);
-    if (currentParams['id'] !== prevParams['id']) {
+    if (currentParams[ 'id' ] !== prevParams[ 'id' ]) {
       this.props.initScreen();
     }
     return null;
@@ -87,7 +86,7 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
       <div className="">
         <div className="item-detail-container">
           <div className="row no-gutters">
-            <div className="col-md-12 col-lg-3 col-xl-2 offset-xl-1">
+            <div className="col-md-12 col-lg-3 col-xl-3">
               <div className="left-panel">
                 <h3>{project.project_name}</h3>
                 <div className="w-100 d-flex">
@@ -149,10 +148,8 @@ const mapStateToProps = ({ projectDetail }: IRootState) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
-    dispatch(reset());
-    dispatch(animationDisplayLoading());
     const params = paramObj(ownProps.location.search);
-    const projectId = params['id'] ? params['id'] : '';
+    const projectId = params[ 'id' ] ? params[ 'id' ] : '';
     dispatch(requestProjectDetailData(projectId));
   }
 });
