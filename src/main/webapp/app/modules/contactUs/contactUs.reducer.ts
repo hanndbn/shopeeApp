@@ -1,24 +1,26 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
-// import { BASE_IMG_URL, GET_CAROUSEL_DATA } from 'app/config/constants';
+import { GET_CONTACT_US_ADDRESS_URL, POST_CONTACT_US_URL } from 'app/config/constants';
+import axios from 'axios';
+// import { BASE_IMG_URL, GET_CONTACT_US_DATA } from 'app/config/constants';
 
 const ACTION_TYPES = {
-  GET_CAROUSEL_DATA: 'ContactUs/GET_CAROUSEL_DATA',
-  SET_CAROUSEL_DATA_BAN_HANG: 'ContactUs/SET_CAROUSEL_DATA_BAN_HANG',
-  SET_CAROUSEL_DATA_TU_VAN: 'ContactUs/SET_CAROUSEL_DATA_TU_VAN',
+  POST_CONTACT_US: 'ContactUs/POST_CONTACT_US',
+  GET_CONTACT_US_ADDRESS: 'ContactUs/GET_CONTACT_US_ADDRESS',
+  SET_INPUT: 'ContactUs/SET_INPUT',
   RESET: 'ContactUs/RESET'
 };
 
 const initialState = {
-  contactUsData: [
-    {
-      imageUrl: 'content/images/temp/classic-home-slider-image.jpg'
-    },
-    {
-      imageUrl: 'content/images/temp/classic-home-slider-image-3.jpg'
-    }
-  ],
+  contactUsAddressData: [],
+  input: {
+    post: 153,
+    author_name: '',
+    author_email: '',
+    content: ''
+  },
   loading: false,
   requestFailure: false,
+  requestSuccess: false,
   errorMessage: null
 };
 
@@ -27,46 +29,52 @@ export type ContactUsState = Readonly<typeof initialState>;
 // Reducer
 export default (state: ContactUsState = initialState, action): ContactUsState => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.GET_CAROUSEL_DATA):
+    case REQUEST(ACTION_TYPES.GET_CONTACT_US_ADDRESS):
       return {
         ...state,
         loading: true
       };
-    case SUCCESS(ACTION_TYPES.GET_CAROUSEL_DATA):
+    case SUCCESS(ACTION_TYPES.GET_CONTACT_US_ADDRESS):
       return {
         ...state,
         loading: false,
-        contactUsData: action.payload.data
+        contactUsAddressData: action.payload.data
       };
-    case FAILURE(ACTION_TYPES.GET_CAROUSEL_DATA):
+    case FAILURE(ACTION_TYPES.GET_CONTACT_US_ADDRESS):
       return {
-        ...initialState,
+        ...state,
+        contactUsAddressData: [],
+        loading: false
+      };
+    case REQUEST(ACTION_TYPES.POST_CONTACT_US):
+      return {
+        ...state,
+        loading: true
+      };
+    case SUCCESS(ACTION_TYPES.POST_CONTACT_US):
+      return {
+        ...state,
+        // @ts-ignore
+        input: initialState.input,
+        requestSuccess: true,
+        loading: false
+      };
+    case FAILURE(ACTION_TYPES.POST_CONTACT_US):
+      return {
+        ...state,
+        loading: false,
         requestFailure: true,
-        errorMessage: action.error
+        errorMessage: action.payload && action.payload.response && action.payload.response.data ? `${action.payload.response.data.message}` : ''
       };
-    case ACTION_TYPES.SET_CAROUSEL_DATA_BAN_HANG:
+    case ACTION_TYPES.SET_INPUT:
       return {
         ...state,
-        contactUsData: [
-          {
-            imageUrl: 'content/images/temp/businessbanner.jpg'
-          },
-          {
-            imageUrl: 'content/images/temp/FILE_EE53ED-6D353A-974A4C-9F6564-B766B7-7E963B.jpg'
-          }
-        ]
-      };
-    case ACTION_TYPES.SET_CAROUSEL_DATA_TU_VAN:
-      return {
-        ...state,
-        contactUsData: [
-          {
-            imageUrl: 'content/images/temp/picture6.jpg'
-          },
-          {
-            imageUrl: 'content/images/temp/healthy-girl-at-doctor-1920x500.jpg'
-          }
-        ]
+        requestSuccess: false,
+        requestFailure: false,
+        input: {
+          ...state.input,
+          [action.fieldName]: action.value
+        }
       };
     case ACTION_TYPES.RESET:
       return {
@@ -77,22 +85,32 @@ export default (state: ContactUsState = initialState, action): ContactUsState =>
   }
 };
 
-// export const requestContactUsData = history => async (dispatch, getState) => {
-//   const lang = `?lang=${getState().locale && getState().locale.currentLocale ? getState().locale.currentLocale : 'en'}`;
-//   await dispatch({
-//     type: ACTION_TYPES.GET_CAROUSEL_DATA,
-//     payload: axios.get(GET_CAROUSEL_DATA + lang)
-//   });
-// };
+export const postContactUs = id => async (dispatch, getState) => {
+  const input = {
+    ...getState().contactUs.input,
+    post: id ? id : getState().contactUs.input.post
+  };
+
+  await dispatch({
+    type: ACTION_TYPES.POST_CONTACT_US,
+    payload: axios.post(POST_CONTACT_US_URL, input
+    )
+  });
+};
+
+export const getContactUsAddress = () => async (dispatch, getState) => {
+  await dispatch({
+    type: ACTION_TYPES.GET_CONTACT_US_ADDRESS,
+    payload: axios.get(GET_CONTACT_US_ADDRESS_URL)
+  });
+};
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
 
-export const setContactUsBanHang = () => ({
-  type: ACTION_TYPES.SET_CAROUSEL_DATA_BAN_HANG
-});
-
-export const setContactUsBanHangTuVan = () => ({
-  type: ACTION_TYPES.SET_CAROUSEL_DATA_TU_VAN
+export const setInput = (fieldName, value) => ({
+  type: ACTION_TYPES.SET_INPUT,
+  fieldName,
+  value
 });

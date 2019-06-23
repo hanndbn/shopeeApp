@@ -26,3 +26,5 @@ export const GET_CAROUSEL_DATA_URL = 'http://localhost/wordpress/wp-json/acf/v3/
 export const GET_CATEGORY_DATA_URL = 'http://localhost/wordpress/wp-json/wp/v2/categories';
 export const GET_PROJECTS_DATA_URL = 'http://localhost/wordpress/wp-json/wp/v2/projects';
 export const GET_PROJECT_DETAIL_DATA_URL = 'http://localhost/wordpress/wp-json/wp/v2/projects/';
+export const POST_CONTACT_US_URL = 'http://localhost/wordpress/wp-json/wp/v2/comments';
+export const GET_CONTACT_US_ADDRESS_URL = 'http://localhost/wordpress/wp-json/wp/v2/contact-us';

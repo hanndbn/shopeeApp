@@ -1,49 +1,41 @@
 .contact-us-container {
-  margin-top: 100px;
+  font-weight: 300;
+  margin-top: 0px;
   .mapouter,
   .gmap_canvas,
   iframe {
     width: 100%;
-    height: 400px;
+    height: 500px;
   }
-  .dec-text {
-    font-size: 22px;
-    text-transform: uppercase;
-    font-weight: 700;
+
+  input.form-control {
+    height: 40px;
+  }
+
+  .btn-submit {
     position: relative;
-    text-align: left;
-    font-family: "futurastd-bold";
-    width: 100%;
-    padding-bottom: 20px;
+    display: inline-block;
+    outline: 0;
+    padding: 10px 30px;
+    font-family: "Titillium Web", serif;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #fff;
+    background-color: black;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    -webkit-transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+    -moz-transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+    transition: color .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
   }
-  p {
-    font-family: sans-serif;
-    letter-spacing: 2px;
-    font-size: 15px;
-    line-height: 24px;
-    padding-bottom: 10px;
-    text-align: left;
-  }
-  .contact-list {
-    width: 100%;
-    margin-top: 30px;
-    li {
-      list-style: none;
-      width: 100%;
-      margin-bottom: 10px;
-      text-align: left;
-      font-family: arial;
-      span {
-        width: 100%;
-        margin-bottom: 6px;
-        color: #ccc;
-        font-size: 12px;
-        text-transform: uppercase;
-        font-weight: 700;
-      }
-      div {
-        font-size: 14px;
-      }
-    }
+
+  .message-wrapper {
+    min-height: 50px;
   }
 }

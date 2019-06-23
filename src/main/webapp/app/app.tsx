@@ -8,9 +8,7 @@ import { Card } from 'reactstrap';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { IRootState } from 'app/shared/reducers';
-import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
-import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
 import Footer from 'app/shared/layout/footer/footer';
 import Header from 'app/shared/layout/header/header';
@@ -54,14 +52,8 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, applicationProfile, locale, common }: IRootState) => ({
-  currentLocale: locale.currentLocale,
-  isAuthenticated: authentication.isAuthenticated,
-  isAdmin: hasAnyAuthority(authentication.account.authorities, [ AUTHORITIES.ADMIN ]),
-  ribbonEnv: applicationProfile.ribbonEnv,
-  isInProduction: applicationProfile.inProduction,
-  isSwaggerEnabled: applicationProfile.isSwaggerEnabled,
-  displayLoading: common.displayLoading
+const mapStateToProps = ({ common, projects, contactUs, projectDetail }: IRootState) => ({
+  displayLoading: common.displayLoading || projects.loading || contactUs.loading || projectDetail.loading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

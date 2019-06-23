@@ -3,64 +3,29 @@ import './contactUs.scss';
 // import logo from 'static/images/logo/oe-logo.png'
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
-import * as carouselAction from 'app/modules/carousel/carousel.reducer';
-import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
+import * as contactUsAction from 'app/modules/contactUs/contactUs.reducer';
 
 export interface ICarouselProp extends StateProps, DispatchProps {
-  requestCarouselData: Function;
-  reset: Function;
-  carouselData: any;
+  initScreen: Function;
+  setInput: Function;
+  postContactUs: Function;
 }
 
 export class ContactUs extends React.Component<ICarouselProp> {
   componentDidMount() {
-    this.props.requestCarouselData();
+    this.props.initScreen();
   }
 
   render() {
-    const { carouselData } = this.props;
+    const { contactUsAddressData, input, setInput, postContactUs, loading, errorMessage, requestSuccess, requestFailure } = this.props;
+    const addressData = contactUsAddressData && contactUsAddressData.length > 0 ? contactUsAddressData[0] : {};
     return (
       <div className="contact-us-container">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <div className="container small-container">
-                <h3 className="dec-text">Contacts</h3>
-                <p>
-                  KCONCEPT&nbsp;was founded in 2012. We are mainly engaged in design and construction interiors, residential, commercial, office space planning and project
-                  management.
-                </p>
-                <p>
-                  The good space is not the kind of extravagant, we try to design the space that people have better ways to interact and feel of the space temperature, the story of
-                  people to fill the space.
-                </p>
-                <ul className="contact-list">
-                  <li>
-                    <span>Adress </span>
-                    <div>185/6 Co Bac. Dist1 . HCM City . VietNam</div>
-                  </li>
-                  <li>
-                    <span>Phone</span>
-                    <div>0988772104 . 0286 2991391</div>
-                  </li>
-                  <li>
-                    <span>E-mail </span>
-                    <div>Kconceptvn@gmail.com</div>
-                  </li>
-                </ul>
-                <a href="#" className=" btn anim-button   trans-btn   transition  fl-l showform">
-                  <span>Write us</span>
-                  <i className="fa fa-eye"/>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="mapouter">
           <div className="gmap_canvas">
             <iframe
               width={700}
-              height={250}
+              height={300}
               id="gmap_canvas"
               src="https://maps.google.com/maps?q=165%20th%C3%A1i%20h%C3%A0&t=&z=13&ie=UTF8&iwloc=&output=embed"
               frameBorder={0}
@@ -76,21 +41,74 @@ export class ContactUs extends React.Component<ICarouselProp> {
             }}
           />
         </div>
+        <div className="container g-margin-top-30">
+          <div className="row">
+            <div className="col-12 col-sm-12 col-md-6">
+              <div dangerouslySetInnerHTML={{ __html: addressData.address ? addressData.address : '' }}/>
+            </div>
+            <div className="col-12 col-sm-12 col-md-6">
+              <div className="form-group message-wrapper">
+                {
+                  requestSuccess && <span className="text-success">Thank for you feedback!</span>
+                }
+                {
+                  requestFailure && errorMessage && <span className="text-danger">{errorMessage}</span>
+                }
+              </div>
+              <div className="form-group">
+                <input className="form-control" type="text"
+                       value={input.author_name}
+                       onChange={e => setInput(e.target.value, 'author_name')}
+                       placeholder="Your Name*"/>
+              </div>
+              <div className="form-group">
+                <input className="form-control" type="text"
+                       value={input.author_email}
+                       onChange={e => setInput(e.target.value, 'author_email')}
+                       placeholder="Your Email*"/>
+              </div>
+              <div className="form-group">
+                <textarea rows={4} className="form-control"
+                          value={input.content}
+                          onChange={e => setInput(e.target.value, 'content')}
+                          placeholder="Your Message*"/>
+              </div>
+              <div className="form-group">
+                <button className="btn btn-submit"
+                        disabled={loading}
+                        onClick={() => postContactUs(addressData.id)}>Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ carousel }: IRootState) => ({
-  carouselData: carousel.carouselData
+const mapStateToProps = ({ contactUs }: IRootState) => ({
+  contactUsAddressData: contactUs.contactUsAddressData,
+  input: contactUs.input,
+  requestFailure: contactUs.requestFailure,
+  requestSuccess: contactUs.requestSuccess,
+  errorMessage: contactUs.errorMessage,
+  loading: contactUs.loading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  requestCarouselData: () => {
-    dispatch(animationDisplayLoading());
+  initScreen: () => {
+    dispatch(contactUsAction.reset());
+    dispatch(contactUsAction.getContactUsAddress());
+  },
+  setInput: (value, fieldName) => {
+    dispatch(contactUsAction.setInput(fieldName, value));
+  },
+  postContactUs: id => {
+    dispatch(contactUsAction.postContactUs(id));
   },
   reset: () => {
-    dispatch(carouselAction.reset());
+    dispatch(contactUsAction.reset());
   }
 });
 

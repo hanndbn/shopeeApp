@@ -21,7 +21,7 @@ export class News extends React.Component<INewsProp> {
     const { } = this.props;
     return (
       <div className="new-container">
-        <div className="alert-warning">This page is building</div>
+        <div className="alert-warning text-center">This page is building</div>
       </div>
     );
   }
