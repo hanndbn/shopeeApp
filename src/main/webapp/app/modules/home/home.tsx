@@ -7,7 +7,6 @@ import Carousel from 'app/modules/carousel/carousel';
 import { IRootState } from 'app/shared/reducers';
 import { setHeaderBackground } from 'app/shared/common/common.reducer';
 import Projects from 'app/modules/projects/projects';
-import { checkDisplayToTop } from 'app/shared/util/util';
 import $ from 'jquery';
 import { withRouter } from 'react-router';
 
@@ -23,15 +22,6 @@ export class Home extends React.Component<IHomeProp> {
     window.scrollTo(0, 0);
     this.props.initScreen();
     $('#header-wrapper').attr('class', 'header-wrapper fixed-header');
-    $(window).scroll(() => {
-      if (window.location.pathname === '/') {
-        if (checkDisplayToTop()) {
-          $('#header-wrapper').attr('class', 'header-wrapper fixed-header header-scroll');
-        } else {
-          $('#header-wrapper').attr('class', 'header-wrapper fixed-header');
-        }
-      }
-    });
   }
 
   componentWillUnmount() {
@@ -39,7 +29,7 @@ export class Home extends React.Component<IHomeProp> {
   }
 
   render() {
-    const { } = this.props;
+    const {} = this.props;
     return (
       <div className="">
         <Carousel/>
@@ -49,8 +39,7 @@ export class Home extends React.Component<IHomeProp> {
   }
 }
 
-const mapStateToProps = ({ common }: IRootState) => ({
-});
+const mapStateToProps = ({ common }: IRootState) => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {

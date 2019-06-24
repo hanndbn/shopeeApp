@@ -92,16 +92,8 @@ export const setActiveCategory = activeCategory => async (dispatch, getState) =>
 
 export const setActiveSubCategory = activeSubCategory => async (dispatch, getState) => {
   await dispatch({
-    type: ACTION_TYPES.SET_SETTING_ACTIVE_CATEGORY,
-    payload: true
-  });
-  await dispatch({
     type: ACTION_TYPES.SET_ACTIVE_SUB_CATEGORY,
     payload: activeSubCategory
-  });
-  await dispatch({
-    type: ACTION_TYPES.SET_SETTING_ACTIVE_CATEGORY,
-    payload: false
   });
 };
 

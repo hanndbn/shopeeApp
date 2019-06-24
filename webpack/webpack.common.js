@@ -105,7 +105,7 @@ module.exports = options => ({
         // If this URL is left empty (""), then it will be relative to the current context.
         // If you use an API server, in `prod` mode, you will need to enable CORS
         // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-        SERVER_API_URL: `'http://hanndbn.000webhostapp.com/'`
+        SERVER_API_URL: `'http://localhost/wordpress/'`
       }
     }),
     new ForkTsCheckerWebpackPlugin({ tslint: true }),
@@ -129,7 +129,7 @@ module.exports = options => ({
       output: {
         groupBy: [
           { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" },
-          { pattern: "./src/main/webapp/i18n/vi/*.json", fileName: "./i18n/vi.json" }
+          { pattern: "./src/main/webapp/i18n/vi/*.json", fileName: "./i18n/viheader-wrapper.json" }
           // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
         ]
       }

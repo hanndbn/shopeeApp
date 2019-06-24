@@ -5,19 +5,9 @@
   z-index: 1;
   width: 100%;
   transition: all ease-in 0.4s;
-  border-bottom: 1px solid #80808085;
   &.fixed-header {
     position: fixed;
     border: none;
-    &.header-scroll {
-      background-color: white;
-      border-bottom: 1px solid #80808085;
-      .nav-link {
-        .nav-text {
-          color: black;
-        }
-      }
-    }
     .nav-link {
       .nav-text {
         color: white;

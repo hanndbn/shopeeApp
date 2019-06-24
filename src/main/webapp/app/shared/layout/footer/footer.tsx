@@ -10,7 +10,7 @@ const Footer = props => (
       <div className="row">
         <div className="col-12 col-sm-6 col-lg-8">
           <div className="row">
-            <div className="col-12 offset-0 col-md-12 offset-md-0 col-lg-6 offset-lg-0 col-xl-4 offset-xl-2">
+            <div className="col-12 offset-0 col-md-12 offset-md-0 col-lg-6 offset-lg-0 col-xl-5 offset-xl-1">
               <div className="g-margin-bottom-20">
                 <img className="footer-logo-img" src="content/images/logo/logofooter.png"/>
               </div>

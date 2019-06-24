@@ -62,7 +62,7 @@ export class Category extends React.Component<IHomeProp> {
     return (
       <div className="container-fluid">
         <div className="row category-container">
-          <div className="col-12 d-flex flex-wrap justify-content-center g-margin-bottom-20">
+          <div className="col-12 d-flex flex-wrap justify-content-center">
             {
               parentCategory.map((category, idx) => (
                 <div className={cn('category-item', { 'active': (!activeCategory && category.id === 0) || (activeCategory && category.id === parseInt(activeCategory, 10)) })}

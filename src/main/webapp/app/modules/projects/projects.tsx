@@ -59,7 +59,7 @@ export class Projects extends React.Component<IHomeProp> {
                   {projects.map((project, idx) => (
                     <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 g-margin-bottom-20 g-padding-left-right-5" key={idx}>
                       <div className="card">
-                        <Link className="card-img-wrapper" to={`/project-detail?id=${project.id}&category=${activeCategory}`}>
+                        <Link className="card-img-wrapper" to={`/project-detail?id=${project.id}${activeCategory ? `&categories=${activeCategory}` : ''}`}>
                           <img className="card-img-top" src={project.avatar_img} alt="Card image cap"/>
                         </Link>
                         <div className="card-body">
