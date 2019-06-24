@@ -4,6 +4,7 @@ import './contactUs.scss';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import * as contactUsAction from 'app/modules/contactUs/contactUs.reducer';
+import { withRouter } from 'react-router';
 
 export interface ICarouselProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -13,6 +14,7 @@ export interface ICarouselProp extends StateProps, DispatchProps {
 
 export class ContactUs extends React.Component<ICarouselProp> {
   componentDidMount() {
+    window.scrollTo(0, 0);
     this.props.initScreen();
   }
 
@@ -115,7 +117,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(ContactUs);
+)(ContactUs));

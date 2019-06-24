@@ -6,6 +6,7 @@ import Slider from 'react-slick';
 import { IRootState } from 'app/shared/reducers';
 import * as carouselAction from 'app/modules/carousel/carousel.reducer';
 import _ from 'lodash';
+import { withRouter } from 'react-router';
 
 const NextArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay next-arrow-carousel">
@@ -111,7 +112,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Carousel);
+)(Carousel));

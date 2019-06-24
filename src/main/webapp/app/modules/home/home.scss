@@ -15,7 +15,7 @@
     transition: color 0.15s ease-out;
     -webkit-transition: color 0.15s ease-out;
     -moz-transition: color 0.15s ease-out;
-    &:hover {
+    &:hover, &.active {
       color: #dfb947;
     }
   }
@@ -31,7 +31,7 @@
     font-weight: 500;
     letter-spacing: 1px;
     line-height: 24px;
-    &.active,
+    &.active .text:after,
     &:hover .text:after {
       width: calc(100% + 2px);
     }

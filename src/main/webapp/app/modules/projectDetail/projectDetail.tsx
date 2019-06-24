@@ -7,6 +7,9 @@ import { IRootState } from 'app/shared/reducers';
 import { requestProjectDetailData } from 'app/modules/projectDetail/projectDetail.reducer';
 import { paramObj } from 'app/shared/util/util';
 import Slider from 'react-slick';
+import { requestProjectsData } from 'app/modules/projects/projects.reducer';
+import qs from 'querystring';
+import { withRouter } from 'react-router';
 
 const NextArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay next-arrow-carousel">
@@ -57,18 +60,25 @@ export interface IProjectDetailProp extends StateProps, DispatchProps {
   location: any;
   projectDetailData: any;
   initScreen: Function;
+  getProjectDetailData: Function;
+  getProjectsData: Function;
+  handleChangeProject: Function;
 }
 
 export class ProjectDetail extends React.Component<IProjectDetailProp> {
   componentDidMount() {
+    window.scrollTo(0, 0);
     this.props.initScreen();
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
     const currentParams = paramObj(this.props.location.search);
     const prevParams = paramObj(prevProps.location.search);
-    if (currentParams[ 'id' ] !== prevParams[ 'id' ]) {
-      this.props.initScreen();
+    if (currentParams['id'] !== prevParams['id']) {
+      this.props.getProjectDetailData();
+    }
+    if (currentParams['category'] !== prevParams['category']) {
+      this.props.getProjectsData();
     }
     return null;
   }
@@ -77,7 +87,7 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
   }
 
   render() {
-    const { projectDetailData } = this.props;
+    const { projectDetailData, projectNextPreviousData, handleChangeProject } = this.props;
     const project = {
       ...projectDetailData.acf,
       list_images: projectDetailData.list_images
@@ -108,6 +118,23 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
                     <span>Location : </span> {project.location}
                   </div>
                 </div>
+                <div className="row w-100 no-gutters g-margin-top-10">
+                  <div className="col-6 action-btn">
+                    {
+                      projectNextPreviousData.previous !== null &&
+                      <span className="action-txt previous-btn"
+                            onClick={() => handleChangeProject(projectNextPreviousData.previous)}
+                      >Previous</span>
+                    }
+                  </div>
+                  <div className="col-6 text-right action-btn">
+                    {
+                      projectNextPreviousData.next !== null &&
+                      <span className="action-txt next-btn"
+                            onClick={() => handleChangeProject(projectNextPreviousData.previous)}>Next</span>
+                    }
+                  </div>
+                </div>
               </div>
             </div>
             <div className="col-md-12 col-lg-9">
@@ -132,9 +159,7 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
                   ))}
                 </>
               }
-
             </div>
-
           </div>
         </div>
       </div>
@@ -143,21 +168,39 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
 }
 
 const mapStateToProps = ({ projectDetail }: IRootState) => ({
-  projectDetailData: projectDetail.projectDetailData
+  projectDetailData: projectDetail.projectDetailData,
+  projectNextPreviousData: projectDetail.projectNextPreviousData
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: () => {
+  initScreen: async () => {
     const params = paramObj(ownProps.location.search);
-    const projectId = params[ 'id' ] ? params[ 'id' ] : '';
+    const projectId = params['id'] ? params['id'] : '';
+    const category = params['category'] ? params['category'] : '';
     dispatch(requestProjectDetailData(projectId));
+    await dispatch(requestProjectsData(category));
+  },
+  getProjectDetailData: () => {
+    const params = paramObj(ownProps.location.search);
+    const projectId = params['id'] ? params['id'] : '';
+    dispatch(requestProjectDetailData(projectId));
+  },
+  getProjectsData: async () => {
+    const params = paramObj(ownProps.location.search);
+    const category = params['category'] ? params['category'] : '';
+    await dispatch(requestProjectsData(category));
+  },
+  handleChangeProject: id => {
+    const params = paramObj(ownProps.location.search);
+    params.id = id;
+    ownProps.history.push(`/project-detail?${qs.stringify(params)}`);
   }
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProjectDetail);
+)(ProjectDetail));

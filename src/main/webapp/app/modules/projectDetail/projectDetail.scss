@@ -65,5 +65,90 @@
         font-family: "vniavo", "helveticaNeueLight";
       }
     }
+
+    .action-btn {
+      cursor: pointer;
+      font-weight: 600;
+      &:hover {
+        color: #dfb947;
+        .action-txt {
+          &.previous-btn {
+            &:before {
+              webkit-transform: translate(-9px, -13px) rotate(-40deg);
+              -moz-transform: translate(-9px, -13px) rotate(-40deg);
+              transform: translate(-9px, -13px) rotate(-40deg);
+            }
+            &:after {
+              -webkit-transform: translate(0, 3px) rotate(40deg);
+              -moz-transform: translate(0, 3px) rotate(40deg);
+              transform: translate(0, 3px) rotate(40deg);
+            }
+          }
+          &.next-btn {
+            &:before {
+              -webkit-transform: translate(0, 13px) rotate(40deg);
+              -moz-transform: translate(0, 13px) rotate(40deg);
+              transform: translate(0, 13px) rotate(40deg);
+            }
+            &:after {
+              -webkit-transform: translate(0, 0) rotate(-40deg);
+              -moz-transform: translate(0, 0) rotate(-40deg);
+              transform: translate(0, 0) rotate(-40deg);
+            }
+          }
+        }
+      }
+      .action-txt {
+        position: relative;
+        &.next-btn:after,
+        &.next-btn:before {
+          content: '';
+          position: absolute;
+          right: -7px;
+          top: 50%;
+          width: 1px;
+          height: 7px;
+          background-color: #cbcccd;
+          -webkit-transform-origin: 21px 0;
+          -moz-transform-origin: 21px 0;
+          transform-origin: 21px 0;
+          -webkit-transition: transform .2s;
+          -moz-transition: transform .2s;
+          transition: transform .2s;
+        }
+
+        &.next-btn:after {
+          -webkit-transform-origin: 3px 0;
+          -moz-transform-origin: 3px 0;
+          transform-origin: 3px 0;
+          top: 2px;
+        }
+
+        &.previous-btn:after,
+        &.previous-btn:before {
+          content: '';
+          position: absolute;
+          left: -10px;
+          top: 50%;
+          width: 1px;
+          height: 7px;
+          background-color: #cbcccd;
+          -webkit-transform-origin: 21px 0;
+          -moz-transform-origin: 21px 0;
+          transform-origin: 21px 0;
+          -webkit-transition: transform .2s;
+          -moz-transition: transform .2s;
+          transition: transform .2s;
+        }
+
+        &.previous-btn:after {
+          -webkit-transform-origin: 3px 0;
+          -moz-transform-origin: 3px 0;
+          transform-origin: 3px 0;
+          top: 2px;
+        }
+
+      }
+    }
   }
 }

@@ -49,10 +49,10 @@ export default (state: ProjectsState = initialState, action): ProjectsState => {
   }
 };
 
-export const requestProjectsData = history => async (dispatch, getState) => {
+export const requestProjectsData = category => async (dispatch, getState) => {
   await dispatch({
     type: ACTION_TYPES.GET_PROJECTS_DATA,
-    payload: axios.get(GET_PROJECTS_DATA_URL)
+    payload: axios.get(`${GET_PROJECTS_DATA_URL}${category ? `?categories=${category}` : ''}`)
   });
 };
 

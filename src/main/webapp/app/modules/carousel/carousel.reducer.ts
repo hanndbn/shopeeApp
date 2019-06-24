@@ -11,7 +11,16 @@ const ACTION_TYPES = {
 };
 
 const initialState = {
-  carouselData: [],
+  carouselData: [
+    {
+      'id': 0,
+      'acf': {
+        'display_title': '',
+        'imageurl': 'content/images/temp/patern-ambient.png',
+        'display_order': '1'
+      }
+    }
+  ],
   loading: false,
   requestFailure: false,
   errorMessage: null

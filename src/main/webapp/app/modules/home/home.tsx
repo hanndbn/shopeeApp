@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import { Alert, Col, Row } from 'reactstrap';
 import Carousel from 'app/modules/carousel/carousel';
 import { IRootState } from 'app/shared/reducers';
-import { animationDisplayLoading, reset, setHeaderBackground } from 'app/shared/common/common.reducer';
+import { setHeaderBackground } from 'app/shared/common/common.reducer';
 import Projects from 'app/modules/projects/projects';
 import { checkDisplayToTop } from 'app/shared/util/util';
 import $ from 'jquery';
+import { withRouter } from 'react-router';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -19,6 +20,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
 
 export class Home extends React.Component<IHomeProp> {
   componentDidMount() {
+    window.scrollTo(0, 0);
     this.props.initScreen();
     $('#header-wrapper').attr('class', 'header-wrapper fixed-header');
     $(window).scroll(() => {
@@ -59,7 +61,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Home);
+)(Home));

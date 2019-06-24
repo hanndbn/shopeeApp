@@ -6,6 +6,7 @@ import { GET_CATEGORY_DATA_URL } from 'app/config/constants';
 const ACTION_TYPES = {
   GET_CATEGORY_DATA: 'Category/GET_CATEGORY_DATA',
   SET_ACTIVE_CATEGORY: 'Category/SET_ACTIVE_CATEGORY',
+  SET_ACTIVE_SUB_CATEGORY: 'Category/SET_ACTIVE_SUB_CATEGORY',
   SET_SETTING_ACTIVE_CATEGORY: 'Category/SET_SETTING_ACTIVE_CATEGORY',
   RESET: 'Category/RESET'
 };
@@ -13,6 +14,7 @@ const ACTION_TYPES = {
 const initialState = {
   categoryData: [],
   activeCategory: null,
+  activeSubCategory: null,
   loading: false,
   settingActiveCategory: false,
   requestFailure: false,
@@ -28,6 +30,11 @@ export default (state: CategoryState = initialState, action): CategoryState => {
       return {
         ...state,
         activeCategory: action.payload
+      };
+    case ACTION_TYPES.SET_ACTIVE_SUB_CATEGORY:
+      return {
+        ...state,
+        activeSubCategory: action.payload
       };
     case ACTION_TYPES.SET_SETTING_ACTIVE_CATEGORY:
       return {
@@ -76,6 +83,21 @@ export const setActiveCategory = activeCategory => async (dispatch, getState) =>
   await dispatch({
     type: ACTION_TYPES.SET_ACTIVE_CATEGORY,
     payload: activeCategory
+  });
+  await dispatch({
+    type: ACTION_TYPES.SET_SETTING_ACTIVE_CATEGORY,
+    payload: false
+  });
+};
+
+export const setActiveSubCategory = activeSubCategory => async (dispatch, getState) => {
+  await dispatch({
+    type: ACTION_TYPES.SET_SETTING_ACTIVE_CATEGORY,
+    payload: true
+  });
+  await dispatch({
+    type: ACTION_TYPES.SET_ACTIVE_SUB_CATEGORY,
+    payload: activeSubCategory
   });
   await dispatch({
     type: ACTION_TYPES.SET_SETTING_ACTIVE_CATEGORY,

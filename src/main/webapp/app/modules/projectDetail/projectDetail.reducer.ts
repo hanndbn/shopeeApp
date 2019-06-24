@@ -5,13 +5,16 @@ import { GET_PROJECT_DETAIL_DATA_URL } from 'app/config/constants';
 
 const ACTION_TYPES = {
   GET_PROJECT_DETAIL_DATA: 'ProjectDetail/GET_PROJECT_DETAIL_DATA',
-  SET_PROJECT_DETAIL_DATA_BAN_HANG: 'ProjectDetail/SET_PROJECT_DETAIL_DATA_BAN_HANG',
-  SET_PROJECT_DETAIL_DATA_TU_VAN: 'ProjectDetail/SET_PROJECT_DETAIL_DATA_TU_VAN',
+  SET_NEXT_PREVIOUS_DATA: 'ProjectDetail/SET_NEXT_PREVIOUS_DATA',
   RESET: 'ProjectDetail/RESET'
 };
 
 const initialState = {
   projectDetailData: {},
+  projectNextPreviousData: {
+    next: null,
+    previous: null
+  },
   loading: false,
   requestFailure: false,
   errorMessage: null
@@ -40,6 +43,11 @@ export default (state: ProjectDetailState = initialState, action): ProjectDetail
         requestFailure: true,
         errorMessage: action.error
       };
+    case ACTION_TYPES.SET_NEXT_PREVIOUS_DATA:
+      return {
+        ...state,
+        projectNextPreviousData: action.payload
+      };
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -49,12 +57,30 @@ export default (state: ProjectDetailState = initialState, action): ProjectDetail
   }
 };
 
-export const requestProjectDetailData = id => async (dispatch, getState) => {
-  await dispatch({
+export const requestProjectDetailData = id => (dispatch, getState) => {
+  dispatch({
     type: ACTION_TYPES.GET_PROJECT_DETAIL_DATA,
     payload: axios.get(GET_PROJECT_DETAIL_DATA_URL + id)
   });
+  const projectsData = getState().projects.projectsData ? getState().projects.projectsData : [];
+  let activeProjectIdx = null;
+  projectsData.map((project, idx) => {
+    if (project.id === id) {
+      activeProjectIdx = idx;
+    }
+  });
+  if (activeProjectIdx !== null) {
+    dispatch(setNextPreviousData({
+      next: (activeProjectIdx - 1 >= 0) && projectsData[activeProjectIdx - 1] ? projectsData[activeProjectIdx - 1].id : null,
+      previous: (activeProjectIdx + 1 <= projectsData.length - 1) && projectsData[activeProjectIdx + 1] ? projectsData[activeProjectIdx + 1].id : null
+    }));
+  }
 };
+
+export const setNextPreviousData = projectNextPreviousData => ({
+  type: ACTION_TYPES.SET_NEXT_PREVIOUS_DATA,
+  payload: projectNextPreviousData
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

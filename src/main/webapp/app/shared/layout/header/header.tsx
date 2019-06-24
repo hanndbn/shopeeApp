@@ -2,7 +2,7 @@ import './header.scss';
 
 import React from 'react';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { IRootState } from 'app/shared/reducers';
 import { reset } from 'app/shared/common/common.reducer';
 import { connect } from 'react-redux';
@@ -99,7 +99,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Header);
+)(Header));

@@ -87,6 +87,12 @@
 @media only screen and (max-width: 992px) {
   .site-header {
     .header-wrapper {
+      position: relative;
+      .nav-link {
+        .nav-text {
+          color: white;
+        }
+      }
       padding: 0;
       .navbar {
         background-image: url(https://ambient.elated-themes.com/wp-content/uploads/2017/03/footer-image-new.jpg);

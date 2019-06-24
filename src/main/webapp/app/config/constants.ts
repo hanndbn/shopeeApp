@@ -4,6 +4,7 @@ const config = {
 
 export default config;
 
+// export const SERVER_API_URL = 'hanndbn.000webhostapp.com';
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const AUTHORITIES = {
@@ -22,9 +23,9 @@ export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDThh:mm';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 
-export const GET_CAROUSEL_DATA_URL = 'http://localhost/wordpress/wp-json/acf/v3/carousel';
-export const GET_CATEGORY_DATA_URL = 'http://localhost/wordpress/wp-json/wp/v2/categories';
-export const GET_PROJECTS_DATA_URL = 'http://localhost/wordpress/wp-json/wp/v2/projects';
-export const GET_PROJECT_DETAIL_DATA_URL = 'http://localhost/wordpress/wp-json/wp/v2/projects/';
-export const POST_CONTACT_US_URL = 'http://localhost/wordpress/wp-json/wp/v2/comments';
-export const GET_CONTACT_US_ADDRESS_URL = 'http://localhost/wordpress/wp-json/wp/v2/contact-us';
+export const GET_CAROUSEL_DATA_URL = 'wp-json/acf/v3/carousel';
+export const GET_CATEGORY_DATA_URL = 'wp-json/wp/v2/categories';
+export const GET_PROJECTS_DATA_URL = 'wp-json/wp/v2/projects';
+export const GET_PROJECT_DETAIL_DATA_URL = 'wp-json/wp/v2/projects/';
+export const POST_CONTACT_US_URL = 'wp-json/wp/v2/comments';
+export const GET_CONTACT_US_ADDRESS_URL = 'wp-json/wp/v2/contact-us';
