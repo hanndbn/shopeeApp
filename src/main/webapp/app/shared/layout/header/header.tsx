@@ -10,6 +10,7 @@ import { HEADER_LINK } from 'app/config/constants';
 
 export interface IHeaderProps {
   headerBackground: any;
+  location: any;
 }
 
 export interface IHeaderState {
@@ -20,6 +21,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
 
   render() {
     const { headerBackground } = this.props;
+    const logo = this.props.location.pathname === '/' ? 'logo-white.jpg' : 'logo-black.jpg';
     return (
       <div className="">
         {/*<div className="header-wrapper" style={{ background: headerBackground }}>*/}
@@ -29,7 +31,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
               <div className="col-12">
                 <nav className="navbar navbar-custom navbar-expand-lg">
                   <Link to="/" className="navbar-brand" href="#">
-                    <img className="logo-image" src="content/images/logo/logo.jpg"/>
+                    <img className="logo-image" src={`content/images/logo/${logo}`}/>
                   </Link>
                   <button
                     className="navbar-toggler"
