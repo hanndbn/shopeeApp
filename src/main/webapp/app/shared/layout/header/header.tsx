@@ -6,6 +6,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { IRootState } from 'app/shared/reducers';
 import { reset } from 'app/shared/common/common.reducer';
 import { connect } from 'react-redux';
+import { HEADER_LINK } from 'app/config/constants';
 
 export interface IHeaderProps {
   headerBackground: any;
@@ -48,32 +49,20 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
                   </button>
                   <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav header-menu-wrapper">
-                      <li className="nav-item active">
-                        <Link className="nav-link" to="/">
-                          <span className="nav-text">Home</span>
-                          <span className="sr-only">(current)</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/about-me">
-                          <span className="nav-text">Giới thiệu</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/projects">
-                          <span className="nav-text">Dự án</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/tin-tuc">
-                          <span className="nav-text">Tin tức</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/contact-us">
-                          <span className="nav-text">Liên hệ</span>
-                        </Link>
-                      </li>
+                      {
+                        HEADER_LINK.map((item, idx) =>
+                          <li className="nav-item active" key={idx}
+                              data-toggle="collapse"
+                              data-target="#navbarNav"
+                              aria-controls="navbarNav"
+                              aria-expanded="false"
+                          >
+                            <Link className="nav-link" to={item.pathname}>
+                              <span className="nav-text">{item.title}</span>
+                            </Link>
+                          </li>
+                        )
+                      }
                     </ul>
                   </div>
                 </nav>
@@ -86,9 +75,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
   }
 }
 
-const mapStateToProps = ({ common }: IRootState) => ({
-  headerBackground: common.headerBackground
-});
+const mapStateToProps = ({}: IRootState) => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {

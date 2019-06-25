@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Alert, Col, Row } from 'reactstrap';
 import { IRootState } from 'app/shared/reducers';
-import { reset } from 'app/shared/common/common.reducer';
+import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 import { Link, withRouter } from 'react-router-dom';
 import { requestProjectsData } from 'app/modules/projects/projects.reducer';
 import Category from 'app/modules/category/category';
@@ -15,13 +15,15 @@ import Loading from 'app/Loader/loading';
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
+  handleChangeData: Function;
   location: any;
 }
 
 export class Projects extends React.Component<IHomeProp> {
-  componentDidMount() {
+  async componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.initScreen();
+    await this.props.initScreen();
+    await this.props.handleChangeData();
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
@@ -29,7 +31,7 @@ export class Projects extends React.Component<IHomeProp> {
     const prevParams = paramObj(prevProps.location.search);
     if (currentParams['category'] !== prevParams['category']
       || currentParams['subCategory'] !== prevParams['subCategory']) {
-      this.props.initScreen();
+      this.props.handleChangeData();
     }
     return null;
   }
@@ -50,7 +52,7 @@ export class Projects extends React.Component<IHomeProp> {
     return (
       <div className="projects-container list-item-container">
         <Category/>
-        <div className="container-fluid">
+        <div className="">
           {
             loading ? <Loading/>
               :
@@ -92,6 +94,9 @@ const mapStateToProps = ({ projects, category }: IRootState) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
     dispatch(reset());
+    dispatch(animationDisplayLoading());
+  },
+  handleChangeData: () => {
     const params = paramObj(ownProps.location.search);
     const category = params['category'] ? params['category'] : null;
     const subCategory = params['subCategory'] ? params['subCategory'] : null;

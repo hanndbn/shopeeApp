@@ -5,8 +5,8 @@
   z-index: 1;
   width: 100%;
   transition: all ease-in 0.4s;
-  &.fixed-header {
-    position: fixed;
+  &.home-header {
+    position: absolute;
     border: none;
     .nav-link {
       .nav-text {

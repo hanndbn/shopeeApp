@@ -1,6 +1,7 @@
 .contact-us-container {
   font-weight: 300;
   margin-top: 0px;
+  margin-bottom: 50px;
   .mapouter,
   .gmap_canvas,
   iframe {
@@ -36,6 +37,19 @@
   }
 
   .message-wrapper {
-    min-height: 50px;
+    margin-left: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    &.lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 20px;
+      height: 20px;
+    }
+    &.local-loader.lds-ring div {
+      width: 20px;
+      height: 20px;
+    }
   }
 }

@@ -1,6 +1,5 @@
 html {
   height: 100%;
-  font-size: 13px;
 }
 
 body {
@@ -52,17 +51,17 @@ body {
 body::after {
   content: "";
   display: block;
-  @media only screen and (max-width: 575px) {
-    height: 700px;
-  }
-  height: 500px;
+}
+
+.site-content {
+  min-height: calc(100vh - 400px);
 }
 
 .site-footer {
-  position: absolute;
   background-color: white;
   bottom: 0;
   width: 100%;
+  margin-top: 20px;
 }
 
 .g-z-index-2 {

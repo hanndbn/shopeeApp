@@ -6,4 +6,4 @@ export const paramObj = search => {
   return qs.parse(parsed);
 };
 
-export const checkDisplayToTop = () => document.body.scrollTop > 20 || document.documentElement.scrollTop > 20;
+export const checkDisplayToTop = () => document.body.scrollTop > 80 || document.documentElement.scrollTop > 80;

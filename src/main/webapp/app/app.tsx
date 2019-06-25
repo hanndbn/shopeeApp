@@ -52,8 +52,8 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ common, projects, contactUs, projectDetail }: IRootState) => ({
-  displayLoading: common.displayLoading || contactUs.loading || projectDetail.loading
+const mapStateToProps = ({ common, projects, contactUs, projectDetail, carousel }: IRootState) => ({
+  displayLoading: common.displayLoading || contactUs.loading || projectDetail.loading || carousel.loading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

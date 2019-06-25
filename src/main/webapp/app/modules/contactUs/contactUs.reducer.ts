@@ -19,6 +19,7 @@ const initialState = {
     content: ''
   },
   loading: false,
+  postLoading: false,
   requestFailure: false,
   requestSuccess: false,
   errorMessage: null
@@ -49,7 +50,10 @@ export default (state: ContactUsState = initialState, action): ContactUsState =>
     case REQUEST(ACTION_TYPES.POST_CONTACT_US):
       return {
         ...state,
-        loading: true
+        requestSuccess: false,
+        requestFailure: false,
+        errorMessage: '',
+        postLoading: true
       };
     case SUCCESS(ACTION_TYPES.POST_CONTACT_US):
       return {
@@ -57,12 +61,12 @@ export default (state: ContactUsState = initialState, action): ContactUsState =>
         // @ts-ignore
         input: initialState.input,
         requestSuccess: true,
-        loading: false
+        postLoading: false
       };
     case FAILURE(ACTION_TYPES.POST_CONTACT_US):
       return {
         ...state,
-        loading: false,
+        postLoading: false,
         requestFailure: true,
         errorMessage: action.payload && action.payload.response && action.payload.response.data ? `${action.payload.response.data.message}` : ''
       };

@@ -60,7 +60,7 @@ export class Category extends React.Component<IHomeProp> {
       .filter(category => rootCategory && activeCategory && parseInt(activeCategory, 10) !== rootCategory.id && category.parent === parseInt(activeCategory, 10));
     childCategory = _.orderBy(childCategory, ['display_order'], ['asc']);
     return (
-      <div className="container-fluid">
+      <div className="">
         <div className="row category-container">
           <div className="col-12 d-flex flex-wrap justify-content-center">
             {

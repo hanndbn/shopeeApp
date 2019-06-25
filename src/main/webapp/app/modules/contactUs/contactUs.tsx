@@ -19,7 +19,7 @@ export class ContactUs extends React.Component<ICarouselProp> {
   }
 
   render() {
-    const { contactUsAddressData, input, setInput, postContactUs, loading, errorMessage, requestSuccess, requestFailure } = this.props;
+    const { contactUsAddressData, input, setInput, postContactUs, loading, errorMessage, requestSuccess, requestFailure, postLoading } = this.props;
     const addressData = contactUsAddressData && contactUsAddressData.length > 0 ? contactUsAddressData[0] : {};
     return (
       <div className="contact-us-container">
@@ -43,20 +43,12 @@ export class ContactUs extends React.Component<ICarouselProp> {
             }}
           />
         </div>
-        <div className="container g-margin-top-30">
+        <div className="container g-margin-top-50">
           <div className="row">
             <div className="col-12 col-sm-12 col-md-6">
               <div dangerouslySetInnerHTML={{ __html: addressData.address ? addressData.address : '' }}/>
             </div>
             <div className="col-12 col-sm-12 col-md-6">
-              <div className="form-group message-wrapper">
-                {
-                  requestSuccess && <span className="text-success">Thank for you feedback!</span>
-                }
-                {
-                  requestFailure && errorMessage && <span className="text-danger">{errorMessage}</span>
-                }
-              </div>
               <div className="form-group">
                 <input className="form-control" type="text"
                        value={input.author_name}
@@ -75,11 +67,19 @@ export class ContactUs extends React.Component<ICarouselProp> {
                           onChange={e => setInput(e.target.value, 'content')}
                           placeholder="Your Message*"/>
               </div>
-              <div className="form-group">
+              <div className="form-group d-flex flex-wrap">
                 <button className="btn btn-submit"
-                        disabled={loading}
+                        disabled={postLoading}
                         onClick={() => postContactUs(addressData.id)}>Submit
                 </button>
+                <div className="message-wrapper">
+                  {
+                    requestSuccess && <span className="text-success">Thank for you feedback!</span>
+                  }
+                  {
+                    requestFailure && errorMessage && <span className="text-danger">{errorMessage}</span>
+                  }
+                </div>
               </div>
             </div>
           </div>
@@ -95,7 +95,8 @@ const mapStateToProps = ({ contactUs }: IRootState) => ({
   requestFailure: contactUs.requestFailure,
   requestSuccess: contactUs.requestSuccess,
   errorMessage: contactUs.errorMessage,
-  loading: contactUs.loading
+  loading: contactUs.loading,
+  postLoading: contactUs.postLoading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

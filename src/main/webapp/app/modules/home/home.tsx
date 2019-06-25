@@ -21,7 +21,7 @@ export class Home extends React.Component<IHomeProp> {
   componentDidMount() {
     window.scrollTo(0, 0);
     this.props.initScreen();
-    $('#header-wrapper').attr('class', 'header-wrapper fixed-header');
+    $('#header-wrapper').attr('class', 'header-wrapper home-header');
   }
 
   componentWillUnmount() {
