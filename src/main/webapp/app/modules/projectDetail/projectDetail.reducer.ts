@@ -1,11 +1,12 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
+import { GET_PROJECT_DETAIL_DATA_URL } from 'app/config/constants';
 // import { BASE_IMG_URL, GET_PROJECT_DETAIL_DATA } from 'app/config/constants';
 import axios from 'axios';
-import { GET_PROJECT_DETAIL_DATA_URL } from 'app/config/constants';
 
 const ACTION_TYPES = {
   GET_PROJECT_DETAIL_DATA: 'ProjectDetail/GET_PROJECT_DETAIL_DATA',
   SET_NEXT_PREVIOUS_DATA: 'ProjectDetail/SET_NEXT_PREVIOUS_DATA',
+  SET_PROJECT_DETAIL_DATA: 'ProjectDetail/SET_PROJECT_DETAIL_DATA',
   RESET: 'ProjectDetail/RESET'
 };
 
@@ -43,6 +44,11 @@ export default (state: ProjectDetailState = initialState, action): ProjectDetail
         requestFailure: true,
         errorMessage: action.error
       };
+    case ACTION_TYPES.SET_PROJECT_DETAIL_DATA:
+      return {
+        ...state,
+        projectDetailData: action.payload
+      };
     case ACTION_TYPES.SET_NEXT_PREVIOUS_DATA:
       return {
         ...state,
@@ -65,14 +71,14 @@ export const requestProjectDetailData = id => (dispatch, getState) => {
   const projectsData = getState().projects.projectsData ? getState().projects.projectsData : [];
   let activeProjectIdx = null;
   projectsData.map((project, idx) => {
-    if (project.id === id) {
+    if (project.id.toString() === id) {
       activeProjectIdx = idx;
     }
   });
   if (activeProjectIdx !== null) {
     dispatch(setNextPreviousData({
-      next: (activeProjectIdx - 1 >= 0) && projectsData[activeProjectIdx - 1] ? projectsData[activeProjectIdx - 1].id : null,
-      previous: (activeProjectIdx + 1 <= projectsData.length - 1) && projectsData[activeProjectIdx + 1] ? projectsData[activeProjectIdx + 1].id : null
+      previous: (activeProjectIdx - 1 >= 0) && projectsData[activeProjectIdx - 1] ? projectsData[activeProjectIdx - 1].id : null,
+      next: (activeProjectIdx + 1 <= projectsData.length - 1) && projectsData[activeProjectIdx + 1] ? projectsData[activeProjectIdx + 1].id : null
     }));
   }
 };

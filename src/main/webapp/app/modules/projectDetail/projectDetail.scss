@@ -64,12 +64,24 @@
       }
     }
 
+    .icon-grid-wrapper {
+      span {
+        cursor: pointer;
+        &:hover {
+          color: #dfb947;
+        }
+      }
+    }
+
     .action-btn {
-      cursor: pointer;
       font-weight: 600;
-      &:hover {
-        color: #dfb947;
-        .action-txt {
+      .action-txt {
+        &[disabled] {
+          cursor: not-allowed;
+          color: #9a9a9a !important;
+        }
+        &:hover {
+          color: #dfb947;
           &.previous-btn {
             &:before {
               webkit-transform: translate(-9px, -13px) rotate(-40deg);
@@ -97,7 +109,18 @@
         }
       }
       .action-txt {
+        cursor: pointer;
         position: relative;
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        outline: none;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently */
         &.next-btn:after,
         &.next-btn:before {
           content: '';
@@ -119,7 +142,7 @@
           -webkit-transform-origin: 3px 0;
           -moz-transform-origin: 3px 0;
           transform-origin: 3px 0;
-          top: 2px;
+          top: 6px;
         }
 
         &.previous-btn:after,
@@ -143,7 +166,7 @@
           -webkit-transform-origin: 3px 0;
           -moz-transform-origin: 3px 0;
           transform-origin: 3px 0;
-          top: 2px;
+          top: 6px;
         }
 
       }

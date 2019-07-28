@@ -10,6 +10,9 @@ import Slider from 'react-slick';
 import { requestProjectsData } from 'app/modules/projects/projects.reducer';
 import qs from 'querystring';
 import { withRouter } from 'react-router';
+import { Helmet } from 'react-helmet';
+import { SCREEN_PATH, TITLE_HELMET } from 'app/config/constants';
+import { Link } from 'react-router-dom';
 
 const NextArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay next-arrow-carousel">
@@ -76,7 +79,8 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
     if (currentParams['id'] !== prevParams['id']) {
       this.props.getProjectDetailData();
     }
-    if (currentParams['category'] !== prevParams['category']) {
+    if (currentParams['category'] !== prevParams['category']
+      || currentParams['subCategory'] !== prevParams['subCategory']) {
       this.props.getProjectsData();
     }
     return null;
@@ -86,13 +90,17 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
   }
 
   render() {
-    const { projectDetailData, projectNextPreviousData, handleChangeProject } = this.props;
+    const { projectDetailData, projectNextPreviousData, handleChangeProject, activeCategory } = this.props;
     const project = {
       ...projectDetailData.acf,
       list_images: projectDetailData.list_images
     };
+    const projectName = project && project.project_name ? project.project_name : '';
     return (
       <div className="">
+        <Helmet>
+          <title>{`${TITLE_HELMET} - ${projectName}`}</title>
+        </Helmet>
         <div className="item-detail-container">
           <div className="row no-gutters">
             <div className="col-md-12 col-lg-3 col-xl-3">
@@ -118,20 +126,23 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
                   </div>
                 </div>
                 <div className="row w-100 no-gutters g-margin-top-10">
-                  <div className="col-6 action-btn">
-                    {
-                      projectNextPreviousData.previous !== null &&
-                      <span className="action-txt previous-btn"
+                  <div className="col-4 action-btn">
+                    <button className="action-txt previous-btn"
+                            disabled={projectNextPreviousData.previous === null}
                             onClick={() => handleChangeProject(projectNextPreviousData.previous)}
-                      >Previous</span>
-                    }
+                    >Previous
+                    </button>
                   </div>
-                  <div className="col-6 text-right action-btn">
-                    {
-                      projectNextPreviousData.next !== null &&
-                      <span className="action-txt next-btn"
-                            onClick={() => handleChangeProject(projectNextPreviousData.previous)}>Next</span>
-                    }
+                  <div className="col-4 text-center icon-grid-wrapper">
+                    <Link to={`${SCREEN_PATH.PROJECTS}${activeCategory ? `?category=${activeCategory}` : ''}`}>
+                      <span className="icon_grid-3x3"/>
+                    </Link>
+                  </div>
+                  <div className="col-4 text-right action-btn">
+                    <button className="action-txt next-btn"
+                            disabled={projectNextPreviousData.next === null}
+                            onClick={() => handleChangeProject(projectNextPreviousData.next)}>Next
+                    </button>
                   </div>
                 </div>
               </div>
@@ -166,9 +177,10 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
   }
 }
 
-const mapStateToProps = ({ projectDetail }: IRootState) => ({
+const mapStateToProps = ({ projectDetail, category }: IRootState) => ({
   projectDetailData: projectDetail.projectDetailData,
-  projectNextPreviousData: projectDetail.projectNextPreviousData
+  projectNextPreviousData: projectDetail.projectNextPreviousData,
+  activeCategory: category.activeCategory
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
@@ -176,8 +188,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     const params = paramObj(ownProps.location.search);
     const projectId = params['id'] ? params['id'] : '';
     const category = params['category'] ? params['category'] : '';
+    const subCategory = params['subCategory'] ? params['subCategory'] : '';
+    await dispatch(requestProjectsData(subCategory ? subCategory : category));
     dispatch(requestProjectDetailData(projectId));
-    await dispatch(requestProjectsData(category));
   },
   getProjectDetailData: () => {
     const params = paramObj(ownProps.location.search);
@@ -187,7 +200,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   getProjectsData: async () => {
     const params = paramObj(ownProps.location.search);
     const category = params['category'] ? params['category'] : '';
-    await dispatch(requestProjectsData(category));
+    const subCategory = params['subCategory'] ? params['subCategory'] : '';
+    await dispatch(requestProjectsData(subCategory ? subCategory : category));
   },
   handleChangeProject: id => {
     const params = paramObj(ownProps.location.search);

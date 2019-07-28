@@ -40,7 +40,7 @@ const Routes = () => (
       <ErrorBoundaryRoute path="/contact-us" component={ContactUs}/>
       <ErrorBoundaryRoute path="/about-me" component={About}/>
       <ErrorBoundaryRoute path="/tin-tuc" component={News}/>
-      <ErrorBoundaryRoute path="/projects" component={Projects}/>
+      <ErrorBoundaryRoute path="/du-an" component={Projects}/>
       <ErrorBoundaryRoute path="/logout" component={Logout}/>
       <ErrorBoundaryRoute path="/register" component={Register}/>
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate}/>

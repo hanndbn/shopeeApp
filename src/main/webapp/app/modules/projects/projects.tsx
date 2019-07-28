@@ -10,6 +10,8 @@ import { requestProjectsData } from 'app/modules/projects/projects.reducer';
 import Category from 'app/modules/category/category';
 import { paramObj } from 'app/shared/util/util';
 import Loading from 'app/Loader/loading';
+import { Helmet } from 'react-helmet';
+import { TITLE_HELMET } from 'app/config/constants';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -40,7 +42,7 @@ export class Projects extends React.Component<IHomeProp> {
   }
 
   render() {
-    const { projectsData, activeCategory, loading } = this.props;
+    const { projectsData, activeCategory, loading, categoryData, activeSubCategory } = this.props;
     const projects = [];
     projectsData && projectsData.map(project => {
       projects.push({
@@ -49,8 +51,15 @@ export class Projects extends React.Component<IHomeProp> {
         list_images: project.list_images
       });
     });
+    const category = categoryData.find(v => v.id.toString() === activeCategory);
+    const categoryName = category ? ` | ${category.name}` : '';
+    const subCategory = categoryData.find(v => v.id.toString() === activeSubCategory);
+    const subCategoryName = subCategory ? ` | ${subCategory.name}` : '';
     return (
       <div className="projects-container list-item-container">
+        <Helmet>
+          <title>{`${TITLE_HELMET} | Dự Án${categoryName}${subCategoryName}`}</title>
+        </Helmet>
         <Category/>
         <div className="">
           {
@@ -58,21 +67,24 @@ export class Projects extends React.Component<IHomeProp> {
               :
               projects.length > 0 ?
                 <div className="row">
-                  {projects.map((project, idx) => (
-                    <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 g-margin-bottom-20 g-padding-left-right-5" key={idx}>
-                      <div className="card">
-                        <Link className="card-img-wrapper" to={`/project-detail?id=${project.id}${activeCategory ? `&categories=${activeCategory}` : ''}`}>
-                          <img className="card-img-top" src={project.avatar_img} alt="Card image cap"/>
-                        </Link>
-                        <div className="card-body">
-                          <h5 className="card-title">
-                            <Link to={`/project-detail?id=${project.id}`}>{project.project_name}</Link>
-                          </h5>
-                          <p className="card-text">{project.status}</p>
+                  {projects.map((project, idx) => {
+                    const link = `/project-detail?id=${project.id}${activeCategory ? `&category=${activeCategory}` : ''}${activeCategory && activeSubCategory ? `&subCategory=${activeSubCategory}` : ''}`;
+                    return (
+                      <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 g-margin-bottom-20 g-padding-left-right-5" key={idx}>
+                        <div className="card">
+                          <Link className="card-img-wrapper" to={link}>
+                            <div className="card-img" style={{ backgroundImage: `url(${project.avatar_img})` }}/>
+                          </Link>
+                          <div className="card-body">
+                            <h5 className="card-title">
+                              <Link to={link}>{project.project_name}</Link>
+                            </h5>
+                            <p className="card-text">{project.status}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 :
                 <div className="row">
@@ -88,7 +100,9 @@ export class Projects extends React.Component<IHomeProp> {
 const mapStateToProps = ({ projects, category }: IRootState) => ({
   projectsData: projects.projectsData,
   loading: projects.loading,
-  activeCategory: category.activeCategory
+  activeCategory: category.activeCategory,
+  activeSubCategory: category.activeSubCategory,
+  categoryData: category.categoryData
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

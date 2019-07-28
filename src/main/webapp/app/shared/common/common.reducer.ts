@@ -1,6 +1,6 @@
 // import { BASE_IMG_URL, GET_CAROUSEL_DATA } from 'app/config/constants';
 
-const ACTION_TYPES = {
+export const ACTION_TYPES = {
   RESET: 'Common/RESET',
   SET_LOADING: 'Common/SET_LOADING',
   SET_HEADER_BACKGROUND: 'Common/SET_HEADER_BACKGROUND'

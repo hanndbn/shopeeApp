@@ -9,6 +9,8 @@ import { setHeaderBackground } from 'app/shared/common/common.reducer';
 import Projects from 'app/modules/projects/projects';
 import $ from 'jquery';
 import { withRouter } from 'react-router';
+import { TITLE_HELMET } from 'app/config/constants';
+import { Helmet } from 'react-helmet';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -32,6 +34,9 @@ export class Home extends React.Component<IHomeProp> {
     const {} = this.props;
     return (
       <div className="">
+        <Helmet>
+          <title>{`${TITLE_HELMET}`}</title>
+        </Helmet>
         <Carousel/>
         <Projects/>
       </div>

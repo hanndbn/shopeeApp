@@ -6,6 +6,8 @@ import { Alert, Col, Row } from 'reactstrap';
 import { IRootState } from 'app/shared/reducers';
 import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 import { withRouter } from 'react-router';
+import { TITLE_HELMET } from 'app/config/constants';
+import { Helmet } from 'react-helmet';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -23,6 +25,9 @@ export class About extends React.Component<IAboutProp> {
     const {} = this.props;
     return (
       <div className="about-container">
+        <Helmet>
+          <title>{`${TITLE_HELMET} - Giới Thiệu`}</title>
+        </Helmet>
         <div className="alert-warning text-center">This page is building</div>
       </div>
     );

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import * as contactUsAction from 'app/modules/contactUs/contactUs.reducer';
 import { withRouter } from 'react-router';
+import { TITLE_HELMET } from 'app/config/constants';
+import { Helmet } from 'react-helmet';
 
 export interface ICarouselProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -23,6 +25,9 @@ export class ContactUs extends React.Component<ICarouselProp> {
     const addressData = contactUsAddressData && contactUsAddressData.length > 0 ? contactUsAddressData[0] : {};
     return (
       <div className="contact-us-container">
+        <Helmet>
+          <title>{`${TITLE_HELMET} - Liên Hệ`}</title>
+        </Helmet>
         <div className="mapouter">
           <div className="gmap_canvas">
             <iframe

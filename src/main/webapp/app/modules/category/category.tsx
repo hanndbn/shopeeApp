@@ -117,6 +117,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     const params = paramObj(ownProps.location.search);
     const category = params['category'] ? params['category'] : null;
     dispatch(categoryAction.setActiveCategory(category));
+    dispatch(categoryAction.setActiveSubCategory(null));
   },
   setActiveSubCategory: () => {
     const params = paramObj(ownProps.location.search);

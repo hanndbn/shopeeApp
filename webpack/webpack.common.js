@@ -106,8 +106,8 @@ module.exports = options => ({
         // If you use an API server, in `prod` mode, you will need to enable CORS
         // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
         // SERVER_API_URL: `'http://localhost/wordpress'`
-        // SERVER_API_URL: `'wordpress'`
-        SERVER_API_URL: `'https://skydln.com/wordpress/'`
+        SERVER_API_URL: `'wordpress'`
+        // SERVER_API_URL: `'http://pyramids.com.vn/wordpress/'`
       }
     }),
     new ForkTsCheckerWebpackPlugin({ tslint: true }),
