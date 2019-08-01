@@ -61,7 +61,7 @@ body::after {
   background-color: white;
   bottom: 0;
   width: 100%;
-  margin-top: 20px;
+  //margin-top: 20px;
 }
 
 .g-z-index-2 {
@@ -115,6 +115,10 @@ body::after {
   transform: scale(0.5);
 }
 
+.opacity-animation {
+  animation: animation-opacity 0.25s linear;
+}
+
 @-webkit-keyframes animation-right-left {
   0% {
     opacity: 0;
@@ -144,3 +148,22 @@ body::after {
     transform: translateX(0);
   }
 }
+
+@keyframes animation-opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes animation-opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+

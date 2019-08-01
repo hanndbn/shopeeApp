@@ -34,3 +34,24 @@
 .footer-logo-img {
   height: 60px;
 }
+
+.site .toTopBtn {
+  cursor: pointer;
+  position: fixed;
+  right: 15px;
+  bottom: 20px;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  border: 1px solid #3a454500;
+  color: #ffffffb5;
+  font-size: 8px;
+  background-color: #0000003d;
+  padding: 8px 8px;
+}
+
+.toTopBtn .fa-chevron-up {
+  width: 100%;
+  text-align: center;
+  font-size: 22px;
+}

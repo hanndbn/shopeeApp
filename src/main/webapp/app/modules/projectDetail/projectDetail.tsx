@@ -13,6 +13,7 @@ import { withRouter } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { SCREEN_PATH, TITLE_HELMET } from 'app/config/constants';
 import { Link } from 'react-router-dom';
+import LazyLoad from 'react-lazyload';
 
 const NextArrow = props => (
   <div onClick={props.onClick} className="arrow-carousel animation-delay next-arrow-carousel">
@@ -154,7 +155,9 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
                   project.list_images.map((img, idx) => (
                     <div key={idx}>
                       <div key={idx} className="card">
-                        <img className="card-img-top" src={img.guid}/>
+                        <LazyLoad height={200} offset={100} once>
+                          <img className="card-img-top" src={img.guid}/>
+                        </LazyLoad>
                       </div>
                     </div>
                   ))}
@@ -164,7 +167,9 @@ export class ProjectDetail extends React.Component<IProjectDetailProp> {
                   {project.list_images &&
                   project.list_images.map((img, idx) => (
                     <div key={idx} className="card">
-                      <img className="card-img-top" src={img.guid}/>
+                      <LazyLoad height={200} offset={100} once>
+                        <img className="card-img-top" src={img.guid}/>
+                      </LazyLoad>
                     </div>
                   ))}
                 </>

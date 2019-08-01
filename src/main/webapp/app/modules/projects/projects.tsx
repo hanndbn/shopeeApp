@@ -12,6 +12,7 @@ import { paramObj } from 'app/shared/util/util';
 import Loading from 'app/Loader/loading';
 import { Helmet } from 'react-helmet';
 import { TITLE_HELMET } from 'app/config/constants';
+import LazyLoad from 'react-lazyload';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -73,13 +74,14 @@ export class Projects extends React.Component<IHomeProp> {
                       <div className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 g-margin-bottom-20 g-padding-left-right-5" key={idx}>
                         <div className="card">
                           <Link className="card-img-wrapper" to={link}>
-                            <div className="card-img" style={{ backgroundImage: `url(${project.avatar_img})` }}/>
+                            <LazyLoad height={200} offset={100} once>
+                              <div className="card-img" style={{ backgroundImage: `url(${project.avatar_img})` }}/>
+                            </LazyLoad>
                           </Link>
                           <div className="card-body">
                             <h5 className="card-title">
                               <Link to={link}>{project.project_name}</Link>
                             </h5>
-                            <p className="card-text">{project.status}</p>
                           </div>
                         </div>
                       </div>

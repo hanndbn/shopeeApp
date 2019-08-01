@@ -9,7 +9,7 @@
     position: absolute;
     border: none;
     .nav-link {
-      .nav-text {
+      .nav-text, .navbar-toggler-icon {
         color: white;
       }
     }
@@ -81,8 +81,11 @@
       .navbar-custom {
         align-items: center;
         padding: 0;
+        .navbar-toggler-icon {
+          color: black;
+        }
       }
-      .header-menu-wrapper{
+      .header-menu-wrapper {
         background-color: white;
       }
       .nav-link {
@@ -91,8 +94,10 @@
         }
       }
       padding: 0;
-      .navbar-toggler-icon {
-        color: white;
+      &.home-header {
+        .navbar-toggler-icon {
+          color: white;
+        }
       }
     }
   }

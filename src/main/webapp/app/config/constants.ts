@@ -18,6 +18,21 @@ export const messages = {
   DATA_ERROR_ALERT: 'Internal Error'
 };
 
+export const ABOUT_TABS = [
+  {
+    id: 'office',
+    title: 'Văn phòng thiết kế'
+  },
+  {
+    id: 'factory',
+    title: 'Xưởng nội thất'
+  },
+  {
+    id: 'employee',
+    title: 'Nhân sự'
+  }
+];
+
 export const HEADER_LINK = [
   {
     title: 'Home',
@@ -58,3 +73,4 @@ export const GET_PROJECTS_DATA_URL = '/wp-json/wp/v2/projects';
 export const GET_PROJECT_DETAIL_DATA_URL = '/wp-json/wp/v2/projects/';
 export const POST_CONTACT_US_URL = '/wp-json/wp/v2/comments';
 export const GET_CONTACT_US_ADDRESS_URL = '/wp-json/wp/v2/contact-us';
+export const GET_ABOUT_DATA_URL = '/wp-json/wp/v2/about';

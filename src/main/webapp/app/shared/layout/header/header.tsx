@@ -7,7 +7,6 @@ import { IRootState } from 'app/shared/reducers';
 import { reset } from 'app/shared/common/common.reducer';
 import { connect } from 'react-redux';
 import { HEADER_LINK } from 'app/config/constants';
-import Drawer from '@material-ui/core';
 
 export interface IHeaderProps {
   headerBackground: any;
@@ -30,10 +29,6 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
           <div className="">
             <div className="row">
               <div className="col-12">
-                <Drawer open={true} anchor="left">
-                  <div>fdsa</div>
-                  <div>fdsa</div>
-                </Drawer>
                 <nav className="navbar navbar-custom navbar-expand-lg">
                   <Link to="/" className="navbar-brand" href="#">
                     <img className="logo-image" src={`content/images/logo/${logo}`}/>
@@ -54,7 +49,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
                       </svg>
                     </span>
                   </button>
-                  <div className="navbar-collapse" id="navbarNav">
+                  <div className="navbar-collapse collapse" id="navbarNav">
                     <ul className="navbar-nav header-menu-wrapper">
                       {
                         HEADER_LINK.map((item, idx) =>
