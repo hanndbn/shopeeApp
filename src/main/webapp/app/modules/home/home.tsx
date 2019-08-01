@@ -2,7 +2,6 @@ import './home.scss';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Alert, Col, Row } from 'reactstrap';
 import Carousel from 'app/modules/carousel/carousel';
 import { IRootState } from 'app/shared/reducers';
 import { setHeaderBackground } from 'app/shared/common/common.reducer';
@@ -38,7 +37,7 @@ export class Home extends React.Component<IHomeProp> {
           <title>{`${TITLE_HELMET}`}</title>
         </Helmet>
         <Carousel/>
-        <Projects/>
+        <Projects hiddenHelmet="1"/>
       </div>
     );
   }

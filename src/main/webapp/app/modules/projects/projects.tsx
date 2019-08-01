@@ -2,7 +2,6 @@ import './projects.scss';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Alert, Col, Row } from 'reactstrap';
 import { IRootState } from 'app/shared/reducers';
 import { animationDisplayLoading, reset } from 'app/shared/common/common.reducer';
 import { Link, withRouter } from 'react-router-dom';
@@ -20,6 +19,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
   handleChangeData: Function;
   location: any;
+  hiddenHelmet: any;
 }
 
 export class Projects extends React.Component<IHomeProp> {
@@ -32,8 +32,8 @@ export class Projects extends React.Component<IHomeProp> {
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
     const currentParams = paramObj(this.props.location.search);
     const prevParams = paramObj(prevProps.location.search);
-    if (currentParams['category'] !== prevParams['category']
-      || currentParams['subCategory'] !== prevParams['subCategory']) {
+    if (currentParams[ 'category' ] !== prevParams[ 'category' ]
+      || currentParams[ 'subCategory' ] !== prevParams[ 'subCategory' ]) {
       this.props.handleChangeData();
     }
     return null;
@@ -43,7 +43,7 @@ export class Projects extends React.Component<IHomeProp> {
   }
 
   render() {
-    const { projectsData, activeCategory, loading, categoryData, activeSubCategory } = this.props;
+    const { projectsData, activeCategory, loading, categoryData, activeSubCategory, hiddenHelmet } = this.props;
     const projects = [];
     projectsData && projectsData.map(project => {
       projects.push({
@@ -58,9 +58,12 @@ export class Projects extends React.Component<IHomeProp> {
     const subCategoryName = subCategory ? ` | ${subCategory.name}` : '';
     return (
       <div className="projects-container list-item-container">
-        <Helmet>
-          <title>{`${TITLE_HELMET} | Dự Án${categoryName}${subCategoryName}`}</title>
-        </Helmet>
+        {
+          !hiddenHelmet &&
+          <Helmet>
+            <title>{`${TITLE_HELMET} | Dự Án${categoryName}${subCategoryName}`}</title>
+          </Helmet>
+        }
         <Category/>
         <div className="">
           {
@@ -114,8 +117,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   handleChangeData: () => {
     const params = paramObj(ownProps.location.search);
-    const category = params['category'] ? params['category'] : null;
-    const subCategory = params['subCategory'] ? params['subCategory'] : null;
+    const category = params[ 'category' ] ? params[ 'category' ] : null;
+    const subCategory = params[ 'subCategory' ] ? params[ 'subCategory' ] : null;
     dispatch(requestProjectsData(subCategory ? subCategory : category));
   }
 });

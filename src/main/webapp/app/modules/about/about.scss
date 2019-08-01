@@ -1,10 +1,21 @@
+@media only screen and (min-width: 992px) {
+  .view-container,
+  .view-container {
+    height: 100%;
+  }
+}
+
 .about-container {
+  height: 100%;
   margin-top: 20px;
   background-color: black;
+
   .tab-header {
     background-color: #121212;
     border: none;
+
     .nav-link {
+      cursor: pointer;
       display: block;
       padding: 15px 30px;
       color: #777;
@@ -12,6 +23,7 @@
       position: relative;
       text-decoration: none;
       border: none;
+
       &.active, &:hover {
         background-color: inherit;
         border: none;
@@ -22,6 +34,7 @@
 
   .tab-content {
     padding: 20px 10px;
+
     .about-item {
       padding: 0;
       @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -30,6 +43,7 @@
       @media only screen and (min-width: 992px) {
         max-width: 25%;
       }
+
       img {
         width: 100%;
         transition: filter 300ms linear, transform 1s linear;
@@ -37,6 +51,7 @@
         -webkit-filter: grayscale(100%);
         -moz-filter: grayscale(100%);
         -o-filter: grayscale(100%);
+
         &:hover {
           filter: none;
           -webkit-filter: none;
@@ -44,6 +59,14 @@
           -o-filter: none;
         }
       }
+    }
+
+    .about-detail-container {
+      background-color: transparent;
+    }
+
+    .slick-dots button:before {
+      color: white;
     }
   }
 }

@@ -74,7 +74,7 @@ export class Carousel extends React.Component<ICarouselProp> {
               {carouselDataSorted.map((carousel, idx) => (
                   <div key={idx}>
                     <div className="carousel-container no-gutters">
-                      <div className="col-12 d-flex flex-wrap">
+                      <div className="col-12 g-display-flex">
                         <img className="carousel-img" src={carousel.imageurl}/>
                         <div className="carousel-text-wrapper">
                           <div className="carousel-text">

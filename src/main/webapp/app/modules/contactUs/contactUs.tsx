@@ -28,26 +28,7 @@ export class ContactUs extends React.Component<ICarouselProp> {
         <Helmet>
           <title>{`${TITLE_HELMET} - Liên Hệ`}</title>
         </Helmet>
-        <div className="mapouter">
-          <div className="gmap_canvas">
-            <iframe
-              width={700}
-              height={300}
-              id="gmap_canvas"
-              src="https://maps.google.com/maps?q=165%20th%C3%A1i%20h%C3%A0&t=&z=13&ie=UTF8&iwloc=&output=embed"
-              frameBorder={0}
-              scrolling="no"
-              marginHeight={0}
-              marginWidth={0}
-            />
-            <a href="https://www.emojilib.com"/>
-          </div>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: '.mapouter{position:relative;text-align:right;height:250px;width:700px;}.gmap_canvas {overflow:hidden;background:none!important;height:250px;width:700px;}'
-            }}
-          />
-        </div>
+        <div dangerouslySetInnerHTML={{ __html: addressData.address_map ? addressData.address_map : '' }}/>
         <div className="container g-margin-top-50">
           <div className="row">
             <div className="col-12 col-sm-12 col-md-6">

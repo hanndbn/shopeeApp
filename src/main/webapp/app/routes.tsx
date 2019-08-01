@@ -38,7 +38,8 @@ const Routes = () => (
       <ErrorBoundaryRoute exact path="/" component={Home}/>
       <ErrorBoundaryRoute path="/project-detail" component={ProjectDetail}/>
       <ErrorBoundaryRoute path="/contact-us" component={ContactUs}/>
-      <ErrorBoundaryRoute path="/about-me" component={About}/>
+      <ErrorBoundaryRoute exact={true} path="/about" component={About}/>
+      <ErrorBoundaryRoute path="/about/:link" component={About}/>
       <ErrorBoundaryRoute path="/tin-tuc" component={News}/>
       <ErrorBoundaryRoute path="/du-an" component={Projects}/>
       <ErrorBoundaryRoute path="/logout" component={Logout}/>

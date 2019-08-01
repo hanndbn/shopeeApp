@@ -7,10 +7,9 @@ body {
   //overflow-y: hidden;
 }
 
-html,
-body {
+html, body {
   width: auto !important;
-  //overflow-x: hidden !important;
+  overflow-x: hidden !important;
 }
 
 div {
@@ -165,5 +164,12 @@ body::after {
   100% {
     opacity: 1;
   }
+}
+
+.g-display-flex {
+  -webkit-flex: 1; /* Safari 6.1+ */
+  -ms-flex: 1; /* IE 10 */
+  flex: 1;
+  flex-wrap: wrap;
 }
 

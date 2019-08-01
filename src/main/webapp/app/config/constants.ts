@@ -21,14 +21,17 @@ export const messages = {
 export const ABOUT_TABS = [
   {
     id: 'office',
+    link: 'van-phong-thiet-ke',
     title: 'Văn phòng thiết kế'
   },
   {
     id: 'factory',
+    link: 'xuong-noi-that',
     title: 'Xưởng nội thất'
   },
   {
     id: 'employee',
+    link: 'nhan-su',
     title: 'Nhân sự'
   }
 ];
@@ -40,7 +43,7 @@ export const HEADER_LINK = [
   },
   {
     title: 'Giới thiệu',
-    pathname: '/about-me'
+    pathname: '/about'
   },
   {
     title: 'Dự án',

@@ -6,12 +6,18 @@ import { GET_ABOUT_DATA_URL } from 'app/config/constants';
 const ACTION_TYPES = {
   SET_ACTIVE_TAB: 'About/SET_ACTIVE_TAB',
   GET_ABOUT_DATA: 'About/GET_ABOUT_DATA',
+  SET_SHOW_DETAIL: 'About/SET_SHOW_DETAIL',
+  SET_DETAIL_DATA: 'About/SET_DETAIL_DATA',
+  SET_INIT_IDX: 'About/SET_INIT_IDX',
   RESET: 'About/RESET'
 };
 
 const initialState = {
   aboutData: [],
-  activeTab: 0,
+  showDetail: false,
+  detailData: [],
+  initIdx: 0,
+  activeTab: '',
   loading: false,
   requestFailure: false,
   errorMessage: null
@@ -45,6 +51,21 @@ export default (state: AboutState = initialState, action): AboutState => {
         ...state,
         activeTab: action.payload
       };
+    case ACTION_TYPES.SET_SHOW_DETAIL:
+      return {
+        ...state,
+        showDetail: action.payload
+      };
+    case ACTION_TYPES.SET_DETAIL_DATA:
+      return {
+        ...state,
+        detailData: action.payload
+      };
+    case ACTION_TYPES.SET_INIT_IDX:
+      return {
+        ...state,
+        initIdx: action.payload
+      };
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -65,6 +86,21 @@ export const requestAboutData = () => async (dispatch, getState) => {
 export const setActiveTab = activeTab => ({
   type: ACTION_TYPES.SET_ACTIVE_TAB,
   payload: activeTab
+});
+
+export const setShowDetail = showDetail => ({
+  type: ACTION_TYPES.SET_SHOW_DETAIL,
+  payload: showDetail
+});
+
+export const setDetailData = detailData => ({
+  type: ACTION_TYPES.SET_DETAIL_DATA,
+  payload: detailData
+});
+
+export const setInitIdx = initIdx => ({
+  type: ACTION_TYPES.SET_INIT_IDX,
+  payload: initIdx
 });
 
 export const reset = () => ({
