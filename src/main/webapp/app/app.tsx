@@ -4,14 +4,11 @@ import 'bootstrap';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card } from 'reactstrap';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { IRootState } from 'app/shared/reducers';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AppRoutes from 'app/routes';
-import Footer from 'app/shared/layout/footer/footer';
-import Header from 'app/shared/layout/header/header';
 import Loader from 'app/shared/layout/loader/loader';
 import { requestCategoryData } from 'app/modules/category/category.reducer';
 
@@ -33,18 +30,12 @@ export class App extends React.Component<IAppProps> {
         <div className="site">
           {displayLoading && <Loader/>}
           {/*<ToastContainer position={toast.POSITION.TOP_LEFT as ToastPosition} className="toastify-container" toastClassName="toastify-toast" />*/}
-          <div className="site-header">
-            <Header/>
-          </div>
           <div className="site-content">
             <div className="view-container" id="app-view-container">
               <ErrorBoundary>
                 <AppRoutes/>
               </ErrorBoundary>
             </div>
-          </div>
-          <div className="site-footer">
-            <Footer/>
           </div>
         </div>
       </Router>
