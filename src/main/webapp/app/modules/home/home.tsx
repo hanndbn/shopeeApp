@@ -7,6 +7,7 @@ import { setHeaderBackground } from 'app/shared/common/common.reducer';
 import { withRouter } from 'react-router';
 import { TITLE_HELMET } from 'app/config/constants';
 import { Helmet } from 'react-helmet';
+import _ from 'lodash';
 // import x2js from 'x2js';
 var DOMParser = require('xmldom').DOMParser;
 // const jsdom = require("jsdom");
@@ -26,6 +27,15 @@ export class Home extends React.Component<IHomeProp> {
   componentWillUnmount() {
   }
 
+  isNumericAttribute(attr) {
+    // Handles known numeric attributes for generic objects
+    const result = (attr.name === 'x' || attr.name === 'y' ||
+      attr.name === 'width' || attr.name === 'height') ||
+      (attr.name === 'x' || attr.name === 'y') ||
+      _.isNumber(attr.value);
+    return result;
+  }
+
   render() {
     const input = `
     <mxGraphModel dx="1422" dy="836" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
@@ -40,6 +50,34 @@ export class Home extends React.Component<IHomeProp> {
     `;
     // const x2js1 = new x2js();
     const doc = new DOMParser().parseFromString(input, 'text/xml');
+    const node = doc.documentElement;
+    if (node != null && node.nodeType === 1) {
+      // decodeAttributes
+      const attrs = node.attributes;
+      const obj = {};
+      attrs && attrs.map(attr => {
+        const name = attr.nodeName;
+        const value = _.isNumber(attr.value) ? parseFloat(attr.value) : attr.value;
+        obj[name] = value;
+      });
+
+      // decodeChildren
+      const child = node.firstChild;
+      while (child != null) {
+        let tmp = child.nextSibling;
+
+        if (child.nodeType === 1) {
+          if (child.nodeName === 'root') {
+            this.decodeRoot(dec, child, obj);
+          }
+          else {
+            mxObjectCodec.prototype.decodeChild.apply(this, arguments);
+          }
+        }
+
+        child = tmp;
+      }
+    }
     console.log(doc);
     // const dom = new jsdom.JSDOM(input);
     // console.log(dom);
