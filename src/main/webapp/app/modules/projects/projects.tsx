@@ -54,7 +54,7 @@ export class Projects extends React.Component<IHomeProp> {
         date: project.date
       });
     });
-    projects = _.orderBy(projects, [ 'display_order', 'date' ], [ 'asc', 'desc' ]);
+    // projects = _.orderBy(projects, [ 'display_order', 'date' ], [ 'asc', 'desc' ]);
     const category = categoryData.find(v => v.id.toString() === activeCategory);
     const categoryName = category ? ` | ${category.name}` : '';
     const subCategory = categoryData.find(v => v.id.toString() === activeSubCategory);

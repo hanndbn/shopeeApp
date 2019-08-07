@@ -33,6 +33,11 @@ export const ABOUT_TABS = [
     id: 'employee',
     link: 'nhan-su',
     title: 'Nhân sự'
+  },
+  {
+    id: 'activity',
+    link: 'hoat-dong',
+    title: 'Hoạt động'
   }
 ];
 
@@ -72,7 +77,7 @@ export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 
 export const GET_CAROUSEL_DATA_URL = '/wp-json/acf/v3/carousel?per_page=100';
 export const GET_CATEGORY_DATA_URL = '/wp-json/wp/v2/categories?per_page=100';
-export const GET_PROJECTS_DATA_URL = '/wp-json/wp/v2/projects?per_page=100&filter[orderby]=date&order=desc';
+export const GET_PROJECTS_DATA_URL = '/wp-json/wp/v2/projects?per_page=100';
 export const GET_PROJECT_DETAIL_DATA_URL = '/wp-json/wp/v2/projects/';
 export const POST_CONTACT_US_URL = '/wp-json/wp/v2/comments';
 export const GET_CONTACT_US_ADDRESS_URL = '/wp-json/wp/v2/contact-us';
