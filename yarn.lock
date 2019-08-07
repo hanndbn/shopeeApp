@@ -12637,12 +12637,6 @@ ws@~6.1.0:
   dependencies:
     async-limiter "~1.0.0"
 
-x2js@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.3.1.tgz#185d0cb19511d150f38db87d02da7e34b07aa49e"
-  dependencies:
-    xmldom "^0.1.19"
-
 xdg-basedir@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-2.0.0.tgz#edbc903cc385fc04523d966a335504b5504d1bd2"
@@ -12668,7 +12662,7 @@ xmlbuilder@~9.0.1:
   version "9.0.7"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
 
-xmldom@^0.1.19, xmldom@^0.1.27:
+xmldom@^0.1.27:
   version "0.1.27"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
 

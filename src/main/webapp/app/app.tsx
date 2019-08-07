@@ -19,7 +19,7 @@ export interface IAppProps extends StateProps, DispatchProps {
 
 export class App extends React.Component<IAppProps> {
   componentDidMount() {
-    this.props.getCommonData();
+    // this.props.getCommonData();
     // this.props.getProfile();
   }
 
