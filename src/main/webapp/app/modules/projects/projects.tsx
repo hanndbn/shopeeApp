@@ -12,6 +12,7 @@ import Loading from 'app/Loader/loading';
 import { Helmet } from 'react-helmet';
 import { TITLE_HELMET } from 'app/config/constants';
 import LazyLoad from 'react-lazyload';
+import _ from 'lodash';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -44,14 +45,16 @@ export class Projects extends React.Component<IHomeProp> {
 
   render() {
     const { projectsData, activeCategory, loading, categoryData, activeSubCategory, hiddenHelmet } = this.props;
-    const projects = [];
+    let projects = [];
     projectsData && projectsData.map(project => {
       projects.push({
         ...project.acf,
         id: project.id,
-        list_images: project.list_images
+        list_images: project.list_images,
+        date: project.date
       });
     });
+    projects = _.orderBy(projects, [ 'display_order', 'date' ], [ 'asc', 'desc' ]);
     const category = categoryData.find(v => v.id.toString() === activeCategory);
     const categoryName = category ? ` | ${category.name}` : '';
     const subCategory = categoryData.find(v => v.id.toString() === activeSubCategory);
