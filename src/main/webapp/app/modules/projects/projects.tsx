@@ -45,7 +45,7 @@ export class Projects extends React.Component<IHomeProp> {
 
   render() {
     const { projectsData, activeCategory, loading, categoryData, activeSubCategory, hiddenHelmet } = this.props;
-    let projects = [];
+    const projects = [];
     projectsData && projectsData.map(project => {
       projects.push({
         ...project.acf,
