@@ -67,7 +67,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   constructor(props) {
     super(props);
     this.state = {
-      input: `<mxGraphModel dx="1536" dy="868" grid="1" gridSize="18" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
+      input: `<mxGraphModel dx="1422" dy="804" grid="1" gridSize="18" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
   <root>
     <mxCell id="0" style="spacingBottom=0;verticalAlign=top;"/>
     <mxCell id="1" style="verticalAlign=top;" parent="0"/>
@@ -83,7 +83,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     <mxCell id="4" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;fontSize=20;image=https://media3.scdn.vn/img3/2019/7_1/vPZBhq_simg_de2fe0_500x500_maxb.jpg;" parent="2" vertex="1">
       <mxGeometry x="35" y="60" width="180" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="17" value="Next" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=16;fontColor=#FF1745;shadow=0;opacity=10;" parent="2" vertex="1">
+    <mxCell id="17" value="&lt;font style=&quot;font-size: 13px&quot;&gt;Next&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=12;fontColor=#FF1745;shadow=0;opacity=50;" parent="2" vertex="1">
       <mxGeometry x="125" y="270" width="108" height="30" as="geometry"/>
     </mxCell>
     <mxCell id="15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;" parent="1" source="6" target="11" edge="1">
@@ -98,7 +98,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     <mxCell id="8" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;fontSize=20;image=https://media3.scdn.vn/img3/2019/7_1/yQz1yI_simg_de2fe0_500x500_maxb.jpg;" parent="6" vertex="1">
       <mxGeometry x="35" y="60" width="180" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="18" value="Next" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=16;fontColor=#FF1745;strokeColor=none;" parent="6" vertex="1">
+    <mxCell id="18" value="&lt;font style=&quot;font-size: 13px&quot;&gt;Next&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=12;fontColor=#FF1745;shadow=0;opacity=50;" vertex="1" parent="6">
       <mxGeometry x="125" y="270" width="108" height="30" as="geometry"/>
     </mxCell>
     <mxCell id="11" value="" style="rounded=0;whiteSpace=wrap;html=1;container=1;" parent="1" vertex="1">
@@ -110,11 +110,14 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     <mxCell id="13" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;fontSize=20;image=https://media3.scdn.vn/img3/2019/7_1/sulUFJ_simg_de2fe0_500x500_maxb.jpg;" parent="11" vertex="1">
       <mxGeometry x="35" y="60" width="180" height="180" as="geometry"/>
     </mxCell>
-    <mxCell id="16" value="Next" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=16;fontColor=#FF1745;strokeColor=none;" parent="11" vertex="1">
-      <mxGeometry x="107" y="274" width="108" height="30" as="geometry"/>
+    <mxCell id="23" value="&lt;font style=&quot;font-size: 13px&quot;&gt;Finish&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=12;fontColor=#FF1745;shadow=0;opacity=50;" vertex="1" parent="11">
+      <mxGeometry x="126" y="271" width="108" height="30" as="geometry"/>
     </mxCell>
   </root>
 </mxGraphModel>
+
+
+
 
 
 `, content: `
@@ -137,13 +140,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   decode(node, data) {
     let obj = {};
     if (node != null && node.nodeType === 1) {
-      obj['name'] = node.nodeName;
-      obj['child'] = [];
+      obj[ 'name' ] = node.nodeName;
+      obj[ 'child' ] = [];
       // decodeAttributes
       const attrs = node.attributes;
       for (const attr of attrs) {
         if (attr.nodeName !== 'name' && attr.nodeName !== 'child') {
-          obj[attr.nodeName] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
+          obj[ attr.nodeName ] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
         }
       }
 
@@ -154,16 +157,16 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         if (child.nodeType === 1) {
           const childObj = this.decode(child, data);
           if (childObj) {
-            if (childObj['name'] === 'mxGeometry') {
+            if (childObj[ 'name' ] === 'mxGeometry') {
               obj = {
                 ...obj,
-                x: childObj['x'],
-                y: childObj['y'],
-                width: childObj['width'],
-                height: childObj['height']
+                x: childObj[ 'x' ],
+                y: childObj[ 'y' ],
+                width: childObj[ 'width' ],
+                height: childObj[ 'height' ]
               };
             } else {
-              obj['child'].push(childObj);
+              obj[ 'child' ].push(childObj);
             }
           }
         }
@@ -171,19 +174,19 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
       if (node.nodeName === 'mxGraphModel') {
         data.root = _.omit(obj, 'child');
-      } else if (node.nodeName === 'mxCell' && obj['parent'] != null) {
-        if (obj['source'] && obj['target']) {
-          const relation = data.relation.find(v => v.source === obj['source'] && v.target === obj['target']);
+      } else if (node.nodeName === 'mxCell' && obj[ 'parent' ] != null) {
+        if (obj[ 'source' ] && obj[ 'target' ]) {
+          const relation = data.relation.find(v => v.source === obj[ 'source' ] && v.target === obj[ 'target' ]);
           if (!relation) {
             data.relation.push({
-              source: obj['source'],
-              target: obj['target']
+              source: obj[ 'source' ],
+              target: obj[ 'target' ]
             });
           }
-        } else if (!obj['source'] && !obj['target']) {
+        } else if (!obj[ 'source' ] && !obj[ 'target' ]) {
           let element = null;
           data.elements.map(v => {
-            element = this.searchElement(v, obj['parent']);
+            element = this.searchElement(v, obj[ 'parent' ]);
           });
           if (element) {
             element.child.push(obj);
@@ -199,7 +202,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   searchElement(element, parentId) {
-    if (element['id'] === parentId) {
+    if (element[ 'id' ] === parentId) {
       return element;
     } else if (element.child && element.child.length > 0) {
       let result = null;
@@ -213,12 +216,26 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   parse2html(data) {
     const { root, elements, relation } = data;
-    const slides = elements && elements.length > 0 ? elements[0].child : [];
+    const slides = elements && elements.length > 0 ? elements[ 0 ].child : [];
+    let validElement = [];
+    relation.map(v => {
+      if (slides.find(slide => slide.id === v.source)
+        && slides.find(slide => slide.id === v.target)) {
+        validElement.push(v.source);
+        validElement.push(v.target);
+      }
+    });
+    validElement = _.uniq(validElement);
+    const slidesProcessed = [];
+    validElement.map(v => {
+      const slideProcessed = slides.find(slide => slide.id === v);
+      if (slideProcessed) slidesProcessed.push(slideProcessed);
+    });
     return (
       <div className="container">
         <div className="slide-container">
           <Slider {...Settings}>
-            {slides.map((slide, idx) => {
+            {slidesProcessed.map((slide, idx) => {
               const a = slide;
               return (<div key={idx}>
                 <div key={idx} className="d-flex flex-wrap align-items-center justify-content-center">
@@ -234,9 +251,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(slide, isRoot = false, idx) {
-    const relationShip = this.getRelationShop(slide);
-    console.log(relationShip);
-    const slideStyle = this.getSlideStyle(slide['style']);
+    const slideStyle = this.getSlideStyle(slide[ 'style' ]);
     const style: any = this.getStyle(slide, slideStyle, isRoot);
     const childStyle: any = this.getChildStyle(slide, slideStyle);
     const valueStyle: any = this.getValueStyle(slide, slideStyle);
@@ -252,7 +267,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         {slide.value && <div
           className="slide-value"
           style={valueStyle}
-        >{slide.value}</div>}
+        >
+          <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
+        </div>}
       </div>
     </div>);
   }
@@ -260,17 +277,17 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   getSlideStyle(styleStr) {
     const slideStyle = {};
     styleStr.split(';').map(v => {
-      const styleName = v.split('=')[0] ? v.split('=')[0] : null;
-      const styleValue = v.split('=')[1] ? v.split('=')[1] : null;
+      const styleName = v.split('=')[ 0 ] ? v.split('=')[ 0 ] : null;
+      const styleValue = v.split('=')[ 1 ] ? v.split('=')[ 1 ] : null;
       if (styleName === ELEMENT_TYPE.TEXT) {
-        slideStyle['elementStyle'] = ELEMENT_TYPE.TEXT;
+        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.TEXT;
       } else if (styleName === ELEMENT_TYPE.IMAGE) {
-        slideStyle['elementStyle'] = ELEMENT_TYPE.IMAGE;
+        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.IMAGE;
       } else if (styleName === 'rounded' && styleValue === '1') {
-        slideStyle['elementStyle'] = ELEMENT_TYPE.BUTTON;
+        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.BUTTON;
       }
       if (styleName !== null && styleValue !== null) {
-        slideStyle[styleName] = styleValue;
+        slideStyle[ styleName ] = styleValue;
       }
     });
     return slideStyle;
@@ -279,25 +296,25 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   getStyle(slide, slideStyle, isRoot) {
     let style: any = {};
     // add common style
-    const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
+    const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
     style = {
       ...style,
-      border: slideStyle['strokeColor'] === 'none' || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE ?
+      border: slideStyle[ 'strokeColor' ] === 'none' || slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.IMAGE ?
         '' : `1px solid ${this.getColorWithOpacity('#000000', opacityHex)}`,
-      width: slide['width'],
-      height: slide['height'],
-      fontSize: `${slideStyle['fontSize']}px`,
-      fontFamily: slideStyle['fontFamily'] ? `${slideStyle['fontFamily']}` : '',
-      borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
-      backgroundColor: slideStyle['fillColor'] ? `${this.getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
+      width: slide[ 'width' ],
+      height: slide[ 'height' ],
+      fontSize: `${slideStyle[ 'fontSize' ]}px`,
+      fontFamily: slideStyle[ 'fontFamily' ] ? `${slideStyle[ 'fontFamily' ]}` : '',
+      borderRadius: slideStyle[ 'rounded' ] === '1' ? '5px' : '',
+      backgroundColor: slideStyle[ 'fillColor' ] ? `${this.getColorWithOpacity(slideStyle[ 'fillColor' ], opacityHex)}` : ''
     };
     // add special style
-    if (slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE) {
+    if (slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.IMAGE) {
       style = {
         ...style,
-        backgroundImage: `url(${slideStyle['image']})`
+        backgroundImage: `url(${slideStyle[ 'image' ]})`
       };
-    } else if (slideStyle['elementStyle'] === ELEMENT_TYPE.BUTTON) {
+    } else if (slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.BUTTON) {
       style = {
         ...style,
         cursor: `pointer`
@@ -317,77 +334,77 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   getChildStyle(slide, slideStyle) {
     let childStyle: any = {};
-    const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
+    const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
     childStyle = {
       ...childStyle,
       // border: slideStyle['strokeColor'] === 'none' || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE ?
       //   '' : `1px solid ${this.getColorWithOpacity('#000000', opacityHex)}`,
-      borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
-      backgroundColor: slideStyle['fillColor'] ? `${this.getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
+      borderRadius: slideStyle[ 'rounded' ] === '1' ? '5px' : '',
+      backgroundColor: slideStyle[ 'fillColor' ] ? `${this.getColorWithOpacity(slideStyle[ 'fillColor' ], opacityHex)}` : ''
     };
     return childStyle;
   }
 
   getValueStyle(slide, slideStyle) {
     let valueStyle: any = {};
-    const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
+    const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
     valueStyle = {
       ...valueStyle,
-      color: slideStyle['fontColor'] ? slideStyle['fontColor'] : '',
-      backgroundColor: slideStyle['labelBackgroundColor'] && slideStyle['labelBackgroundColor'] !== 'none' ?
-        `${this.getColorWithOpacity(slideStyle['labelBackgroundColor'], opacityHex)}` : ''
+      color: slideStyle[ 'fontColor' ] ? slideStyle[ 'fontColor' ] : '',
+      backgroundColor: slideStyle[ 'labelBackgroundColor' ] && slideStyle[ 'labelBackgroundColor' ] !== 'none' ?
+        `${this.getColorWithOpacity(slideStyle[ 'labelBackgroundColor' ], opacityHex)}` : ''
       // border: (slideStyle['labelBorderColor'] && slideStyle['labelBorderColor'] !== 'none') ?
       //   `1px solid ${this.getColorWithOpacity(slideStyle['labelBorderColor'], opacityHex)}` : ''
     };
 
     // set align
-    if (slideStyle['labelPosition'] !== 'center') {
-      if (slideStyle['labelPosition'] === 'left') {
+    if (slideStyle[ 'labelPosition' ] !== 'center') {
+      if (slideStyle[ 'labelPosition' ] === 'left') {
         valueStyle = {
           ...valueStyle,
-          right: `${slide['width']}px`
+          right: `${slide[ 'width' ]}px`
         };
-      } else if (slideStyle['labelPosition'] === 'right') {
+      } else if (slideStyle[ 'labelPosition' ] === 'right') {
         valueStyle = {
           ...valueStyle,
-          left: `${slide['width']}px`
+          left: `${slide[ 'width' ]}px`
         };
       }
     }
 
     // set vertical align
-    if (slideStyle['verticalLabelPosition'] !== 'middle') {
-      if (slideStyle['verticalLabelPosition'] === 'top') {
+    if (slideStyle[ 'verticalLabelPosition' ] !== 'middle') {
+      if (slideStyle[ 'verticalLabelPosition' ] === 'top') {
         valueStyle = {
           ...valueStyle,
-          bottom: `${slide['height']}px`
+          bottom: `${slide[ 'height' ]}px`
         };
-      } else if (slideStyle['labelPosition'] === 'bottom') {
+      } else if (slideStyle[ 'labelPosition' ] === 'bottom') {
         valueStyle = {
           ...valueStyle,
-          top: `${slide['height']}px`
+          top: `${slide[ 'height' ]}px`
         };
       }
     }
     // set font style
-    if (slideStyle['fontStyle']) {
-      const fontStyleArray = parseInt(slideStyle['fontStyle'], 10).toString(2).split('');
+    if (slideStyle[ 'fontStyle' ]) {
+      const fontStyleArray = parseInt(slideStyle[ 'fontStyle' ], 10).toString(2).split('');
       valueStyle = {
         ...valueStyle,
-        fontWeight: fontStyleArray[0] === '1' ? 'bold' : '',
-        fontStyle: fontStyleArray[1] === '1' ? 'italic' : '',
-        textDecoration: fontStyleArray[1] === '1' ? 'underline' : ''
+        fontWeight: fontStyleArray[ 0 ] === '1' ? 'bold' : '',
+        fontStyle: fontStyleArray[ 1 ] === '1' ? 'italic' : '',
+        textDecoration: fontStyleArray[ 1 ] === '1' ? 'underline' : ''
       };
     }
 
     // set padding
     valueStyle = {
       ...valueStyle,
-      padding: slideStyle['spacing'] ? `${slideStyle['spacing']}px` : '',
-      paddingLeft: slideStyle['spacingLeft'] ? `${slideStyle['spacingLeft']}px` : '',
-      paddingRight: slideStyle['spacingRight'] ? `${slideStyle['spacingRight']}px` : '',
-      paddingBottom: slideStyle['spacingBottom'] ? `${slideStyle['spacingBottom']}px` : '',
-      paddingTop: slideStyle['spacingTop'] ? `${slideStyle['spacingTop']}px` : ''
+      padding: slideStyle[ 'spacing' ] ? `${slideStyle[ 'spacing' ]}px` : '',
+      paddingLeft: slideStyle[ 'spacingLeft' ] ? `${slideStyle[ 'spacingLeft' ]}px` : '',
+      paddingRight: slideStyle[ 'spacingRight' ] ? `${slideStyle[ 'spacingRight' ]}px` : '',
+      paddingBottom: slideStyle[ 'spacingBottom' ] ? `${slideStyle[ 'spacingBottom' ]}px` : '',
+      paddingTop: slideStyle[ 'spacingTop' ] ? `${slideStyle[ 'spacingTop' ]}px` : ''
     };
     return valueStyle;
   }
@@ -400,8 +417,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return opacity !== null && opacity !== '' ? `rgb(${r}, ${g}, ${b}, ${opacity / 100}` : `rgb(${r}, ${g}, ${b}`;
   }
 
-  getRelationShop(slide) {
-
+  decodeHTMLEntities(str) {
+    return str.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
   }
 
   render() {
