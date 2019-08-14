@@ -213,7 +213,18 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   parse2html(data) {
     const { root, elements, relation } = data;
-    const slides = elements && elements.length > 0 ? elements[0].child : [];
+    let slides = elements && elements.length > 0 ? elements[0].child : [];
+    let validElement = [];
+    relation.map(v => {
+      if (slides.find(slide => slide.id === v.source)
+        && slides.find(slide => slide.id === v.target)
+      ) {
+        validElement.push(v.source);
+        validElement.push(v.target);
+      }
+    });
+    validElement = _.uniq(validElement);
+    slides = slides.filter(slide => validElement.indexOf(slide.id) > -1);
     return (
       <div className="container">
         <div className="slide-container">
@@ -234,8 +245,6 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(slide, isRoot = false, idx) {
-    const relationShip = this.getRelationShop(slide);
-    console.log(relationShip);
     const slideStyle = this.getSlideStyle(slide['style']);
     const style: any = this.getStyle(slide, slideStyle, isRoot);
     const childStyle: any = this.getChildStyle(slide, slideStyle);
