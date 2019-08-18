@@ -3,7 +3,6 @@ import './home.scss';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
-import { setHeaderBackground } from 'app/shared/common/common.reducer';
 import { withRouter } from 'react-router';
 import { ELEMENT_TYPE, TITLE_HELMET } from 'app/config/constants';
 import { Helmet } from 'react-helmet';
@@ -11,7 +10,7 @@ import _ from 'lodash';
 import Slider from 'react-slick';
 // import x2js from 'x2js';
 import xmldom from 'xmldom';
-import { requestHomeData } from 'app/modules/home/home.reducer';
+import * as homeAction from 'app/modules/home/home.reducer';
 
 const DOMParser = xmldom.DOMParser;
 // const jsdom = require("jsdom");
@@ -29,59 +28,30 @@ const PrevArrow = props => (
   </div>
 );
 
-const Settings = {
-  dots: true,
-  infinite: true,
-  speed: 1500,
-  autoplaySpeed: 3000,
-  pauseOnHover: true,
-  pauseOnFocus: true,
-  lazyLoad: 'ondemand',
-  cssEase: 'linear',
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  autoplay: false,
-  nextArrow: <NextArrow/>,
-  prevArrow: <PrevArrow/>,
-  responsive: [
-    {
-      breakpoint: 320,
-      settings: {
-        dots: true,
-        arrows: true
-      }
-    },
-    {
-      breakpoint: 992,
-      settings: {
-        dots: true,
-        arrows: true
-      }
-    }
-  ]
-};
-
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
+  saveTrackingData: Function;
   location: any;
   match: any;
 }
 
 export class Home extends React.Component<IHomeProp, { input: any, content: any }> {
+
   constructor(props) {
     super(props);
     this.state = {
-      input: '', content: `
-`
+      input: '', content: ``
     };
+    window.addEventListener('beforeunload', ev => {
+      ev.preventDefault();
+      this.props.saveTrackingData();
+      return ev.returnValue = 'Are you sure you want to close?';
+    });
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
     this.props.initScreen();
-  }
-
-  componentWillUnmount() {
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
@@ -96,13 +66,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   decode(node, data) {
     let obj = {};
     if (node != null && node.nodeType === 1) {
-      obj[ 'name' ] = node.nodeName;
-      obj[ 'child' ] = [];
+      obj['name'] = node.nodeName;
+      obj['child'] = [];
       // decodeAttributes
       const attrs = node.attributes;
       for (const attr of attrs) {
         if (attr.nodeName !== 'name' && attr.nodeName !== 'child') {
-          obj[ attr.nodeName ] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
+          obj[attr.nodeName] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
         }
       }
 
@@ -113,16 +83,16 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         if (child.nodeType === 1) {
           const childObj = this.decode(child, data);
           if (childObj) {
-            if (childObj[ 'name' ] === 'mxGeometry') {
+            if (childObj['name'] === 'mxGeometry') {
               obj = {
                 ...obj,
-                x: childObj[ 'x' ],
-                y: childObj[ 'y' ],
-                width: childObj[ 'width' ],
-                height: childObj[ 'height' ]
+                x: childObj['x'],
+                y: childObj['y'],
+                width: childObj['width'],
+                height: childObj['height']
               };
             } else {
-              obj[ 'child' ].push(childObj);
+              obj['child'].push(childObj);
             }
           }
         }
@@ -130,19 +100,19 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
       if (node.nodeName === 'mxGraphModel') {
         data.root = _.omit(obj, 'child');
-      } else if (node.nodeName === 'mxCell' && obj[ 'parent' ] != null) {
-        if (obj[ 'source' ] && obj[ 'target' ]) {
-          const relation = data.relation.find(v => v.source === obj[ 'source' ] && v.target === obj[ 'target' ]);
+      } else if (node.nodeName === 'mxCell' && obj['parent'] != null) {
+        if (obj['source'] && obj['target']) {
+          const relation = data.relation.find(v => v.source === obj['source'] && v.target === obj['target']);
           if (!relation) {
             data.relation.push({
-              source: obj[ 'source' ],
-              target: obj[ 'target' ]
+              source: obj['source'],
+              target: obj['target']
             });
           }
-        } else if (!obj[ 'source' ] && !obj[ 'target' ]) {
+        } else if (!obj['source'] && !obj['target']) {
           let element = null;
           data.elements.map(v => {
-            element = this.searchElement(v, obj[ 'parent' ]);
+            element = this.searchElement(v, obj['parent']);
           });
           if (element) {
             element.child.push(obj);
@@ -158,7 +128,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   searchElement(element, parentId) {
-    if (element[ 'id' ] === parentId) {
+    if (element['id'] === parentId) {
       return element;
     } else if (element.child && element.child.length > 0) {
       let result = null;
@@ -170,9 +140,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return null;
   }
 
-  parse2html(data) {
+  parse2html(data, settings) {
     const { root, elements, relation } = data;
-    const slides = elements && elements.length > 0 ? elements[ 0 ].child : [];
+    const slides = elements && elements.length > 0 ? elements[0].child : [];
     let validElement = [];
     relation.map(v => {
       if (slides.find(slide => slide.id === v.source)
@@ -190,7 +160,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return (
       <div className="container">
         <div className="slide-container">
-          <Slider {...Settings}>
+          <Slider {...settings}>
             {slidesProcessed.map((slide, idx) => {
               const a = slide;
               return (<div key={idx}>
@@ -207,7 +177,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(slide, isRoot = false, idx) {
-    const slideStyle = this.getSlideStyle(slide[ 'style' ]);
+    const slideStyle = this.getSlideStyle(slide['style']);
     const style: any = this.getStyle(slide, slideStyle, isRoot);
     const childStyle: any = this.getChildStyle(slide, slideStyle);
     const valueStyle: any = this.getValueStyle(slide, slideStyle);
@@ -233,17 +203,17 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   getSlideStyle(styleStr) {
     const slideStyle = {};
     styleStr.split(';').map(v => {
-      const styleName = v.split('=')[ 0 ] ? v.split('=')[ 0 ] : null;
-      const styleValue = v.split('=')[ 1 ] ? v.split('=')[ 1 ] : null;
+      const styleName = v.split('=')[0] ? v.split('=')[0] : null;
+      const styleValue = v.split('=')[1] ? v.split('=')[1] : null;
       if (styleName === ELEMENT_TYPE.TEXT) {
-        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.TEXT;
+        slideStyle['elementStyle'] = ELEMENT_TYPE.TEXT;
       } else if (styleName === ELEMENT_TYPE.IMAGE) {
-        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.IMAGE;
+        slideStyle['elementStyle'] = ELEMENT_TYPE.IMAGE;
       } else if (styleName === 'rounded' && styleValue === '1') {
-        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.BUTTON;
+        slideStyle['elementStyle'] = ELEMENT_TYPE.BUTTON;
       }
       if (styleName !== null && styleValue !== null) {
-        slideStyle[ styleName ] = styleValue;
+        slideStyle[styleName] = styleValue;
       }
     });
     return slideStyle;
@@ -252,25 +222,25 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   getStyle(slide, slideStyle, isRoot) {
     let style: any = {};
     // add common style
-    const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
+    const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
     style = {
       ...style,
-      border: slideStyle[ 'strokeColor' ] === 'none' || slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.IMAGE ?
+      border: slideStyle['strokeColor'] === 'none' || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE ?
         '' : `1px solid ${this.getColorWithOpacity('#000000', opacityHex)}`,
-      width: slide[ 'width' ],
-      height: slide[ 'height' ],
-      fontSize: `${slideStyle[ 'fontSize' ]}px`,
-      fontFamily: slideStyle[ 'fontFamily' ] ? `${slideStyle[ 'fontFamily' ]}` : '',
-      borderRadius: slideStyle[ 'rounded' ] === '1' ? '5px' : '',
-      backgroundColor: slideStyle[ 'fillColor' ] ? `${this.getColorWithOpacity(slideStyle[ 'fillColor' ], opacityHex)}` : ''
+      width: slide['width'],
+      height: slide['height'],
+      fontSize: `${slideStyle['fontSize']}px`,
+      fontFamily: slideStyle['fontFamily'] ? `${slideStyle['fontFamily']}` : '',
+      borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
+      backgroundColor: slideStyle['fillColor'] ? `${this.getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
     };
     // add special style
-    if (slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.IMAGE) {
+    if (slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE) {
       style = {
         ...style,
-        backgroundImage: `url(${slideStyle[ 'image' ]})`
+        backgroundImage: `url(${slideStyle['image']})`
       };
-    } else if (slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.BUTTON) {
+    } else if (slideStyle['elementStyle'] === ELEMENT_TYPE.BUTTON) {
       style = {
         ...style,
         cursor: `pointer`
@@ -290,77 +260,77 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   getChildStyle(slide, slideStyle) {
     let childStyle: any = {};
-    const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
+    const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
     childStyle = {
       ...childStyle,
       // border: slideStyle['strokeColor'] === 'none' || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE ?
       //   '' : `1px solid ${this.getColorWithOpacity('#000000', opacityHex)}`,
-      borderRadius: slideStyle[ 'rounded' ] === '1' ? '5px' : '',
-      backgroundColor: slideStyle[ 'fillColor' ] ? `${this.getColorWithOpacity(slideStyle[ 'fillColor' ], opacityHex)}` : ''
+      borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
+      backgroundColor: slideStyle['fillColor'] ? `${this.getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
     };
     return childStyle;
   }
 
   getValueStyle(slide, slideStyle) {
     let valueStyle: any = {};
-    const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
+    const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
     valueStyle = {
       ...valueStyle,
-      color: slideStyle[ 'fontColor' ] ? slideStyle[ 'fontColor' ] : '',
-      backgroundColor: slideStyle[ 'labelBackgroundColor' ] && slideStyle[ 'labelBackgroundColor' ] !== 'none' ?
-        `${this.getColorWithOpacity(slideStyle[ 'labelBackgroundColor' ], opacityHex)}` : ''
+      color: slideStyle['fontColor'] ? slideStyle['fontColor'] : '',
+      backgroundColor: slideStyle['labelBackgroundColor'] && slideStyle['labelBackgroundColor'] !== 'none' ?
+        `${this.getColorWithOpacity(slideStyle['labelBackgroundColor'], opacityHex)}` : ''
       // border: (slideStyle['labelBorderColor'] && slideStyle['labelBorderColor'] !== 'none') ?
       //   `1px solid ${this.getColorWithOpacity(slideStyle['labelBorderColor'], opacityHex)}` : ''
     };
 
     // set align
-    if (slideStyle[ 'labelPosition' ] !== 'center') {
-      if (slideStyle[ 'labelPosition' ] === 'left') {
+    if (slideStyle['labelPosition'] !== 'center') {
+      if (slideStyle['labelPosition'] === 'left') {
         valueStyle = {
           ...valueStyle,
-          right: `${slide[ 'width' ]}px`
+          right: `${slide['width']}px`
         };
-      } else if (slideStyle[ 'labelPosition' ] === 'right') {
+      } else if (slideStyle['labelPosition'] === 'right') {
         valueStyle = {
           ...valueStyle,
-          left: `${slide[ 'width' ]}px`
+          left: `${slide['width']}px`
         };
       }
     }
 
     // set vertical align
-    if (slideStyle[ 'verticalLabelPosition' ] !== 'middle') {
-      if (slideStyle[ 'verticalLabelPosition' ] === 'top') {
+    if (slideStyle['verticalLabelPosition'] !== 'middle') {
+      if (slideStyle['verticalLabelPosition'] === 'top') {
         valueStyle = {
           ...valueStyle,
-          bottom: `${slide[ 'height' ]}px`
+          bottom: `${slide['height']}px`
         };
-      } else if (slideStyle[ 'labelPosition' ] === 'bottom') {
+      } else if (slideStyle['labelPosition'] === 'bottom') {
         valueStyle = {
           ...valueStyle,
-          top: `${slide[ 'height' ]}px`
+          top: `${slide['height']}px`
         };
       }
     }
     // set font style
-    if (slideStyle[ 'fontStyle' ]) {
-      const fontStyleArray = parseInt(slideStyle[ 'fontStyle' ], 10).toString(2).split('');
+    if (slideStyle['fontStyle']) {
+      const fontStyleArray = parseInt(slideStyle['fontStyle'], 10).toString(2).split('');
       valueStyle = {
         ...valueStyle,
-        fontWeight: fontStyleArray[ 0 ] === '1' ? 'bold' : '',
-        fontStyle: fontStyleArray[ 1 ] === '1' ? 'italic' : '',
-        textDecoration: fontStyleArray[ 1 ] === '1' ? 'underline' : ''
+        fontWeight: fontStyleArray[0] === '1' ? 'bold' : '',
+        fontStyle: fontStyleArray[1] === '1' ? 'italic' : '',
+        textDecoration: fontStyleArray[1] === '1' ? 'underline' : ''
       };
     }
 
     // set padding
     valueStyle = {
       ...valueStyle,
-      padding: slideStyle[ 'spacing' ] ? `${slideStyle[ 'spacing' ]}px` : '',
-      paddingLeft: slideStyle[ 'spacingLeft' ] ? `${slideStyle[ 'spacingLeft' ]}px` : '',
-      paddingRight: slideStyle[ 'spacingRight' ] ? `${slideStyle[ 'spacingRight' ]}px` : '',
-      paddingBottom: slideStyle[ 'spacingBottom' ] ? `${slideStyle[ 'spacingBottom' ]}px` : '',
-      paddingTop: slideStyle[ 'spacingTop' ] ? `${slideStyle[ 'spacingTop' ]}px` : ''
+      padding: slideStyle['spacing'] ? `${slideStyle['spacing']}px` : '',
+      paddingLeft: slideStyle['spacingLeft'] ? `${slideStyle['spacingLeft']}px` : '',
+      paddingRight: slideStyle['spacingRight'] ? `${slideStyle['spacingRight']}px` : '',
+      paddingBottom: slideStyle['spacingBottom'] ? `${slideStyle['spacingBottom']}px` : '',
+      paddingTop: slideStyle['spacingTop'] ? `${slideStyle['spacingTop']}px` : ''
     };
     return valueStyle;
   }
@@ -378,7 +348,44 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   render() {
-    const { homeData, requestFailure, errorMessage }: any = this.props;
+    const { homeData, requestFailure, errorMessage, saveTrackingData, setCurrentIdx }: any = this.props;
+    const settings = {
+      dots: true,
+      infinite: false,
+      speed: 1500,
+      autoplaySpeed: 3000,
+      pauseOnHover: true,
+      pauseOnFocus: true,
+      lazyLoad: 'ondemand',
+      cssEase: 'linear',
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: false,
+      nextArrow: <NextArrow/>,
+      prevArrow: <PrevArrow/>,
+      beforeChange: idx => {
+        saveTrackingData(idx);
+      },
+      afterChange: idx => {
+        setCurrentIdx(idx);
+      },
+      responsive: [
+        {
+          breakpoint: 320,
+          settings: {
+            dots: true,
+            arrows: true
+          }
+        },
+        {
+          breakpoint: 992,
+          settings: {
+            dots: true,
+            arrows: true
+          }
+        }
+      ]
+    };
     const content = homeData.data;
     // const x2js1 = new x2js();
     const doc = new DOMParser().parseFromString(content, 'text/xml');
@@ -393,7 +400,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       this.decode(node, data);
       // console.log(obj);
       // const data = this.restructuring(obj);
-      displaySlide = this.parse2html(data);
+      displaySlide = this.parse2html(data, settings);
     }// const dom = new jsdom.JSDOM(input);
     // const parser = new htmlparser.Parser({}, { decodeEntities: true });
     // parser.write(input);
@@ -428,11 +435,17 @@ const mapStateToProps = ({ home }: IRootState) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
+    await dispatch(homeAction.reset());
     const appId = ownProps.match.params.appId ? ownProps.match.params.appId : '';
-    dispatch(requestHomeData(appId));
+    await dispatch(homeAction.requestHomeData(appId));
+    await dispatch(homeAction.setTimeStart(new Date()));
   },
-  changeInput: async () => {
-    dispatch(setHeaderBackground('transparent'));
+  setCurrentIdx: idx => {
+    dispatch(homeAction.setCurrentIdx(idx));
+  },
+  saveTrackingData: () => {
+    const appId = ownProps.match.params.appId ? ownProps.match.params.appId : '';
+    dispatch(homeAction.saveTrackingData(appId));
   }
 });
 
