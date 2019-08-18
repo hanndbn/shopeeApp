@@ -7,4 +7,3 @@ export const paramObj = search => {
 };
 
 export const checkDisplayToTop = () => document.body.scrollTop > 80 || document.documentElement.scrollTop > 80;
-

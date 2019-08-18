@@ -10,7 +10,10 @@ import { Helmet } from 'react-helmet';
 import _ from 'lodash';
 import Slider from 'react-slick';
 // import x2js from 'x2js';
-const DOMParser = require('xmldom').DOMParser;
+import xmldom from 'xmldom';
+import { requestHomeData } from 'app/modules/home/home.reducer';
+
+const DOMParser = xmldom.DOMParser;
 // const jsdom = require("jsdom");
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -61,80 +64,33 @@ const Settings = {
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
   location: any;
+  match: any;
 }
 
 export class Home extends React.Component<IHomeProp, { input: any, content: any }> {
   constructor(props) {
     super(props);
     this.state = {
-      input: `<mxGraphModel dx="1422" dy="804" grid="1" gridSize="18" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169">
-  <root>
-    <mxCell id="0" style="spacingBottom=0;verticalAlign=top;"/>
-    <mxCell id="1" style="verticalAlign=top;" parent="0"/>
-    <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=12;" parent="1" source="2" target="6" edge="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="2" value="" style="rounded=0;whiteSpace=wrap;html=1;container=1;" parent="1" vertex="1">
-      <mxGeometry x="30" y="90" width="250" height="320" as="geometry"/>
-    </mxCell>
-    <mxCell id="3" value="Slide 1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#40FF79;" parent="2" vertex="1">
-      <mxGeometry x="85" y="20" width="95" height="50" as="geometry"/>
-    </mxCell>
-    <mxCell id="4" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;fontSize=20;image=https://media3.scdn.vn/img3/2019/7_1/vPZBhq_simg_de2fe0_500x500_maxb.jpg;" parent="2" vertex="1">
-      <mxGeometry x="35" y="60" width="180" height="180" as="geometry"/>
-    </mxCell>
-    <mxCell id="17" value="&lt;font style=&quot;font-size: 13px&quot;&gt;Next&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=12;fontColor=#FF1745;shadow=0;opacity=50;" parent="2" vertex="1">
-      <mxGeometry x="125" y="270" width="108" height="30" as="geometry"/>
-    </mxCell>
-    <mxCell id="15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=12;" parent="1" source="6" target="11" edge="1">
-      <mxGeometry relative="1" as="geometry"/>
-    </mxCell>
-    <mxCell id="6" value="" style="rounded=0;whiteSpace=wrap;html=1;container=1;" parent="1" vertex="1">
-      <mxGeometry x="350" y="90" width="250" height="320" as="geometry"/>
-    </mxCell>
-    <mxCell id="7" value="Slide 2" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#2E4AFF;" parent="6" vertex="1">
-      <mxGeometry x="85" y="20" width="95" height="50" as="geometry"/>
-    </mxCell>
-    <mxCell id="8" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;fontSize=20;image=https://media3.scdn.vn/img3/2019/7_1/yQz1yI_simg_de2fe0_500x500_maxb.jpg;" parent="6" vertex="1">
-      <mxGeometry x="35" y="60" width="180" height="180" as="geometry"/>
-    </mxCell>
-    <mxCell id="18" value="&lt;font style=&quot;font-size: 13px&quot;&gt;Next&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=12;fontColor=#FF1745;shadow=0;opacity=50;" vertex="1" parent="6">
-      <mxGeometry x="125" y="270" width="108" height="30" as="geometry"/>
-    </mxCell>
-    <mxCell id="11" value="" style="rounded=0;whiteSpace=wrap;html=1;container=1;" parent="1" vertex="1">
-      <mxGeometry x="30" y="500" width="250" height="320" as="geometry"/>
-    </mxCell>
-    <mxCell id="12" value="Slide 3" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#FF1745;" parent="11" vertex="1">
-      <mxGeometry x="85" y="20" width="95" height="50" as="geometry"/>
-    </mxCell>
-    <mxCell id="13" value="" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;fontSize=20;image=https://media3.scdn.vn/img3/2019/7_1/sulUFJ_simg_de2fe0_500x500_maxb.jpg;" parent="11" vertex="1">
-      <mxGeometry x="35" y="60" width="180" height="180" as="geometry"/>
-    </mxCell>
-    <mxCell id="23" value="&lt;font style=&quot;font-size: 13px&quot;&gt;Finish&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;fontSize=12;fontColor=#FF1745;shadow=0;opacity=50;" vertex="1" parent="11">
-      <mxGeometry x="126" y="271" width="108" height="30" as="geometry"/>
-    </mxCell>
-  </root>
-</mxGraphModel>
-
-
-
-
-
-`, content: `
+      input: '', content: `
 `
     };
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    // this.props.initScreen();
+    this.props.initScreen();
   }
 
   componentWillUnmount() {
   }
 
-  _handleChangeInput(e) {
-    this.setState({ ...this.state, input: e.target.value });
+  getSnapshotBeforeUpdate(prevProps, prevState): any | null {
+    const preAppId = prevProps.match.params.appId ? prevProps.match.params.appId : '';
+    const currentAppId = this.props.match.params.appId ? this.props.match.params.appId : '';
+    if (preAppId !== currentAppId) {
+      this.props.initScreen();
+    }
+    return null;
   }
 
   decode(node, data) {
@@ -422,8 +378,10 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   render() {
+    const { homeData, requestFailure, errorMessage }: any = this.props;
+    const content = homeData.data;
     // const x2js1 = new x2js();
-    const doc = new DOMParser().parseFromString(this.state.content, 'text/xml');
+    const doc = new DOMParser().parseFromString(content, 'text/xml');
     let displaySlide = null;
     if (doc) {
       const node = doc.documentElement;
@@ -432,7 +390,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         elements: [],
         relation: []
       };
-      const obj = this.decode(node, data);
+      this.decode(node, data);
       // console.log(obj);
       // const data = this.restructuring(obj);
       displaySlide = this.parse2html(data);
@@ -444,7 +402,6 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     // const { JSDOM } = jsdom;
     // const output = new JSDOM().window.DOMParser.parseFromString(input, 'text/xml');
     // const output = xml2json('<e name="value">text</e>');
-    const {} = this.props;
     return (
       <div className="">
         <Helmet>
@@ -452,42 +409,27 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         </Helmet>
         <div className="container input-wrapper">
           <div className="row">
-            <div className="col-12 text-left">
-              <div>
-                <div className="">
-                  Diagram input:
-                </div>
-                <textarea className="form-control g-font-size-12"
-                          placeholder=""
-                          cols={8}
-                          rows={8}
-                          onChange={e => this._handleChangeInput(e)}
-                          value={this.state.input}
-                />
-              </div>
-            </div>
-            <div className="col-12 text-left g-margin-top-20">
-              <button className="btn btn-danger"
-                      onClick={() => this.setState({ ...this.state, content: this.state.input })}
-              >Update
-              </button>
-            </div>
             <div className="col-12">
-              <hr/>
+              {requestFailure && <div className="alert alert-danger">{errorMessage}</div>}
+              {displaySlide}
             </div>
           </div>
         </div>
-        {displaySlide}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ common }: IRootState) => ({});
+const mapStateToProps = ({ home }: IRootState) => ({
+  homeData: home.homeData,
+  requestFailure: home.requestFailure,
+  errorMessage: home.errorMessage
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
-    dispatch(setHeaderBackground('transparent'));
+    const appId = ownProps.match.params.appId ? ownProps.match.params.appId : '';
+    dispatch(requestHomeData(appId));
   },
   changeInput: async () => {
     dispatch(setHeaderBackground('transparent'));

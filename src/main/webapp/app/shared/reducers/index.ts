@@ -19,6 +19,7 @@ import projectDetail, { ProjectDetailState } from 'app/modules/projectDetail/pro
 import category, { CategoryState } from 'app/modules/category/category.reducer';
 import contactUs, { ContactUsState } from 'app/modules/contactUs/contactUs.reducer';
 import about, { AboutState } from 'app/modules/about/about.reducer';
+import home, { HomeState } from 'app/modules/home/home.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -40,6 +41,7 @@ export interface IRootState {
   readonly contactUs: ContactUsState;
   readonly common: CommonState;
   readonly about: AboutState;
+  readonly home: HomeState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -62,6 +64,7 @@ const rootReducer = combineReducers<IRootState>({
   contactUs,
   common,
   about,
+  home,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });
