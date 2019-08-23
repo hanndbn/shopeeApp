@@ -82,10 +82,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin({
       host: "localhost",
-      port: 9000,
+      port: 9090,
       cors: true,
       proxy: {
-        target: "http://localhost:9060",
+        target: 'http://localhost:9091',
         ws: true
       },
       // advanced: {

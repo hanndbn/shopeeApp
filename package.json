@@ -151,7 +151,6 @@
   },
   "lint-staged": {},
   "scripts": {
-    "prettier:format": "prettier --write \"src/**/*.{json,ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "npm run lint -- --fix",
     "cleanup": "rimraf target/www",
@@ -159,8 +158,8 @@
     "start-tls": "npm run webpack:dev -- --env.tls",
     "test": "npm run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "npm test -- --watch",
-    "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
-    "webpack:dev-verbose": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
+    "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9091 --env.stats=minimal",
+    "webpack:dev-verbose": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9091 --profile --progress --env.stats=normal",
     "webpack:build:main": "npm run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build": "npm run cleanup && npm run webpack:build:main",
     "webpack:prod:main": "npm run webpack -- --config webpack/webpack.prod.js --profile",

@@ -35,7 +35,7 @@ const Routes = () => (
   <div className="view-routes">
     <ErrorBoundaryRoute path="/login" component={Login}/>
     <Switch>
-      <ErrorBoundaryRoute exact path="/:appId" component={Home}/>
+      <ErrorBoundaryRoute path="/app/:appId" component={Home}/>
       <ErrorBoundaryRoute path="/project-detail" component={ProjectDetail}/>
       <ErrorBoundaryRoute path="/contact-us" component={ContactUs}/>
       <ErrorBoundaryRoute exact={true} path="/about" component={About}/>
