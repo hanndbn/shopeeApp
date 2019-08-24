@@ -3094,6 +3094,26 @@ EditorUi.prototype.saveFile = function(forceDialog) {
   }
 };
 
+
+/**
+ * Adds the label menu items to the given menu and parent.
+ */
+EditorUi.prototype.showLoadDataDialog = function() {
+  var dlg = new LoadDataDialog(this, this.editor.getOrCreateFilename(), mxResources.get('load'), mxUtils.bind(this, function(name) {
+    this.loadData(name);
+  }), null, mxUtils.bind(this, function(name) {
+    if (name != null && name.length > 0) {
+      return true;
+    }
+
+    mxUtils.confirm(mxResources.get('invalidName'));
+
+    return false;
+  }));
+  this.showDialog(dlg.container, 300, 120, true, true);
+  dlg.init();
+};
+
 /**
  * Saves the current graph under the given filename.
  */
@@ -3132,7 +3152,26 @@ EditorUi.prototype.save = function(name) {
       // 		return;
       // 	}
       // }
-      requestSaveName(name, this);
+      var data = {
+        appId: this.editor.appId,
+        appName: name,
+        content: xml.toString()
+      };
+      requestSaveApp(data, this);
+    }
+    catch (e) {
+      this.editor.setStatus(mxUtils.htmlEntities(mxResources.get('errorSavingFile')));
+    }
+  }
+};
+
+EditorUi.prototype.loadData = function(name) {
+  if (name != null) {
+    try {
+      var data = {
+        appName: name
+      };
+      requestLoadDataApp(data, this);
     }
     catch (e) {
       this.editor.setStatus(mxUtils.htmlEntities(mxResources.get('errorSavingFile')));

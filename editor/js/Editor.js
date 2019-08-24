@@ -12,6 +12,7 @@ Editor = function(chromeless, themes, model, graph, editable) {
   this.editable = (editable != null) ? editable : !chromeless;
   this.undoManager = this.createUndoManager();
   this.status = '';
+  this.appId = '';
 
   this.getOrCreateFilename = function() {
     return this.filename || mxResources.get('drawing', [Editor.pageCounter]);
@@ -44,6 +45,16 @@ Editor = function(chromeless, themes, model, graph, editable) {
   this.graph.getModel().addListener(mxEvent.CHANGE, mxUtils.bind(this, function() {
     this.graphChangeListener.apply(this, arguments);
   }));
+
+  // Sets the status and fires a statusChanged event
+  this.setAppId = function(value) {
+    this.appId = value;
+  };
+
+  // Returns the current status
+  this.getAppId = function() {
+    return this.appId;
+  };
 
   // Sets persistent graph state defaults
   this.graph.resetViewOnRootChange = false;

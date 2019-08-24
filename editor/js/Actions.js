@@ -64,9 +64,9 @@ Actions.prototype.init = function() {
   this.addAction('save', function() {
     ui.saveFile(false);
   }, null, null, Editor.ctrlKey + '+S').isEnabled = isGraphEnabled;
-  this.addAction('saveAs...', function() {
-    ui.saveFile(true);
-  }, null, null, Editor.ctrlKey + '+Shift+S').isEnabled = isGraphEnabled;
+  this.addAction('load...', function() {
+    ui.showLoadDataDialog(true);
+  }, null, null, Editor.ctrlKey + '+L').isEnabled = isGraphEnabled;
   this.addAction('export...', function() {
     ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true);
   });
