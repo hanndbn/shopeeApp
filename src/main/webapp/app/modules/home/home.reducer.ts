@@ -10,11 +10,13 @@ const ACTION_TYPES = {
   SET_TRACKING_ID: 'Home/SET_TRACKING_ID',
   SET_TIME_START: 'Home/SET_TIME_START',
   SET_CURRENT_IDX: 'Home/SET_CURRENT_IDX',
+  SET_APP_ID: 'Home/SET_APP_ID',
   RESET: 'Home/RESET'
 };
 
 const initialState = {
   homeData: {},
+  appId: null,
   trackingId: null,
   currentIdx: 0,
   timeStart: null,
@@ -37,7 +39,8 @@ export default (state: HomeState = initialState, action): HomeState => {
       return {
         ...state,
         loading: false,
-        homeData: action.payload.data
+        homeData: action.payload.data,
+        appId: action.payload.data.appId
       };
     case FAILURE(ACTION_TYPES.GET_HOME_DATA):
       return {
@@ -75,16 +78,17 @@ export default (state: HomeState = initialState, action): HomeState => {
   }
 };
 
-export const requestHomeData = appId => (dispatch, getState) => {
+export const requestHomeData = appName => (dispatch, getState) => {
   dispatch({
     type: ACTION_TYPES.GET_HOME_DATA,
-    payload: axios.get(`${GET_HOME_DATA_URL}?appId=${appId}`)
+    payload: axios.get(`${GET_HOME_DATA_URL}?appName=${appName}`)
   });
 };
 
-export const saveTrackingData = appId => async (dispatch, getState) => {
+export const saveTrackingData = () => async (dispatch, getState) => {
   const timeStart = getState().home.timeStart ? getState().home.timeStart : null;
   const currentIdx = getState().home.currentIdx;
+  const appId = getState().home.appId;
   if (!timeStart || !appId) return;
   const displayTime = moment().diff(timeStart);
   let data: any = {

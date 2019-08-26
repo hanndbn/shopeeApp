@@ -43,11 +43,11 @@ function requestLoadDataApp(data, editorUi) {
       console.log(data);
       editorUi.editor.setStatus('load data success');
       editorUi.editor.setModified(false);
+      editorUi.editor.setFilename(data.appName);
+      editorUi.editor.setAppId(data.appId);
       editorUi.editor.graph.model.beginUpdate();
       try {
-
-        editorUi.editor.setGraphXml(mxUtils.parseXml(data.data).documentElement);
-        // LATER: Why is hideDialog between begin-/endUpdate faster?
+        editorUi.editor.setGraphXml(mxUtils.parseXml(data.content).documentElement);
       }
       catch (e) {
       }

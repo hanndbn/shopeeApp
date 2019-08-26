@@ -3153,7 +3153,7 @@ EditorUi.prototype.save = function(name) {
       // 	}
       // }
       var data = {
-        appId: this.editor.appId,
+        appId: this.editor.getAppId(),
         appName: name,
         content: xml.toString()
       };

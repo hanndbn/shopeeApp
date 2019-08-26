@@ -386,7 +386,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         }
       ]
     };
-    const content = homeData.data;
+    const content = homeData.content;
     // const x2js1 = new x2js();
     const doc = new DOMParser().parseFromString(content, 'text/xml');
     let displaySlide = null;
@@ -436,16 +436,15 @@ const mapStateToProps = ({ home }: IRootState) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
     await dispatch(homeAction.reset());
-    const appId = ownProps.match.params.appId ? ownProps.match.params.appId : '';
-    await dispatch(homeAction.requestHomeData(appId));
+    const appName = ownProps.match.params.appName ? ownProps.match.params.appName : '';
+    await dispatch(homeAction.requestHomeData(appName));
     await dispatch(homeAction.setTimeStart(new Date()));
   },
   setCurrentIdx: idx => {
     dispatch(homeAction.setCurrentIdx(idx));
   },
   saveTrackingData: () => {
-    const appId = ownProps.match.params.appId ? ownProps.match.params.appId : '';
-    dispatch(homeAction.saveTrackingData(appId));
+    dispatch(homeAction.saveTrackingData());
   }
 });
 
