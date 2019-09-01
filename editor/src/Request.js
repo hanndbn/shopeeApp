@@ -42,6 +42,7 @@ function requestLoadDataApp(data, editorUi) {
     contentType: 'application/json',
     success: function(data) {
       $('#myModal').modal('hide');
+      $('#publishItem').prop('hidden', false);
       // editorUi.editor.setStatus('load data success');
       editorUi.editor.setModified(false);
       editorUi.editor.setFilename(data.appName);

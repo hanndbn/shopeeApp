@@ -428,6 +428,7 @@ Menus.prototype.init = function() {
   this.put('help', new Menu(mxUtils.bind(this, function(menu, parent) {
     this.addMenuItems(menu, ['help', '-', 'about', 'test']);
   })));
+
 };
 
 /**
@@ -969,7 +970,23 @@ Menus.prototype.createMenubar = function(container) {
       this.menuCreated(menu, elt);
     }))(this.get(menus[i]));
   }
+  var publish = document.createElement('div');
+  publish.className = 'geItem publishItem';
+  publish.id = 'publishItem';
+  publish.innerHTML = `Publish`;
+  publish.hidden = true;
 
+  menubar.container.appendChild(publish);
+  var self = this;
+  publish.addEventListener('click', function() {
+    $('#myModal').html(publishAppModal());
+    $('#myModal').modal('show');
+    $('#appName').val(SERVER_URL + self.editorUi.editor.filename);
+    $('#app-link').attr('href', SERVER_URL + self.editorUi.editor.filename);
+    $('#publishApp').click(function() {
+      $('#responseError').html('function not working');
+    });
+  });
   return menubar;
 };
 

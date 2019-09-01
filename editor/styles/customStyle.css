@@ -1,0 +1,79 @@
+.save-publish-panel-header {
+  position: relative;
+  height: 126px;
+  border-radius: 8px 8px 0 0;
+  background-color: #3899ec;
+  box-sizing: border-box;
+  padding-top: 35px;
+  text-align: center;
+}
+
+.save-publish-panel-header .subtitle, .confirm-panel-header .subtitle {
+  font-family: HelveticaNeueW01-45Ligh, HelveticaNeueW02-45Ligh, HelveticaNeueW10-45Ligh, Helvetica Neue, Helvetica, Arial, メイリオ, meiryo, ヒラギノ角ゴ pro w3, hiragino kaku gothic pro, sans-serif;
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  margin-top: 10px;
+  white-space: nowrap;
+  color: #d3edff;
+}
+
+.save-publish-panel-header .title, .confirm-panel-header .title {
+  font-family: HelveticaNeueW01-45Ligh, HelveticaNeueW02-45Ligh, HelveticaNeueW10-45Ligh, Helvetica Neue, Helvetica, Arial, メイリオ, meiryo, ヒラギノ角ゴ pro w3, hiragino kaku gothic pro, sans-serif;
+  font-size: 30px;
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  line-height: 30px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.save-publish-panel-header button, .confirm-panel-header button {
+  border-radius: 50%;
+  border: 0;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 24px;
+  right: 24px;
+  background-color: #2b81cb;
+  box-sizing: border-box;
+  line-height: 20px;
+  padding: 0;
+}
+
+.publish-dialog .modal-content {
+  background-color: transparent;
+  border: none;
+}
+
+.publish-dialog .modal-body, .publish-dialog .modal-footer {
+  background-color: white;
+}
+
+.publish-dialog .app-link {
+  background-color: #eaf7ff;
+  color: #3899ec;
+  display: inline-block;
+  width: auto;
+  min-width: 0;
+  line-height: 30px;
+  margin-left: 12px;
+  font-weight: 400;
+  vertical-align: top;
+  margin-top: 3px;
+  padding: 0px 10px;
+  border-radius: 10px;
+}
+
+.publishItem {
+  margin-left: 50px;
+  background-color: #3899ec;
+  color: white;
+  padding: 5px 20px;
+}
+
+.geItem.publishItem:hover {
+  background-color: #39a7ff;
+  color: white;
+}

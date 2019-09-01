@@ -1,6 +1,7 @@
 /**
  * Copyright (c) 2006-2012, JGraph Ltd
  */
+
 /**
  * Constructs the actions object for the given UI.
  */
@@ -798,8 +799,15 @@ Actions.prototype.init = function() {
     }
   }, null, null, 'F1'));
 
-  this.put('test', new Action(mxResources.get('about') + ' test', function() {
-  }, null, null, 'F12'));
+  // this.put('test', new Action('test', function() {
+  //   $('#myModal').html(publishAppModal());
+  //   $('#myModal').modal('show');
+  //   $('#appName').val(SERVER_URL + ui.editor.filename);
+  //   $('#app-link').attr('href', SERVER_URL + ui.editor.filename);
+  //   $('#publishApp').click(function() {
+  //     $('#responseError').html('function not working');
+  //   });
+  // }, null, null, 'F12'));
 
   // Font style actions
   var toggleFontStyle = mxUtils.bind(this, function(key, style, fn, shortcut) {
