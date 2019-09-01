@@ -802,6 +802,20 @@ Sidebar.prototype.insertSearchHint = function(div, searchTerm, count, page, resu
  */
 Sidebar.prototype.addGeneralPalette = function(expand) {
   var lineTags = 'line lines connector connectors connection connections arrow arrows ';
+  var sb = this;
+  var fns0 = [
+    this.addEntry('First Slide', function() {
+      var arrow = new mxCell('Label', new mxGeometry(0, 0, 160, 70),
+        'html=1;whiteSpace=wrap;container=1;recursiveResize=0;');
+      arrow.vertex = true;
+      var cell = new mxCell('Label', new mxGeometry(0, 0, 160, 70),
+        'html=1;whiteSpace=wrap;container=1;recursiveResize=0;');
+      cell.vertex = true;
+      return sb.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'First Slide');
+    })
+  ];
+
+  this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
     this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 300, 400, '', 'Slide', null, null, 'slide container')

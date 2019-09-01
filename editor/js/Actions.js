@@ -62,10 +62,46 @@ Actions.prototype.init = function() {
     });
   }).isEnabled = isGraphEnabled;
   this.addAction('save', function() {
-    ui.saveFile(false);
+    $('#myModal').html(saveAppModal());
+    $('#saveApp').click(function() {
+      let appName = $('#appName').val();
+      if (appName === '') {
+        $('#responseError').html('app name must not empty');
+      } else {
+        ui.save(appName);
+      }
+    });
+    $('#appName').keyup(function(e) {
+      if (e.target.value === '') {
+        $('#responseError').html('app name must not empty');
+        $('#saveApp').prop('disabled', true);
+      } else {
+        $('#responseError').empty();
+        $('#saveApp').prop('disabled', false);
+      }
+    });
+    $('#myModal').modal('show');
   }, null, null, Editor.ctrlKey + '+S').isEnabled = isGraphEnabled;
   this.addAction('load...', function() {
-    ui.showLoadDataDialog(true);
+    $('#myModal').html(loadAppModal());
+    $('#saveApp').click(function() {
+      let appName = $('#appName').val();
+      if (appName === '') {
+        $('#responseError').html('app name must not empty');
+      } else {
+        ui.loadData(appName);
+      }
+    });
+    $('#appName').keyup(function(e) {
+      if (e.target.value === '') {
+        $('#responseError').html('app name must not empty');
+        $('#saveApp').prop('disabled', true);
+      } else {
+        $('#responseError').empty();
+        $('#saveApp').prop('disabled', false);
+      }
+    });
+    $('#myModal').modal('show');
   }, null, null, Editor.ctrlKey + '+L').isEnabled = isGraphEnabled;
   this.addAction('export...', function() {
     ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true);
@@ -761,6 +797,9 @@ Actions.prototype.init = function() {
       showingAbout = true;
     }
   }, null, null, 'F1'));
+
+  this.put('test', new Action(mxResources.get('about') + ' test', function() {
+  }, null, null, 'F12'));
 
   // Font style actions
   var toggleFontStyle = mxUtils.bind(this, function(key, style, fn, shortcut) {

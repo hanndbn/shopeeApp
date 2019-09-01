@@ -426,7 +426,7 @@ Menus.prototype.init = function() {
     this.addMenuItems(menu, ['copyConnect', 'collapseExpand', '-', 'editDiagram']);
   })));
   this.put('help', new Menu(mxUtils.bind(this, function(menu, parent) {
-    this.addMenuItems(menu, ['help', '-', 'about']);
+    this.addMenuItems(menu, ['help', '-', 'about', 'test']);
   })));
 };
 

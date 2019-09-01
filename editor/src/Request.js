@@ -8,26 +8,27 @@ function requestAPI(method, url, data, successCallback, failureCallback) {
   });
 }
 
-function requestSaveApp(data, editorUi) {
+function requestSaveApp(requestData, editorUi) {
   $.ajax({
     type: 'POST',
     url: CONSTANT.SAVE_NAME_API,
-    data: JSON.stringify(data),
+    data: JSON.stringify(requestData),
     dataType: 'json',
     contentType: 'application/json',
     success: function(data) {
+      $('#myModal').modal('hide');
       editorUi.editor.setModified(false);
-      editorUi.editor.setFilename(name);
+      editorUi.editor.setFilename(requestData.appName);
       if (data.appId) {
         editorUi.editor.setAppId(data.appId);
-        editorUi.editor.setStatus('save success');
+        swal('', 'save data success', 'success');
       } else {
-        editorUi.editor.setStatus('update success');
+        swal('', 'update data success', 'success');
       }
       editorUi.updateDocumentTitle();
     },
     error: function(xhr) {
-      editorUi.editor.setStatus(xhr.responseJSON.code + ' : ' + xhr.responseJSON.message);
+      $('#responseError').html(xhr.responseJSON.code + ' : ' + xhr.responseJSON.message);
     }
   });
 }
@@ -40,11 +41,12 @@ function requestLoadDataApp(data, editorUi) {
     dataType: 'json',
     contentType: 'application/json',
     success: function(data) {
-      console.log(data);
-      editorUi.editor.setStatus('load data success');
+      $('#myModal').modal('hide');
+      // editorUi.editor.setStatus('load data success');
       editorUi.editor.setModified(false);
       editorUi.editor.setFilename(data.appName);
       editorUi.editor.setAppId(data.appId);
+      editorUi.updateDocumentTitle();
       editorUi.editor.graph.model.beginUpdate();
       try {
         editorUi.editor.setGraphXml(mxUtils.parseXml(data.content).documentElement);
@@ -54,9 +56,10 @@ function requestLoadDataApp(data, editorUi) {
       finally {
         editorUi.editor.graph.model.endUpdate();
       }
+      swal('', 'Load data success', 'success');
     },
     error: function(xhr) {
-      editorUi.editor.setStatus(xhr.responseJSON.code + ' : ' + xhr.responseJSON.message);
+      $('#responseError').html(xhr.responseJSON.code + ' : ' + xhr.responseJSON.message);
     }
   });
 }

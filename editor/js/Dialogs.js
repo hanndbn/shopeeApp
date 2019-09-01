@@ -328,6 +328,15 @@ var AboutDialog = function(editorUi) {
   this.container = div;
 };
 
+var InfoDialog = function(editorUi) {
+  var div = document.createElement('div');
+  div.innerHTML =
+    `<div onclick="alert(1)">
+      123
+      </div>`;
+  this.container = div;
+};
+
 /**
  * Constructs a new filename dialog.
  */
