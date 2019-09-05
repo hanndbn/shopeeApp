@@ -1,7 +1,18 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 .slide-container {
-  margin-top: 50px;
+  //margin-top: 50px;
   //display: flex;
   justify-content: space-evenly;
+  height: 100vh;
+  width: 100vw;
 }
 
 .slide {
@@ -11,6 +22,11 @@
   background-repeat: no-repeat;
   background-size: contain;
   position: relative;
+
+  &.root-slide {
+    border: none !important;
+    overflow: auto;
+  }
 
   .slide-child {
     width: 100%;
@@ -25,10 +41,6 @@
       width: fit-content;
     }
   }
-}
-
-.input-wrapper {
-  margin-top: 20px;
 }
 
 .g-cursor-pointer {

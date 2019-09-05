@@ -16,6 +16,7 @@ const ACTION_TYPES = {
   SET_CURRENT_IDX: 'Home/SET_CURRENT_IDX',
   SET_APP_ID: 'Home/SET_APP_ID',
   SET_ACTIVE_SLIDE_ID: 'Home/SET_ACTIVE_SLIDE_ID',
+  SET_WINDOW_SIZE: 'Home/SET_WINDOW_SIZE',
   RESET: 'Home/RESET'
 };
 
@@ -26,6 +27,7 @@ const initialState = {
   trackingId: null,
   currentIdx: 0,
   timeStart: null,
+  windowSize: null,
   loading: false,
   requestFailure: false,
   errorMessage: null
@@ -79,6 +81,11 @@ export default (state: HomeState = initialState, action): HomeState => {
       return {
         ...state,
         activeSlideId: action.payload
+      };
+    case ACTION_TYPES.SET_WINDOW_SIZE:
+      return {
+        ...state,
+        windowSize: action.payload
       };
     case ACTION_TYPES.RESET:
       return {
@@ -163,6 +170,11 @@ export const setCurrentIdx = idx => ({
 export const setActiveSlideId = id => ({
   type: ACTION_TYPES.SET_ACTIVE_SLIDE_ID,
   payload: id
+});
+
+export const setWindowSize = windowSize => ({
+  type: ACTION_TYPES.SET_WINDOW_SIZE,
+  payload: windowSize
 });
 
 export const reset = () => ({

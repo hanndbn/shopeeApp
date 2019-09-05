@@ -16,6 +16,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
   saveTrackingData: Function;
   setActiveSlideId: Function;
+  setWindowSize: Function;
   location: any;
   match: any;
 }
@@ -24,19 +25,26 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   constructor(props) {
     super(props);
-    this.state = {
-      input: '', content: ``
-    };
     window.addEventListener('beforeunload', ev => {
       ev.preventDefault();
       this.props.saveTrackingData();
       return ev.returnValue = 'Are you sure you want to close?';
     });
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
     this.props.initScreen();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.props.setWindowSize({ width: window.innerWidth, height: window.innerHeight });
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
@@ -53,11 +61,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     if (!elements) return;
     const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
     return (
-      <div className="container">
-        <div className="slide-container">
-          <div className="d-flex flex-wrap align-items-center justify-content-center">
-            {this.slide2html(data, slide)};
-          </div>
+      <div className="slide-container">
+        <div className="d-flex align-items-center justify-content-center h-100 w-100">
+          {this.slide2html(data, slide, activeSlideId)};
         </div>
       </div>
     );
@@ -65,16 +71,33 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   slide2html(data, slide, idx = 0) {
     const slideStyle = homeAction.getSlideStyle(slide['style']);
-    const style: any = homeAction.getStyle(slide, slideStyle);
+    let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     const valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
+    const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
       nextSlideId = homeAction.getSlideContainerId(relation.target, data.elements);
     }
-    return (<div className={cn('slide', { 'g-cursor-pointer': relation })}
+    if (isRoot) {
+      const windowWidth = this.props.windowSize ? this.props.windowSize.width : 0;
+      const windowHeight = this.props.windowSize ? this.props.windowSize.height : 0;
+      const slideWidth = style['width'] ? style['width'] : 0;
+      const slideHeight = style['height'] ? style['height'] : 0;
+      if (slideWidth < windowWidth) {
+        style = { ...style, width: '100%' };
+      }
+      if (slideHeight < windowHeight) {
+        style = { ...style, height: '100%' };
+      }
+    }
+    return (<div className={cn('slide', {
+      'g-cursor-pointer': relation,
+      'root-slide': isRoot,
+      'opacity-animation': isRoot
+    })}
                  style={style}
                  key={idx}
                  onClick={() => relation ? this.props.setActiveSlideId(nextSlideId) : ''}
@@ -105,7 +128,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         <Helmet>
           <title>{`${TITLE_HELMET}`}</title>
         </Helmet>
-        <div className="container input-wrapper">
+        <div className="">
           <div className="row">
             <div className="col-12">
               {requestFailure && <div className="alert alert-danger">{errorMessage}</div>}
@@ -122,12 +145,14 @@ const mapStateToProps = ({ home }: IRootState) => ({
   data: home.data,
   activeSlideId: home.activeSlideId,
   requestFailure: home.requestFailure,
+  windowSize: home.windowSize,
   errorMessage: home.errorMessage
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
     await dispatch(homeAction.reset());
+    await dispatch(homeAction.setWindowSize({ width: window.innerWidth, height: window.innerHeight }));
     const appName = ownProps.match.params.appName ? ownProps.match.params.appName : '';
     await dispatch(homeAction.requestHomeData(appName));
     await dispatch(homeAction.setTimeStart(new Date()));
@@ -140,6 +165,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   setActiveSlideId: id => {
     dispatch(homeAction.setActiveSlideId(id));
+  },
+  setWindowSize: windowSize => {
+    dispatch(homeAction.setWindowSize(windowSize));
   }
 });
 

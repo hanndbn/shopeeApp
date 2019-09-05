@@ -1,3 +1,13 @@
+.geSidebarContainer *,
+.geSidebarContainer *::before,
+.geSidebarContainer *::after,
+.geDialog,
+.geDialog *,
+.geDialog *::before,
+.geDialog *::after {
+  box-sizing: content-box;
+}
+
 .save-publish-panel-header {
   position: relative;
   height: 126px;
