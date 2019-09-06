@@ -13,6 +13,11 @@ body, html {
   justify-content: space-evenly;
   height: 100vh;
   width: 100vw;
+  //@media only screen and (min-width: 992px) {
+  //  max-height: 500px;
+  //  max-width: 400px;
+  //  border: 1px solid gray;
+  //}
 }
 
 .slide {

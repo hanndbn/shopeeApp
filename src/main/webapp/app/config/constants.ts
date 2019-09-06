@@ -8,6 +8,9 @@ export default config;
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
 export const TITLE_HELMET = 'PYRAMIDS';
+export const CONSTANT = {
+  DEFAULT_RATIO: 19.5 / 9
+};
 
 export const AUTHORITIES = {
   ADMIN: 'ROLE_ADMIN',

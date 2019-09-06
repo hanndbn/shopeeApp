@@ -11,6 +11,7 @@ import * as homeAction from 'app/modules/home/home.reducer';
 // const jsdom = require("jsdom");
 // import { getCategory } from "app/shared/reducers/category";
 import cn from 'classnames';
+import _ from 'lodash';
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -62,14 +63,14 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
     return (
       <div className="slide-container">
-        <div className="d-flex align-items-center justify-content-center h-100 w-100">
+        <div className="d-flex justify-content-center h-100 w-100">
           {this.slide2html(data, slide, activeSlideId)};
         </div>
       </div>
     );
   }
 
-  slide2html(data, slide, idx = 0) {
+  slide2html(data, slide, parentStyle, idx = 0) {
     const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
@@ -87,10 +88,39 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       const slideWidth = style['width'] ? style['width'] : 0;
       const slideHeight = style['height'] ? style['height'] : 0;
       if (slideWidth < windowWidth) {
-        style = { ...style, width: '100%' };
+        style = {
+          ...style,
+          widthValue: style.width,
+          width: '100%'
+        };
       }
       if (slideHeight < windowHeight) {
-        style = { ...style, height: '100%' };
+        style = {
+          ...style,
+          heightValue: style.height,
+          height: '100%'
+        };
+      } else {
+        style = {
+          ...style,
+          heightValue: style.height,
+          height: style.height
+        };
+      }
+    } else {
+      if (style['width'] && parentStyle['widthValue']) {
+        style = {
+          ...style,
+          width: `${_.round(style['width'] / parentStyle['widthValue'], 2) * 100}%`,
+          left: `${_.round(style['left'] / parentStyle['widthValue'], 2) * 100}%`
+        };
+      }
+      if (style['height'] && parentStyle['heightValue']) {
+        style = {
+          ...style,
+          height: `${_.round(style['height'] / parentStyle['heightValue'], 2) * 100}%`,
+          top: `${_.round(style['top'] / parentStyle['heightValue'], 2) * 100}%`
+        };
       }
     }
     return (<div className={cn('slide', {
@@ -105,7 +135,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       <div className="slide-child"
            style={childStyle}
       >
-        {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, idxChild))}
+        {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, style, idxChild))}
         {slide.value && <div
           className="slide-value"
           style={valueStyle}
@@ -130,7 +160,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         </Helmet>
         <div className="">
           <div className="row">
-            <div className="col-12">
+            <div className="col-12 d-flex justify-content-center">
               {requestFailure && <div className="alert alert-danger">{errorMessage}</div>}
               {displaySlide}
             </div>
