@@ -11,8 +11,18 @@ body, html {
   //margin-top: 50px;
   //display: flex;
   justify-content: space-evenly;
-  height: 100vh;
-  width: 100vw;
+  overflow: auto;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  @media only screen and (min-width: 768px) {
+    margin-top: 50px;
+    width: 360px;
+    height: 640px;
+    border: 1px solid gray;
+    max-height: 640px;
+    overflow: auto;
+  }
   //@media only screen and (min-width: 992px) {
   //  max-height: 500px;
   //  max-width: 400px;
@@ -30,7 +40,7 @@ body, html {
 
   &.root-slide {
     border: none !important;
-    overflow: auto;
+    //overflow: auto;
   }
 
   .slide-child {

@@ -62,19 +62,19 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     if (!elements) return;
     const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
     return (
-      <div className="slide-container">
+      <div className={cn('slide-container')}>
         <div className="d-flex justify-content-center h-100 w-100">
-          {this.slide2html(data, slide, activeSlideId)};
+          {this.slide2html(data, slide, null, null, activeSlideId)};
         </div>
       </div>
     );
   }
 
-  slide2html(data, slide, parentStyle, idx = 0) {
+  slide2html(data, slide, parentStyle, zoomVal, idx = 0) {
     const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
-    const valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
+    let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
     const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
@@ -83,43 +83,64 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       nextSlideId = homeAction.getSlideContainerId(relation.target, data.elements);
     }
     if (isRoot) {
-      const windowWidth = this.props.windowSize ? this.props.windowSize.width : 0;
-      const windowHeight = this.props.windowSize ? this.props.windowSize.height : 0;
+      let windowWidth = this.props.windowSize ? this.props.windowSize.width : 0;
+      let windowHeight = this.props.windowSize ? this.props.windowSize.height : 0;
+      if (windowWidth > 768) {
+        windowWidth = 360;
+        windowHeight = 640;
+      }
       const slideWidth = style['width'] ? style['width'] : 0;
       const slideHeight = style['height'] ? style['height'] : 0;
-      if (slideWidth < windowWidth) {
+      const screenRatio = windowHeight / windowWidth;
+      const needHeightEditor = slideWidth * screenRatio;
+      const slideRatio = slideHeight / slideWidth;
+      const needHeightScreen = windowWidth * slideRatio;
+      zoomVal = windowWidth / slideWidth;
+      style = {
+        ...style,
+        originalWith: style.width,
+        originalHeight: style.height,
+        width: '100%'
+      };
+      if (slideHeight <= needHeightEditor) {
         style = {
           ...style,
-          widthValue: style.width,
-          width: '100%'
-        };
-      }
-      if (slideHeight < windowHeight) {
-        style = {
-          ...style,
-          heightValue: style.height,
           height: '100%'
         };
       } else {
         style = {
           ...style,
-          heightValue: style.height,
-          height: style.height
+          height: needHeightScreen
         };
       }
     } else {
-      if (style['width'] && parentStyle['widthValue']) {
+      const parentWith = parentStyle.originalWith ? parentStyle.originalWith : parentStyle.width;
+      const parentHeight = parentStyle.originalHeight ? parentStyle.originalHeight : parentStyle.height;
+
+      style = {
+        ...style,
+        width: `${_.round(style.width / parentWith, 2) * 100}%`,
+        left: `${_.round(style.left / parentWith, 2) * 100}%`,
+        height: `${_.round(style.height / parentHeight, 2) * 100}%`,
+        top: `${_.round(style.top / parentHeight, 2) * 100}%`
+      };
+
+      const fontSize = style.fontSize ? style.fontSize : null;
+      if (fontSize && zoomVal) {
+        const fontSizeVal = _.toInteger(fontSize.substring(0, fontSize.length - 2));
+        const zoomFontSize = fontSizeVal * zoomVal;
         style = {
           ...style,
-          width: `${_.round(style['width'] / parentStyle['widthValue'], 2) * 100}%`,
-          left: `${_.round(style['left'] / parentStyle['widthValue'], 2) * 100}%`
+          fontSize: zoomFontSize
         };
       }
-      if (style['height'] && parentStyle['heightValue']) {
-        style = {
-          ...style,
-          height: `${_.round(style['height'] / parentStyle['heightValue'], 2) * 100}%`,
-          top: `${_.round(style['top'] / parentStyle['heightValue'], 2) * 100}%`
+      const fontSizeValueElement = valueStyle.fontSize ? valueStyle.fontSize : null;
+      if (fontSizeValueElement && zoomVal) {
+        const fontSizeVal = _.toInteger(fontSizeValueElement.substring(0, fontSizeValueElement.length - 2));
+        const zoomFontSize = fontSizeVal * zoomVal;
+        valueStyle = {
+          ...valueStyle,
+          fontSize: zoomFontSize
         };
       }
     }
@@ -130,12 +151,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     })}
                  style={style}
                  key={idx}
-                 onClick={() => relation ? this.props.setActiveSlideId(nextSlideId) : ''}
+                 onClick={() => !isRoot && relation ? this.props.setActiveSlideId(nextSlideId) : ''}
     >
       <div className="slide-child"
            style={childStyle}
       >
-        {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, style, idxChild))}
+        {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, style, zoomVal, idxChild))}
         {slide.value && <div
           className="slide-value"
           style={valueStyle}

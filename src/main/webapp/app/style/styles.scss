@@ -1,15 +1,14 @@
 html {
   height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 body {
-  min-height: 100%;
-  //overflow-y: hidden;
-}
-
-html, body {
-  width: auto !important;
-  overflow-x: hidden !important;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden !important;
 }
 
 div {
@@ -52,8 +51,12 @@ body::after {
   display: block;
 }
 
+#root {
+  position: relative;
+  min-height: 100%;
+}
+
 .site-content {
-  min-height: calc(100vh - 400px);
 }
 
 .site-footer {
