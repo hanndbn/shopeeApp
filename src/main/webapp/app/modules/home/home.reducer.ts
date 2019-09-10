@@ -266,7 +266,7 @@ export const getStyle = (slide, slideStyle) => {
       '' : `1px solid ${getColorWithOpacity('#000000', opacityHex)}`,
     width: slide['width'],
     height: slide['height'],
-    fontSize: `${slideStyle['fontSize']}px`,
+    fontSize: slideStyle.fontSize ? `${slideStyle.fontSize}px` : '',
     fontFamily: slideStyle['fontFamily'] ? `${slideStyle['fontFamily']}` : '',
     borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
     backgroundColor: slideStyle['fillColor'] ? `${getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
