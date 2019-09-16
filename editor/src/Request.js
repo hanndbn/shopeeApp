@@ -44,7 +44,7 @@ function requestLoadDataApp(data, editorUi) {
       $('#myModal').modal('hide');
       $('#publishItem').prop('hidden', false);
       // editorUi.editor.setStatus('load data success');
-      editorUi.editor.setModified(false);
+      editorUi.editor.setModified(true);
       editorUi.editor.setFilename(data.appName);
       editorUi.editor.setAppId(data.appId);
       editorUi.updateDocumentTitle();

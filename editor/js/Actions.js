@@ -63,25 +63,31 @@ Actions.prototype.init = function() {
     });
   }).isEnabled = isGraphEnabled;
   this.addAction('save', function() {
-    $('#myModal').html(saveAppModal());
-    $('#saveApp').click(function() {
-      let appName = $('#appName').val();
-      if (appName === '') {
-        $('#responseError').html('app name must not empty');
-      } else {
-        ui.save(appName);
-      }
-    });
-    $('#appName').keyup(function(e) {
-      if (e.target.value === '') {
-        $('#responseError').html('app name must not empty');
-        $('#saveApp').prop('disabled', true);
-      } else {
-        $('#responseError').empty();
-        $('#saveApp').prop('disabled', false);
-      }
-    });
-    $('#myModal').modal('show');
+    console.log(editor.appId);
+    if (!editor.appId) {
+      $('#myModal').html(saveAppModal());
+      $('#appName').val(editor.getOrCreateFilename());
+      $('#saveApp').click(function() {
+        let appName = $('#appName').val();
+        if (appName === '') {
+          $('#responseError').html('app name must not empty');
+        } else {
+          ui.save(appName);
+        }
+      });
+      $('#appName').keyup(function(e) {
+        if (e.target.value === '') {
+          $('#responseError').html('app name must not empty');
+          $('#saveApp').prop('disabled', true);
+        } else {
+          $('#responseError').empty();
+          $('#saveApp').prop('disabled', false);
+        }
+      });
+      $('#myModal').modal('show');
+    } else {
+      ui.save(editor.getFilename());
+    }
   }, null, null, Editor.ctrlKey + '+S').isEnabled = isGraphEnabled;
   this.addAction('load...', function() {
     $('#myModal').html(loadAppModal());
