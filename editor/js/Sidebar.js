@@ -15,6 +15,7 @@ function Sidebar(editorUi, container) {
   this.graph.cellRenderer.antiAlias = this.thumbAntiAlias;
   this.graph.container.style.visibility = 'hidden';
   this.graph.foldingEnabled = false;
+  this.counter = 0;
 
   document.body.appendChild(this.graph.container);
 
@@ -73,6 +74,7 @@ Sidebar.prototype.init = function() {
 
   this.addSearchPalette(true);
   this.addGeneralPalette(true);
+  // this.addAdvancedPalette(true);
 };
 
 /**
@@ -803,18 +805,33 @@ Sidebar.prototype.insertSearchHint = function(div, searchTerm, count, page, resu
 Sidebar.prototype.addGeneralPalette = function(expand) {
   var lineTags = 'line lines connector connectors connection connections arrow arrows ';
   var sb = this;
-  var fns0 = [
-    this.addEntry('First Slide', function() {
-      var arrow = new mxCell('Label', new mxGeometry(0, 0, 195, 90),
-        'html=1;whiteSpace=wrap;container=1;recursiveResize=0;');
-      arrow.vertex = true;
-      var cell = new mxCell('Label', new mxGeometry(0, 0, 160, 70),
-        'html=1;whiteSpace=wrap;container=1;recursiveResize=0;');
-      cell.vertex = true;
-      return sb.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'First Slide');
-    })
-  ];
+  // var fns0 = [
+  //   this.addEntry('First Slide', function() {
+  //     var arrow = new mxCell('Label', new mxGeometry(0, 0, 195, 90),
+  //       'html=1;whiteSpace=wrap;container=1;recursiveResize=0;');
+  //     arrow.vertex = true;
+  //     var cell = new mxCell('Label', new mxGeometry(0, 0, 160, 70),
+  //       'html=1;whiteSpace=wrap;container=1;recursiveResize=0;');
+  //     cell.vertex = true;
+  //     return sb.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'First Slide');
+  //   })
+  // ];
 
+  // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
+
+  // var fns0 = [
+  //   this.addEntry('list group erd table', function() {
+  //     var cell = new mxCell('', new mxGeometry(0, 0, 225, 400),
+  //       'container=1;rounded=0;whiteSpace=wrap;html=1;');
+  //     cell.vertex = true;
+  //     var field = new mxCell('', new mxGeometry(0, 0, 60, 26), 'edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;');
+  //     field.geometry.setTerminalPoint(new mxPoint(0, 230), true);
+  //     field.geometry.points = [new mxPoint(0, 330)];
+  //     cell.insert(field);
+  //
+  //     return sb.createVertexTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'List');
+  //   })
+  // ];
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
@@ -1822,6 +1839,9 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
   allowCellsInserted = (allowCellsInserted != null) ? allowCellsInserted : true;
 
   return mxUtils.bind(this, function(graph, evt, target, x, y, force) {
+    if (mxUtils.getPrettyXml(this.editorUi.editor.getGraphXml()).indexOf('isFirstSlide="1"') === -1) {
+      this.counter = 0;
+    }
     var elt = (force) ? null : ((mxEvent.isTouchEvent(evt) || mxEvent.isPenEvent(evt)) ?
       document.elementFromPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt)) :
       mxEvent.getSource(evt));
@@ -1832,6 +1852,23 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 
     if (elt == null && graph.isEnabled()) {
       cells = graph.getImportableCells(cells);
+      var cellStyle = cells[0].style.split(';');
+      cellStyle = cellStyle.filter(function(v) {
+        return v;
+      });
+      if (cellStyle.includes('container=1')) {
+        if (this.counter === 0) {
+          this.counter++;
+          cellStyle.push('strokeColor=#FF176C');
+          cells[0].style = cellStyle.join(';') + ';';
+          cells[0].isFirstSlide = '1';
+        } else {
+          this.counter++;
+          cellStyle.push('strokeColor=#000');
+          cells[0].style = cellStyle.join(';') + ';';
+          cells[0].isFirstSlide = '0';
+        }
+      }
 
       if (cells.length > 0) {
         graph.stopEditing();
