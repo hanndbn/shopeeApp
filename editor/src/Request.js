@@ -25,6 +25,7 @@ function requestSaveApp(requestData, editorUi) {
       } else {
         swal('', 'update data success', 'success');
       }
+      $('#publishItem').prop('hidden', false);
       editorUi.updateDocumentTitle();
     },
     error: function(xhr) {

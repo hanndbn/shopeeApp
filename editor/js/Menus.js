@@ -984,7 +984,8 @@ Menus.prototype.createMenubar = function(container) {
     $('#appName').val(SERVER_URL + self.editorUi.editor.filename);
     $('#app-link').attr('href', SERVER_URL + self.editorUi.editor.filename);
     $('#publishApp').click(function() {
-      $('#responseError').html('function not working');
+      window.location = SERVER_URL + self.editorUi.editor.filename;
+      // $('#responseError').html('function not working');
     });
   });
   return menubar;

@@ -214,8 +214,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   saveTrackingData: () => {
     dispatch(homeAction.saveTrackingData());
   },
-  setActiveSlideId: id => {
-    dispatch(homeAction.setActiveSlideId(id));
+  setActiveSlideId: async id => {
+    await dispatch(homeAction.setActiveSlideId(id));
+    await dispatch(homeAction.saveTrackingData());
   },
   setWindowSize: windowSize => {
     dispatch(homeAction.setWindowSize(windowSize));
