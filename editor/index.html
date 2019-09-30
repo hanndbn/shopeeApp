@@ -29,13 +29,13 @@
         // - chrome=0: Chromeless mode.
         var urlParams = (function(url) {
             var result = new Object();
-            var idx = url.lastIndexOf('?');
+            var idx = url.lastIndexOf("?");
 
             if (idx > 0) {
-                var params = url.substring(idx + 1).split('&');
+                var params = url.substring(idx + 1).split("&");
 
                 for (var i = 0; i < params.length; i++) {
-                    idx = params[i].indexOf('=');
+                    idx = params[i].indexOf("=");
 
                     if (idx > 0) {
                         result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
@@ -67,6 +67,45 @@
     <script type="text/javascript" src="js/Dialogs.js"></script>
 </head>
 <body class="geEditor">
+<div class="navContainer">
+    <div class="nav-item">
+        <a class="nav-link">HOME</a>
+    </div>
+    <div class="nav-item">
+        <a class="nav-link">
+            <div>
+                <div>CLIENT&</div>
+                <div>TIMELINES</div>
+            </div>
+        </a>
+    </div>
+    <div class="nav-item">
+        <a class="nav-link">
+            INSIGHTS
+        </a>
+    </div>
+    <div class="nav-item">
+        <a class="nav-link">
+            SCHEDULER
+        </a>
+    </div>
+    <div class="nav-item">
+        <a class="nav-link">
+            <div>
+                <div>RESOURCE</div>
+                <div>BANK</div>
+            </div>
+        </a>
+    </div>
+    <div class="nav-item">
+        <a class="nav-link">
+            <div>
+                <div>BILLING</div>
+                <div>PAYMENTS</div>
+            </div>
+        </a>
+    </div>
+</div>
 <script type="text/javascript">
     // Extends EditorUi to update I/O action states based on availability of backend
     (function() {
@@ -78,7 +117,7 @@
 
             // Updates action states which require a backend
             if (!Editor.useLocalStorage) {
-                mxUtils.post(OPEN_URL, '', mxUtils.bind(this, function(req) {
+                mxUtils.post(OPEN_URL, "", mxUtils.bind(this, function(req) {
                     var enabled = req.getStatus() != 404;
                     // this.actions.get('open').setEnabled(enabled || Graph.fileSupport);
                     // this.actions.get('import').setEnabled(enabled || Graph.fileSupport);
@@ -96,7 +135,7 @@
             mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
 
         // Fixes possible asynchronous requests
-        mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr) {
+        mxUtils.getAll([bundle, STYLE_PATH + "/default.xml"], function(xhr) {
             // Adds bundle text to resources
             mxResources.parse(xhr[0].getText());
 
@@ -105,9 +144,9 @@
             themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
             // Main
-            new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
+            new EditorUi(new Editor(urlParams["chrome"] == "0", themes));
         }, function() {
-            document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
+            document.body.innerHTML = "<center style=\"margin-top:10%;\">Error loading resource files. Please check browser console.</center>";
         });
     })();
 </script>
