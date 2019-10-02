@@ -23,13 +23,16 @@ export interface IHomeProp extends StateProps, DispatchProps {
 }
 
 export class Home extends React.Component<IHomeProp, { input: any, content: any }> {
+  private parentContainer: any = React.createRef();
+  private childContainer: any = React.createRef();
+  private scrollCount = 0;
 
   constructor(props) {
     super(props);
     window.addEventListener('beforeunload', ev => {
       ev.preventDefault();
       this.props.saveTrackingData();
-      return ev.returnValue = 'Are you sure you want to close?';
+      return null;
     });
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
@@ -57,26 +60,43 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return null;
   }
 
+  scrollParentEvent(e) {
+    if (this.scrollCount === 0) {
+      const target: any = document.getElementsByClassName('slide-scroll-wrapper')[ 0 ];
+      target.scrollTo(0, target.offsetHeight * (e.target.scrollTop / e.target.scrollHeight));
+      this.scrollCount++;
+    }
+  }
+
+  scrollChildEvent(e) {
+    this.parentContainer.current.scrollTo(0, this.parentContainer.current.offsetHeight * (e.target.scrollTop / e.target.scrollHeight));
+  }
+
   parse2html(data, activeSlideId) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
+    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[ 0 ];
     return (
-      <div className={cn('slide-container')}>
+      <div className={cn('slide-container')} ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
+        <div className="slide-scroll-container" onScroll={e => this.scrollChildEvent(e)}>
+          <div className="slide-scroll-wrapper">
+            <div className="slide-scroll-content"/>
+          </div>
+        </div>
         <div className="d-flex justify-content-center h-100 w-100">
-          {this.slide2html(data, slide, null, null, activeSlideId)};
+          {this.slide2html(data, slide, null, null, activeSlideId)}
         </div>
       </div>
     );
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0) {
-    const slideStyle = homeAction.getSlideStyle(slide['style']);
+    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide['parent'];
+    const isRoot = !slide[ 'parent' ];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -89,8 +109,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style['width'] ? style['width'] : 0;
-      const slideHeight = style['height'] ? style['height'] : 0;
+      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
+      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
