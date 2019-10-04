@@ -377,7 +377,7 @@ export const getColorWithOpacity = (hex, opacity) => {
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-  return opacity !== null && opacity !== '' ? `rgb(${r}, ${g}, ${b}, ${opacity / 100}` : `rgb(${r}, ${g}, ${b}`;
+  return opacity !== null && opacity !== '' ? `rgba(${r}, ${g}, ${b}, ${opacity / 100})` : `rgb(${r}, ${g}, ${b})`;
 };
 
 export const getSlideContainerId = (id, elements) => {

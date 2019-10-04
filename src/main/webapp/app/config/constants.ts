@@ -7,7 +7,7 @@ export default config;
 // export const SERVER_API_URL = 'hanndbn.000webhostapp.com';
 export const SERVER_API_URL = process.env.SERVER_API_URL;
 
-export const TITLE_HELMET = 'PYRAMIDS';
+export const TITLE_HELMET = 'FLOW';
 export const CONSTANT = {
   DEFAULT_RATIO: 19.5 / 9
 };

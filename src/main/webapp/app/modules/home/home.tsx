@@ -1,5 +1,4 @@
 import './home.scss';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
@@ -25,7 +24,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
 export class Home extends React.Component<IHomeProp, { input: any, content: any }> {
   private parentContainer: any = React.createRef();
   private childContainer: any = React.createRef();
-  private scrollCount = 0;
+  private ignoreScrollEvents = false;
 
   constructor(props) {
     super(props);
@@ -35,6 +34,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       return null;
     });
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+
   }
 
   componentDidMount() {
@@ -60,29 +60,37 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return null;
   }
 
+  //
+  // handleScroll(e) {
+  //   console.log(1);
+  // }
+
   scrollParentEvent(e) {
-    if (this.scrollCount === 0) {
-      const target: any = document.getElementsByClassName('slide-scroll-wrapper')[ 0 ];
-      target.scrollTo(0, target.offsetHeight * (e.target.scrollTop / e.target.scrollHeight));
-      this.scrollCount++;
-    }
+    this.childContainer.current.scrollTop = this.childContainer.current.scrollHeight * (e.target.scrollTop / e.target.scrollHeight) * 3;
   }
 
-  scrollChildEvent(e) {
-    this.parentContainer.current.scrollTo(0, this.parentContainer.current.offsetHeight * (e.target.scrollTop / e.target.scrollHeight));
-  }
+  // scrollChildEvent(e) {
+  //   this.parentContainer.current.scrollTop = this.parentContainer.current.offsetHeight * (e.target.scrollTop / e.target.scrollHeight);
+  // }
+
+  // scrollParentEvent() {
+  //   console.log('parent');
+  // }
+  //
+  // scrollChildEvent() {
+  //   console.log('childrent');
+  // }
+  //
+  // scrollChildEvent1() {
+  //   console.log('childrent1');
+  // }
 
   parse2html(data, activeSlideId) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[ 0 ];
+    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
     return (
-      <div className={cn('slide-container')} ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
-        <div className="slide-scroll-container" onScroll={e => this.scrollChildEvent(e)}>
-          <div className="slide-scroll-wrapper">
-            <div className="slide-scroll-content"/>
-          </div>
-        </div>
+      <div className={cn('slide-container')} id="slide-container" ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
         <div className="d-flex justify-content-center h-100 w-100">
           {this.slide2html(data, slide, null, null, activeSlideId)}
         </div>
@@ -91,12 +99,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0) {
-    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
+    const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide[ 'parent' ];
+    const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -109,8 +117,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
-      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
+      const slideWidth = style['width'] ? style['width'] : 0;
+      const slideHeight = style['height'] ? style['height'] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -188,7 +196,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   decodeHTMLEntities(str) {
-    return str.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+    return str.replace(/&#(\d+)/g, (match, dec) => String.fromCharCode(dec));
   }
 
   render() {
@@ -202,6 +210,11 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         <div className="">
           <div className="row">
             <div className="col-12 d-flex justify-content-center">
+              <div className="slide-scroll-container">
+                <div className="slide-scroll-wrapper" id="slide-scroll-wrapper" ref={this.childContainer}>
+                  <div className="slide-scroll-content"/>
+                </div>
+              </div>
               {requestFailure && <div className="alert alert-danger">{errorMessage}</div>}
               {displaySlide}
             </div>
