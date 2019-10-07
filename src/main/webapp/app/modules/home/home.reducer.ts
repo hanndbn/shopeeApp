@@ -17,6 +17,7 @@ const ACTION_TYPES = {
   SET_APP_ID: 'Home/SET_APP_ID',
   SET_ACTIVE_SLIDE_ID: 'Home/SET_ACTIVE_SLIDE_ID',
   SET_WINDOW_SIZE: 'Home/SET_WINDOW_SIZE',
+  SET_SCROLL_POSITION: 'Home/SET_SCROLL_POSITION',
   RESET: 'Home/RESET'
 };
 
@@ -30,7 +31,8 @@ const initialState = {
   windowSize: null,
   loading: false,
   requestFailure: false,
-  errorMessage: null
+  errorMessage: null,
+  scrollPosition: 100
 };
 
 export type HomeState = Readonly<typeof initialState>;
@@ -87,6 +89,11 @@ export default (state: HomeState = initialState, action): HomeState => {
         ...state,
         windowSize: action.payload
       };
+    case ACTION_TYPES.SET_SCROLL_POSITION:
+      return {
+        ...state,
+        scrollPosition: action.payload
+      };
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -114,7 +121,9 @@ export const requestHomeData = appName => (dispatch, getState) => {
           relation: []
         };
         await decode(node, data);
-        dispatch({
+        const firstSlide = data.elements.find(v => v.isFirstSlide);
+        await dispatch(setActiveSlideId(firstSlide.id));
+        await dispatch({
           type: SUCCESS(ACTION_TYPES.GET_HOME_DATA),
           appId: response.data.appId,
           data
@@ -175,6 +184,11 @@ export const setActiveSlideId = id => ({
 export const setWindowSize = windowSize => ({
   type: ACTION_TYPES.SET_WINDOW_SIZE,
   payload: windowSize
+});
+
+export const setScrollPosition = scrollPosition => ({
+  type: ACTION_TYPES.SET_SCROLL_POSITION,
+  payload: scrollPosition
 });
 
 export const reset = () => ({
