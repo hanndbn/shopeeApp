@@ -122,7 +122,9 @@ export const requestHomeData = appName => (dispatch, getState) => {
         };
         await decode(node, data);
         const firstSlide = data.elements.find(v => v.isFirstSlide);
-        await dispatch(setActiveSlideId(firstSlide.id));
+        if (firstSlide) {
+          await dispatch(setActiveSlideId(firstSlide.id));
+        }
         await dispatch({
           type: SUCCESS(ACTION_TYPES.GET_HOME_DATA),
           appId: response.data.appId,
