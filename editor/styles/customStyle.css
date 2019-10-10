@@ -88,26 +88,28 @@
   color: white;
 }
 
-.geSidebarContainer.geComponentContainer {
-  left: 130px !important;
-}
+/*.geSidebarContainer.geComponentContainer {*/
+/*  left: 50px !important;*/
+/*}*/
 
-.geHsplit {
-  left: 342px !important;
-}
+/*.geHsplit {*/
+/*  left: 392px !important;*/
+/*}*/
 
-.geDiagramContainer {
-  left: 354px !important;
-}
+/*.geDiagramContainer {*/
+/*  left: 404px !important;*/
+/*}*/
 
 .navContainer {
-  top: 70px;
+  top: 0;
   position: absolute;
   width: 130px;
+  height: 100%;
+  border-right: 1px solid #707070;
 }
 
 .geSidebarContainer {
-  border-left: 1px solid #707070;
+  /*border-left: 1px solid #707070;*/
 }
 
 .nav-item {
@@ -129,5 +131,88 @@
   text-align: center;
   cursor: pointer;
 }
+
+.header-container {
+  padding: 10px 15px 30px 0;
+  width: 100%;
+  font-family: 'Barlow', sans-serif;
+}
+
+.header-title {
+  font-size: 20px;
+  color: #4C7A81;
+  font-weight: 600;
+}
+
+.header-hr {
+  height: 5px;
+  margin-top: 10px;
+  padding-left: 15px;
+}
+
+.header-hr div {
+  background-color: #E8E8E8;
+}
+
+.header-hr div.active {
+  background-color: #52A1A7;
+}
+
+.root {
+  width: calc(100% - 130px);
+  height: 100%;
+  position: absolute;
+  left: 130px;
+  padding: 10px 20px 10px 50px;
+}
+
+#editor-container {
+  position: relative;
+  width: 100%;
+  height: 80%;
+  border-radius: 10px;
+  border: 1px solid #BCBCBC;
+  box-shadow: 1px 1px 4px 0px grey;
+}
+
+.customToolbarContainer {
+  height: 50px;
+  background-color: #52A1A7;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.customToolbarContainer .action-btn {
+  padding: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.custom-footer-container {
+  margin-top: 20px;
+  margin-right: 15px;
+}
+
+.custom-footer-container .action-btn {
+  padding: 8px 20px;
+  color: #BCBCBC;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.custom-footer-container .submit-btn {
+  color: white;
+  background-color: #4C7A81;
+  border: 1px solid;
+}
+
 
 
