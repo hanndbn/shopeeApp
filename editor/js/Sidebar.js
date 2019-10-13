@@ -835,7 +835,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', null, null, 'slide container')
+    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', null, null, 'slide container', 'add-container-icon')
   ];
 
   this.addPaletteFunctions('general', 'Container', (expand != null) ? expand : true, fns1);
@@ -860,7 +860,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
     // 	'<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
     // 	'Textbox', null, null, 'text textbox textarea'),
     this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
-      40, 20, 'Text', 'Text', null, null, 'text textbox textarea label')
+      40, 20, 'Text', 'Text', null, null, 'text textbox textarea label', 'add-text-icon')
   ];
 
   this.addPaletteFunctions('general', 'Text', (expand != null) ? expand : true, fns3);
@@ -868,11 +868,17 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   var fns4 = [
     // 	'<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
     // 	'Textbox', null, null, 'text textbox textarea'),
-    this.createVertexTemplateEntry('shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
-      200, 80, '', 'Image', null, null, 'image')
+    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', null, null, 'rounded rect rectangle box')
   ];
 
   this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns4);
+
+  var fns5 = [
+    this.createVertexTemplateEntry('shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
+      200, 80, '', 'Image', null, null, 'image', 'add-image-icon')
+  ];
+
+  this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns5);
 };
 
 /**
@@ -1719,8 +1725,11 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 /**
  * Creates and returns a new palette item for the given image.
  */
-Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted) {
+Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted, id = null) {
   var elt = document.createElement('a');
+  if (id) {
+    elt.id = id;
+  }
   elt.className = 'geItem';
   elt.style.overflow = 'hidden';
   var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
@@ -2881,6 +2890,7 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells) {
 
     oldMouseMove.apply(this, arguments);
   };
+  this.added = false;
 
   ds.mouseUp = function(evt) {
     if (!mxEvent.isPopupTrigger(evt) && this.currentGraph == null &&
@@ -2894,28 +2904,33 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells) {
 
     // Blocks tooltips on this element after single click
     sb.currentElt = elt;
+    elt.dataset.added = 'true';
   };
+  elt.addEventListener('click', function(evt) {
+    if (elt.dataset.added == 'true') return;
+    sb.itemClicked(cells, ds, evt, elt);
+  });
 };
 
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplateEntry = function(style, width, height, value, title, showLabel, showTitle, tags) {
+Sidebar.prototype.createVertexTemplateEntry = function(style, width, height, value, title, showLabel, showTitle, tags, id = null) {
   tags = (tags != null && tags.length > 0) ? tags : title.toLowerCase();
 
   return this.addEntry(tags, mxUtils.bind(this, function() {
-    return this.createVertexTemplate(style, width, height, value, title, showLabel, showTitle);
+    return this.createVertexTemplate(style, width, height, value, title, showLabel, showTitle, null, id);
   }));
 };
 
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplate = function(style, width, height, value, title, showLabel, showTitle, allowCellsInserted) {
+Sidebar.prototype.createVertexTemplate = function(style, width, height, value, title, showLabel, showTitle, allowCellsInserted, id = null) {
   var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
   cells[0].vertex = true;
 
-  return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted);
+  return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted, id);
 };
 
 /**
@@ -2936,10 +2951,10 @@ Sidebar.prototype.createVertexTemplateFromData = function(data, width, height, t
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel, showTitle, allowCellsInserted) {
+Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel, showTitle, allowCellsInserted, id = null) {
   // Use this line to convert calls to this function with lots of boilerplate code for creating cells
   //console.trace('xml', Graph.compress(mxUtils.getXml(this.graph.encodeCells(cells))), cells);
-  return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted);
+  return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted, id);
 };
 
 /**
@@ -2969,8 +2984,8 @@ Sidebar.prototype.createEdgeTemplate = function(style, width, height, value, tit
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createEdgeTemplateFromCells = function(cells, width, height, title, showLabel, allowCellsInserted) {
-  return this.createItem(cells, title, showLabel, true, width, height, allowCellsInserted);
+Sidebar.prototype.createEdgeTemplateFromCells = function(cells, width, height, title, showLabel, allowCellsInserted, id = null) {
+  return this.createItem(cells, title, showLabel, true, width, height, allowCellsInserted, id);
 };
 
 /**

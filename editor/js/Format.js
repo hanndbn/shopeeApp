@@ -103,7 +103,11 @@ Format.prototype.initSelectionState = function() {
   return {
     vertices: [], edges: [], x: null, y: null, width: null, height: null, style: {},
     containsImage: false, containsLabel: false, fill: true, glass: true, rounded: true,
-    comic: true, autoSize: false, image: true, shadow: true, lineJumps: true
+    comic: true, autoSize: false, image: true, shadow: true, lineJumps: true,
+    modalPopup: false,
+    modalType: 'CONTACT',
+    modalTypeDetail: 'CONTACT_FORM',
+    modalSiteUrl: ''
   };
 };
 
@@ -3512,6 +3516,8 @@ StyleFormatPanel.prototype.init = function() {
   }
 
   this.container.appendChild(this.addStyleOps(opsPanel));
+
+  this.container.appendChild(this.addModalOps());
 };
 
 /**
@@ -4610,6 +4616,170 @@ StyleFormatPanel.prototype.addStyleOps = function(div) {
   div.appendChild(btn);
 
   return div;
+};
+
+/**
+ * Adds the label menu items to the given menu and parent.
+ */
+StyleFormatPanel.prototype.addModalOps = function() {
+  var ui = this.editorUi;
+  var editor = ui.editor;
+  var graph = editor.graph;
+  var ss = this.format.getSelectionState();
+  const modalOption = document.createElement('div');
+  modalOption.innerHTML =
+    `
+      <div class="geFormatSection modal-option-wrapper">
+        <div class="row no-gutters">
+          <div class="col-12 modal-option-title">Modal Option</div>
+          <div class="col-12 form-group d-flex align-items-center">
+              <input type="checkbox" class="g-margin-right-5" id="modal-popup-check">
+              <div class="font-weight-bold">Enable Modal Popup</div>
+          </div>
+          <div class="col-12" id="modal-type-wrapper" style="display: none;">
+            <div class="form-group d-flex align-items-center g-margin-top-5 justify-content-end">
+              <div class="font-weight-bold">Modal</div>
+              <select id="modal-type" class="modal-option-type">
+                  <option value="CONTACT">Contact</option>  
+                  <option value="MEDIA">Media</option>  
+                  <option value="BASIC">Basic</option>  
+                  <option value="SOCIAL">Social</option>  
+                  <option value="SITE">Site</option>  
+              </select>
+            </div>
+            <div class="form-group d-flex align-items-center g-margin-top-5 justify-content-end">
+              <div class="font-weight-bold">Type</div>
+              <select id="modal-type-detail" class="modal-option-type">
+              </select>
+            </div>
+            <div class="form-group  g-margin-top-5 " style="display:none;" id="modal-site-url-wrapper">
+              <div class="d-flex align-items-center justify-content-end">
+                <div class="font-weight-bold">Url</div>
+                <input id="modal-site-url" class="modal-option-type"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  var listener = mxUtils.bind(this, function() {
+    ss = this.format.getSelectionState();
+    var modalPopupVal = mxUtils.getValue(ss.style, 'modalPopup', false);
+    modalOption.querySelector('#modal-popup-check').checked = modalPopupVal;
+
+    if (modalPopupVal) {
+      $(modalOption.querySelector('#modal-type-wrapper')).show();
+    } else {
+      $(modalOption.querySelector('#modal-type-wrapper')).hide();
+    }
+
+    var modalTypeVal = mxUtils.getValue(ss.style, 'modalType', 'CONTACT');
+    modalOption.querySelector('#modal-type').value = modalTypeVal;
+
+    let defaultModalTypeDetailVal = '';
+    const modalTypeDetailSelect = $(modalOption.querySelector('#modal-type-detail'));
+    if (modalTypeVal == 'CONTACT') {
+      defaultModalTypeDetailVal = 'CONTACT_FORM';
+      modalTypeDetailSelect.empty();
+      // form page 1
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'CONTACT_FORM').text('Contact Form'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'RSVP_CONTACT').text('RSVP Contact'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'ASK_QUESTION').text('Ask Question'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'EVENT_REGISTRATION').text('Event Registration'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'GENERIC_FORM').text('Generic Form'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'CARD_SIGN_UP').text('Card Sign Up'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'AVAILABILITY').text('Availability'));
+
+      // form page 2
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'EMAIL_TO_USER').text('Email To User'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'THANKYOU').text('Thankyou'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'MAP').text('Map'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'CALENDAR').text('Calendar'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'SERVICE_NEARBY_YOU').text('Service Nearby You'));
+    } else if (modalTypeVal == 'MEDIA') {
+      defaultModalTypeDetailVal = 'YOUTUBE';
+      modalTypeDetailSelect.empty();
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'YOUTUBE').text('Youtube'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'SPOTIFY').text('Spotify'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'VIMEO').text('vimeo'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'YOUTUBE_VERT').text('Youtube Vert'));
+    } else if (modalTypeVal == 'BASIC') {
+      defaultModalTypeDetailVal = 'GDPR';
+      modalTypeDetailSelect.empty();
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'GDPR').text('GDPR'));
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'PDF').text('PDF'));
+    } else if (modalTypeVal == 'SOCIAL') {
+      defaultModalTypeDetailVal = 'SHARE_BUBBLE';
+      modalTypeDetailSelect.empty();
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'SHARE_BUBBLE').text('Share Bubble'));
+    } else if (modalTypeVal == 'SITE') {
+      defaultModalTypeDetailVal = '';
+      modalTypeDetailSelect.empty();
+      modalTypeDetailSelect.append($('<option></option>').attr('value', 'SITE_URL').text('Site url'));
+    }
+    if (modalTypeVal == 'SITE') {
+      $(modalOption.querySelector('#modal-site-url-wrapper')).show();
+    } else {
+      $(modalOption.querySelector('#modal-site-url-wrapper')).hide();
+    }
+    var modalSiteUrlVal = mxUtils.getValue(ss.style, 'modalSiteUrl', '');
+    $(modalOption.querySelector('#modal-site-url')).val(modalSiteUrlVal);
+    var modalTypeDetailVal = mxUtils.getValue(ss.style, 'modalTypeDetail', defaultModalTypeDetailVal);
+    modalOption.querySelector('#modal-type-detail').value = modalTypeDetailVal;
+  });
+
+  graph.getModel().addListener(mxEvent.CHANGE, listener);
+  this.listeners.push({
+    destroy: function() {
+      graph.getModel().removeListener(listener);
+    }
+  });
+  listener();
+
+  // -------------------------MODAL ACTION-------------------------------------
+  const modalPopupCheck = $(modalOption.querySelector('#modal-popup-check'));
+  modalPopupCheck.change(function(e) {
+    const value = modalPopupCheck.is(':checked') ? '1' : '0';
+    graph.setCellStyles('modalPopup', value, graph.getSelectionCells());
+    if (modalPopupCheck.is(':checked')) {
+      graph.setCellStyles('modalType', 'CONTACT', graph.getSelectionCells());
+      graph.setCellStyles('modalTypeDetail', 'CONTACT_FORM', graph.getSelectionCells());
+    }
+  });
+
+  const modalTypeSelect = $(modalOption.querySelector('#modal-type'));
+  const modalTypeDetailSelect = $(modalOption.querySelector('#modal-type-detail'));
+  modalTypeSelect.change(function(e) {
+    const value = modalTypeSelect.val();
+    let detailValue = '';
+    if (value === 'CONTACT') {
+      detailValue = 'CONTACT_FORM';
+    } else if (value === 'MEDIA') {
+      detailValue = 'YOUTUBE';
+    } else if (value === 'BASIC') {
+      detailValue = 'GDPR';
+    } else if (value === 'SOCIAL') {
+      detailValue = 'SHARE_BUBBLE';
+    } else if (value === 'SITE') {
+      detailValue = 'SITE_URL';
+    }
+    graph.setCellStyles('modalType', value, graph.getSelectionCells());
+    graph.setCellStyles('modalTypeDetail', detailValue, graph.getSelectionCells());
+  });
+
+
+  modalTypeDetailSelect.change(function(e) {
+    const value = modalTypeDetailSelect.val();
+    graph.setCellStyles('modalTypeDetail', value, graph.getSelectionCells());
+  });
+
+  const modalSiteUrlInput = $(modalOption.querySelector('#modal-site-url'));
+  modalSiteUrlInput.change(function(e) {
+    const value = modalSiteUrlInput.val();
+    graph.setCellStyles('modalSiteUrl', value, graph.getSelectionCells());
+  });
+
+  return modalOption;
 };
 
 /**

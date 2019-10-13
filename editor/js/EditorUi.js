@@ -9,7 +9,7 @@ EditorUi = function(editor, container, lightbox) {
 
   this.destroyFunctions = [];
   this.editor = editor || new Editor();
-  this.container = document.getElementById("editor-container");
+  this.container = document.getElementById('editor-container');
   this.container.style.left = 130;
 
   var graph = this.editor.graph;
@@ -22,7 +22,7 @@ EditorUi = function(editor, container, lightbox) {
 
   // Pre-fetches submenu image or replaces with embedded image if supported
   if (mxClient.IS_SVG) {
-    mxPopupMenu.prototype.submenuImage = "data:image/gif;base64,R0lGODlhCQAJAIAAAP///zMzMyH5BAEAAAAALAAAAAAJAAkAAAIPhI8WebHsHopSOVgb26AAADs=";
+    mxPopupMenu.prototype.submenuImage = 'data:image/gif;base64,R0lGODlhCQAJAIAAAP///zMzMyH5BAEAAAAALAAAAAAJAAkAAAIPhI8WebHsHopSOVgb26AAADs=';
   } else {
     new Image().src = mxPopupMenu.prototype.submenuImage;
   }
@@ -48,6 +48,8 @@ EditorUi = function(editor, container, lightbox) {
   this.menus = this.createMenus();
   this.createDivs();
   this.createUi();
+  // add custom handle event
+  new CustomActions(this);
   this.refresh();
 
   // Disables HTML and text selection
@@ -87,9 +89,9 @@ EditorUi = function(editor, container, lightbox) {
       if (evt != null) {
         var source = mxEvent.getSource(evt);
 
-        if (source.nodeName == "A") {
+        if (source.nodeName == 'A') {
           while (source != null) {
-            if (source.className == "geHint") {
+            if (source.className == 'geHint') {
               return true;
             }
 
@@ -101,8 +103,8 @@ EditorUi = function(editor, container, lightbox) {
       return textEditing(evt);
     };
 
-    if (mxClient.IS_IE && (typeof (document.documentMode) === "undefined" || document.documentMode < 9)) {
-      mxEvent.addListener(this.diagramContainer, "contextmenu", linkHandler);
+    if (mxClient.IS_IE && (typeof (document.documentMode) === 'undefined' || document.documentMode < 9)) {
+      mxEvent.addListener(this.diagramContainer, 'contextmenu', linkHandler);
     } else {
       // Allows browser context menu outside of diagram and sidebar
       this.diagramContainer.oncontextmenu = linkHandler;
@@ -119,7 +121,7 @@ EditorUi = function(editor, container, lightbox) {
     var root = graph.view.getDrawPane().ownerSVGElement;
 
     if (root != null) {
-      root.style.position = "absolute";
+      root.style.position = 'absolute';
     }
   }
 
@@ -127,14 +129,14 @@ EditorUi = function(editor, container, lightbox) {
   this.hoverIcons = this.createHoverIcons();
 
   // Adds tooltip when mouse is over scrollbars to show space-drag panning option
-  mxEvent.addListener(this.diagramContainer, "mousemove", mxUtils.bind(this, function(evt) {
+  mxEvent.addListener(this.diagramContainer, 'mousemove', mxUtils.bind(this, function(evt) {
     var off = mxUtils.getOffset(this.diagramContainer);
 
     if (mxEvent.getClientX(evt) - off.x - this.diagramContainer.clientWidth > 0 ||
       mxEvent.getClientY(evt) - off.y - this.diagramContainer.clientHeight > 0) {
-      this.diagramContainer.setAttribute("title", mxResources.get("panTooltip"));
+      this.diagramContainer.setAttribute('title', mxResources.get('panTooltip'));
     } else {
-      this.diagramContainer.removeAttribute("title");
+      this.diagramContainer.removeAttribute('title');
     }
   }));
 
@@ -152,7 +154,7 @@ EditorUi = function(editor, container, lightbox) {
     if (evt.which == 32 /* Space */) {
       spaceKeyPressed = true;
       this.hoverIcons.reset();
-      graph.container.style.cursor = "move";
+      graph.container.style.cursor = 'move';
 
       // Disables scroll after space keystroke with scrollbars
       if (!graph.isEditing() && mxEvent.getSource(evt) == graph.container) {
@@ -163,14 +165,14 @@ EditorUi = function(editor, container, lightbox) {
     }
   });
 
-  mxEvent.addListener(document, "keydown", this.keydownHandler);
+  mxEvent.addListener(document, 'keydown', this.keydownHandler);
 
   this.keyupHandler = mxUtils.bind(this, function(evt) {
-    graph.container.style.cursor = "";
+    graph.container.style.cursor = '';
     spaceKeyPressed = false;
   });
 
-  mxEvent.addListener(document, "keyup", this.keyupHandler);
+  mxEvent.addListener(document, 'keyup', this.keyupHandler);
 
   // Forces panning for middle and right mouse buttons
   var panningHandlerIsForcePanningEvent = graph.panningHandler.isForcePanningEvent;
@@ -269,11 +271,11 @@ EditorUi = function(editor, container, lightbox) {
                 // Strips leading and trailing quotes
                 var ff = css.fontFamily;
 
-                if (ff.charAt(0) == "'") {
+                if (ff.charAt(0) == '\'') {
                   ff = ff.substring(1);
                 }
 
-                if (ff.charAt(ff.length - 1) == "'") {
+                if (ff.charAt(ff.length - 1) == '\'') {
                   ff = ff.substring(0, ff.length - 1);
                 }
 
@@ -287,10 +289,10 @@ EditorUi = function(editor, container, lightbox) {
         }
       };
 
-      mxEvent.addListener(graph.cellEditor.textarea, "input", updateCssHandler);
-      mxEvent.addListener(graph.cellEditor.textarea, "touchend", updateCssHandler);
-      mxEvent.addListener(graph.cellEditor.textarea, "mouseup", updateCssHandler);
-      mxEvent.addListener(graph.cellEditor.textarea, "keyup", updateCssHandler);
+      mxEvent.addListener(graph.cellEditor.textarea, 'input', updateCssHandler);
+      mxEvent.addListener(graph.cellEditor.textarea, 'touchend', updateCssHandler);
+      mxEvent.addListener(graph.cellEditor.textarea, 'mouseup', updateCssHandler);
+      mxEvent.addListener(graph.cellEditor.textarea, 'keyup', updateCssHandler);
       updateCssHandler();
     }
   };
@@ -302,8 +304,8 @@ EditorUi = function(editor, container, lightbox) {
   };
 
   // Enables scrollbars and sets cursor style for the container
-  graph.container.setAttribute("tabindex", "0");
-  graph.container.style.cursor = "default";
+  graph.container.setAttribute('tabindex', '0');
+  graph.container.style.cursor = 'default';
 
   // Workaround for page scroll if embedded via iframe
   if (window.self === window.top && graph.container.parentNode != null) {
@@ -348,8 +350,8 @@ EditorUi = function(editor, container, lightbox) {
   };
 
   // Stores the current style and assigns it to new cells
-  var styles = ["rounded", "shadow", "glass", "dashed", "dashPattern", "comic", "labelBackgroundColor"];
-  var connectStyles = ["shape", "edgeStyle", "curved", "rounded", "elbow", "comic", "jumpStyle", "jumpSize"];
+  var styles = ['rounded', 'shadow', 'glass', 'dashed', 'dashPattern', 'comic', 'labelBackgroundColor'];
+  var connectStyles = ['shape', 'edgeStyle', 'curved', 'rounded', 'elbow', 'comic', 'jumpStyle', 'jumpSize'];
 
   // Note: Everything that is not in styles is ignored (styles is augmented below)
   this.setDefaultStyle = function(cell) {
@@ -359,7 +361,7 @@ EditorUi = function(editor, container, lightbox) {
       if (state != null) {
         // Ignores default styles
         var clone = cell.clone();
-        clone.style = "";
+        clone.style = '';
         var defaultStyle = graph.getCellStyle(clone);
         var values = [];
         var keys = [];
@@ -373,17 +375,17 @@ EditorUi = function(editor, container, lightbox) {
 
         // Handles special case for value "none"
         var cellStyle = graph.getModel().getStyle(state.cell);
-        var tokens = (cellStyle != null) ? cellStyle.split(";") : [];
+        var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
 
         for (var i = 0; i < tokens.length; i++) {
           var tmp = tokens[i];
-          var pos = tmp.indexOf("=");
+          var pos = tmp.indexOf('=');
 
           if (pos >= 0) {
             var key = tmp.substring(0, pos);
             var value = tmp.substring(pos + 1);
 
-            if (defaultStyle[key] != null && value == "none") {
+            if (defaultStyle[key] != null && value == 'none') {
               values.push(value);
               keys.push(key);
             }
@@ -397,7 +399,7 @@ EditorUi = function(editor, container, lightbox) {
           graph.currentVertexStyle = {};
         }
 
-        this.fireEvent(new mxEventObject("styleChanged", "keys", keys, "values", values, "cells", [state.cell]));
+        this.fireEvent(new mxEventObject('styleChanged', 'keys', keys, 'values', values, 'cells', [state.cell]));
       }
     } catch (e) {
       this.handleError(e);
@@ -409,26 +411,26 @@ EditorUi = function(editor, container, lightbox) {
     graph.currentVertexStyle = mxUtils.clone(graph.defaultVertexStyle);
 
     // Updates UI
-    this.fireEvent(new mxEventObject("styleChanged", "keys", [], "values", [], "cells", []));
+    this.fireEvent(new mxEventObject('styleChanged', 'keys', [], 'values', [], 'cells', []));
   };
 
   // Keys that should be ignored if the cell has a value (known: new default for all cells is html=1 so
   // for the html key this effecticely only works for edges inserted via the connection handler)
-  var valueStyles = ["fontFamily", "fontSize", "fontColor"];
+  var valueStyles = ['fontFamily', 'fontSize', 'fontColor'];
 
   // Keys that always update the current edge style regardless of selection
-  var alwaysEdgeStyles = ["edgeStyle", "startArrow", "startFill", "startSize", "endArrow",
-    "endFill", "endSize"];
+  var alwaysEdgeStyles = ['edgeStyle', 'startArrow', 'startFill', 'startSize', 'endArrow',
+    'endFill', 'endSize'];
 
   // Keys that are ignored together (if one appears all are ignored)
-  var keyGroups = [["startArrow", "startFill", "startSize", "sourcePerimeterSpacing",
-    "endArrow", "endFill", "endSize", "targetPerimeterSpacing"],
-    ["strokeColor", "strokeWidth"],
-    ["fillColor", "gradientColor"],
+  var keyGroups = [['startArrow', 'startFill', 'startSize', 'sourcePerimeterSpacing',
+    'endArrow', 'endFill', 'endSize', 'targetPerimeterSpacing'],
+    ['strokeColor', 'strokeWidth'],
+    ['fillColor', 'gradientColor'],
     valueStyles,
-    ["opacity"],
-    ["align"],
-    ["html"]];
+    ['opacity'],
+    ['align'],
+    ['html']];
 
   // Adds all keys used above to the styles array
   for (var i = 0; i < keyGroups.length; i++) {
@@ -453,7 +455,7 @@ EditorUi = function(editor, container, lightbox) {
       if (asText) {
         var edge = model.isEdge(cell);
         var current = (edge) ? graph.currentEdgeStyle : graph.currentVertexStyle;
-        var textStyles = ["fontSize", "fontFamily", "fontColor"];
+        var textStyles = ['fontSize', 'fontFamily', 'fontColor'];
 
         for (var j = 0; j < textStyles.length; j++) {
           var value = current[textStyles[j]];
@@ -468,12 +470,12 @@ EditorUi = function(editor, container, lightbox) {
 
           // Removes styles defined in the cell style from the styles to be applied
           var cellStyle = model.getStyle(cell);
-          var tokens = (cellStyle != null) ? cellStyle.split(";") : [];
+          var tokens = (cellStyle != null) ? cellStyle.split(';') : [];
           var appliedStyles = styles.slice();
 
           for (var j = 0; j < tokens.length; j++) {
             var tmp = tokens[j];
-            var pos = tmp.indexOf("=");
+            var pos = tmp.indexOf('=');
 
             if (pos >= 0) {
               var key = tmp.substring(0, pos);
@@ -509,7 +511,7 @@ EditorUi = function(editor, container, lightbox) {
             var key = appliedStyles[j];
             var styleValue = current[key];
 
-            if (styleValue != null && (key != "shape" || edge)) {
+            if (styleValue != null && (key != 'shape' || edge)) {
               // Special case: Connect styles are not applied here but in the connection handler
               if (!edge || mxUtils.indexOf(connectStyles, key) < 0) {
                 newStyle = mxUtils.setStyle(newStyle, key, styleValue);
@@ -525,27 +527,27 @@ EditorUi = function(editor, container, lightbox) {
     }
   };
 
-  graph.addListener("cellsInserted", function(sender, evt) {
-    insertHandler(evt.getProperty("cells"));
+  graph.addListener('cellsInserted', function(sender, evt) {
+    insertHandler(evt.getProperty('cells'));
   });
 
-  graph.addListener("textInserted", function(sender, evt) {
-    insertHandler(evt.getProperty("cells"), true);
+  graph.addListener('textInserted', function(sender, evt) {
+    insertHandler(evt.getProperty('cells'), true);
   });
 
   graph.connectionHandler.addListener(mxEvent.CONNECT, function(sender, evt) {
-    var cells = [evt.getProperty("cell")];
+    var cells = [evt.getProperty('cell')];
 
-    if (evt.getProperty("terminalInserted")) {
-      cells.push(evt.getProperty("terminal"));
+    if (evt.getProperty('terminalInserted')) {
+      cells.push(evt.getProperty('terminal'));
     }
 
     insertHandler(cells);
   });
 
-  this.addListener("styleChanged", mxUtils.bind(this, function(sender, evt) {
+  this.addListener('styleChanged', mxUtils.bind(this, function(sender, evt) {
     // Checks if edges and/or vertices were modified
-    var cells = evt.getProperty("cells");
+    var cells = evt.getProperty('cells');
     var vertex = false;
     var edge = false;
 
@@ -563,14 +565,14 @@ EditorUi = function(editor, container, lightbox) {
       edge = true;
     }
 
-    var keys = evt.getProperty("keys");
-    var values = evt.getProperty("values");
+    var keys = evt.getProperty('keys');
+    var values = evt.getProperty('values');
 
     for (var i = 0; i < keys.length; i++) {
       var common = mxUtils.indexOf(valueStyles, keys[i]) >= 0;
 
       // Ignores transparent stroke colors
-      if (keys[i] != "strokeColor" || (values[i] != null && values[i] != "none")) {
+      if (keys[i] != 'strokeColor' || (values[i] != null && values[i] != 'none')) {
         // Special case: Edge style and shape
         if (mxUtils.indexOf(connectStyles, keys[i]) >= 0) {
           if (edge || mxUtils.indexOf(alwaysEdgeStyles, keys[i]) >= 0) {
@@ -609,62 +611,62 @@ EditorUi = function(editor, container, lightbox) {
     }
 
     if (this.toolbar != null) {
-      this.toolbar.setFontName(graph.currentVertexStyle["fontFamily"] || Menus.prototype.defaultFont);
-      this.toolbar.setFontSize(graph.currentVertexStyle["fontSize"] || Menus.prototype.defaultFontSize);
+      this.toolbar.setFontName(graph.currentVertexStyle['fontFamily'] || Menus.prototype.defaultFont);
+      this.toolbar.setFontSize(graph.currentVertexStyle['fontSize'] || Menus.prototype.defaultFontSize);
 
       if (this.toolbar.edgeStyleMenu != null) {
         // Updates toolbar icon for edge style
-        var edgeStyleDiv = this.toolbar.edgeStyleMenu.getElementsByTagName("div")[0];
+        var edgeStyleDiv = this.toolbar.edgeStyleMenu.getElementsByTagName('div')[0];
 
-        if (graph.currentEdgeStyle["edgeStyle"] == "orthogonalEdgeStyle" && graph.currentEdgeStyle["curved"] == "1") {
-          edgeStyleDiv.className = "geSprite geSprite-curved";
-        } else if (graph.currentEdgeStyle["edgeStyle"] == "straight" || graph.currentEdgeStyle["edgeStyle"] == "none" ||
-          graph.currentEdgeStyle["edgeStyle"] == null) {
-          edgeStyleDiv.className = "geSprite geSprite-straight";
-        } else if (graph.currentEdgeStyle["edgeStyle"] == "entityRelationEdgeStyle") {
-          edgeStyleDiv.className = "geSprite geSprite-entity";
-        } else if (graph.currentEdgeStyle["edgeStyle"] == "elbowEdgeStyle") {
-          edgeStyleDiv.className = "geSprite geSprite-" + ((graph.currentEdgeStyle["elbow"] == "vertical") ?
-            "verticalelbow" : "horizontalelbow");
-        } else if (graph.currentEdgeStyle["edgeStyle"] == "isometricEdgeStyle") {
-          edgeStyleDiv.className = "geSprite geSprite-" + ((graph.currentEdgeStyle["elbow"] == "vertical") ?
-            "verticalisometric" : "horizontalisometric");
+        if (graph.currentEdgeStyle['edgeStyle'] == 'orthogonalEdgeStyle' && graph.currentEdgeStyle['curved'] == '1') {
+          edgeStyleDiv.className = 'geSprite geSprite-curved';
+        } else if (graph.currentEdgeStyle['edgeStyle'] == 'straight' || graph.currentEdgeStyle['edgeStyle'] == 'none' ||
+          graph.currentEdgeStyle['edgeStyle'] == null) {
+          edgeStyleDiv.className = 'geSprite geSprite-straight';
+        } else if (graph.currentEdgeStyle['edgeStyle'] == 'entityRelationEdgeStyle') {
+          edgeStyleDiv.className = 'geSprite geSprite-entity';
+        } else if (graph.currentEdgeStyle['edgeStyle'] == 'elbowEdgeStyle') {
+          edgeStyleDiv.className = 'geSprite geSprite-' + ((graph.currentEdgeStyle['elbow'] == 'vertical') ?
+            'verticalelbow' : 'horizontalelbow');
+        } else if (graph.currentEdgeStyle['edgeStyle'] == 'isometricEdgeStyle') {
+          edgeStyleDiv.className = 'geSprite geSprite-' + ((graph.currentEdgeStyle['elbow'] == 'vertical') ?
+            'verticalisometric' : 'horizontalisometric');
         } else {
-          edgeStyleDiv.className = "geSprite geSprite-orthogonal";
+          edgeStyleDiv.className = 'geSprite geSprite-orthogonal';
         }
       }
 
       if (this.toolbar.edgeShapeMenu != null) {
         // Updates icon for edge shape
-        var edgeShapeDiv = this.toolbar.edgeShapeMenu.getElementsByTagName("div")[0];
+        var edgeShapeDiv = this.toolbar.edgeShapeMenu.getElementsByTagName('div')[0];
 
-        if (graph.currentEdgeStyle["shape"] == "link") {
-          edgeShapeDiv.className = "geSprite geSprite-linkedge";
-        } else if (graph.currentEdgeStyle["shape"] == "flexArrow") {
-          edgeShapeDiv.className = "geSprite geSprite-arrow";
-        } else if (graph.currentEdgeStyle["shape"] == "arrow") {
-          edgeShapeDiv.className = "geSprite geSprite-simplearrow";
+        if (graph.currentEdgeStyle['shape'] == 'link') {
+          edgeShapeDiv.className = 'geSprite geSprite-linkedge';
+        } else if (graph.currentEdgeStyle['shape'] == 'flexArrow') {
+          edgeShapeDiv.className = 'geSprite geSprite-arrow';
+        } else if (graph.currentEdgeStyle['shape'] == 'arrow') {
+          edgeShapeDiv.className = 'geSprite geSprite-simplearrow';
         } else {
-          edgeShapeDiv.className = "geSprite geSprite-connection";
+          edgeShapeDiv.className = 'geSprite geSprite-connection';
         }
       }
 
       // Updates icon for optinal line start shape
       if (this.toolbar.lineStartMenu != null) {
-        var lineStartDiv = this.toolbar.lineStartMenu.getElementsByTagName("div")[0];
+        var lineStartDiv = this.toolbar.lineStartMenu.getElementsByTagName('div')[0];
 
-        lineStartDiv.className = this.getCssClassForMarker("start",
-          graph.currentEdgeStyle["shape"], graph.currentEdgeStyle[mxConstants.STYLE_STARTARROW],
-          mxUtils.getValue(graph.currentEdgeStyle, "startFill", "1"));
+        lineStartDiv.className = this.getCssClassForMarker('start',
+          graph.currentEdgeStyle['shape'], graph.currentEdgeStyle[mxConstants.STYLE_STARTARROW],
+          mxUtils.getValue(graph.currentEdgeStyle, 'startFill', '1'));
       }
 
       // Updates icon for optinal line end shape
       if (this.toolbar.lineEndMenu != null) {
-        var lineEndDiv = this.toolbar.lineEndMenu.getElementsByTagName("div")[0];
+        var lineEndDiv = this.toolbar.lineEndMenu.getElementsByTagName('div')[0];
 
-        lineEndDiv.className = this.getCssClassForMarker("end",
-          graph.currentEdgeStyle["shape"], graph.currentEdgeStyle[mxConstants.STYLE_ENDARROW],
-          mxUtils.getValue(graph.currentEdgeStyle, "endFill", "1"));
+        lineEndDiv.className = this.getCssClassForMarker('end',
+          graph.currentEdgeStyle['shape'], graph.currentEdgeStyle[mxConstants.STYLE_ENDARROW],
+          mxUtils.getValue(graph.currentEdgeStyle, 'endFill', '1'));
       }
     }
   }));
@@ -672,8 +674,8 @@ EditorUi = function(editor, container, lightbox) {
   // Update font size and font family labels
   if (this.toolbar != null) {
     var update = mxUtils.bind(this, function() {
-      var ff = graph.currentVertexStyle["fontFamily"] || "Helvetica";
-      var fs = String(graph.currentVertexStyle["fontSize"] || "12");
+      var ff = graph.currentVertexStyle['fontFamily'] || 'Helvetica';
+      var fs = String(graph.currentVertexStyle['fontSize'] || '12');
       var state = graph.getView().getState(graph.getSelectionCell());
 
       if (state != null) {
@@ -681,7 +683,7 @@ EditorUi = function(editor, container, lightbox) {
         fs = state.style[mxConstants.STYLE_FONTSIZE] || fs;
 
         if (ff.length > 10) {
-          ff = ff.substring(0, 8) + "...";
+          ff = ff.substring(0, 8) + '...';
         }
       }
 
@@ -695,8 +697,8 @@ EditorUi = function(editor, container, lightbox) {
 
   // Makes sure the current layer is visible when cells are added
   graph.addListener(mxEvent.CELLS_ADDED, function(sender, evt) {
-    var cells = evt.getProperty("cells");
-    var parent = evt.getProperty("parent");
+    var cells = evt.getProperty('cells');
+    var parent = evt.getProperty('parent');
 
     if (graph.getModel().isLayer(parent) && !graph.isCellVisible(parent) && cells != null && cells.length > 0) {
       graph.getModel().setVisible(parent, true);
@@ -723,13 +725,13 @@ EditorUi = function(editor, container, lightbox) {
     }), 0);
   });
 
-  mxEvent.addListener(window, "resize", this.resizeHandler);
+  mxEvent.addListener(window, 'resize', this.resizeHandler);
 
   this.orientationChangeHandler = mxUtils.bind(this, function() {
     this.refresh();
   });
 
-  mxEvent.addListener(window, "orientationchange", this.orientationChangeHandler);
+  mxEvent.addListener(window, 'orientationchange', this.orientationChangeHandler);
 
   // Workaround for bug on iOS see
   // http://stackoverflow.com/questions/19012135/ios-7-ipad-safari-landscape-innerheight-outerheight-layout-issue
@@ -738,31 +740,31 @@ EditorUi = function(editor, container, lightbox) {
       window.scrollTo(0, 0);
     });
 
-    mxEvent.addListener(window, "scroll", this.scrollHandler);
+    mxEvent.addListener(window, 'scroll', this.scrollHandler);
   }
 
   /**
    * Sets the initial scrollbar locations after a file was loaded.
    */
-  this.editor.addListener("resetGraphView", mxUtils.bind(this, function() {
+  this.editor.addListener('resetGraphView', mxUtils.bind(this, function() {
     this.resetScrollbars();
   }));
 
   /**
    * Repaints the grid.
    */
-  this.addListener("gridEnabledChanged", mxUtils.bind(this, function() {
+  this.addListener('gridEnabledChanged', mxUtils.bind(this, function() {
     graph.view.validateBackground();
   }));
 
-  this.addListener("backgroundColorChanged", mxUtils.bind(this, function() {
+  this.addListener('backgroundColorChanged', mxUtils.bind(this, function() {
     graph.view.validateBackground();
   }));
 
   /**
    * Repaints the grid.
    */
-  graph.addListener("gridSizeChanged", mxUtils.bind(this, function() {
+  graph.addListener('gridSizeChanged', mxUtils.bind(this, function() {
     if (graph.isGridEnabled()) {
       graph.view.validateBackground();
     }
@@ -821,7 +823,7 @@ EditorUi.prototype.sidebarFooterHeight = 34;
  * Specifies the position of the horizontal split bar. Default is 240 or 118 for
  * screen widths <= 640px.
  */
-EditorUi.prototype.hsplitPosition = (screen.width <= 640) ? 118 : ((urlParams["sidebar-entries"] != "large") ? 262 : 290);
+EditorUi.prototype.hsplitPosition = (screen.width <= 640) ? 118 : ((urlParams['sidebar-entries'] != 'large') ? 262 : 290);
 
 /**
  * Specifies if animations are allowed in <executeLayout>. Default is true.
@@ -852,10 +854,10 @@ EditorUi.prototype.init = function() {
    */
   var graph = this.editor.graph;
 
-  mxEvent.addListener(graph.container, "keydown", mxUtils.bind(this, function(evt) {
+  mxEvent.addListener(graph.container, 'keydown', mxUtils.bind(this, function(evt) {
     this.onKeyDown(evt);
   }));
-  mxEvent.addListener(graph.container, "keypress", mxUtils.bind(this, function(evt) {
+  mxEvent.addListener(graph.container, 'keypress', mxUtils.bind(this, function(evt) {
     this.onKeyPress(evt);
   }));
 
@@ -881,7 +883,7 @@ EditorUi.prototype.init = function() {
   };
 
   // Hack to make editLink available in vertex handler
-  graph.editLink = ui.actions.get("editLink").funct;
+  graph.editLink = ui.actions.get('editLink').funct;
 
   this.updateActionStates();
   this.initClipboard();
@@ -949,54 +951,54 @@ EditorUi.prototype.isImmediateEditingEvent = function(evt) {
  * Private helper method.
  */
 EditorUi.prototype.getCssClassForMarker = function(prefix, shape, marker, fill) {
-  var result = "";
+  var result = '';
 
-  if (shape == "flexArrow") {
+  if (shape == 'flexArrow') {
     result = (marker != null && marker != mxConstants.NONE) ?
-      "geSprite geSprite-" + prefix + "blocktrans" : "geSprite geSprite-noarrow";
+      'geSprite geSprite-' + prefix + 'blocktrans' : 'geSprite geSprite-noarrow';
   } else {
     if (marker == mxConstants.ARROW_CLASSIC) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "classic" : "geSprite geSprite-" + prefix + "classictrans";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'classic' : 'geSprite geSprite-' + prefix + 'classictrans';
     } else if (marker == mxConstants.ARROW_CLASSIC_THIN) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "classicthin" : "geSprite geSprite-" + prefix + "classicthintrans";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'classicthin' : 'geSprite geSprite-' + prefix + 'classicthintrans';
     } else if (marker == mxConstants.ARROW_OPEN) {
-      result = "geSprite geSprite-" + prefix + "open";
+      result = 'geSprite geSprite-' + prefix + 'open';
     } else if (marker == mxConstants.ARROW_OPEN_THIN) {
-      result = "geSprite geSprite-" + prefix + "openthin";
+      result = 'geSprite geSprite-' + prefix + 'openthin';
     } else if (marker == mxConstants.ARROW_BLOCK) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "block" : "geSprite geSprite-" + prefix + "blocktrans";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'block' : 'geSprite geSprite-' + prefix + 'blocktrans';
     } else if (marker == mxConstants.ARROW_BLOCK_THIN) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "blockthin" : "geSprite geSprite-" + prefix + "blockthintrans";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'blockthin' : 'geSprite geSprite-' + prefix + 'blockthintrans';
     } else if (marker == mxConstants.ARROW_OVAL) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "oval" : "geSprite geSprite-" + prefix + "ovaltrans";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'oval' : 'geSprite geSprite-' + prefix + 'ovaltrans';
     } else if (marker == mxConstants.ARROW_DIAMOND) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "diamond" : "geSprite geSprite-" + prefix + "diamondtrans";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'diamond' : 'geSprite geSprite-' + prefix + 'diamondtrans';
     } else if (marker == mxConstants.ARROW_DIAMOND_THIN) {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "thindiamond" : "geSprite geSprite-" + prefix + "thindiamondtrans";
-    } else if (marker == "openAsync") {
-      result = "geSprite geSprite-" + prefix + "openasync";
-    } else if (marker == "dash") {
-      result = "geSprite geSprite-" + prefix + "dash";
-    } else if (marker == "cross") {
-      result = "geSprite geSprite-" + prefix + "cross";
-    } else if (marker == "async") {
-      result = (fill == "1") ? "geSprite geSprite-" + prefix + "async" : "geSprite geSprite-" + prefix + "asynctrans";
-    } else if (marker == "circle" || marker == "circlePlus") {
-      result = (fill == "1" || marker == "circle") ? "geSprite geSprite-" + prefix + "circle" : "geSprite geSprite-" + prefix + "circleplus";
-    } else if (marker == "ERone") {
-      result = "geSprite geSprite-" + prefix + "erone";
-    } else if (marker == "ERmandOne") {
-      result = "geSprite geSprite-" + prefix + "eronetoone";
-    } else if (marker == "ERmany") {
-      result = "geSprite geSprite-" + prefix + "ermany";
-    } else if (marker == "ERoneToMany") {
-      result = "geSprite geSprite-" + prefix + "eronetomany";
-    } else if (marker == "ERzeroToOne") {
-      result = "geSprite geSprite-" + prefix + "eroneopt";
-    } else if (marker == "ERzeroToMany") {
-      result = "geSprite geSprite-" + prefix + "ermanyopt";
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'thindiamond' : 'geSprite geSprite-' + prefix + 'thindiamondtrans';
+    } else if (marker == 'openAsync') {
+      result = 'geSprite geSprite-' + prefix + 'openasync';
+    } else if (marker == 'dash') {
+      result = 'geSprite geSprite-' + prefix + 'dash';
+    } else if (marker == 'cross') {
+      result = 'geSprite geSprite-' + prefix + 'cross';
+    } else if (marker == 'async') {
+      result = (fill == '1') ? 'geSprite geSprite-' + prefix + 'async' : 'geSprite geSprite-' + prefix + 'asynctrans';
+    } else if (marker == 'circle' || marker == 'circlePlus') {
+      result = (fill == '1' || marker == 'circle') ? 'geSprite geSprite-' + prefix + 'circle' : 'geSprite geSprite-' + prefix + 'circleplus';
+    } else if (marker == 'ERone') {
+      result = 'geSprite geSprite-' + prefix + 'erone';
+    } else if (marker == 'ERmandOne') {
+      result = 'geSprite geSprite-' + prefix + 'eronetoone';
+    } else if (marker == 'ERmany') {
+      result = 'geSprite geSprite-' + prefix + 'ermany';
+    } else if (marker == 'ERoneToMany') {
+      result = 'geSprite geSprite-' + prefix + 'eronetomany';
+    } else if (marker == 'ERzeroToOne') {
+      result = 'geSprite geSprite-' + prefix + 'eroneopt';
+    } else if (marker == 'ERzeroToMany') {
+      result = 'geSprite geSprite-' + prefix + 'ermanyopt';
     } else {
-      result = "geSprite geSprite-noarrow";
+      result = 'geSprite geSprite-noarrow';
     }
   }
 
@@ -1015,8 +1017,8 @@ EditorUi.prototype.createMenus = function() {
  */
 EditorUi.prototype.updatePasteActionStates = function() {
   var graph = this.editor.graph;
-  var paste = this.actions.get("paste");
-  var pasteHere = this.actions.get("pasteHere");
+  var paste = this.actions.get('paste');
+  var pasteHere = this.actions.get('pasteHere');
 
   paste.setEnabled(this.editor.graph.cellEditor.isContentEditing() || (!mxClipboard.isEmpty() &&
     graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent())));
@@ -1032,7 +1034,7 @@ EditorUi.prototype.initClipboard = function() {
   var mxClipboardCut = mxClipboard.cut;
   mxClipboard.cut = function(graph) {
     if (graph.cellEditor.isContentEditing()) {
-      document.execCommand("cut", false, null);
+      document.execCommand('cut', false, null);
     } else {
       mxClipboardCut.apply(this, arguments);
     }
@@ -1043,7 +1045,7 @@ EditorUi.prototype.initClipboard = function() {
   var mxClipboardCopy = mxClipboard.copy;
   mxClipboard.copy = function(graph) {
     if (graph.cellEditor.isContentEditing()) {
-      document.execCommand("copy", false, null);
+      document.execCommand('copy', false, null);
     } else {
       mxClipboardCopy.apply(this, arguments);
     }
@@ -1056,7 +1058,7 @@ EditorUi.prototype.initClipboard = function() {
     var result = null;
 
     if (graph.cellEditor.isContentEditing()) {
-      document.execCommand("paste", false, null);
+      document.execCommand('paste', false, null);
     } else {
       result = mxClipboardPaste.apply(this, arguments);
     }
@@ -1189,51 +1191,51 @@ EditorUi.prototype.initCanvas = function() {
       this.chromelessWindowResize(false);
     });
 
-    mxEvent.addListener(window, "resize", autoscaleResize);
+    mxEvent.addListener(window, 'resize', autoscaleResize);
 
     this.destroyFunctions.push(function() {
-      mxEvent.removeListener(window, "resize", autoscaleResize);
+      mxEvent.removeListener(window, 'resize', autoscaleResize);
     });
 
-    this.editor.addListener("resetGraphView", mxUtils.bind(this, function() {
+    this.editor.addListener('resetGraphView', mxUtils.bind(this, function() {
       this.chromelessResize(true);
     }));
 
-    this.actions.get("zoomIn").funct = mxUtils.bind(this, function(evt) {
+    this.actions.get('zoomIn').funct = mxUtils.bind(this, function(evt) {
       graph.zoomIn();
       this.chromelessResize(false);
     });
-    this.actions.get("zoomOut").funct = mxUtils.bind(this, function(evt) {
+    this.actions.get('zoomOut').funct = mxUtils.bind(this, function(evt) {
       graph.zoomOut();
       this.chromelessResize(false);
     });
 
     // Creates toolbar for viewer - do not use CSS here
     // as this may be used in a viewer that has no CSS
-    if (urlParams["toolbar"] != "0") {
-      var toolbarConfig = JSON.parse(decodeURIComponent(urlParams["toolbar-config"] || "{}"));
+    if (urlParams['toolbar'] != '0') {
+      var toolbarConfig = JSON.parse(decodeURIComponent(urlParams['toolbar-config'] || '{}'));
 
-      this.chromelessToolbar = document.createElement("div");
-      this.chromelessToolbar.style.position = "fixed";
-      this.chromelessToolbar.style.overflow = "hidden";
-      this.chromelessToolbar.style.boxSizing = "border-box";
-      this.chromelessToolbar.style.whiteSpace = "nowrap";
-      this.chromelessToolbar.style.backgroundColor = "#000000";
-      this.chromelessToolbar.style.padding = "10px 10px 8px 10px";
-      this.chromelessToolbar.style.left = "50%";
+      this.chromelessToolbar = document.createElement('div');
+      this.chromelessToolbar.style.position = 'fixed';
+      this.chromelessToolbar.style.overflow = 'hidden';
+      this.chromelessToolbar.style.boxSizing = 'border-box';
+      this.chromelessToolbar.style.whiteSpace = 'nowrap';
+      this.chromelessToolbar.style.backgroundColor = '#000000';
+      this.chromelessToolbar.style.padding = '10px 10px 8px 10px';
+      this.chromelessToolbar.style.left = '50%';
 
       if (!mxClient.IS_VML) {
-        mxUtils.setPrefixedStyle(this.chromelessToolbar.style, "borderRadius", "20px");
-        mxUtils.setPrefixedStyle(this.chromelessToolbar.style, "transition", "opacity 600ms ease-in-out");
+        mxUtils.setPrefixedStyle(this.chromelessToolbar.style, 'borderRadius', '20px');
+        mxUtils.setPrefixedStyle(this.chromelessToolbar.style, 'transition', 'opacity 600ms ease-in-out');
       }
 
       var updateChromelessToolbarPosition = mxUtils.bind(this, function() {
         var css = mxUtils.getCurrentStyle(graph.container);
-        this.chromelessToolbar.style.bottom = ((css != null) ? parseInt(css["margin-bottom"] || 0) : 0) +
-          ((this.tabContainer != null) ? (20 + parseInt(this.tabContainer.style.height)) : 20) + "px";
+        this.chromelessToolbar.style.bottom = ((css != null) ? parseInt(css['margin-bottom'] || 0) : 0) +
+          ((this.tabContainer != null) ? (20 + parseInt(this.tabContainer.style.height)) : 20) + 'px';
       });
 
-      this.editor.addListener("resetGraphView", updateChromelessToolbarPosition);
+      this.editor.addListener('resetGraphView', updateChromelessToolbarPosition);
       updateChromelessToolbarPosition();
 
       var btnCount = 0;
@@ -1241,19 +1243,19 @@ EditorUi.prototype.initCanvas = function() {
       var addButton = mxUtils.bind(this, function(fn, imgSrc, tip) {
         btnCount++;
 
-        var a = document.createElement("span");
-        a.style.paddingLeft = "8px";
-        a.style.paddingRight = "8px";
-        a.style.cursor = "pointer";
-        mxEvent.addListener(a, "click", fn);
+        var a = document.createElement('span');
+        a.style.paddingLeft = '8px';
+        a.style.paddingRight = '8px';
+        a.style.cursor = 'pointer';
+        mxEvent.addListener(a, 'click', fn);
 
         if (tip != null) {
-          a.setAttribute("title", tip);
+          a.setAttribute('title', tip);
         }
 
-        var img = document.createElement("img");
-        img.setAttribute("border", "0");
-        img.setAttribute("src", imgSrc);
+        var img = document.createElement('img');
+        img.setAttribute('border', '0');
+        img.setAttribute('src', imgSrc);
 
         a.appendChild(img);
         this.chromelessToolbar.appendChild(a);
@@ -1265,66 +1267,66 @@ EditorUi.prototype.initCanvas = function() {
         addButton(mxUtils.bind(this, function(evt) {
           window.location.href = toolbarConfig.backBtn.url;
           mxEvent.consume(evt);
-        }), Editor.backLargeImage, mxResources.get("back", null, "Back"));
+        }), Editor.backLargeImage, mxResources.get('back', null, 'Back'));
       }
 
       var prevButton = addButton(mxUtils.bind(this, function(evt) {
-        this.actions.get("previousPage").funct();
+        this.actions.get('previousPage').funct();
         mxEvent.consume(evt);
-      }), Editor.previousLargeImage, mxResources.get("previousPage"));
+      }), Editor.previousLargeImage, mxResources.get('previousPage'));
 
-      var pageInfo = document.createElement("div");
-      pageInfo.style.display = "inline-block";
-      pageInfo.style.verticalAlign = "top";
-      pageInfo.style.fontFamily = "Helvetica,Arial";
-      pageInfo.style.marginTop = "8px";
-      pageInfo.style.fontSize = "14px";
-      pageInfo.style.color = "#ffffff";
+      var pageInfo = document.createElement('div');
+      pageInfo.style.display = 'inline-block';
+      pageInfo.style.verticalAlign = 'top';
+      pageInfo.style.fontFamily = 'Helvetica,Arial';
+      pageInfo.style.marginTop = '8px';
+      pageInfo.style.fontSize = '14px';
+      pageInfo.style.color = '#ffffff';
       this.chromelessToolbar.appendChild(pageInfo);
 
       var nextButton = addButton(mxUtils.bind(this, function(evt) {
-        this.actions.get("nextPage").funct();
+        this.actions.get('nextPage').funct();
         mxEvent.consume(evt);
-      }), Editor.nextLargeImage, mxResources.get("nextPage"));
+      }), Editor.nextLargeImage, mxResources.get('nextPage'));
 
       var updatePageInfo = mxUtils.bind(this, function() {
         if (this.pages != null && this.pages.length > 1 && this.currentPage != null) {
-          pageInfo.innerHTML = "";
-          mxUtils.write(pageInfo, (mxUtils.indexOf(this.pages, this.currentPage) + 1) + " / " + this.pages.length);
+          pageInfo.innerHTML = '';
+          mxUtils.write(pageInfo, (mxUtils.indexOf(this.pages, this.currentPage) + 1) + ' / ' + this.pages.length);
         }
       });
 
-      prevButton.style.paddingLeft = "0px";
-      prevButton.style.paddingRight = "4px";
-      nextButton.style.paddingLeft = "4px";
-      nextButton.style.paddingRight = "0px";
+      prevButton.style.paddingLeft = '0px';
+      prevButton.style.paddingRight = '4px';
+      nextButton.style.paddingLeft = '4px';
+      nextButton.style.paddingRight = '0px';
 
       var updatePageButtons = mxUtils.bind(this, function() {
         if (this.pages != null && this.pages.length > 1 && this.currentPage != null) {
-          nextButton.style.display = "";
-          prevButton.style.display = "";
-          pageInfo.style.display = "inline-block";
+          nextButton.style.display = '';
+          prevButton.style.display = '';
+          pageInfo.style.display = 'inline-block';
         } else {
-          nextButton.style.display = "none";
-          prevButton.style.display = "none";
-          pageInfo.style.display = "none";
+          nextButton.style.display = 'none';
+          prevButton.style.display = 'none';
+          pageInfo.style.display = 'none';
         }
 
         updatePageInfo();
       });
 
-      this.editor.addListener("resetGraphView", updatePageButtons);
-      this.editor.addListener("pageSelected", updatePageInfo);
+      this.editor.addListener('resetGraphView', updatePageButtons);
+      this.editor.addListener('pageSelected', updatePageInfo);
 
       addButton(mxUtils.bind(this, function(evt) {
-        this.actions.get("zoomOut").funct();
+        this.actions.get('zoomOut').funct();
         mxEvent.consume(evt);
-      }), Editor.zoomOutLargeImage, mxResources.get("zoomOut") + " (Alt+Mousewheel)");
+      }), Editor.zoomOutLargeImage, mxResources.get('zoomOut') + ' (Alt+Mousewheel)');
 
       addButton(mxUtils.bind(this, function(evt) {
-        this.actions.get("zoomIn").funct();
+        this.actions.get('zoomIn').funct();
         mxEvent.consume(evt);
-      }), Editor.zoomInLargeImage, mxResources.get("zoomIn") + " (Alt+Mousewheel)");
+      }), Editor.zoomInLargeImage, mxResources.get('zoomIn') + ' (Alt+Mousewheel)');
 
       addButton(mxUtils.bind(this, function(evt) {
         if (graph.isLightboxView()) {
@@ -1340,7 +1342,7 @@ EditorUi.prototype.initCanvas = function() {
         }
 
         mxEvent.consume(evt);
-      }), Editor.actualSizeLargeImage, mxResources.get("fit"));
+      }), Editor.actualSizeLargeImage, mxResources.get('fit'));
 
       // Changes toolbar opacity on hover
       var fadeThread = null;
@@ -1362,7 +1364,7 @@ EditorUi.prototype.initCanvas = function() {
           fadeThread = null;
 
           fadeThread2 = window.setTimeout(mxUtils.bind(this, function() {
-            this.chromelessToolbar.style.display = "none";
+            this.chromelessToolbar.style.display = 'none';
             fadeThread2 = null;
           }), 600);
         }), delay || 200);
@@ -1379,11 +1381,11 @@ EditorUi.prototype.initCanvas = function() {
           fadeThead2 = null;
         }
 
-        this.chromelessToolbar.style.display = "";
+        this.chromelessToolbar.style.display = '';
         mxUtils.setOpacity(this.chromelessToolbar, opacity || 30);
       });
 
-      if (urlParams["layers"] == "1") {
+      if (urlParams['layers'] == '1') {
         this.layersDialog = null;
 
         var layersButton = addButton(mxUtils.bind(this, function(evt) {
@@ -1393,24 +1395,24 @@ EditorUi.prototype.initCanvas = function() {
           } else {
             this.layersDialog = graph.createLayersDialog();
 
-            mxEvent.addListener(this.layersDialog, "mouseleave", mxUtils.bind(this, function() {
+            mxEvent.addListener(this.layersDialog, 'mouseleave', mxUtils.bind(this, function() {
               this.layersDialog.parentNode.removeChild(this.layersDialog);
               this.layersDialog = null;
             }));
 
             var r = layersButton.getBoundingClientRect();
 
-            mxUtils.setPrefixedStyle(this.layersDialog.style, "borderRadius", "5px");
-            this.layersDialog.style.position = "fixed";
-            this.layersDialog.style.fontFamily = "Helvetica,Arial";
-            this.layersDialog.style.backgroundColor = "#000000";
-            this.layersDialog.style.width = "160px";
-            this.layersDialog.style.padding = "4px 2px 4px 2px";
-            this.layersDialog.style.color = "#ffffff";
+            mxUtils.setPrefixedStyle(this.layersDialog.style, 'borderRadius', '5px');
+            this.layersDialog.style.position = 'fixed';
+            this.layersDialog.style.fontFamily = 'Helvetica,Arial';
+            this.layersDialog.style.backgroundColor = '#000000';
+            this.layersDialog.style.width = '160px';
+            this.layersDialog.style.padding = '4px 2px 4px 2px';
+            this.layersDialog.style.color = '#ffffff';
             mxUtils.setOpacity(this.layersDialog, 70);
-            this.layersDialog.style.left = r.left + "px";
+            this.layersDialog.style.left = r.left + 'px';
             this.layersDialog.style.bottom = parseInt(this.chromelessToolbar.style.bottom) +
-              this.chromelessToolbar.offsetHeight + 4 + "px";
+              this.chromelessToolbar.offsetHeight + 4 + 'px';
 
             // Puts the dialog on top of the container z-index
             var style = mxUtils.getCurrentStyle(this.editor.graph.container);
@@ -1420,13 +1422,13 @@ EditorUi.prototype.initCanvas = function() {
           }
 
           mxEvent.consume(evt);
-        }), Editor.layersLargeImage, mxResources.get("layers"));
+        }), Editor.layersLargeImage, mxResources.get('layers'));
 
         // Shows/hides layers button depending on content
         var model = graph.getModel();
 
         model.addListener(mxEvent.CHANGE, function() {
-          layersButton.style.display = (model.getChildCount(model.root) > 1) ? "" : "none";
+          layersButton.style.display = (model.getChildCount(model.root) > 1) ? '' : 'none';
         });
       }
 
@@ -1436,14 +1438,14 @@ EditorUi.prototype.initCanvas = function() {
         addButton(mxUtils.bind(this, function(evt) {
           if (this.editor.editButtonFunc != null) {
             this.editor.editButtonFunc();
-          } else if (this.editor.editButtonLink == "_blank") {
+          } else if (this.editor.editButtonLink == '_blank') {
             this.editor.editAsNew(this.getEditBlankXml());
           } else {
-            graph.openLink(this.editor.editButtonLink, "editWindow");
+            graph.openLink(this.editor.editButtonLink, 'editWindow');
           }
 
           mxEvent.consume(evt);
-        }), Editor.editLargeImage, mxResources.get("edit"));
+        }), Editor.editLargeImage, mxResources.get('edit'));
       }
 
       if (this.lightboxToolbarActions != null) {
@@ -1462,7 +1464,7 @@ EditorUi.prototype.initCanvas = function() {
           }
 
           mxEvent.consume(evt);
-        }), Editor.refreshLargeImage, mxResources.get("refresh", null, "Refresh"));
+        }), Editor.refreshLargeImage, mxResources.get('refresh', null, 'Refresh'));
       }
 
       if (toolbarConfig.fullscreenBtn != null && window.self !== window.top) {
@@ -1474,27 +1476,27 @@ EditorUi.prototype.initCanvas = function() {
           }
 
           mxEvent.consume(evt);
-        }), Editor.fullscreenLargeImage, mxResources.get("openInNewWindow", null, "Open in New Window"));
+        }), Editor.fullscreenLargeImage, mxResources.get('openInNewWindow', null, 'Open in New Window'));
       }
 
       if ((toolbarConfig.closeBtn && window.self === window.top) ||
-        (graph.lightbox && (urlParams["close"] == "1" || this.container != document.body))) {
+        (graph.lightbox && (urlParams['close'] == '1' || this.container != document.body))) {
         addButton(mxUtils.bind(this, function(evt) {
-          if (urlParams["close"] == "1" || toolbarConfig.closeBtn) {
+          if (urlParams['close'] == '1' || toolbarConfig.closeBtn) {
             window.close();
           } else {
             this.destroy();
             mxEvent.consume(evt);
           }
-        }), Editor.closeLargeImage, mxResources.get("close") + " (Escape)");
+        }), Editor.closeLargeImage, mxResources.get('close') + ' (Escape)');
       }
 
       // Initial state invisible
-      this.chromelessToolbar.style.display = "none";
-      mxUtils.setPrefixedStyle(this.chromelessToolbar.style, "transform", "translate(-50%,0)");
+      this.chromelessToolbar.style.display = 'none';
+      mxUtils.setPrefixedStyle(this.chromelessToolbar.style, 'transform', 'translate(-50%,0)');
       graph.container.appendChild(this.chromelessToolbar);
 
-      mxEvent.addListener(graph.container, (mxClient.IS_POINTER) ? "pointermove" : "mousemove", mxUtils.bind(this, function(evt) {
+      mxEvent.addListener(graph.container, (mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', mxUtils.bind(this, function(evt) {
         if (!mxEvent.isTouchEvent(evt)) {
           if (!mxEvent.isShiftDown(evt)) {
             fadeIn(30);
@@ -1504,11 +1506,11 @@ EditorUi.prototype.initCanvas = function() {
         }
       }));
 
-      mxEvent.addListener(this.chromelessToolbar, (mxClient.IS_POINTER) ? "pointermove" : "mousemove", function(evt) {
+      mxEvent.addListener(this.chromelessToolbar, (mxClient.IS_POINTER) ? 'pointermove' : 'mousemove', function(evt) {
         mxEvent.consume(evt);
       });
 
-      mxEvent.addListener(this.chromelessToolbar, "mouseenter", mxUtils.bind(this, function(evt) {
+      mxEvent.addListener(this.chromelessToolbar, 'mouseenter', mxUtils.bind(this, function(evt) {
         if (!mxEvent.isShiftDown(evt)) {
           fadeIn(100);
         } else {
@@ -1516,7 +1518,7 @@ EditorUi.prototype.initCanvas = function() {
         }
       }));
 
-      mxEvent.addListener(this.chromelessToolbar, "mousemove", mxUtils.bind(this, function(evt) {
+      mxEvent.addListener(this.chromelessToolbar, 'mousemove', mxUtils.bind(this, function(evt) {
         if (!mxEvent.isShiftDown(evt)) {
           fadeIn(100);
         } else {
@@ -1526,7 +1528,7 @@ EditorUi.prototype.initCanvas = function() {
         mxEvent.consume(evt);
       }));
 
-      mxEvent.addListener(this.chromelessToolbar, "mouseleave", mxUtils.bind(this, function(evt) {
+      mxEvent.addListener(this.chromelessToolbar, 'mouseleave', mxUtils.bind(this, function(evt) {
         if (!mxEvent.isTouchEvent(evt)) {
           fadeIn(30);
         }
@@ -1640,7 +1642,7 @@ EditorUi.prototype.initCanvas = function() {
         graphSizeDidChange.apply(this, arguments);
       } else {
         // Fires event but does not invoke superclass
-        this.fireEvent(new mxEventObject(mxEvent.SIZE, "bounds", this.getGraphBounds()));
+        this.fireEvent(new mxEventObject(mxEvent.SIZE, 'bounds', this.getGraphBounds()));
       }
     };
   }
@@ -1738,16 +1740,16 @@ EditorUi.prototype.initCanvas = function() {
  */
 EditorUi.prototype.addChromelessToolbarItems = function(addButton) {
   addButton(mxUtils.bind(this, function(evt) {
-    this.actions.get("print").funct();
+    this.actions.get('print').funct();
     mxEvent.consume(evt);
-  }), Editor.printLargeImage, mxResources.get("print"));
+  }), Editor.printLargeImage, mxResources.get('print'));
 };
 
 /**
  * Creates a temporary graph instance for rendering off-screen content.
  */
 EditorUi.prototype.createTemporaryGraph = function(stylesheet) {
-  var graph = new Graph(document.createElement("div"), null, null, stylesheet);
+  var graph = new Graph(document.createElement('div'), null, null, stylesheet);
   graph.resetViewOnRootChange = false;
   graph.setConnectable(false);
   graph.gridEnabled = false;
@@ -1756,11 +1758,11 @@ EditorUi.prototype.createTemporaryGraph = function(stylesheet) {
   graph.setEnabled(false);
 
   // Container must be in the DOM for correct HTML rendering
-  graph.container.style.visibility = "hidden";
-  graph.container.style.position = "absolute";
-  graph.container.style.overflow = "hidden";
-  graph.container.style.height = "1px";
-  graph.container.style.width = "1px";
+  graph.container.style.visibility = 'hidden';
+  graph.container.style.position = 'absolute';
+  graph.container.style.overflow = 'hidden';
+  graph.container.style.height = '1px';
+  graph.container.style.width = '1px';
 
   return graph;
 };
@@ -1769,11 +1771,11 @@ EditorUi.prototype.createTemporaryGraph = function(stylesheet) {
  *
  */
 EditorUi.prototype.addChromelessClickHandler = function() {
-  var hl = urlParams["highlight"];
+  var hl = urlParams['highlight'];
 
   // Adds leading # for highlight color code
   if (hl != null && hl.length > 0) {
-    hl = "#" + hl;
+    hl = '#' + hl;
   }
 
   this.editor.graph.addClickHandler(hl);
@@ -1785,10 +1787,10 @@ EditorUi.prototype.addChromelessClickHandler = function() {
 EditorUi.prototype.toggleFormatPanel = function(forceHide) {
   if (this.format != null) {
     this.formatWidth = (forceHide || this.formatWidth > 0) ? 0 : 240;
-    this.formatContainer.style.display = (forceHide || this.formatWidth > 0) ? "" : "none";
+    this.formatContainer.style.display = (forceHide || this.formatWidth > 0) ? '' : 'none';
     this.refresh();
     this.format.refresh();
-    this.fireEvent(new mxEventObject("formatWidthChanged"));
+    this.fireEvent(new mxEventObject('formatWidthChanged'));
   }
 };
 
@@ -1799,7 +1801,7 @@ EditorUi.prototype.lightboxFit = function(maxHeight) {
   if (this.isDiagramEmpty()) {
     this.editor.graph.view.setScale(1);
   } else {
-    var p = urlParams["border"];
+    var p = urlParams['border'];
     var border = 60;
 
     if (p != null) {
@@ -1829,7 +1831,7 @@ EditorUi.prototype.isDiagramEmpty = function() {
  * Hook for allowing selection and context menu for certain events.
  */
 EditorUi.prototype.isSelectionAllowed = function(evt) {
-  return mxEvent.getSource(evt).nodeName == "SELECT" || (mxEvent.getSource(evt).nodeName == "INPUT" &&
+  return mxEvent.getSource(evt).nodeName == 'SELECT' || (mxEvent.getSource(evt).nodeName == 'INPUT' &&
     mxUtils.isAncestorNode(this.formatContainer, mxEvent.getSource(evt)));
 };
 
@@ -1852,7 +1854,7 @@ EditorUi.prototype.addBeforeUnloadListener = function() {
  */
 EditorUi.prototype.onBeforeUnload = function() {
   if (this.editor.modified) {
-    return mxResources.get("allChangesLost");
+    return mxResources.get('allChangesLost');
   }
 };
 
@@ -1878,7 +1880,7 @@ EditorUi.prototype.open = function() {
 
           return;
         } catch (e) {
-          mxUtils.alert(mxResources.get("invalidOrMissingFile") + ": " + e.message);
+          mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
         }
       }));
     }
@@ -1892,7 +1894,7 @@ EditorUi.prototype.open = function() {
   // Required only in special cases where an initial file is opened
   // and the minimumGraphSize changes and CSS must be updated.
   this.editor.graph.sizeDidChange();
-  this.editor.fireEvent(new mxEventObject("resetGraphView"));
+  this.editor.fireEvent(new mxEventObject('resetGraphView'));
 };
 
 /**
@@ -1928,7 +1930,7 @@ EditorUi.prototype.updateDocumentTitle = function() {
   var title = this.editor.getOrCreateFilename();
 
   if (this.editor.appName != null) {
-    title += " - " + this.editor.appName;
+    title += ' - ' + this.editor.appName;
   }
 
   document.title = title;
@@ -1949,7 +1951,7 @@ EditorUi.prototype.redo = function() {
     var graph = this.editor.graph;
 
     if (graph.isEditing()) {
-      document.execCommand("redo", false, null);
+      document.execCommand('redo', false, null);
     } else {
       this.editor.undoManager.redo();
     }
@@ -1969,7 +1971,7 @@ EditorUi.prototype.undo = function() {
       // Stops editing and executes undo on graph if native undo
       // does not affect current editing value
       var value = graph.cellEditor.textarea.innerHTML;
-      document.execCommand("undo", false, null);
+      document.execCommand('undo', false, null);
 
       if (value == graph.cellEditor.textarea.innerHTML) {
         graph.stopEditing(true);
@@ -2009,17 +2011,17 @@ EditorUi.prototype.getEditBlankXml = function() {
  */
 EditorUi.prototype.getUrl = function(pathname) {
   var href = (pathname != null) ? pathname : window.location.pathname;
-  var parms = (href.indexOf("?") > 0) ? 1 : 0;
+  var parms = (href.indexOf('?') > 0) ? 1 : 0;
 
   // Removes template URL parameter for new blank diagram
   for (var key in urlParams) {
     if (parms == 0) {
-      href += "?";
+      href += '?';
     } else {
-      href += "&";
+      href += '&';
     }
 
-    href += key + "=" + urlParams[key];
+    href += key + '=' + urlParams[key];
     parms++;
   }
 
@@ -2036,7 +2038,7 @@ EditorUi.prototype.setScrollbars = function(value) {
   this.editor.updateGraphComponents();
 
   if (prev != graph.container.style.overflow) {
-    if (graph.container.style.overflow == "hidden") {
+    if (graph.container.style.overflow == 'hidden') {
       var t = graph.view.translate;
       graph.view.setTranslate(t.x - graph.container.scrollLeft / graph.view.scale, t.y - graph.container.scrollTop / graph.view.scale);
       graph.container.scrollLeft = 0;
@@ -2055,7 +2057,7 @@ EditorUi.prototype.setScrollbars = function(value) {
     }
   }
 
-  this.fireEvent(new mxEventObject("scrollbarsChanged"));
+  this.fireEvent(new mxEventObject('scrollbarsChanged'));
 };
 
 /**
@@ -2154,7 +2156,7 @@ EditorUi.prototype.setPageVisible = function(value) {
     graph.container.scrollTop = graph.view.translate.y * graph.view.scale - ty;
   }
 
-  this.fireEvent(new mxEventObject("pageViewChanged"));
+  this.fireEvent(new mxEventObject('pageViewChanged'));
 };
 
 /**
@@ -2213,7 +2215,7 @@ ChangePageSetup.prototype.execute = function() {
 
 // Registers codec for ChangePageSetup
 (function() {
-  var codec = new mxObjectCodec(new ChangePageSetup(), ["ui", "previousColor", "previousImage", "previousFormat"]);
+  var codec = new mxObjectCodec(new ChangePageSetup(), ['ui', 'previousColor', 'previousImage', 'previousFormat']);
 
   codec.afterDecode = function(dec, node, obj) {
     obj.previousColor = obj.color;
@@ -2237,7 +2239,7 @@ EditorUi.prototype.setBackgroundColor = function(value) {
   this.editor.graph.background = value;
   this.editor.graph.view.validateBackground();
 
-  this.fireEvent(new mxEventObject("backgroundColorChanged"));
+  this.fireEvent(new mxEventObject('backgroundColorChanged'));
 };
 
 /**
@@ -2247,7 +2249,7 @@ EditorUi.prototype.setFoldingEnabled = function(value) {
   this.editor.graph.foldingEnabled = value;
   this.editor.graph.view.revalidate();
 
-  this.fireEvent(new mxEventObject("foldingEnabledChanged"));
+  this.fireEvent(new mxEventObject('foldingEnabledChanged'));
 };
 
 /**
@@ -2257,13 +2259,13 @@ EditorUi.prototype.setPageFormat = function(value) {
   this.editor.graph.pageFormat = value;
 
   if (!this.editor.graph.pageVisible) {
-    this.actions.get("pageView").funct();
+    this.actions.get('pageView').funct();
   } else {
     this.editor.graph.view.validateBackground();
     this.editor.graph.sizeDidChange();
   }
 
-  this.fireEvent(new mxEventObject("pageFormatChanged"));
+  this.fireEvent(new mxEventObject('pageFormatChanged'));
 };
 
 /**
@@ -2273,13 +2275,13 @@ EditorUi.prototype.setPageScale = function(value) {
   this.editor.graph.pageScale = value;
 
   if (!this.editor.graph.pageVisible) {
-    this.actions.get("pageView").funct();
+    this.actions.get('pageView').funct();
   } else {
     this.editor.graph.view.validateBackground();
     this.editor.graph.sizeDidChange();
   }
 
-  this.fireEvent(new mxEventObject("pageScaleChanged"));
+  this.fireEvent(new mxEventObject('pageScaleChanged'));
 };
 
 /**
@@ -2288,15 +2290,15 @@ EditorUi.prototype.setPageScale = function(value) {
 EditorUi.prototype.setGridColor = function(value) {
   this.editor.graph.view.gridColor = value;
   this.editor.graph.view.validateBackground();
-  this.fireEvent(new mxEventObject("gridColorChanged"));
+  this.fireEvent(new mxEventObject('gridColorChanged'));
 };
 
 /**
  * Updates the states of the given undo/redo items.
  */
 EditorUi.prototype.addUndoListener = function() {
-  var undo = this.actions.get("undo");
-  var redo = this.actions.get("redo");
+  var undo = this.actions.get('undo');
+  var redo = this.actions.get('redo');
 
   var undoMgr = this.editor.undoManager;
 
@@ -2359,60 +2361,60 @@ EditorUi.prototype.updateActionStates = function() {
   }
 
   // Updates action states
-  var actions = ["cut", "copy", "bold", "italic", "underline", "delete", "duplicate",
-    "editStyle", "editTooltip", "editLink", "backgroundColor", "borderColor",
-    "edit", "toFront", "toBack", "lockUnlock", "solid", "dashed", "pasteSize",
-    "dotted", "fillColor", "gradientColor", "shadow", "fontColor",
-    "formattedText", "rounded", "toggleRounded", "sharp", "strokeColor"];
+  var actions = ['cut', 'copy', 'bold', 'italic', 'underline', 'delete', 'duplicate',
+    'editStyle', 'editTooltip', 'editLink', 'backgroundColor', 'borderColor',
+    'edit', 'toFront', 'toBack', 'lockUnlock', 'solid', 'dashed', 'pasteSize',
+    'dotted', 'fillColor', 'gradientColor', 'shadow', 'fontColor',
+    'formattedText', 'rounded', 'toggleRounded', 'sharp', 'strokeColor'];
 
   for (var i = 0; i < actions.length; i++) {
     this.actions.get(actions[i]).setEnabled(selected);
   }
 
-  this.actions.get("setAsDefaultStyle").setEnabled(graph.getSelectionCount() == 1);
-  this.actions.get("clearWaypoints").setEnabled(!graph.isSelectionEmpty());
-  this.actions.get("copySize").setEnabled(graph.getSelectionCount() == 1);
-  this.actions.get("turn").setEnabled(!graph.isSelectionEmpty());
-  this.actions.get("curved").setEnabled(edgeSelected);
-  this.actions.get("rotation").setEnabled(vertexSelected);
-  this.actions.get("wordWrap").setEnabled(vertexSelected);
-  this.actions.get("autosize").setEnabled(vertexSelected);
+  this.actions.get('setAsDefaultStyle').setEnabled(graph.getSelectionCount() == 1);
+  this.actions.get('clearWaypoints').setEnabled(!graph.isSelectionEmpty());
+  this.actions.get('copySize').setEnabled(graph.getSelectionCount() == 1);
+  this.actions.get('turn').setEnabled(!graph.isSelectionEmpty());
+  this.actions.get('curved').setEnabled(edgeSelected);
+  this.actions.get('rotation').setEnabled(vertexSelected);
+  this.actions.get('wordWrap').setEnabled(vertexSelected);
+  this.actions.get('autosize').setEnabled(vertexSelected);
   var oneVertexSelected = vertexSelected && graph.getSelectionCount() == 1;
-  this.actions.get("group").setEnabled(graph.getSelectionCount() > 1 ||
+  this.actions.get('group').setEnabled(graph.getSelectionCount() > 1 ||
     (oneVertexSelected && !graph.isContainer(graph.getSelectionCell())));
-  this.actions.get("ungroup").setEnabled(graph.getSelectionCount() == 1 &&
+  this.actions.get('ungroup').setEnabled(graph.getSelectionCount() == 1 &&
     (graph.getModel().getChildCount(graph.getSelectionCell()) > 0 ||
       (oneVertexSelected && graph.isContainer(graph.getSelectionCell()))));
-  this.actions.get("removeFromGroup").setEnabled(oneVertexSelected &&
+  this.actions.get('removeFromGroup').setEnabled(oneVertexSelected &&
     graph.getModel().isVertex(graph.getModel().getParent(graph.getSelectionCell())));
 
   // Updates menu states
   var state = graph.view.getState(graph.getSelectionCell());
-  this.menus.get("navigation").setEnabled(selected || graph.view.currentRoot != null);
-  this.actions.get("collapsible").setEnabled(vertexSelected &&
+  this.menus.get('navigation').setEnabled(selected || graph.view.currentRoot != null);
+  this.actions.get('collapsible').setEnabled(vertexSelected &&
     (graph.isContainer(graph.getSelectionCell()) || graph.model.getChildCount(graph.getSelectionCell()) > 0));
-  this.actions.get("home").setEnabled(graph.view.currentRoot != null);
-  this.actions.get("exitGroup").setEnabled(graph.view.currentRoot != null);
-  this.actions.get("enterGroup").setEnabled(graph.getSelectionCount() == 1 && graph.isValidRoot(graph.getSelectionCell()));
+  this.actions.get('home').setEnabled(graph.view.currentRoot != null);
+  this.actions.get('exitGroup').setEnabled(graph.view.currentRoot != null);
+  this.actions.get('enterGroup').setEnabled(graph.getSelectionCount() == 1 && graph.isValidRoot(graph.getSelectionCell()));
   var foldable = graph.getSelectionCount() == 1 && graph.isCellFoldable(graph.getSelectionCell());
-  this.actions.get("expand").setEnabled(foldable);
-  this.actions.get("collapse").setEnabled(foldable);
-  this.actions.get("editLink").setEnabled(graph.getSelectionCount() == 1);
-  this.actions.get("openLink").setEnabled(graph.getSelectionCount() == 1 &&
+  this.actions.get('expand').setEnabled(foldable);
+  this.actions.get('collapse').setEnabled(foldable);
+  this.actions.get('editLink').setEnabled(graph.getSelectionCount() == 1);
+  this.actions.get('openLink').setEnabled(graph.getSelectionCount() == 1 &&
     graph.getLinkForCell(graph.getSelectionCell()) != null);
-  this.actions.get("guides").setEnabled(graph.isEnabled());
-  this.actions.get("grid").setEnabled(!this.editor.chromeless || this.editor.editable);
+  this.actions.get('guides').setEnabled(graph.isEnabled());
+  this.actions.get('grid').setEnabled(!this.editor.chromeless || this.editor.editable);
 
   var unlocked = graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent());
-  this.menus.get("layout").setEnabled(unlocked);
-  this.menus.get("insert").setEnabled(unlocked);
-  this.menus.get("direction").setEnabled(unlocked && vertexSelected);
-  this.menus.get("align").setEnabled(unlocked && vertexSelected && graph.getSelectionCount() > 1);
-  this.menus.get("distribute").setEnabled(unlocked && vertexSelected && graph.getSelectionCount() > 1);
-  this.actions.get("selectVertices").setEnabled(unlocked);
-  this.actions.get("selectEdges").setEnabled(unlocked);
-  this.actions.get("selectAll").setEnabled(unlocked);
-  this.actions.get("selectNone").setEnabled(unlocked);
+  this.menus.get('layout').setEnabled(unlocked);
+  this.menus.get('insert').setEnabled(unlocked);
+  this.menus.get('direction').setEnabled(unlocked && vertexSelected);
+  this.menus.get('align').setEnabled(unlocked && vertexSelected && graph.getSelectionCount() > 1);
+  this.menus.get('distribute').setEnabled(unlocked && vertexSelected && graph.getSelectionCount() > 1);
+  this.actions.get('selectVertices').setEnabled(unlocked);
+  this.actions.get('selectEdges').setEnabled(unlocked);
+  this.actions.get('selectAll').setEnabled(unlocked);
+  this.actions.get('selectNone').setEnabled(unlocked);
 
   this.updatePasteActionStates();
 };
@@ -2467,65 +2469,65 @@ EditorUi.prototype.refresh = function(sizeDidChange) {
   if (this.sidebarFooterContainer != null) {
     var bottom = this.footerHeight + off;
     sidebarFooterHeight = Math.max(0, Math.min(h - tmp - bottom, this.sidebarFooterHeight));
-    this.sidebarFooterContainer.style.width = effHsplitPosition + "px";
-    this.sidebarFooterContainer.style.height = sidebarFooterHeight + "px";
-    this.sidebarFooterContainer.style.bottom = bottom + "px";
+    this.sidebarFooterContainer.style.width = effHsplitPosition + 'px';
+    this.sidebarFooterContainer.style.height = sidebarFooterHeight + 'px';
+    this.sidebarFooterContainer.style.bottom = bottom + 'px';
   }
 
   var fw = (this.format != null) ? this.formatWidth : 0;
-  this.sidebarContainer.style.top = tmp + "px";
-  this.sidebarContainer.style.width = effHsplitPosition + "px";
-  this.formatContainer.style.top = tmp + "px";
-  this.formatContainer.style.width = fw + "px";
-  this.formatContainer.style.display = (this.format != null) ? "" : "none";
+  this.sidebarContainer.style.top = tmp + 'px';
+  this.sidebarContainer.style.width = effHsplitPosition + 'px';
+  this.formatContainer.style.top = tmp + 'px';
+  this.formatContainer.style.width = fw + 'px';
+  this.formatContainer.style.display = (this.format != null) ? '' : 'none';
 
-  this.diagramContainer.style.left = (this.hsplit.parentNode != null) ? (effHsplitPosition + this.splitSize) + "px" : "0px";
+  this.diagramContainer.style.left = (this.hsplit.parentNode != null) ? (effHsplitPosition + this.splitSize) + 'px' : '0px';
   this.diagramContainer.style.top = this.sidebarContainer.style.top;
-  this.footerContainer.style.height = this.footerHeight + "px";
+  this.footerContainer.style.height = this.footerHeight + 'px';
   this.hsplit.style.top = this.sidebarContainer.style.top;
-  this.hsplit.style.bottom = (this.footerHeight + off) + "px";
-  this.hsplit.style.left = effHsplitPosition + "px";
-  this.footerContainer.style.display = (this.footerHeight == 0) ? "none" : "";
+  this.hsplit.style.bottom = (this.footerHeight + off) + 'px';
+  this.hsplit.style.left = effHsplitPosition + 'px';
+  this.footerContainer.style.display = (this.footerHeight == 0) ? 'none' : '';
 
   if (this.tabContainer != null) {
     this.tabContainer.style.left = this.diagramContainer.style.left;
   }
 
   if (quirks) {
-    this.menubarContainer.style.width = w + "px";
+    this.menubarContainer.style.width = w + 'px';
     this.toolbarContainer.style.width = this.menubarContainer.style.width;
     var sidebarHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight);
-    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + "px";
-    this.formatContainer.style.height = sidebarHeight + "px";
-    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + "px" : w + "px";
+    this.sidebarContainer.style.height = (sidebarHeight - sidebarFooterHeight) + 'px';
+    this.formatContainer.style.height = sidebarHeight + 'px';
+    this.diagramContainer.style.width = (this.hsplit.parentNode != null) ? Math.max(0, w - effHsplitPosition - this.splitSize - fw) + 'px' : w + 'px';
     this.footerContainer.style.width = this.menubarContainer.style.width;
     var diagramHeight = Math.max(0, h - this.footerHeight - this.menubarHeight - this.toolbarHeight);
 
     if (this.tabContainer != null) {
       this.tabContainer.style.width = this.diagramContainer.style.width;
-      this.tabContainer.style.bottom = (this.footerHeight + off) + "px";
+      this.tabContainer.style.bottom = (this.footerHeight + off) + 'px';
       diagramHeight -= this.tabContainer.clientHeight;
     }
 
-    this.diagramContainer.style.height = diagramHeight + "px";
-    this.hsplit.style.height = diagramHeight + "px";
+    this.diagramContainer.style.height = diagramHeight + 'px';
+    this.hsplit.style.height = diagramHeight + 'px';
   } else {
     if (this.footerHeight > 0) {
-      this.footerContainer.style.bottom = off + "px";
+      this.footerContainer.style.bottom = off + 'px';
     }
 
-    this.diagramContainer.style.right = fw + "px";
+    this.diagramContainer.style.right = fw + 'px';
     var th = 0;
 
     if (this.tabContainer != null) {
-      this.tabContainer.style.bottom = (this.footerHeight + off) + "px";
+      this.tabContainer.style.bottom = (this.footerHeight + off) + 'px';
       this.tabContainer.style.right = this.diagramContainer.style.right;
       th = this.tabContainer.clientHeight;
     }
 
-    this.sidebarContainer.style.bottom = (this.footerHeight + sidebarFooterHeight + off) + "px";
-    this.formatContainer.style.bottom = (this.footerHeight + off) + "px";
-    this.diagramContainer.style.bottom = (this.footerHeight + off + th) + "px";
+    this.sidebarContainer.style.bottom = (this.footerHeight + sidebarFooterHeight + off) + 'px';
+    this.formatContainer.style.bottom = (this.footerHeight + off) + 'px';
+    this.diagramContainer.style.bottom = (this.footerHeight + off + th) + 'px';
   }
 
   if (sizeDidChange) {
@@ -2544,41 +2546,41 @@ EditorUi.prototype.createTabContainer = function() {
  * Creates the required containers.
  */
 EditorUi.prototype.createDivs = function() {
-  this.customToolbarContainer = this.createDiv("customToolbarContainer");
-  this.menubarContainer = this.createDiv("geMenubarContainer");
-  this.toolbarContainer = this.createDiv("geToolbarContainer");
-  this.sidebarContainer = this.createDiv("geSidebarContainer geComponentContainer");
-  this.formatContainer = this.createDiv("geSidebarContainer geFormatContainer");
-  this.diagramContainer = this.createDiv("geDiagramContainer");
-  this.footerContainer = this.createDiv("geFooterContainer");
-  this.hsplit = this.createDiv("geHsplit");
-  this.hsplit.setAttribute("title", mxResources.get("collapseExpand"));
+  this.customToolbarContainer = this.createDiv('customToolbarContainer');
+  this.menubarContainer = this.createDiv('geMenubarContainer');
+  this.toolbarContainer = this.createDiv('geToolbarContainer');
+  this.sidebarContainer = this.createDiv('geSidebarContainer geComponentContainer');
+  this.formatContainer = this.createDiv('geSidebarContainer geFormatContainer');
+  this.diagramContainer = this.createDiv('geDiagramContainer');
+  this.footerContainer = this.createDiv('geFooterContainer');
+  this.hsplit = this.createDiv('geHsplit');
+  this.hsplit.setAttribute('title', mxResources.get('collapseExpand'));
 
   // Sets static style for containers
-  this.menubarContainer.style.top = "0px";
-  this.menubarContainer.style.left = "0px";
-  this.menubarContainer.style.right = "0px";
-  this.toolbarContainer.style.left = "0px";
-  this.toolbarContainer.style.right = "0px";
-  this.sidebarContainer.style.left = "0px";
-  this.formatContainer.style.right = "0px";
-  this.formatContainer.style.zIndex = "1";
-  this.diagramContainer.style.right = ((this.format != null) ? this.formatWidth : 0) + "px";
-  this.footerContainer.style.left = "0px";
-  this.footerContainer.style.right = "0px";
-  this.footerContainer.style.bottom = "0px";
+  this.menubarContainer.style.top = '0px';
+  this.menubarContainer.style.left = '0px';
+  this.menubarContainer.style.right = '0px';
+  this.toolbarContainer.style.left = '0px';
+  this.toolbarContainer.style.right = '0px';
+  this.sidebarContainer.style.left = '0px';
+  this.formatContainer.style.right = '0px';
+  this.formatContainer.style.zIndex = '1';
+  this.diagramContainer.style.right = ((this.format != null) ? this.formatWidth : 0) + 'px';
+  this.footerContainer.style.left = '0px';
+  this.footerContainer.style.right = '0px';
+  this.footerContainer.style.bottom = '0px';
   this.footerContainer.style.zIndex = mxPopupMenu.prototype.zIndex - 2;
-  this.hsplit.style.width = this.splitSize + "px";
+  this.hsplit.style.width = this.splitSize + 'px';
   this.sidebarFooterContainer = this.createSidebarFooterContainer();
 
   if (this.sidebarFooterContainer) {
-    this.sidebarFooterContainer.style.left = "0px";
+    this.sidebarFooterContainer.style.left = '0px';
   }
 
   if (!this.editor.chromeless) {
     this.tabContainer = this.createTabContainer();
   } else {
-    this.diagramContainer.style.border = "none";
+    this.diagramContainer.style.border = 'none';
   }
 };
 
@@ -2598,21 +2600,16 @@ EditorUi.prototype.createUi = function() {
     this.customToolbarContainer.innerHTML = `
     <div class="row align-items-center w-100 no-gutters">   
         <div class="col-9 d-flex flex-wrap align-items-center">
-          <div class="action-btn"
-          onclick="(function() {
-            graph.zoomIn();
-            return false;
-          })();"
-          ><img src="/content/images/icon/Group%20467@2x.png"/></div>
-          <div class="action-btn"><img src="/content/images/icon/Group%20262@2x.png"/></div>
-          <div class="action-btn"><img src="/content/images/icon/Group%20468@2x.png"/></div>
-          <div class="action-btn"><img src="/content/images/icon/Group%20469@2x.png"/></div>
-          <div class="action-btn"><img src="/content/images/icon/Group%20470@2x.png"/></div>
-          <div class="action-btn"><img src="/content/images/icon/Group%20471@2x.png"/></div>
+          <div class="action-btn" id="add-container-btn"><img src="/content/images/icon/Group%20467@2x.png"/></div>
+          <div class="action-btn" id="clone-container-btn"><img src="/content/images/icon/Group%20262@2x.png"/></div>
+          <div class="action-btn" id="add-text-btn"><img src="/content/images/icon/Group%20468@2x.png"/></div>
+          <div class="action-btn" id="add-image-btn"><img src="/content/images/icon/Group%20469@2x.png"/></div>
+          <div class="action-btn" id="add-link-btn"><img src="/content/images/icon/Group%20470@2x.png"/></div>
+          <div class="action-btn" id="add-home-btn"><img src="/content/images/icon/Group%20471@2x.png"/></div>
         </div>
         <div class="col-3 d-flex flex-wrap align-items-center justify-content-end">
-          <div class="action-btn"><img src="/content/images/icon/Group%20473@2x.png"/></div>
-          <div class="action-btn"><img src="/content/images/icon/Group%20474@2x.png"/></div>
+          <div class="action-btn" id="zoom-out-btn"><img src="/content/images/icon/Group%20473@2x.png"/></div>
+          <div class="action-btn" id="zoom-in-btn"><img src="/content/images/icon/Group%20474@2x.png"/></div>
 <!--          <div class="action-btn"><img src="/content/images/icon/Group%20465@2x.png"/></div>-->
         </div>
     </div>
@@ -2623,7 +2620,7 @@ EditorUi.prototype.createUi = function() {
 
 
   // Creates menubar
-  this.menubar = (this.editor.chromeless) ? null : this.menus.createMenubar(this.createDiv("geMenubar"));
+  this.menubar = (this.editor.chromeless) ? null : this.menus.createMenubar(this.createDiv('geMenubar'));
 
   if (this.menubar != null) {
     this.menubarContainer.appendChild(this.menubar.container);
@@ -2634,7 +2631,7 @@ EditorUi.prototype.createUi = function() {
     this.statusContainer = this.createStatusContainer();
 
     // Connects the status bar to the editor status
-    this.editor.addListener("statusChanged", mxUtils.bind(this, function() {
+    this.editor.addListener('statusChanged', mxUtils.bind(this, function() {
       this.setStatusText(this.editor.getStatus());
     }));
 
@@ -2642,7 +2639,7 @@ EditorUi.prototype.createUi = function() {
     this.menubar.container.appendChild(this.statusContainer);
 
     // Inserts into DOM
-    // this.container.appendChild(this.menubarContainer);
+    this.container.appendChild(this.menubarContainer);
   }
 
   // Creates the sidebar
@@ -2678,7 +2675,7 @@ EditorUi.prototype.createUi = function() {
   }
 
   // Creates toolbar
-  this.toolbar = (this.editor.chromeless) ? null : this.createToolbar(this.createDiv("geToolbar"));
+  this.toolbar = (this.editor.chromeless) ? null : this.createToolbar(this.createDiv('geToolbar'));
 
   if (this.toolbar != null) {
     this.toolbarContainer.appendChild(this.toolbar.container);
@@ -2695,10 +2692,10 @@ EditorUi.prototype.createUi = function() {
     }));
   }
   // create header container
-  document.getElementById("header-container").innerHTML = `
+  document.getElementById('header-container').innerHTML = `
     <div>
         <div class="header-title">
-            EDITOR
+            EDITOR <span id="header-app-name"></span>
         </div>
         <div class="row header-hr">
             <div class="col-6"></div>
@@ -2708,10 +2705,15 @@ EditorUi.prototype.createUi = function() {
     `;
 
   // create footer container
-  document.getElementById("custom-footer-container").innerHTML = `
-    <div class="row justify-content-end">
-        <div class="action-btn">Back</div>
-        <div class="action-btn submit-btn">Save & Next</div>
+  document.getElementById('custom-footer-container').innerHTML = `
+    <div class="row">
+    <div class="col-6 d-flex">
+        <button class="action-btn submit-btn" id="load-btn">Load</button>
+    </div>
+    <div class="col-6 justify-content-end d-flex">
+        <button class="btn action-btn" id="back-btn">Back</button>
+        <button class="btn action-btn submit-btn" id="save-btn">Save & Next</button>
+    </div>
     </div>
     `;
 };
@@ -2720,12 +2722,12 @@ EditorUi.prototype.createUi = function() {
  * Creates a new toolbar for the given container.
  */
 EditorUi.prototype.createStatusContainer = function() {
-  var container = document.createElement("a");
-  container.className = "geItem geStatus";
+  var container = document.createElement('a');
+  container.className = 'geItem geStatus';
 
   if (screen.width < 420) {
-    container.style.maxWidth = Math.max(20, screen.width - 320) + "px";
-    container.style.overflow = "hidden";
+    container.style.maxWidth = Math.max(20, screen.width - 320) + 'px';
+    container.style.overflow = 'hidden';
   }
 
   return container;
@@ -2763,14 +2765,14 @@ EditorUi.prototype.createFormat = function(container) {
  * Creates and returns a new footer.
  */
 EditorUi.prototype.createFooter = function() {
-  return this.createDiv("geFooter");
+  return this.createDiv('geFooter');
 };
 
 /**
  * Creates the actual toolbar for the toolbar container.
  */
 EditorUi.prototype.createDiv = function(classname) {
-  var elt = document.createElement("div");
+  var elt = document.createElement('div');
   elt.className = classname;
 
   return elt;
@@ -2787,7 +2789,7 @@ EditorUi.prototype.addSplitHandler = function(elt, horizontal, dx, onChange) {
 
   // Disables built-in pan and zoom in IE10 and later
   if (mxClient.IS_POINTER) {
-    elt.style.touchAction = "none";
+    elt.style.touchAction = 'none';
   }
 
   var getValue = mxUtils.bind(this, function() {
@@ -2827,7 +2829,7 @@ EditorUi.prototype.addSplitHandler = function(elt, horizontal, dx, onChange) {
     mxEvent.consume(evt);
   });
 
-  mxEvent.addListener(elt, "click", mxUtils.bind(this, function(evt) {
+  mxEvent.addListener(elt, 'click', mxUtils.bind(this, function(evt) {
     if (!ignoreClick && this.hsplitClickEnabled) {
       var next = (last != null) ? last - dx : 0;
       last = getValue();
@@ -2853,9 +2855,9 @@ EditorUi.prototype.handleError = function(resp, title, fn, invokeFnOnClose, notF
   var e = (resp != null && resp.error != null) ? resp.error : resp;
 
   if (e != null || title != null) {
-    var msg = mxUtils.htmlEntities(mxResources.get("unknownError"));
-    var btn = mxResources.get("ok");
-    title = (title != null) ? title : mxResources.get("error");
+    var msg = mxUtils.htmlEntities(mxResources.get('unknownError'));
+    var btn = mxResources.get('ok');
+    title = (title != null) ? title : mxResources.get('error');
 
     if (e != null && e.message != null) {
       msg = mxUtils.htmlEntities(e.message);
@@ -2875,7 +2877,7 @@ EditorUi.prototype.handleError = function(resp, title, fn, invokeFnOnClose, notF
  * @param {number} dy Y-coordinate of the translation.
  */
 EditorUi.prototype.showError = function(title, msg, btn, fn, retry, btn2, fn2, btn3, fn3, w, h, hide, onClose) {
-  var dlg = new ErrorDialog(this, title, msg, btn || mxResources.get("ok"),
+  var dlg = new ErrorDialog(this, title, msg, btn || mxResources.get('ok'),
     fn, retry, btn2, fn2, hide, btn3, fn3);
   var lines = Math.ceil((msg != null) ? msg.length / 50 : 1);
   this.showDialog(dlg.container, w || 340, h || (100 + lines * 20), true, false, onClose);
@@ -2910,9 +2912,9 @@ EditorUi.prototype.hideDialog = function(cancel, isEsc) {
     }
 
     this.dialog = (this.dialogs.length > 0) ? this.dialogs[this.dialogs.length - 1] : null;
-    this.editor.fireEvent(new mxEventObject("hideDialog"));
+    this.editor.fireEvent(new mxEventObject('hideDialog'));
 
-    if (this.dialog == null && this.editor.graph.container.style.visibility != "hidden") {
+    if (this.dialog == null && this.editor.graph.container.style.visibility != 'hidden') {
       window.setTimeout(mxUtils.bind(this, function() {
         if (this.editor.graph.isEditing() && this.editor.graph.cellEditor.textarea != null) {
           this.editor.graph.cellEditor.textarea.focus();
@@ -2934,7 +2936,7 @@ EditorUi.prototype.pickColor = function(color, apply) {
   var h = 226 + ((Math.ceil(ColorDialog.prototype.presetColors.length / 12) +
     Math.ceil(ColorDialog.prototype.defaultColors.length / 12)) * 17);
 
-  var dlg = new ColorDialog(this, color || "none", function(color) {
+  var dlg = new ColorDialog(this, color || 'none', function(color) {
     graph.cellEditor.restoreSelection(selState);
     apply(color);
   }, function() {
@@ -2967,13 +2969,13 @@ EditorUi.prototype.extractGraphModelFromHtml = function(data) {
   var result = null;
 
   try {
-    var idx = data.indexOf("&lt;mxGraphModel ");
+    var idx = data.indexOf('&lt;mxGraphModel ');
 
     if (idx >= 0) {
-      var idx2 = data.lastIndexOf("&lt;/mxGraphModel&gt;");
+      var idx2 = data.lastIndexOf('&lt;/mxGraphModel&gt;');
 
       if (idx2 > idx) {
-        result = data.substring(idx, idx2 + 21).replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/\\&quot;/g, "\"").replace(/\n/g, "");
+        result = data.substring(idx, idx2 + 21).replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/\\&quot;/g, '"').replace(/\n/g, '');
       }
     }
   } catch (e) {
@@ -2995,12 +2997,12 @@ EditorUi.prototype.extractGraphModelFromEvent = function(evt) {
 
     if (provider != null) {
       if (document.documentMode == 10 || document.documentMode == 11) {
-        data = provider.getData("Text");
+        data = provider.getData('Text');
       } else {
-        data = (mxUtils.indexOf(provider.types, "text/html") >= 0) ? provider.getData("text/html") : null;
+        data = (mxUtils.indexOf(provider.types, 'text/html') >= 0) ? provider.getData('text/html') : null;
 
-        if (mxUtils.indexOf(provider.types, "text/plain" && (data == null || data.length == 0))) {
-          data = provider.getData("text/plain");
+        if (mxUtils.indexOf(provider.types, 'text/plain' && (data == null || data.length == 0))) {
+          data = provider.getData('text/plain');
         }
       }
 
@@ -3039,14 +3041,14 @@ EditorUi.prototype.saveFile = function(forceDialog) {
   if (!forceDialog && this.editor.filename != null) {
     this.save(this.editor.getOrCreateFilename());
   } else {
-    var dlg = new FilenameDialog(this, this.editor.getOrCreateFilename(), mxResources.get("save"), mxUtils.bind(this, function(name) {
+    var dlg = new FilenameDialog(this, this.editor.getOrCreateFilename(), mxResources.get('save'), mxUtils.bind(this, function(name) {
       this.save(name);
     }), null, mxUtils.bind(this, function(name) {
       if (name != null && name.length > 0) {
         return true;
       }
 
-      mxUtils.confirm(mxResources.get("invalidName"));
+      mxUtils.confirm(mxResources.get('invalidName'));
 
       return false;
     }));
@@ -3060,14 +3062,14 @@ EditorUi.prototype.saveFile = function(forceDialog) {
  * Adds the label menu items to the given menu and parent.
  */
 EditorUi.prototype.showLoadDataDialog = function() {
-  var dlg = new LoadDataDialog(this, this.editor.getOrCreateFilename(), mxResources.get("load"), mxUtils.bind(this, function(name) {
+  var dlg = new LoadDataDialog(this, this.editor.getOrCreateFilename(), mxResources.get('load'), mxUtils.bind(this, function(name) {
     this.loadData(name);
   }), null, mxUtils.bind(this, function(name) {
     if (name != null && name.length > 0) {
       return true;
     }
 
-    mxUtils.confirm(mxResources.get("invalidName"));
+    mxUtils.confirm(mxResources.get('invalidName'));
 
     return false;
   }));
@@ -3120,7 +3122,7 @@ EditorUi.prototype.save = function(name) {
       };
       requestSaveApp(data, this);
     } catch (e) {
-      this.editor.setStatus(mxUtils.htmlEntities(mxResources.get("errorSavingFile")));
+      this.editor.setStatus(mxUtils.htmlEntities(mxResources.get('errorSavingFile')));
     }
   }
 };
@@ -3133,7 +3135,7 @@ EditorUi.prototype.loadData = function(name) {
       };
       requestLoadDataApp(data, this);
     } catch (e) {
-      this.editor.setStatus(mxUtils.htmlEntities(mxResources.get("errorSavingFile")));
+      this.editor.setStatus(mxUtils.htmlEntities(mxResources.get('errorSavingFile')));
     }
   }
 };
@@ -3153,7 +3155,7 @@ EditorUi.prototype.executeLayout = function(exec, animate, post) {
     } finally {
       // Animates the changes in the graph model except
       // for Camino, where animation is too slow
-      if (this.allowAnimation && animate && navigator.userAgent.indexOf("Camino") < 0) {
+      if (this.allowAnimation && animate && navigator.userAgent.indexOf('Camino') < 0) {
         // New API for animating graph layout results asynchronously
         var morph = new mxMorphing(graph);
         morph.addListener(mxEvent.DONE, mxUtils.bind(this, function() {
@@ -3193,7 +3195,7 @@ EditorUi.prototype.showImageDialog = function(title, value, fn, ignoreExisting) 
     };
     img.onerror = function() {
       fn(null);
-      mxUtils.alert(mxResources.get("fileNotFound"));
+      mxUtils.alert(mxResources.get('fileNotFound'));
     };
 
     img.src = newValue;
@@ -3233,7 +3235,7 @@ EditorUi.prototype.showBackgroundImageDialog = function(apply) {
     this.editor.graph.model.execute(change);
   });
 
-  var newValue = mxUtils.prompt(mxResources.get("backgroundImage"), "");
+  var newValue = mxUtils.prompt(mxResources.get('backgroundImage'), '');
 
   if (newValue != null && newValue.length > 0) {
     var img = new Image();
@@ -3243,7 +3245,7 @@ EditorUi.prototype.showBackgroundImageDialog = function(apply) {
     };
     img.onerror = function() {
       apply(null);
-      mxUtils.alert(mxResources.get("fileNotFound"));
+      mxUtils.alert(mxResources.get('fileNotFound'));
     };
 
     img.src = newValue;
@@ -3259,7 +3261,7 @@ EditorUi.prototype.setBackgroundImage = function(image) {
   this.editor.graph.setBackgroundImage(image);
   this.editor.graph.view.validateBackgroundImage();
 
-  this.fireEvent(new mxEventObject("backgroundImageChanged"));
+  this.fireEvent(new mxEventObject('backgroundImageChanged'));
 };
 
 /**
@@ -3282,11 +3284,11 @@ EditorUi.prototype.createOutline = function(wnd) {
   var outline = new mxOutline(this.editor.graph);
   outline.border = 20;
 
-  mxEvent.addListener(window, "resize", function() {
+  mxEvent.addListener(window, 'resize', function() {
     outline.update();
   });
 
-  this.addListener("pageFormatChanged", function() {
+  this.addListener('pageFormatChanged', function() {
     outline.update();
   });
 
@@ -3295,13 +3297,13 @@ EditorUi.prototype.createOutline = function(wnd) {
 
 // Alt+Shift+Keycode mapping to action
 EditorUi.prototype.altShiftActions = {
-  67: "clearWaypoints", // Alt+Shift+C
-  65: "connectionArrows", // Alt+Shift+A
-  76: "editLink", // Alt+Shift+L
-  80: "connectionPoints", // Alt+Shift+P
-  84: "editTooltip", // Alt+Shift+T
-  86: "pasteSize", // Alt+Shift+V
-  88: "copySize" // Alt+Shift+X
+  67: 'clearWaypoints', // Alt+Shift+C
+  65: 'connectionArrows', // Alt+Shift+A
+  76: 'editLink', // Alt+Shift+L
+  80: 'connectionPoints', // Alt+Shift+P
+  84: 'editTooltip', // Alt+Shift+T
+  86: 'pasteSize', // Alt+Shift+V
+  88: 'copySize' // Alt+Shift+X
 };
 
 /**
@@ -3553,11 +3555,11 @@ EditorUi.prototype.createKeyHandler = function(editor) {
   keyHandler.bindKey(35, function() {
     graph.refresh();
   }); // End
-  keyHandler.bindAction(107, true, "zoomIn"); // Ctrl+Plus
-  keyHandler.bindAction(109, true, "zoomOut"); // Ctrl+Minus
-  keyHandler.bindAction(80, true, "print"); // Ctrl+P
-  keyHandler.bindAction(79, true, "outline", true); // Ctrl+Shift+O
-  keyHandler.bindAction(112, false, "about"); // F1
+  keyHandler.bindAction(107, true, 'zoomIn'); // Ctrl+Plus
+  keyHandler.bindAction(109, true, 'zoomOut'); // Ctrl+Minus
+  keyHandler.bindAction(80, true, 'print'); // Ctrl+P
+  keyHandler.bindAction(79, true, 'outline', true); // Ctrl+Shift+O
+  keyHandler.bindAction(112, false, 'about'); // F1
 
   if (!this.editor.chromeless || this.editor.editable) {
     keyHandler.bindControlKey(36, function() {
@@ -3575,45 +3577,45 @@ EditorUi.prototype.createKeyHandler = function(editor) {
         graph.setSelectionCells(graph.duplicateCells(graph.getSelectionCells(), false));
       }
     }); // Ctrl+Enter
-    keyHandler.bindAction(8, false, "delete"); // Backspace
-    keyHandler.bindAction(8, true, "deleteAll"); // Backspace
-    keyHandler.bindAction(46, false, "delete"); // Delete
-    keyHandler.bindAction(46, true, "deleteAll"); // Ctrl+Delete
-    keyHandler.bindAction(72, true, "resetView"); // Ctrl+H
-    keyHandler.bindAction(72, true, "fitWindow", true); // Ctrl+Shift+H
-    keyHandler.bindAction(74, true, "fitPage"); // Ctrl+J
-    keyHandler.bindAction(74, true, "fitTwoPages", true); // Ctrl+Shift+J
-    keyHandler.bindAction(48, true, "customZoom"); // Ctrl+0
-    keyHandler.bindAction(82, true, "turn"); // Ctrl+R
-    keyHandler.bindAction(82, true, "clearDefaultStyle", true); // Ctrl+Shift+R
-    keyHandler.bindAction(83, true, "save"); // Ctrl+S
-    keyHandler.bindAction(83, true, "saveAs", true); // Ctrl+Shift+S
-    keyHandler.bindAction(65, true, "selectAll"); // Ctrl+A
-    keyHandler.bindAction(65, true, "selectNone", true); // Ctrl+A
-    keyHandler.bindAction(73, true, "selectVertices", true); // Ctrl+Shift+I
-    keyHandler.bindAction(69, true, "selectEdges", true); // Ctrl+Shift+E
-    keyHandler.bindAction(69, true, "editStyle"); // Ctrl+E
-    keyHandler.bindAction(66, true, "bold"); // Ctrl+B
-    keyHandler.bindAction(66, true, "toBack", true); // Ctrl+Shift+B
-    keyHandler.bindAction(70, true, "toFront", true); // Ctrl+Shift+F
-    keyHandler.bindAction(68, true, "duplicate"); // Ctrl+D
-    keyHandler.bindAction(68, true, "setAsDefaultStyle", true); // Ctrl+Shift+D
-    keyHandler.bindAction(90, true, "undo"); // Ctrl+Z
-    keyHandler.bindAction(89, true, "autosize", true); // Ctrl+Shift+Y
-    keyHandler.bindAction(88, true, "cut"); // Ctrl+X
-    keyHandler.bindAction(67, true, "copy"); // Ctrl+C
-    keyHandler.bindAction(86, true, "paste"); // Ctrl+V
-    keyHandler.bindAction(71, true, "group"); // Ctrl+G
-    keyHandler.bindAction(77, true, "editData"); // Ctrl+M
-    keyHandler.bindAction(71, true, "grid", true); // Ctrl+Shift+G
-    keyHandler.bindAction(73, true, "italic"); // Ctrl+I
-    keyHandler.bindAction(76, true, "lockUnlock"); // Ctrl+L
-    keyHandler.bindAction(76, true, "layers", true); // Ctrl+Shift+L
-    keyHandler.bindAction(80, true, "formatPanel", true); // Ctrl+Shift+P
-    keyHandler.bindAction(85, true, "underline"); // Ctrl+U
-    keyHandler.bindAction(85, true, "ungroup", true); // Ctrl+Shift+U
-    keyHandler.bindAction(190, true, "superscript"); // Ctrl+.
-    keyHandler.bindAction(188, true, "subscript"); // Ctrl+,
+    keyHandler.bindAction(8, false, 'delete'); // Backspace
+    keyHandler.bindAction(8, true, 'deleteAll'); // Backspace
+    keyHandler.bindAction(46, false, 'delete'); // Delete
+    keyHandler.bindAction(46, true, 'deleteAll'); // Ctrl+Delete
+    keyHandler.bindAction(72, true, 'resetView'); // Ctrl+H
+    keyHandler.bindAction(72, true, 'fitWindow', true); // Ctrl+Shift+H
+    keyHandler.bindAction(74, true, 'fitPage'); // Ctrl+J
+    keyHandler.bindAction(74, true, 'fitTwoPages', true); // Ctrl+Shift+J
+    keyHandler.bindAction(48, true, 'customZoom'); // Ctrl+0
+    keyHandler.bindAction(82, true, 'turn'); // Ctrl+R
+    keyHandler.bindAction(82, true, 'clearDefaultStyle', true); // Ctrl+Shift+R
+    keyHandler.bindAction(83, true, 'save'); // Ctrl+S
+    keyHandler.bindAction(83, true, 'saveAs', true); // Ctrl+Shift+S
+    keyHandler.bindAction(65, true, 'selectAll'); // Ctrl+A
+    keyHandler.bindAction(65, true, 'selectNone', true); // Ctrl+A
+    keyHandler.bindAction(73, true, 'selectVertices', true); // Ctrl+Shift+I
+    keyHandler.bindAction(69, true, 'selectEdges', true); // Ctrl+Shift+E
+    keyHandler.bindAction(69, true, 'editStyle'); // Ctrl+E
+    keyHandler.bindAction(66, true, 'bold'); // Ctrl+B
+    keyHandler.bindAction(66, true, 'toBack', true); // Ctrl+Shift+B
+    keyHandler.bindAction(70, true, 'toFront', true); // Ctrl+Shift+F
+    keyHandler.bindAction(68, true, 'duplicate'); // Ctrl+D
+    keyHandler.bindAction(68, true, 'setAsDefaultStyle', true); // Ctrl+Shift+D
+    keyHandler.bindAction(90, true, 'undo'); // Ctrl+Z
+    keyHandler.bindAction(89, true, 'autosize', true); // Ctrl+Shift+Y
+    keyHandler.bindAction(88, true, 'cut'); // Ctrl+X
+    keyHandler.bindAction(67, true, 'copy'); // Ctrl+C
+    keyHandler.bindAction(86, true, 'paste'); // Ctrl+V
+    keyHandler.bindAction(71, true, 'group'); // Ctrl+G
+    keyHandler.bindAction(77, true, 'editData'); // Ctrl+M
+    keyHandler.bindAction(71, true, 'grid', true); // Ctrl+Shift+G
+    keyHandler.bindAction(73, true, 'italic'); // Ctrl+I
+    keyHandler.bindAction(76, true, 'lockUnlock'); // Ctrl+L
+    keyHandler.bindAction(76, true, 'layers', true); // Ctrl+Shift+L
+    keyHandler.bindAction(80, true, 'formatPanel', true); // Ctrl+Shift+P
+    keyHandler.bindAction(85, true, 'underline'); // Ctrl+U
+    keyHandler.bindAction(85, true, 'ungroup', true); // Ctrl+Shift+U
+    keyHandler.bindAction(190, true, 'superscript'); // Ctrl+.
+    keyHandler.bindAction(188, true, 'subscript'); // Ctrl+,
     keyHandler.bindKey(13, function() {
       if (graph.isEnabled()) {
         graph.startEditingAtCell();
@@ -3627,9 +3629,9 @@ EditorUi.prototype.createKeyHandler = function(editor) {
   }
 
   if (!mxClient.IS_WIN) {
-    keyHandler.bindAction(90, true, "redo", true); // Ctrl+Shift+Z
+    keyHandler.bindAction(90, true, 'redo', true); // Ctrl+Shift+Z
   } else {
-    keyHandler.bindAction(89, true, "redo"); // Ctrl+Y
+    keyHandler.bindAction(89, true, 'redo'); // Ctrl+Y
   }
 
   return keyHandler;
@@ -3665,17 +3667,17 @@ EditorUi.prototype.destroy = function() {
   }
 
   if (this.keydownHandler != null) {
-    mxEvent.removeListener(document, "keydown", this.keydownHandler);
+    mxEvent.removeListener(document, 'keydown', this.keydownHandler);
     this.keydownHandler = null;
   }
 
   if (this.keyupHandler != null) {
-    mxEvent.removeListener(document, "keyup", this.keyupHandler);
+    mxEvent.removeListener(document, 'keyup', this.keyupHandler);
     this.keyupHandler = null;
   }
 
   if (this.resizeHandler != null) {
-    mxEvent.removeListener(window, "resize", this.resizeHandler);
+    mxEvent.removeListener(window, 'resize', this.resizeHandler);
     this.resizeHandler = null;
   }
 
@@ -3685,12 +3687,12 @@ EditorUi.prototype.destroy = function() {
   }
 
   if (this.orientationChangeHandler != null) {
-    mxEvent.removeListener(window, "orientationchange", this.orientationChangeHandler);
+    mxEvent.removeListener(window, 'orientationchange', this.orientationChangeHandler);
     this.orientationChangeHandler = null;
   }
 
   if (this.scrollHandler != null) {
-    mxEvent.removeListener(window, "scroll", this.scrollHandler);
+    mxEvent.removeListener(window, 'scroll', this.scrollHandler);
     this.scrollHandler = null;
   }
 

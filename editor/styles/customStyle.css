@@ -200,18 +200,51 @@
 }
 
 .custom-footer-container .action-btn {
+  font-size: 12px;
   padding: 8px 20px;
   color: #BCBCBC;
   margin-left: 5px;
   margin-right: 5px;
   border-radius: 5px;
   text-align: center;
+  border: none;
+  background: none;
 }
 
 .custom-footer-container .submit-btn {
   color: white;
   background-color: #4C7A81;
   border: 1px solid;
+}
+
+.modal-option-title {
+  font-weight: bold;
+  padding: 0 5px;
+  margin-bottom: 10px;
+}
+
+.modal-option-type {
+  height: 20px;
+  /*flex: 1;*/
+  margin-left: 5px;
+  width: 170px;
+}
+
+.modal-option-wrapper {
+  padding: 10px 10px 10px 18px;
+}
+
+.modal-option-url {
+  height: 20px;
+  width: 100%;
+}
+
+.g-margin-top-5 {
+  margin-top: 5px;
+}
+
+.g-margin-right-5 {
+  margin-right: 5px;
 }
 
 

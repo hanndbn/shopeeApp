@@ -18,7 +18,8 @@ function requestSaveApp(requestData, editorUi) {
     success: function(data) {
       $('#myModal').modal('hide');
       editorUi.editor.setModified(false);
-      editorUi.editor.setFilename(requestData.appName);
+      editorUi.editor.setFilename(`- ${requestData.appName}`);
+      $('#header-app-name').html(requestData.appName);
       if (data.appId) {
         editorUi.editor.setAppId(data.appId);
         swal('', 'save data success', 'success');
@@ -43,6 +44,8 @@ function requestLoadDataApp(data, editorUi) {
     contentType: 'application/json',
     success: function(data) {
       $('#myModal').modal('hide');
+      // $('#save-btn').prop('disabled', false);
+      $('#header-app-name').html(`- ${data.appName}`);
       $('#publishItem').prop('hidden', false);
       // editorUi.editor.setStatus('load data success');
       editorUi.editor.setModified(true);
