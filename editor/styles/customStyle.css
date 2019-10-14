@@ -247,5 +247,25 @@
   margin-right: 5px;
 }
 
+.btn-common{
+  font-size: 12px;
+  padding: 8px 20px;
+}
+
+.btn-submit{
+  color: white;
+  background-color: #4C7A81;
+}
+
+.custom-modal-header{
+  background-color: #52A1A7;
+  color: white;
+  padding: 0.5rem;
+}
+
+.custom-modal-header .close{
+  color: white;
+}
+
 
 

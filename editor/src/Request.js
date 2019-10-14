@@ -1,3 +1,9 @@
+var modalFormListing = [];
+$(document).ready(function(){
+  requestModalListing();
+});
+
+
 function requestAPI(method, url, data, successCallback, failureCallback) {
   $.ajax({
     type: method,
@@ -18,8 +24,8 @@ function requestSaveApp(requestData, editorUi) {
     success: function(data) {
       $('#myModal').modal('hide');
       editorUi.editor.setModified(false);
-      editorUi.editor.setFilename(`- ${requestData.appName}`);
-      $('#header-app-name').html(requestData.appName);
+      editorUi.editor.setFilename(`${requestData.appName}`);
+      $('#header-app-name').html(`- ${requestData.appName}`);
       if (data.appId) {
         editorUi.editor.setAppId(data.appId);
         swal('', 'save data success', 'success');
@@ -65,6 +71,20 @@ function requestLoadDataApp(data, editorUi) {
     },
     error: function(xhr) {
       $('#responseError').html(xhr.responseJSON.code + ' : ' + xhr.responseJSON.message);
+    }
+  });
+}
+
+
+function requestModalListing() {
+  $.ajax({
+    type: 'GET',
+    url: CONSTANT.LOAD_MODAL_LISTING_API,
+    contentType: 'application/json',
+    success: function(data) {
+      modalFormListing = data.data;
+    },
+    error: function(xhr) {
     }
   });
 }

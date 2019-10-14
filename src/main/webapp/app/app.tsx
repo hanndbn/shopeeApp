@@ -11,6 +11,7 @@ import ErrorBoundary from 'app/shared/error/error-boundary';
 import AppRoutes from 'app/routes';
 import Loader from 'app/shared/layout/loader/loader';
 import { requestCategoryData } from 'app/modules/category/category.reducer';
+import InfoModal from 'app/InfoModal/infoModal';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -37,6 +38,7 @@ export class App extends React.Component<IAppProps> {
               </ErrorBoundary>
             </div>
           </div>
+          <InfoModal/>
         </div>
       </Router>
     );

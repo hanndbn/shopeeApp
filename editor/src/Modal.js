@@ -2,7 +2,7 @@ var saveAppModal = function() {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header custom-modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Save App</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -22,8 +22,8 @@ var saveAppModal = function() {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" disabled id="saveApp">Save changes</button>
+          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-submit" disabled id="saveApp">Save changes</button>
         </div>
       </div>
     </div>`
@@ -34,7 +34,7 @@ var loadAppModal = function() {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header custom-modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Load App</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -54,8 +54,8 @@ var loadAppModal = function() {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" disabled id="saveApp">Load</button>
+          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-submit" disabled id="saveApp">Load</button>
         </div>
       </div>
     </div>`
@@ -90,8 +90,8 @@ var publishAppModal = function() {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="publishApp">Publish</button>
+          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-submit" id="publishApp">Publish</button>
         </div>
       </div>
     </div>`

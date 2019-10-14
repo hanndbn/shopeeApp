@@ -12,6 +12,7 @@ import * as homeAction from 'app/modules/home/home.reducer';
 import cn from 'classnames';
 import _ from 'lodash';
 import Slider from 'rc-slider';
+import * as infoModaAction from 'app/InfoModal/infoModal.reducer';
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -19,6 +20,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
   setActiveSlideId: Function;
   setWindowSize: Function;
   setScrollPosition: Function;
+  displayModalUrl: Function;
   location: any;
   match: any;
 }
@@ -72,7 +74,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   parse2html(data, activeSlideId) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
+    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[ 0 ];
     return (
       <div className={cn('slide-container')} id="slide-container" ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
         <div className="d-flex justify-content-center h-100 w-100">
@@ -83,12 +85,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0) {
-    const slideStyle = homeAction.getSlideStyle(slide['style']);
+    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide['parent'];
+    const isRoot = !slide[ 'parent' ];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -102,8 +104,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style['width'] ? style['width'] : 0;
-      const slideHeight = style['height'] ? style['height'] : 0;
+      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
+      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -165,7 +167,15 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     })}
                  style={style}
                  key={idx}
-                 onClick={() => !isRoot && relation ? this.props.setActiveSlideId(nextSlideId) : ''}
+                 onClick={() => {
+                   if (!isRoot) {
+                     if (slideStyle[ 'modalPopup' ] === '1' && slideStyle[ 'modalSiteUrl' ]) {
+                       this.props.displayModalUrl(slideStyle[ 'modalSiteUrl' ]);
+                     } else if (relation) {
+                       this.props.setActiveSlideId(nextSlideId);
+                     }
+                   }
+                 }}
     >
       {
         isRoot && isScrollSlide &&
@@ -188,7 +198,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       {
         isRoot && isScrollSlide && this.props.scrollPosition <= 90 &&
         <div className="toTopBtn" onClick={() => this.toTopHandle()}>
-          <span className="fa fa-chevron-up"/>
+          <span className="topBtnContent">SWIPE <span className="fa fa-chevron-up"/></span>
         </div>
       }
       <div className="slide-child"
@@ -280,6 +290,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   setScrollPosition: scrollPosition => {
     dispatch(homeAction.setScrollPosition(scrollPosition));
+  },
+  displayModalUrl: url => {
+    dispatch(infoModaAction.displayModalUrl(url));
   }
 });
 

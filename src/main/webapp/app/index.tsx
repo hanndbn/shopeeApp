@@ -15,7 +15,7 @@ import { loadIcons } from './config/icon-loader';
 
 const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
 
-const store = initStore();
+export const store = initStore();
 registerLocale(store);
 
 const actions = bindActionCreators({ clearAuthentication }, store.dispatch);

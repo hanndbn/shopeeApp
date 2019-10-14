@@ -20,6 +20,7 @@ import category, { CategoryState } from 'app/modules/category/category.reducer';
 import contactUs, { ContactUsState } from 'app/modules/contactUs/contactUs.reducer';
 import about, { AboutState } from 'app/modules/about/about.reducer';
 import home, { HomeState } from 'app/modules/home/home.reducer';
+import infoModal, { InfoModalState } from 'app/InfoModal/infoModal.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -42,6 +43,7 @@ export interface IRootState {
   readonly common: CommonState;
   readonly about: AboutState;
   readonly home: HomeState;
+  readonly infoModal: InfoModalState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -65,6 +67,7 @@ const rootReducer = combineReducers<IRootState>({
   common,
   about,
   home,
+  infoModal,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

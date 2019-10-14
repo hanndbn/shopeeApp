@@ -20,7 +20,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     main: './src/main/webapp/app/index'
   },
   output: {
-    path: 'D:\\project\\silverbullet\\public',
+    path: 'E:\\project\\New folder\\silverbullet\\public',
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[name].[hash].chunk.js'
   },
