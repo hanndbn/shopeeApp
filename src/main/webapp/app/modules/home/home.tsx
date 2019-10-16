@@ -50,7 +50,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   updateWindowDimensions() {
-    this.props.setWindowSize({ width: window.innerWidth, height: window.innerHeight - 10 });
+    this.props.setWindowSize({ width: window.innerWidth, height: window.innerHeight - 4 });
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
@@ -120,7 +120,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       if (slideHeight <= needHeightEditor) {
         style = {
           ...style,
-          height: 'calc(100% - 10px)'
+          height: 'calc(100% - 4px)'
         };
       } else {
         isScrollSlide = true;
