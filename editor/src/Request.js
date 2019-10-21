@@ -76,13 +76,16 @@ function requestLoadDataApp(data, editorUi) {
 }
 
 
-function requestModalListing() {
+function requestModalListing(callback) {
   $.ajax({
     type: 'GET',
     url: CONSTANT.LOAD_MODAL_LISTING_API,
     contentType: 'application/json',
     success: function(data) {
       modalFormListing = data.data;
+      if (callback) {
+        callback(modalFormListing);
+      }
     },
     error: function(xhr) {
     }

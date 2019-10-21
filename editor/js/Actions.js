@@ -1,7 +1,6 @@
 /**
  * Copyright (c) 2006-2012, JGraph Ltd
  */
-
 /**
  * Constructs the actions object for the given UI.
  */
@@ -26,13 +25,7 @@ Actions.prototype.init = function() {
   this.addAction('new...', function() {
     graph.openLink(ui.getUrl());
   });
-  this.addAction('openFromFile...', function() {
-    window.openNew = true;
-    window.openKey = 'open';
-
-    ui.openFile();
-  });
-  this.addAction('openFromFireBase...', function() {
+  this.addAction('open...', function() {
     window.openNew = true;
     window.openKey = 'open';
 
@@ -63,61 +56,19 @@ Actions.prototype.init = function() {
     });
   }).isEnabled = isGraphEnabled;
   this.addAction('save', function() {
-    console.log(editor.appId);
-    if (!editor.appId) {
-      $('#myModal').html(saveAppModal());
-      $('#appName').val(editor.getOrCreateFilename());
-      $('#saveApp').click(function() {
-        let appName = $('#appName').val();
-        if (appName === '') {
-          $('#responseError').html('app name must not empty');
-        } else {
-          ui.save(appName);
-        }
-      });
-      $('#appName').keyup(function(e) {
-        if (e.target.value === '') {
-          $('#responseError').html('app name must not empty');
-          $('#saveApp').prop('disabled', true);
-        } else {
-          $('#responseError').empty();
-          $('#saveApp').prop('disabled', false);
-        }
-      });
-      $('#myModal').modal('show');
-    } else {
-      ui.save(editor.getFilename());
-    }
+    ui.saveFile(false);
   }, null, null, Editor.ctrlKey + '+S').isEnabled = isGraphEnabled;
-  this.addAction('load...', function() {
-    $('#myModal').html(loadAppModal());
-    $('#saveApp').click(function() {
-      let appName = $('#appName').val();
-      if (appName === '') {
-        $('#responseError').html('app name must not empty');
-      } else {
-        ui.loadData(appName);
-      }
-    });
-    $('#appName').keyup(function(e) {
-      if (e.target.value === '') {
-        $('#responseError').html('app name must not empty');
-        $('#saveApp').prop('disabled', true);
-      } else {
-        $('#responseError').empty();
-        $('#saveApp').prop('disabled', false);
-      }
-    });
-    $('#myModal').modal('show');
-  }, null, null, Editor.ctrlKey + '+L').isEnabled = isGraphEnabled;
+  this.addAction('saveAs...', function() {
+    ui.saveFile(true);
+  }, null, null, Editor.ctrlKey + '+Shift+S').isEnabled = isGraphEnabled;
   this.addAction('export...', function() {
-    ui.showDialog(new ExportDialog(ui).container, 300, 230, true, true);
+    ui.showDialog(new ExportDialog(ui).container, 300, 296, true, true);
   });
   this.addAction('editDiagram...', function() {
     var dlg = new EditDiagramDialog(ui);
     ui.showDialog(dlg.container, 620, 420, true, false);
     dlg.init();
-  }, null, 'edit-diagram', Editor.ctrlKey + '+Shift+D');
+  });
   this.addAction('pageSetup...', function() {
     ui.showDialog(new PageSetupDialog(ui).container, 320, 220, true, true);
   }).isEnabled = isGraphEnabled;
@@ -610,7 +561,25 @@ Actions.prototype.init = function() {
     graph.zoomOut();
   }, null, null, Editor.ctrlKey + ' - (Numpad) / Alt+Mousewheel');
   this.addAction('fitWindow', function() {
-    graph.fit();
+    var bounds = (graph.isSelectionEmpty()) ? graph.getGraphBounds() : graph.getBoundingBox(graph.getSelectionCells());
+    var t = graph.view.translate;
+    var s = graph.view.scale;
+    bounds.width /= s;
+    bounds.height /= s;
+    bounds.x = bounds.x / s - t.x;
+    bounds.y = bounds.y / s - t.y;
+
+    var cw = graph.container.clientWidth - 10;
+    var ch = graph.container.clientHeight - 10;
+    var scale = Math.floor(20 * Math.min(cw / bounds.width, ch / bounds.height)) / 20;
+    graph.zoomTo(scale);
+
+    if (mxUtils.hasScrollbars(graph.container)) {
+      graph.container.scrollTop = (bounds.y + t.y) * scale -
+        Math.max((ch - bounds.height * scale) / 2 + 5, 0);
+      graph.container.scrollLeft = (bounds.x + t.x) * scale -
+        Math.max((cw - bounds.width * scale) / 2 + 5, 0);
+    }
   }, null, null, Editor.ctrlKey + '+Shift+H');
   this.addAction('fitPage', mxUtils.bind(this, function() {
     if (!graph.pageVisible) {
@@ -804,16 +773,6 @@ Actions.prototype.init = function() {
       showingAbout = true;
     }
   }, null, null, 'F1'));
-
-  // this.put('test', new Action('test', function() {
-  //   $('#myModal').html(publishAppModal());
-  //   $('#myModal').modal('show');
-  //   $('#appName').val(SERVER_URL + ui.editor.filename);
-  //   $('#app-link').attr('href', SERVER_URL + ui.editor.filename);
-  //   $('#publishApp').click(function() {
-  //     $('#responseError').html('function not working');
-  //   });
-  // }, null, null, 'F12'));
 
   // Font style actions
   var toggleFontStyle = mxUtils.bind(this, function(key, style, fn, shortcut) {

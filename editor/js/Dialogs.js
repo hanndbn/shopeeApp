@@ -184,12 +184,11 @@ var ColorDialog = function(editorUi, color, apply, cancelFn) {
 
     // Blocks any non-alphabetic chars in colors
     if (/(^#?[a-zA-Z0-9]*$)/.test(color)) {
-      ColorDialog.addRecentColor(color, 12);
-
       if (color != 'none' && color.charAt(0) != '#') {
         color = '#' + color;
       }
 
+      ColorDialog.addRecentColor((color != 'none') ? color.substring(1) : color, 12);
       applyFunction(color);
       editorUi.hideDialog();
     }
@@ -328,15 +327,6 @@ var AboutDialog = function(editorUi) {
   this.container = div;
 };
 
-var InfoDialog = function(editorUi) {
-  var div = document.createElement('div');
-  div.innerHTML =
-    `<div onclick="alert(1)">
-      123
-      </div>`;
-  this.container = div;
-};
-
 /**
  * Constructs a new filename dialog.
  */
@@ -437,6 +427,7 @@ var FilenameDialog = function(editorUi, filename, buttonText, fn, label, validat
   };
 
   td = document.createElement('td');
+  td.style.whiteSpace = 'nowrap';
   td.appendChild(nameInput);
   row.appendChild(td);
 
@@ -503,181 +494,6 @@ var FilenameDialog = function(editorUi, filename, buttonText, fn, label, validat
   table.appendChild(tbody);
 
   this.container = table;
-};
-
-/**
- * Constructs a new filename dialog.
- */
-var LoadDataDialog = function(editorUi, filename, buttonText, fn, label, validateFn, content, helpLink, closeOnBtn, cancelFn, hints, w) {
-  closeOnBtn = (closeOnBtn != null) ? closeOnBtn : true;
-  var row, td;
-
-  var table = document.createElement('table');
-  var tbody = document.createElement('tbody');
-  table.style.marginTop = '8px';
-
-  row = document.createElement('tr');
-
-  td = document.createElement('td');
-  td.style.whiteSpace = 'nowrap';
-  td.style.fontSize = '10pt';
-  td.style.width = '120px';
-  mxUtils.write(td, (label || mxResources.get('loadAppName')) + ':');
-
-  row.appendChild(td);
-
-  var nameInput = document.createElement('input');
-  nameInput.setAttribute('value', filename || '');
-  nameInput.style.marginLeft = '4px';
-  nameInput.style.width = (w != null) ? w + 'px' : '180px';
-
-  var genericBtn = mxUtils.button(buttonText, function() {
-    if (validateFn == null || validateFn(nameInput.value)) {
-      if (closeOnBtn) {
-        editorUi.hideDialog();
-      }
-
-      fn(nameInput.value);
-    }
-  });
-  genericBtn.className = 'geBtn gePrimaryBtn';
-
-  this.init = function() {
-    if (label == null && content != null) {
-      return;
-    }
-
-    nameInput.focus();
-
-    if (mxClient.IS_GC || mxClient.IS_FF || document.documentMode >= 5 || mxClient.IS_QUIRKS) {
-      nameInput.select();
-    }
-    else {
-      document.execCommand('selectAll', false, null);
-    }
-
-    // Installs drag and drop handler for links
-    if (Graph.fileSupport) {
-      // Setup the dnd listeners
-      var dlg = table.parentNode;
-
-      if (dlg != null) {
-        var graph = editorUi.editor.graph;
-        var dropElt = null;
-
-        mxEvent.addListener(dlg, 'dragleave', function(evt) {
-          if (dropElt != null) {
-            dropElt.style.backgroundColor = '';
-            dropElt = null;
-          }
-
-          evt.stopPropagation();
-          evt.preventDefault();
-        });
-
-        mxEvent.addListener(dlg, 'dragover', mxUtils.bind(this, function(evt) {
-          // IE 10 does not implement pointer-events so it can't have a drop highlight
-          if (dropElt == null && (!mxClient.IS_IE || document.documentMode > 10)) {
-            dropElt = nameInput;
-            dropElt.style.backgroundColor = '#ebf2f9';
-          }
-
-          evt.stopPropagation();
-          evt.preventDefault();
-        }));
-
-        mxEvent.addListener(dlg, 'drop', mxUtils.bind(this, function(evt) {
-          if (dropElt != null) {
-            dropElt.style.backgroundColor = '';
-            dropElt = null;
-          }
-
-          if (mxUtils.indexOf(evt.dataTransfer.types, 'text/uri-list') >= 0) {
-            nameInput.value = decodeURIComponent(evt.dataTransfer.getData('text/uri-list'));
-            genericBtn.click();
-          }
-
-          evt.stopPropagation();
-          evt.preventDefault();
-        }));
-      }
-    }
-  };
-
-  td = document.createElement('td');
-  td.appendChild(nameInput);
-  row.appendChild(td);
-
-  if (label != null || content == null) {
-    tbody.appendChild(row);
-
-    if (hints != null) {
-      td.appendChild(FilenameDialog.createTypeHint(editorUi, nameInput, hints));
-    }
-  }
-
-  if (content != null) {
-    row = document.createElement('tr');
-    td = document.createElement('td');
-    td.colSpan = 2;
-    td.appendChild(content);
-    row.appendChild(td);
-    tbody.appendChild(row);
-  }
-
-  row = document.createElement('tr');
-  td = document.createElement('td');
-  td.colSpan = 2;
-  td.style.paddingTop = '20px';
-  td.style.whiteSpace = 'nowrap';
-  td.setAttribute('align', 'right');
-
-  var cancelBtn = mxUtils.button(mxResources.get('cancel'), function() {
-    editorUi.hideDialog();
-
-    if (cancelFn != null) {
-      cancelFn();
-    }
-  });
-  cancelBtn.className = 'geBtn';
-
-  if (editorUi.editor.cancelFirst) {
-    td.appendChild(cancelBtn);
-  }
-
-  if (helpLink != null) {
-    var helpBtn = mxUtils.button(mxResources.get('help'), function() {
-      editorUi.editor.graph.openLink(helpLink);
-    });
-
-    helpBtn.className = 'geBtn';
-    td.appendChild(helpBtn);
-  }
-
-  mxEvent.addListener(nameInput, 'keypress', function(e) {
-    if (e.keyCode == 13) {
-      genericBtn.click();
-    }
-  });
-
-  td.appendChild(genericBtn);
-
-  if (!editorUi.editor.cancelFirst) {
-    td.appendChild(cancelBtn);
-  }
-
-  row.appendChild(td);
-  tbody.appendChild(row);
-  table.appendChild(tbody);
-  var layout = document.createElement('div');
-  var header = document.createElement('div');
-  header.innerText = 'Load Data from Firebase';
-  header.style.textAlign = 'center';
-  header.style.fontWeight = 'bold';
-  header.style.marginBottom = '20px';
-  layout.appendChild(header);
-  layout.appendChild(table);
-  this.container = layout;
 };
 
 /**
@@ -936,6 +752,7 @@ var EditDiagramDialog = function(editorUi) {
     // Removes all illegal control characters before parsing
     var data = Graph.zapGremlins(mxUtils.trim(textarea.value));
     var error = null;
+
     if (select.value == 'new') {
       editorUi.hideDialog();
       editorUi.editor.editAsNew(data);
@@ -1142,6 +959,89 @@ var ExportDialog = function(editorUi) {
 
   td = document.createElement('td');
   td.style.fontSize = '10pt';
+  mxUtils.write(td, mxResources.get('dpi') + ':');
+
+  row.appendChild(td);
+
+  var dpiSelect = document.createElement('select');
+  dpiSelect.style.width = '180px';
+
+  var dpi100Option = document.createElement('option');
+  dpi100Option.setAttribute('value', '100');
+  mxUtils.write(dpi100Option, '100dpi');
+  dpiSelect.appendChild(dpi100Option);
+
+  var dpi200Option = document.createElement('option');
+  dpi200Option.setAttribute('value', '200');
+  mxUtils.write(dpi200Option, '200dpi');
+  dpiSelect.appendChild(dpi200Option);
+
+  var dpi300Option = document.createElement('option');
+  dpi300Option.setAttribute('value', '300');
+  mxUtils.write(dpi300Option, '300dpi');
+  dpiSelect.appendChild(dpi300Option);
+
+  var dpi400Option = document.createElement('option');
+  dpi400Option.setAttribute('value', '400');
+  mxUtils.write(dpi400Option, '400dpi');
+  dpiSelect.appendChild(dpi400Option);
+
+  var dpiCustOption = document.createElement('option');
+  dpiCustOption.setAttribute('value', 'custom');
+  mxUtils.write(dpiCustOption, mxResources.get('custom'));
+  dpiSelect.appendChild(dpiCustOption);
+
+  var customDpi = document.createElement('input');
+  customDpi.style.width = '180px';
+  customDpi.style.display = 'none';
+  customDpi.setAttribute('value', '100');
+  customDpi.setAttribute('type', 'number');
+  customDpi.setAttribute('min', '50');
+  customDpi.setAttribute('step', '50');
+
+  var zoomUserChanged = false;
+
+  mxEvent.addListener(dpiSelect, 'change', function() {
+    if (this.value == 'custom') {
+      this.style.display = 'none';
+      customDpi.style.display = '';
+      customDpi.focus();
+    }
+    else {
+      customDpi.value = this.value;
+
+      if (!zoomUserChanged) {
+        zoomInput.value = this.value;
+      }
+    }
+  });
+
+  mxEvent.addListener(customDpi, 'change', function() {
+    var dpi = parseInt(customDpi.value);
+
+    if (isNaN(dpi) || dpi <= 0) {
+      customDpi.style.backgroundColor = 'red';
+    }
+    else {
+      customDpi.style.backgroundColor = '';
+
+      if (!zoomUserChanged) {
+        zoomInput.value = dpi;
+      }
+    }
+  });
+
+  td = document.createElement('td');
+  td.appendChild(dpiSelect);
+  td.appendChild(customDpi);
+  row.appendChild(td);
+
+  tbody.appendChild(row);
+
+  row = document.createElement('tr');
+
+  td = document.createElement('td');
+  td.style.fontSize = '10pt';
   mxUtils.write(td, mxResources.get('background') + ':');
 
   row.appendChild(td);
@@ -1209,6 +1109,15 @@ var ExportDialog = function(editorUi) {
     else {
       transparentCheckbox.setAttribute('disabled', 'disabled');
     }
+
+    if (imageFormatSelect.value === 'png') {
+      dpiSelect.removeAttribute('disabled');
+      customDpi.removeAttribute('disabled');
+    }
+    else {
+      dpiSelect.setAttribute('disabled', 'disabled');
+      customDpi.setAttribute('disabled', 'disabled');
+    }
   };
 
   mxEvent.addListener(imageFormatSelect, 'change', formatChanged);
@@ -1231,6 +1140,7 @@ var ExportDialog = function(editorUi) {
   };
 
   mxEvent.addListener(zoomInput, 'change', function() {
+    zoomUserChanged = true;
     var s = Math.max(0, parseFloat(zoomInput.value) || 100) / 100;
     zoomInput.value = parseFloat((s * 100).toFixed(2));
 
@@ -1295,6 +1205,7 @@ var ExportDialog = function(editorUi) {
       var s = Math.max(0, parseFloat(zoomInput.value) || 100) / 100;
       var b = Math.max(0, parseInt(borderInput.value));
       var bg = graph.background;
+      var dpi = Math.max(1, parseInt(customDpi.value));
 
       if ((format == 'svg' || format == 'png') && transparentCheckbox.checked) {
         bg = null;
@@ -1304,7 +1215,7 @@ var ExportDialog = function(editorUi) {
       }
 
       ExportDialog.lastBorderValue = b;
-      ExportDialog.exportFile(editorUi, name, format, bg, s, b);
+      ExportDialog.exportFile(editorUi, name, format, bg, s, b, dpi);
     }
   }));
   saveBtn.className = 'geBtn gePrimaryBtn';
@@ -1350,7 +1261,7 @@ ExportDialog.showXmlOption = true;
  * parameter and value to be used in the request in the form
  * key=value, where value should be URL encoded.
  */
-ExportDialog.exportFile = function(editorUi, name, format, bg, s, b) {
+ExportDialog.exportFile = function(editorUi, name, format, bg, s, b, dpi) {
   var graph = editorUi.editor.graph;
 
   if (format == 'xml') {
@@ -1387,7 +1298,8 @@ ExportDialog.exportFile = function(editorUi, name, format, bg, s, b) {
       var req = new mxXmlRequest(EXPORT_URL, 'format=' + format +
         '&filename=' + encodeURIComponent(name) +
         '&bg=' + ((bg != null) ? bg : 'none') +
-        '&w=' + w + '&h=' + h + '&' + param);
+        '&w=' + w + '&h=' + h + '&' + param +
+        '&dpi=' + dpi);
       req.simulate(document, '_blank');
     }
     else {
@@ -2002,8 +1914,6 @@ var OutlineWindow = function(editorUi, x, y, w, h) {
         else {
           zoomOutAction.funct();
         }
-
-        mxEvent.consume(evt);
       }
     });
   }

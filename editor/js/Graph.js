@@ -12,6 +12,27 @@ if (typeof html4 !== 'undefined') {
   //html4.ATTRIBS["video::autobuffer"] = 0;
 }
 
+// Workaround for handling named HTML entities in mxUtils.parseXml
+// LATER: How to configure DOMParser to just ignore all entities?
+(function() {
+  var entities = [
+    ['nbsp', '160'],
+    ['shy', '173']
+  ];
+
+  var parseXml = mxUtils.parseXml;
+
+  mxUtils.parseXml = function(text) {
+    for (var i = 0; i < entities.length; i++) {
+      text = text.replace(new RegExp(
+        '&' + entities[i][0] + ';', 'g'),
+        '&#' + entities[i][1] + ';');
+    }
+
+    return parseXml(text);
+  };
+})();
+
 // Shim for missing toISOString in older versions of IE
 // See https://stackoverflow.com/questions/12907862
 if (!Date.prototype.toISOString) {
@@ -47,6 +68,18 @@ if (!Date.now) {
 }
 
 // Changes default colors
+/**
+ * Measurements Units
+ */
+mxConstants.POINTS = 1;
+mxConstants.MILLIMETERS = 2;
+mxConstants.INCHES = 3;
+/**
+ * This ratio is with page scale 1
+ */
+mxConstants.PIXELS_PER_MM = 3.937;
+mxConstants.PIXELS_PER_INCH = 100;
+
 mxConstants.SHADOW_OPACITY = 0.25;
 mxConstants.SHADOWCOLOR = '#000000';
 mxConstants.VML_SHADOWCOLOR = '#d0d0d0';
@@ -81,7 +114,19 @@ mxGraphView.prototype.gridSteps = 4;
 mxGraphView.prototype.minGridSize = 4;
 
 // UrlParams is null in embed mode
-mxGraphView.prototype.gridColor = '#e0e0e0';
+mxGraphView.prototype.defaultGridColor = '#e0e0e0';
+mxGraphView.prototype.gridColor = mxGraphView.prototype.defaultGridColor;
+
+//Units
+mxGraphView.prototype.unit = mxConstants.POINTS;
+
+mxGraphView.prototype.setUnit = function(unit) {
+  if (this.unit != unit) {
+    this.unit = unit;
+
+    this.fireEvent(new mxEventObject('unitChanged', 'unit', unit));
+  }
+};
 
 // Alternative text for unsupported foreignObjects
 mxSvgCanvas2D.prototype.foAltText = '[Not supported by viewer]';
@@ -100,12 +145,13 @@ mxShape.prototype.getConstraints = function(style, w, h) {
 /**
  * Defines graph class.
  */
-Graph = function(container, model, renderHint, stylesheet, themes) {
+Graph = function(container, model, renderHint, stylesheet, themes, standalone) {
   mxGraph.call(this, container, model, renderHint, stylesheet);
 
   this.themes = themes || this.defaultThemes;
   this.currentEdgeStyle = mxUtils.clone(this.defaultEdgeStyle);
   this.currentVertexStyle = mxUtils.clone(this.defaultVertexStyle);
+  this.standalone = (standalone != null) ? standalone : false;
 
   // Sets the base domain URL and domain path URL for relative links.
   var b = this.baseUrl;
@@ -901,8 +947,8 @@ Graph.compress = function(data, deflate) {
     return data;
   }
   else {
-    var tmp = Graph.bytesToString((deflate) ? pako.deflate(encodeURIComponent(data)) :
-      pako.deflateRaw(encodeURIComponent(data)));
+    var tmp = (deflate) ? pako.deflate(encodeURIComponent(data), { to: 'string' }) :
+      pako.deflateRaw(encodeURIComponent(data), { to: 'string' });
 
     return (window.btoa) ? btoa(tmp) : Base64.encode(tmp, true);
   }
@@ -918,9 +964,10 @@ Graph.decompress = function(data, inflate) {
   else {
     var tmp = (window.atob) ? atob(data) : Base64.decode(data, true);
 
-    return Graph.zapGremlins(decodeURIComponent(
-      Graph.bytesToString((inflate) ? pako.inflate(tmp) :
-        pako.inflateRaw(tmp))));
+    var inflated = (inflate) ? pako.inflate(tmp, { to: 'string' }) :
+      pako.inflateRaw(tmp, { to: 'string' });
+
+    return Graph.zapGremlins(decodeURIComponent(inflated));
   }
 };
 
@@ -1055,6 +1102,13 @@ Graph.prototype.editAfterInsert = false;
  * Defines the built-in properties to be ignored in tooltips.
  */
 Graph.prototype.builtInProperties = ['label', 'tooltip', 'placeholders', 'placeholder'];
+
+/**
+ * Defines if the graph is part of an EditorUi. If this is false the graph can
+ * be used in an EditorUi instance but will not have a UI added, functions
+ * overridden or event handlers added.
+ */
+Graph.prototype.standalone = false;
 
 /**
  * Installs child layout styles.
@@ -1389,6 +1443,13 @@ Graph.prototype.isLightboxView = function() {
 };
 
 /**
+ * Sets the XML node for the current diagram.
+ */
+Graph.prototype.isViewer = function() {
+  return false;
+};
+
+/**
  * Installs automatic layout via styles
  */
 Graph.prototype.labelLinkClicked = function(state, elt, evt) {
@@ -1568,6 +1629,12 @@ Graph.prototype.initLayoutManager = function() {
         flowLayout.parallelEdgeSpacing = mxUtils.getValue(style, 'parallelEdgeSpacing', mxHierarchicalLayout.prototype.parallelEdgeSpacing);
 
         return flowLayout;
+      }
+      else if (style['childLayout'] == 'circleLayout') {
+        return new mxCircleLayout(this.graph);
+      }
+      else if (style['childLayout'] == 'organicLayout') {
+        return new mxFastOrganicLayout(this.graph);
       }
     }
 
@@ -3414,7 +3481,8 @@ HoverIcons.prototype.getState = function(state) {
  *
  */
 HoverIcons.prototype.update = function(state, x, y) {
-  if (!this.graph.connectionArrowsEnabled) {
+  if (!this.graph.connectionArrowsEnabled || (state != null &&
+    mxUtils.getValue(state.style, 'allowArrows', '1') == '0')) {
     this.reset();
   }
   else {
@@ -3492,7 +3560,6 @@ HoverIcons.prototype.setCurrentState = function(state) {
 };
 
 (function() {
-
   /**
    * Reset the list of processed edges.
    */
@@ -4340,6 +4407,46 @@ if (typeof mxVertexHandler != 'undefined') {
     };
 
     /**
+     * Creates lookup from object IDs to cell IDs.
+     */
+    Graph.prototype.createCellLookup = function(cells, lookup) {
+      lookup = (lookup != null) ? lookup : new Object();
+
+      for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        lookup[mxObjectIdentity.get(cell)] = cell.getId();
+        var childCount = this.model.getChildCount(cell);
+
+        for (var j = 0; j < childCount; j++) {
+          this.createCellLookup([this.model.getChildAt(cell, j)], lookup);
+        }
+      }
+
+      return lookup;
+    };
+
+    /**
+     * Creates lookup from original to cloned cell IDs where mapping is
+     * the mapping used in cloneCells and lookup is a mapping from
+     * object IDs to cell IDs.
+     */
+    Graph.prototype.createCellMapping = function(mapping, lookup, cellMapping) {
+      cellMapping = (cellMapping != null) ? cellMapping : new Object();
+
+      for (var objectId in mapping) {
+        var cellId = lookup[objectId];
+
+        if (cellMapping[cellId] == null) {
+          // Uses empty string if clone ID was null which means
+          // the cell was cloned but not inserted into the model.
+          cellMapping[cellId] = mapping[objectId].getId() || '';
+        }
+      }
+
+      return cellMapping;
+    };
+
+    /**
      *
      */
     Graph.prototype.importGraphModel = function(node, dx, dy, crop) {
@@ -4352,10 +4459,15 @@ if (typeof mxVertexHandler != 'undefined') {
       var cells = [];
 
       // Clones cells to remove invalid edges
-      var layers = tempModel.getChildren(this.cloneCell(
-        tempModel.root, this.isCloneInvalidEdges()));
+      var cloneMap = new Object();
+      var cellMapping = new Object();
+      var layers = tempModel.getChildren(this.cloneCell(tempModel.root,
+        this.isCloneInvalidEdges(), cloneMap));
 
       if (layers != null) {
+        // Creates lookup from object IDs to cell IDs
+        var lookup = this.createCellLookup([tempModel.root]);
+
         // Uses copy as layers are removed from array inside loop
         layers = layers.slice();
 
@@ -4365,6 +4477,10 @@ if (typeof mxVertexHandler != 'undefined') {
           if (layers.length == 1 && !this.isCellLocked(this.getDefaultParent())) {
             cells = this.moveCells(tempModel.getChildren(layers[0]),
               dx, dy, false, this.getDefaultParent());
+
+            // Imported default default parent maps to local default parent
+            cellMapping[tempModel.getChildAt(tempModel.root, 0).getId()] =
+              this.getDefaultParent().getId();
           }
           else {
             for (var i = 0; i < layers.length; i++) {
@@ -4372,6 +4488,10 @@ if (typeof mxVertexHandler != 'undefined') {
                 [layers[i]], dx, dy, false, this.model.getRoot())[0]));
             }
           }
+
+          // Adds mapping for all cloned entries from imported to local cell ID
+          this.createCellMapping(cloneMap, lookup, cellMapping);
+          this.updateCustomLinks(cellMapping, cells);
 
           if (crop) {
             if (this.isGridEnabled()) {
@@ -4392,6 +4512,88 @@ if (typeof mxVertexHandler != 'undefined') {
       }
 
       return cells;
+    };
+
+    /**
+     * Translates this point by the given vector.
+     *
+     * @param {number} dx X-coordinate of the translation.
+     * @param {number} dy Y-coordinate of the translation.
+     */
+    Graph.prototype.encodeCells = function(cells) {
+      var cloneMap = new Object();
+      var clones = this.cloneCells(cells, null, cloneMap);
+
+      // Creates a dictionary for fast lookups
+      var dict = new mxDictionary();
+
+      for (var i = 0; i < cells.length; i++) {
+        dict.put(cells[i], true);
+      }
+
+      // Checks for orphaned relative children and makes absolute
+      for (var i = 0; i < clones.length; i++) {
+        var state = this.view.getState(cells[i]);
+
+        if (state != null) {
+          var geo = this.getCellGeometry(clones[i]);
+
+          if (geo != null && geo.relative && !this.model.isEdge(cells[i]) &&
+            !dict.get(this.model.getParent(cells[i]))) {
+            geo.relative = false;
+            geo.x = state.x / state.view.scale - state.view.translate.x;
+            geo.y = state.y / state.view.scale - state.view.translate.y;
+          }
+        }
+      }
+
+      var codec = new mxCodec();
+      var model = new mxGraphModel();
+      var parent = model.getChildAt(model.getRoot(), 0);
+
+      for (var i = 0; i < clones.length; i++) {
+        model.add(parent, clones[i]);
+      }
+
+      this.updateCustomLinks(this.createCellMapping(cloneMap,
+        this.createCellLookup(cells)), clones);
+
+      return codec.encode(model);
+    };
+
+    /**
+     * Overrides cloning cells in moveCells.
+     */
+    var graphMoveCells = Graph.prototype.moveCells;
+
+    Graph.prototype.moveCells = function(cells, dx, dy, clone, target, evt, mapping) {
+      mapping = (mapping != null) ? mapping : new Object();
+      var result = graphMoveCells.apply(this, arguments);
+
+      if (clone) {
+        this.updateCustomLinks(this.createCellMapping(mapping,
+          this.createCellLookup(cells)), result);
+      }
+
+      return result;
+    };
+
+    /**
+     * Updates cells IDs for custom links in the given cells.
+     */
+    Graph.prototype.updateCustomLinks = function(mapping, cells) {
+      for (var i = 0; i < cells.length; i++) {
+        if (cells[i] != null) {
+          this.updateCustomLinksForCell(mapping, cells[i]);
+        }
+      }
+    };
+
+    /**
+     * Updates cell IDs in custom links on the given cell and its label.
+     */
+    Graph.prototype.updateCustomLinksForCell = function(mapping, cell) {
+      // Hook for subclassers
     };
 
     /**
@@ -5511,49 +5713,6 @@ if (typeof mxVertexHandler != 'undefined') {
      * @param {number} dx X-coordinate of the translation.
      * @param {number} dy Y-coordinate of the translation.
      */
-    Graph.prototype.encodeCells = function(cells) {
-      var clones = this.cloneCells(cells);
-
-      // Creates a dictionary for fast lookups
-      var dict = new mxDictionary();
-
-      for (var i = 0; i < cells.length; i++) {
-        dict.put(cells[i], true);
-      }
-
-      // Checks for orphaned relative children and makes absolute
-      for (var i = 0; i < clones.length; i++) {
-        var state = this.view.getState(cells[i]);
-
-        if (state != null) {
-          var geo = this.getCellGeometry(clones[i]);
-
-          if (geo != null && geo.relative && !this.model.isEdge(cells[i]) &&
-            !dict.get(this.model.getParent(cells[i]))) {
-            geo.relative = false;
-            geo.x = state.x / state.view.scale - state.view.translate.x;
-            geo.y = state.y / state.view.scale - state.view.translate.y;
-          }
-        }
-      }
-
-      var codec = new mxCodec();
-      var model = new mxGraphModel();
-      var parent = model.getChildAt(model.getRoot(), 0);
-
-      for (var i = 0; i < cells.length; i++) {
-        model.add(parent, clones[i]);
-      }
-
-      return codec.encode(model);
-    };
-
-    /**
-     * Translates this point by the given vector.
-     *
-     * @param {number} dx X-coordinate of the translation.
-     * @param {number} dy Y-coordinate of the translation.
-     */
     Graph.prototype.createSvgImageExport = function() {
       var exp = new mxImageExport();
 
@@ -6659,6 +6818,25 @@ if (typeof mxVertexHandler != 'undefined') {
     };
 
     /**
+     * Format pixels in the given unit
+     */
+    function formatHintText(pixels, unit) {
+      switch (unit) {
+        case mxConstants.POINTS:
+          return pixels;
+        case mxConstants.MILLIMETERS:
+          return (pixels / mxConstants.PIXELS_PER_MM).toFixed(1);
+        case mxConstants.INCHES:
+          return (pixels / mxConstants.PIXELS_PER_INCH).toFixed(2);
+      }
+    };
+
+
+    mxGraphView.prototype.formatUnitText = function(pixels) {
+      return pixels ? formatHintText(pixels, this.unit) : pixels;
+    };
+
+    /**
      * Updates the hint for the current operation.
      */
     mxGraphHandler.prototype.updateHint = function(me) {
@@ -6672,8 +6850,9 @@ if (typeof mxVertexHandler != 'undefined') {
         var s = this.graph.view.scale;
         var x = this.roundLength((this.bounds.x + this.currentDx) / s - t.x);
         var y = this.roundLength((this.bounds.y + this.currentDy) / s - t.y);
+        var unit = this.graph.view.unit;
 
-        this.hint.innerHTML = x + ', ' + y;
+        this.hint.innerHTML = formatHintText(x, unit) + ', ' + formatHintText(y, unit);
 
         this.hint.style.left = (this.shape.bounds.x + Math.round((this.shape.bounds.width - this.hint.clientWidth) / 2)) + 'px';
         this.hint.style.top = (this.shape.bounds.y + this.shape.bounds.height + 12) + 'px';
@@ -6746,7 +6925,9 @@ if (typeof mxVertexHandler != 'undefined') {
         }
         else {
           var s = this.state.view.scale;
-          this.hint.innerHTML = this.roundLength(this.bounds.width / s) + ' x ' + this.roundLength(this.bounds.height / s);
+          var unit = this.state.view.unit;
+          this.hint.innerHTML = formatHintText(this.roundLength(this.bounds.width / s), unit) + ' x ' +
+            formatHintText(this.roundLength(this.bounds.height / s), unit);
         }
 
         var rot = (this.currentAlpha != null) ? this.currentAlpha : this.state.style[mxConstants.STYLE_ROTATION] || '0';
@@ -6777,6 +6958,33 @@ if (typeof mxVertexHandler != 'undefined') {
     };
 
     /**
+     * Hides link hint while moving cells.
+     */
+    var edgeHandlerMouseMove = mxEdgeHandler.prototype.mouseMove;
+
+    mxEdgeHandler.prototype.mouseMove = function(sender, me) {
+      edgeHandlerMouseMove.apply(this, arguments);
+
+      if (this.graph.graphHandler != null && this.graph.graphHandler.first != null &&
+        this.linkHint != null && this.linkHint.style.display != 'none') {
+        this.linkHint.style.display = 'none';
+      }
+    };
+
+    /**
+     * Hides link hint while moving cells.
+     */
+    var edgeHandlerMouseUp = mxEdgeHandler.prototype.mouseUp;
+
+    mxEdgeHandler.prototype.mouseUp = function(sender, me) {
+      edgeHandlerMouseUp.apply(this, arguments);
+
+      if (this.linkHint != null && this.linkHint.style.display == 'none') {
+        this.linkHint.style.display = '';
+      }
+    };
+
+    /**
      * Updates the hint for the current operation.
      */
     mxEdgeHandler.prototype.updateHint = function(me, point) {
@@ -6789,8 +6997,9 @@ if (typeof mxVertexHandler != 'undefined') {
       var s = this.graph.view.scale;
       var x = this.roundLength(point.x / s - t.x);
       var y = this.roundLength(point.y / s - t.y);
+      var unit = this.graph.view.unit;
 
-      this.hint.innerHTML = x + ', ' + y;
+      this.hint.innerHTML = formatHintText(x, unit) + ', ' + formatHintText(y, unit);
       this.hint.style.visibility = 'visible';
 
       if (this.isSource || this.isTarget) {
@@ -6873,6 +7082,7 @@ if (typeof mxVertexHandler != 'undefined') {
     mxVertexHandler.prototype.rotationEnabled = true;
     mxVertexHandler.prototype.manageSizers = true;
     mxVertexHandler.prototype.livePreview = true;
+    mxGraphHandler.prototype.maxLivePreview = 16;
 
     // Increases default rubberband opacity (default is 20)
     mxRubberband.prototype.defaultOpacity = 30;
@@ -7210,13 +7420,30 @@ if (typeof mxVertexHandler != 'undefined') {
         if (model.isEdge(parent) && geo != null && geo.relative) {
           var state = this.graph.view.getState(cells[0]);
 
-          if (state != null && state.width < 2 && state.height < 2 && state.text != null && state.text.boundingBox != null) {
+          if (state != null && state.width < 2 && state.height < 2 && state.text != null &&
+            state.text.boundingBox != null) {
             return mxRectangle.fromRectangle(state.text.boundingBox);
           }
         }
       }
 
       return mxGraphHandlerGetBoundingBox.apply(this, arguments);
+    };
+
+    // Ignores child cells with part style as guides
+    var mxGraphHandlerGetGuideStates = mxGraphHandler.prototype.getGuideStates;
+
+    mxGraphHandler.prototype.getGuideStates = function() {
+      var states = mxGraphHandlerGetGuideStates.apply(this, arguments);
+      var result = [];
+
+      for (var i = 0; i < states.length; i++) {
+        if (mxUtils.getValue(states[i].style, 'part', '0') != '1') {
+          result.push(states[i]);
+        }
+      }
+
+      return result;
     };
 
     // Uses text bounding box for edge labels
@@ -7274,16 +7501,25 @@ if (typeof mxVertexHandler != 'undefined') {
         if (this.rotationShape != null && this.rotationShape.node != null) {
           this.rotationShape.node.style.display = 'none';
         }
+
+        if (this.linkHint != null && this.linkHint.style.display != 'none') {
+          this.linkHint.style.display = 'none';
+        }
       }
     };
 
     var vertexHandlerMouseUp = mxVertexHandler.prototype.mouseUp;
+
     mxVertexHandler.prototype.mouseUp = function(sender, me) {
       vertexHandlerMouseUp.apply(this, arguments);
 
       // Shows rotation handle only if one vertex is selected
       if (this.rotationShape != null && this.rotationShape.node != null) {
         this.rotationShape.node.style.display = (this.graph.getSelectionCount() == 1) ? '' : 'none';
+      }
+
+      if (this.linkHint != null && this.linkHint.style.display == 'none') {
+        this.linkHint.style.display = '';
       }
     };
 
@@ -7297,11 +7533,6 @@ if (typeof mxVertexHandler != 'undefined') {
       }
 
       var update = mxUtils.bind(this, function() {
-        // Shows rotation handle only if one vertex is selected
-        if (this.rotationShape != null && this.rotationShape.node != null) {
-          this.rotationShape.node.style.display = (this.graph.getSelectionCount() == 1) ? '' : 'none';
-        }
-
         if (this.specialHandle != null) {
           this.specialHandle.node.style.display = (this.graph.isEnabled() && this.graph.getSelectionCount() < this.graph.graphHandler.maxCells) ? '' : 'none';
         }
@@ -7309,18 +7540,13 @@ if (typeof mxVertexHandler != 'undefined') {
         this.redrawHandles();
       });
 
-      this.selectionHandler = mxUtils.bind(this, function(sender, evt) {
-        update();
-      });
-
-      this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.selectionHandler);
-
       this.changeHandler = mxUtils.bind(this, function(sender, evt) {
         this.updateLinkHint(this.graph.getLinkForCell(this.state.cell),
           this.graph.getLinksForState(this.state));
         update();
       });
 
+      this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.changeHandler);
       this.graph.getModel().addListener(mxEvent.CHANGE, this.changeHandler);
 
       // Repaint needed when editing stops and no change event is fired
@@ -7435,12 +7661,6 @@ if (typeof mxVertexHandler != 'undefined') {
         }
       });
 
-      this.selectionHandler = mxUtils.bind(this, function(sender, evt) {
-        update();
-      });
-
-      this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.selectionHandler);
-
       this.changeHandler = mxUtils.bind(this, function(sender, evt) {
         this.updateLinkHint(this.graph.getLinkForCell(this.state.cell),
           this.graph.getLinksForState(this.state));
@@ -7448,6 +7668,7 @@ if (typeof mxVertexHandler != 'undefined') {
         this.redrawHandles();
       });
 
+      this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.changeHandler);
       this.graph.getModel().addListener(mxEvent.CHANGE, this.changeHandler);
 
       var link = this.graph.getLinkForCell(this.state.cell);
@@ -7472,6 +7693,12 @@ if (typeof mxVertexHandler != 'undefined') {
 
     var vertexHandlerRedrawHandles = mxVertexHandler.prototype.redrawHandles;
     mxVertexHandler.prototype.redrawHandles = function() {
+      // Shows rotation handle only if one vertex is selected
+      if (this.rotationShape != null && this.rotationShape.node != null) {
+        this.rotationShape.node.style.display = (this.graph.getSelectionCount() == 1 &&
+          (this.index == null || this.index == mxEvent.ROTATION_HANDLE)) ? '' : 'none';
+      }
+
       vertexHandlerRedrawHandles.apply(this);
 
       if (this.state != null && this.linkHint != null) {
@@ -7498,17 +7725,6 @@ if (typeof mxVertexHandler != 'undefined') {
       }
     };
 
-
-    var vertexHandlerReset = mxVertexHandler.prototype.reset;
-    mxVertexHandler.prototype.reset = function() {
-      vertexHandlerReset.apply(this, arguments);
-
-      // Shows rotation handle only if one vertex is selected
-      if (this.rotationShape != null && this.rotationShape.node != null) {
-        this.rotationShape.node.style.display = (this.graph.getSelectionCount() == 1) ? '' : 'none';
-      }
-    };
-
     var vertexHandlerDestroy = mxVertexHandler.prototype.destroy;
     mxVertexHandler.prototype.destroy = function() {
       vertexHandlerDestroy.apply(this, arguments);
@@ -7518,12 +7734,8 @@ if (typeof mxVertexHandler != 'undefined') {
         this.linkHint = null;
       }
 
-      if (this.selectionHandler != null) {
-        this.graph.getSelectionModel().removeListener(this.selectionHandler);
-        this.selectionHandler = null;
-      }
-
       if (this.changeHandler != null) {
+        this.graph.getSelectionModel().removeListener(this.changeHandler);
         this.graph.getModel().removeListener(this.changeHandler);
         this.changeHandler = null;
       }
@@ -7573,13 +7785,9 @@ if (typeof mxVertexHandler != 'undefined') {
         this.linkHint = null;
       }
 
-      if (this.selectionHandler != null) {
-        this.graph.getSelectionModel().removeListener(this.selectionHandler);
-        this.selectionHandler = null;
-      }
-
       if (this.changeHandler != null) {
         this.graph.getModel().removeListener(this.changeHandler);
+        this.graph.getSelectionModel().removeListener(this.changeHandler);
         this.changeHandler = null;
       }
     };

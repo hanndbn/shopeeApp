@@ -15,7 +15,6 @@ function Sidebar(editorUi, container) {
   this.graph.cellRenderer.antiAlias = this.thumbAntiAlias;
   this.graph.container.style.visibility = 'hidden';
   this.graph.foldingEnabled = false;
-  this.counter = 0;
 
   document.body.appendChild(this.graph.container);
 
@@ -74,7 +73,25 @@ Sidebar.prototype.init = function() {
 
   this.addSearchPalette(true);
   this.addGeneralPalette(true);
-  // this.addAdvancedPalette(true);
+  // this.addMiscPalette(false);
+  // this.addAdvancedPalette(false);
+  // this.addBasicPalette(dir);
+  // this.addStencilPalette('arrows', mxResources.get('arrows'), dir + '/arrows.xml',
+  //   ';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
+  // this.addUmlPalette(false);
+  // this.addBpmnPalette(dir, false);
+  // this.addStencilPalette('flowchart', 'Flowchart', dir + '/flowchart.xml',
+  //   ';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
+  // this.addImagePalette('clipart', mxResources.get('clipart'), dir + '/clipart/', '_128x128.png',
+  //   ['Earth_globe', 'Empty_Folder', 'Full_Folder', 'Gear', 'Lock', 'Software', 'Virus', 'Email',
+  //     'Database', 'Router_Icon', 'iPad', 'iMac', 'Laptop', 'MacBook', 'Monitor_Tower', 'Printer',
+  //     'Server_Tower', 'Workstation', 'Firewall_02', 'Wireless_Router_N', 'Credit_Card',
+  //     'Piggy_Bank', 'Graph', 'Safe', 'Shopping_Cart', 'Suit1', 'Suit2', 'Suit3', 'Pilot1',
+  //     'Worker1', 'Soldier1', 'Doctor1', 'Tech1', 'Security1', 'Telesales1'], null,
+  //   {
+  //     'Wireless_Router_N': 'wireless router switch wap wifi access point wlan',
+  //     'Router_Icon': 'router switch'
+  //   });
 };
 
 /**
@@ -276,6 +293,7 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel) {
         }
 
         this.tooltip.style.width = width + 'px';
+        var w2 = width;
 
         // Adds title for entry
         if (this.tooltipTitles && title != null && title.length > 0) {
@@ -284,8 +302,6 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel) {
             this.tooltipTitle.style.borderTop = '1px solid gray';
             this.tooltipTitle.style.textAlign = 'center';
             this.tooltipTitle.style.width = '100%';
-
-            // Oversize titles are cut-off currently. Should make tooltip wider later.
             this.tooltipTitle.style.overflow = 'hidden';
             this.tooltipTitle.style.position = 'absolute';
             this.tooltipTitle.style.paddingTop = '6px';
@@ -300,6 +316,8 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel) {
           this.tooltipTitle.style.display = '';
           mxUtils.write(this.tooltipTitle, title);
 
+          // Allows for wider labels
+          w2 = Math.min(this.maxTooltipWidth, Math.max(width, this.tooltipTitle.scrollWidth + 4));
           var ddy = this.tooltipTitle.offsetHeight + 10;
           height += ddy;
 
@@ -315,8 +333,13 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel) {
           this.tooltipTitle.style.display = 'none';
         }
 
+        // Updates width if label is wider
+        if (w2 > width) {
+          this.tooltip.style.width = w2 + 'px';
+        }
+
         this.tooltip.style.height = height + 'px';
-        var x0 = -Math.round(bounds.x - this.tooltipBorder);
+        var x0 = -Math.round(bounds.x - this.tooltipBorder) + (w2 - width) / 2;
         var y0 = -Math.round(bounds.y - this.tooltipBorder);
 
         var b = document.body;
@@ -343,7 +366,7 @@ Sidebar.prototype.showTooltip = function(elt, cells, w, h, title, showLabel) {
         // Workaround for ignored position CSS style in IE9
         // (changes to relative without the following line)
         this.tooltip.style.position = 'absolute';
-        this.tooltip.style.left = left + 'px';
+        this.tooltip.style.left = left + 100 + 'px';
         this.tooltip.style.top = top + 'px';
       });
 
@@ -381,6 +404,39 @@ Sidebar.prototype.addDataEntry = function(tags, width, height, title, data) {
   return this.addEntry(tags, mxUtils.bind(this, function() {
     return this.createVertexTemplateFromData(data, width, height, title);
   }));
+};
+
+/**
+ * Adds the give entries to the search index.
+ */
+Sidebar.prototype.addEntries = function(images) {
+  for (var i = 0; i < images.length; i++) {
+    (mxUtils.bind(this, function(img) {
+      var data = img.data;
+
+      if (data != null && img.title != null) {
+        this.addEntry(img.title, mxUtils.bind(this, function() {
+          data = this.editorUi.convertDataUri(data);
+          var s = 'shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=0;';
+
+          if (img.aspect == 'fixed') {
+            s += 'aspect=fixed;';
+          }
+
+          return this.createVertexTemplate(s + 'image=' +
+            data, img.w, img.h, '', img.title || '', false, false, true);
+        }));
+      }
+      else if (img.xml != null && img.title != null) {
+        this.addEntry(img.title, mxUtils.bind(this, function() {
+          var cells = this.editorUi.stringToCells(Graph.decompress(img.xml));
+
+          return this.createVertexTemplateFromCells(
+            cells, img.w, img.h, img.title || '', true, false, true);
+        }));
+      }
+    }))(images[i]);
+  }
 };
 
 /**
@@ -551,6 +607,7 @@ Sidebar.prototype.addSearchPalette = function(expand) {
   input.style.width = '100%';
   input.style.outline = 'none';
   input.style.padding = '6px';
+  input.style.paddingRight = '20px';
   inner.appendChild(input);
 
   var cross = document.createElement('img');
@@ -662,6 +719,11 @@ Sidebar.prototype.addSearchPalette = function(expand) {
               page++;
               this.insertSearchHint(div, searchTerm, count, page, results, len, more, terms);
 
+              // Allows to repeat the search
+              if (results.length == 0 && page == 1) {
+                searchTerm = '';
+              }
+
               if (center.parentNode != null) {
                 center.parentNode.removeChild(center);
               }
@@ -718,16 +780,6 @@ Sidebar.prototype.addSearchPalette = function(expand) {
       mxEvent.consume(evt);
     }
   }));
-
-  mxEvent.addListener(input, 'focus', function() {
-    input.style.paddingRight = '';
-  });
-
-  mxEvent.addListener(input, 'blur', function() {
-    input.style.paddingRight = '20px';
-  });
-
-  input.style.paddingRight = '20px';
 
   mxEvent.addListener(input, 'keyup', mxUtils.bind(this, function(evt) {
     if (input.value == '') {
@@ -799,9 +851,6 @@ Sidebar.prototype.insertSearchHint = function(div, searchTerm, count, page, resu
   }
 };
 
-/**
- * Adds the general palette to the sidebar.
- */
 Sidebar.prototype.addGeneralPalette = function(expand) {
   var lineTags = 'line lines connector connectors connection connections arrow arrows ';
   var sb = this;
@@ -871,14 +920,87 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
     this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', null, null, 'rounded rect rectangle box')
   ];
 
-  this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns4);
+  // this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns4);
 
   var fns5 = [
-    this.createVertexTemplateEntry('shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
+    this.createVertexTemplateEntry('shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
       200, 80, '', 'Image', null, null, 'image', 'add-image-icon')
   ];
 
   this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns5);
+  const _self = this;
+  requestModalListing(function(data) {
+    const componentModal = [];
+    data.forEach(function(modalType) {
+      modalType.types.forEach(function(modalTypeDetail) {
+        componentModal.push(
+          _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};modalSiteUrl=https://viettest-a2c1e.firebaseapp.com/page/contact-form.html;`,
+            100, 40, modalTypeDetail.name, modalTypeDetail.name, true, true, 'button', `add-modal-${modalType.group_key}-${modalTypeDetail.key}`));
+      });
+
+    });
+    _self.addPaletteFunctions('general', 'Modal', (expand != null) ? expand : true, componentModal);
+  });
+};
+
+/**
+ * Adds the general palette to the sidebar.
+ */
+Sidebar.prototype.addGeneralPalette1 = function(expand) {
+  var lineTags = 'line lines connector connectors connection connections arrow arrows ';
+
+  var fns = [
+    this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', null, null, 'rect rectangle box'),
+    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', null, null, 'rounded rect rectangle box'),
+    // Explicit strokecolor/fillcolor=none is a workaround to maintain transparent background regardless of current style
+    this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
+      40, 20, 'Text', 'Text', null, null, 'text textbox textarea label'),
+    this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;', 190, 120,
+      '<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
+      'Textbox', null, null, 'text textbox textarea'),
+    this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;', 120, 80, '', 'Ellipse', null, null, 'oval ellipse state'),
+    this.createVertexTemplateEntry('whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Square', null, null, 'square'),
+    this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Circle', null, null, 'circle'),
+    this.createVertexTemplateEntry('shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;', 120, 60, '', 'Process', null, null, 'process task'),
+    this.createVertexTemplateEntry('rhombus;whiteSpace=wrap;html=1;', 80, 80, '', 'Diamond', null, null, 'diamond rhombus if condition decision conditional question test'),
+    this.createVertexTemplateEntry('shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;', 120, 60, '', 'Parallelogram'),
+    this.createVertexTemplateEntry('shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;', 120, 80, '', 'Hexagon', null, null, 'hexagon preparation'),
+    this.createVertexTemplateEntry('triangle;whiteSpace=wrap;html=1;', 60, 80, '', 'Triangle', null, null, 'triangle logic inverter buffer'),
+    this.createVertexTemplateEntry('shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;', 60, 80, '', 'Cylinder', null, null, 'cylinder data database'),
+    this.createVertexTemplateEntry('ellipse;shape=cloud;whiteSpace=wrap;html=1;', 120, 80, '', 'Cloud', null, null, 'cloud network'),
+    this.createVertexTemplateEntry('shape=document;whiteSpace=wrap;html=1;boundedLbl=1;', 120, 80, '', 'Document'),
+    this.createVertexTemplateEntry('shape=internalStorage;whiteSpace=wrap;html=1;backgroundOutline=1;', 80, 80, '', 'Internal Storage'),
+    this.createVertexTemplateEntry('shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;', 120, 80, '', 'Cube'),
+    this.createVertexTemplateEntry('shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;', 120, 80, '', 'Step'),
+    this.createVertexTemplateEntry('shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;', 120, 60, '', 'Trapezoid'),
+    this.createVertexTemplateEntry('shape=tape;whiteSpace=wrap;html=1;', 120, 100, '', 'Tape'),
+    this.createVertexTemplateEntry('shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;', 80, 100, '', 'Note'),
+    this.createVertexTemplateEntry('shape=card;whiteSpace=wrap;html=1;', 80, 100, '', 'Card'),
+    this.createVertexTemplateEntry('shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;', 120, 80, '', 'Callout', null, null, 'bubble chat thought speech message'),
+    this.createVertexTemplateEntry('shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;', 30, 60, 'Actor', 'Actor', false, null, 'user person human stickman'),
+    this.createVertexTemplateEntry('shape=xor;whiteSpace=wrap;html=1;', 60, 80, '', 'Or', null, null, 'logic or'),
+    this.createVertexTemplateEntry('shape=or;whiteSpace=wrap;html=1;', 60, 80, '', 'And', null, null, 'logic and'),
+    this.createVertexTemplateEntry('shape=dataStorage;whiteSpace=wrap;html=1;', 100, 80, '', 'Data Storage'),
+    this.addEntry('curve', mxUtils.bind(this, function() {
+      var cell = new mxCell('', new mxGeometry(0, 0, 50, 50), 'curved=1;endArrow=classic;html=1;');
+      cell.geometry.setTerminalPoint(new mxPoint(0, 50), true);
+      cell.geometry.setTerminalPoint(new mxPoint(50, 0), false);
+      cell.geometry.points = [new mxPoint(50, 50), new mxPoint(0, 0)];
+      cell.geometry.relative = true;
+      cell.edge = true;
+
+      return this.createEdgeTemplateFromCells([cell], cell.geometry.width, cell.geometry.height, 'Curve');
+    })),
+    this.createEdgeTemplateEntry('shape=flexArrow;endArrow=classic;startArrow=classic;html=1;', 50, 50, '', 'Bidirectional Arrow', null, lineTags + 'bidirectional'),
+    this.createEdgeTemplateEntry('shape=flexArrow;endArrow=classic;html=1;', 50, 50, '', 'Arrow', null, lineTags + 'directional directed'),
+    this.createEdgeTemplateEntry('shape=link;html=1;', 50, 50, '', 'Link', null, lineTags + 'link'),
+    this.createEdgeTemplateEntry('endArrow=none;dashed=1;html=1;', 50, 50, '', 'Dashed Line', null, lineTags + 'dashed undirected no'),
+    this.createEdgeTemplateEntry('endArrow=none;html=1;', 50, 50, '', 'Line', null, lineTags + 'simple undirected plain blank no'),
+    this.createEdgeTemplateEntry('endArrow=classic;startArrow=classic;html=1;', 50, 50, '', 'Bidirectional Connector', null, lineTags + 'bidirectional'),
+    this.createEdgeTemplateEntry('endArrow=classic;html=1;', 50, 50, '', 'Directional Connector', null, lineTags + 'directional directed')
+  ];
+
+  this.addPaletteFunctions('general', mxResources.get('general'), (expand != null) ? expand : true, fns);
 };
 
 /**
@@ -1202,8 +1324,12 @@ Sidebar.prototype.addUmlPalette = function(expand) {
 
       return sb.createVertexTemplateFromCells([cell.clone()], cell.geometry.width, cell.geometry.height, 'Interface 2');
     }),
-    this.createVertexTemplateEntry('shape=providedRequiredInterface;html=1;verticalLabelPosition=bottom;', 20, 20, '', 'Provided/Required Interface', null, null, dt + 'provided required interface'),
-    this.createVertexTemplateEntry('shape=requiredInterface;html=1;verticalLabelPosition=bottom;', 10, 20, '', 'Required Interface', null, null, dt + 'required interface'),
+    this.createVertexTemplateEntry('shape=providedRequiredInterface;html=1;verticalLabelPosition=bottom;', 20, 20, '', 'Provided/Required Interface', null, null, 'uml provided required interface lollipop notation'),
+    this.createVertexTemplateEntry('shape=requiredInterface;html=1;verticalLabelPosition=bottom;', 10, 20, '', 'Required Interface', null, null, 'uml required interface lollipop notation'),
+    this.addEntry('uml lollipop notation provided required interface', function() {
+      return sb.createVertexTemplateFromData('zVTBrptADPyavVYEkt4b0uQd3pMq5dD2uAUD27dgZJwE8vX1spsQlETtpVWRIjFjex3PmFVJWvc70m31hjlYlXxWSUqI7N/qPgVrVRyZXCUbFceR/FS8fRJdjNGo1QQN/0lB7AuO2h7AM57oeLCBIDw0Obj8SCVrJK6wxEbbV8RWyIWQP4F52Juzq9AHRqEqrm2IQpN/IsKTwAYb8MzWWBuO9B0hL2E2BGsqIQyxvJ9rzApD7QBrYBokhcBqNsf5UbrzsLzmXUu/oJET42jwGat5QYcHyiDkTDLKy03TiRrFfSx08m+FrrQtUkOZvZdbFKThmwMfVhf4fQ43/W3uZriiPPT+KKhjwnf4anKuQv//wsg+NPJ7/9d9Xf7eVykwbeeMOFWGYd/qzEVO8tHP/Suw4a2ujXV/+gXsEdhkOgSC8os44BQt0tggicZHeG1N2QiXibhAV48epRayEDd8MT7Ct06TUaXVWq027tCuhcx5VZjebeeaoDNn/WMcb/p+j0AM/dNr6InLl4Lgzylsk6OCgRWYsuI592gNZh5OhgmcblPv7+1l+ws=',
+        40, 10, 'Lollipop Notation');
+    }),
     this.createVertexTemplateEntry('shape=umlBoundary;whiteSpace=wrap;html=1;', 100, 80, 'Boundary Object', 'Boundary Object', null, null, 'uml boundary object'),
     this.createVertexTemplateEntry('ellipse;shape=umlEntity;whiteSpace=wrap;html=1;', 80, 80, 'Entity Object', 'Entity Object', null, null, 'uml entity object'),
     this.createVertexTemplateEntry('ellipse;shape=umlControl;whiteSpace=wrap;html=1;', 70, 80, 'Control Object', 'Control Object', null, null, 'uml control object'),
@@ -1607,7 +1733,7 @@ Sidebar.prototype.addBpmnPalette = function(dir, expand) {
       this.createVertexTemplateEntry('shape=mxgraph.bpmn.business_rule_task;html=1;outlineConnect=0;', 14, 14, '', 'Business Rule Task', null, null, this.getTagsForStencil('mxgraph.bpmn', 'business_rule_task').join(' ')),
       this.createVertexTemplateEntry('shape=mxgraph.bpmn.service_task;html=1;outlineConnect=0;', 14, 14, '', 'Service Task', null, null, this.getTagsForStencil('mxgraph.bpmn', 'service_task').join(' ')),
       this.createVertexTemplateEntry('shape=mxgraph.bpmn.script_task;html=1;outlineConnect=0;', 14, 14, '', 'Script Task', null, null, this.getTagsForStencil('mxgraph.bpmn', 'script_task').join(' ')),
-      this.createVertexTemplateEntry('html=1;shape=mxgraph.flowchart.annotation_2;align=left;', 50, 100, '', 'Annotation', null, null, this.getTagsForStencil('bpmn', 'annotation_1', 'bpmn business process model ').join(' ')),
+      this.createVertexTemplateEntry('html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;', 50, 100, '', 'Annotation', null, null, this.getTagsForStencil('bpmn', 'annotation_1', 'bpmn business process model ').join(' ')),
       this.createVertexTemplateEntry('rounded=1;arcSize=10;dashed=1;strokeColor=#000000;fillColor=none;gradientColor=none;dashPattern=8 3 1 3;strokeWidth=2;',
         200, 200, '', 'Group', null, null, this.getTagsForStencil('bpmn', 'group', 'bpmn business process model ').join(' ')),
       this.createEdgeTemplateEntry('endArrow=block;endFill=1;endSize=6;html=1;', 100, 0, '', 'Sequence Flow', null, 'bpmn sequence flow'),
@@ -1699,6 +1825,14 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
 
   parent.appendChild(node);
 
+  if (showLabel) {
+    const componentLabel = document.createElement('div');
+    componentLabel.style.width = '100%';
+    componentLabel.innerHTML = title;
+    parent.appendChild(componentLabel);
+  }
+
+
   // Adds title for sidebar entries
   if (this.sidebarTitles && title != null && showTitle != false) {
     var border = (mxClient.IS_QUIRKS) ? 2 * this.thumbPadding + 2 : 0;
@@ -1734,8 +1868,18 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
   elt.style.overflow = 'hidden';
   var border = (mxClient.IS_QUIRKS) ? 8 + 2 * this.thumbPadding : 2 * this.thumbBorder;
   elt.style.width = (this.thumbWidth + border) + 'px';
-  elt.style.height = (this.thumbHeight + border) + 'px';
+  if (showLabel) {
+    elt.style.minWidth = '80px';
+    elt.style.minHeight = '70px';
+  }
+  elt.style.height = (this.thumbHeight + border) + (showLabel ? 20 : 0) + 'px';
   elt.style.padding = this.thumbPadding + 'px';
+  elt.style.textAlign = 'center';
+  elt.style.fontSize = '12px';
+  elt.style.display = 'flex';
+  elt.style.flexWrap = 'wrap';
+  elt.style.justifyContent = 'center';
+
 
   if (mxClient.IS_IE6) {
     elt.style.border = 'none';
@@ -1848,9 +1992,6 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
   allowCellsInserted = (allowCellsInserted != null) ? allowCellsInserted : true;
 
   return mxUtils.bind(this, function(graph, evt, target, x, y, force) {
-    if (mxUtils.getPrettyXml(this.editorUi.editor.getGraphXml()).indexOf('isFirstSlide="1"') === -1) {
-      this.counter = 0;
-    }
     var elt = (force) ? null : ((mxEvent.isTouchEvent(evt) || mxEvent.isPenEvent(evt)) ?
       document.elementFromPoint(mxEvent.getClientX(evt), mxEvent.getClientY(evt)) :
       mxEvent.getSource(evt));
@@ -1861,23 +2002,6 @@ Sidebar.prototype.createDropHandler = function(cells, allowSplit, allowCellsInse
 
     if (elt == null && graph.isEnabled()) {
       cells = graph.getImportableCells(cells);
-      var cellStyle = cells[0].style.split(';');
-      cellStyle = cellStyle.filter(function(v) {
-        return v;
-      });
-      if (cellStyle.includes('container=1')) {
-        if (this.counter === 0) {
-          this.counter++;
-          cellStyle.push('strokeColor=#FF176C');
-          cells[0].style = cellStyle.join(';') + ';';
-          cells[0].isFirstSlide = '1';
-        } else {
-          this.counter++;
-          cellStyle.push('strokeColor=#000');
-          cells[0].style = cellStyle.join(';') + ';';
-          cells[0].isFirstSlide = '0';
-        }
-      }
 
       if (cells.length > 0) {
         graph.stopEditing();
@@ -2890,7 +3014,6 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells) {
 
     oldMouseMove.apply(this, arguments);
   };
-  this.added = false;
 
   ds.mouseUp = function(evt) {
     if (!mxEvent.isPopupTrigger(evt) && this.currentGraph == null &&
@@ -3008,6 +3131,8 @@ Sidebar.prototype.addPalette = function(id, title, expanded, onInit) {
 
   var div = document.createElement('div');
   div.className = 'geSidebar';
+  div.style.display = 'flex';
+  div.style.flexWrap = 'wrap';
 
   // Disables built-in pan and zoom in IE10 and later
   if (mxClient.IS_POINTER) {

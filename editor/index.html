@@ -51,11 +51,11 @@
         mxLoadResources = false;
     </script>
     <script type="text/javascript" src="js/Init.js"></script>
+    <script type="text/javascript" src="js/viewer.min.js"></script>
     <script type="text/javascript" src="deflate/pako.min.js"></script>
     <script type="text/javascript" src="deflate/base64.js"></script>
     <script type="text/javascript" src="jscolor/jscolor.js"></script>
     <script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
-    <script type="text/javascript" src="mxClient/js/mxClient.js"></script>
     <script type="text/javascript" src="js/EditorUi.js"></script>
     <script type="text/javascript" src="js/Editor.js"></script>
     <script type="text/javascript" src="js/Sidebar.js"></script>
@@ -67,6 +67,7 @@
     <script type="text/javascript" src="js/Menus.js"></script>
     <script type="text/javascript" src="js/Toolbar.js"></script>
     <script type="text/javascript" src="js/Dialogs.js"></script>
+
 </head>
 <body class="geEditor">
 <div class="navContainer">
@@ -120,19 +121,6 @@
 
         EditorUi.prototype.init = function() {
             editorUiInit.apply(this, arguments);
-            // this.actions.get('export').setEnabled(false);
-
-            // Updates action states which require a backend
-            if (!Editor.useLocalStorage) {
-                mxUtils.post(OPEN_URL, '', mxUtils.bind(this, function(req) {
-                    var enabled = req.getStatus() != 404;
-                    // this.actions.get('open').setEnabled(enabled || Graph.fileSupport);
-                    // this.actions.get('import').setEnabled(enabled || Graph.fileSupport);
-                    // this.actions.get('save').setEnabled(enabled);
-                    // this.actions.get('saveAs').setEnabled(enabled);
-                    // this.actions.get('export').setEnabled(enabled);
-                }));
-            }
         };
 
         // Adds required resources (disables loading of fallback properties, this can only
