@@ -3188,7 +3188,7 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct) {
           title.innerHTML = mxResources.get('loading') + '...';
 
           window.setTimeout(function() {
-            content.style.display = 'block';
+            content.style.display = 'flex';
             title.style.cursor = '';
             title.innerHTML = prev;
 
@@ -3199,11 +3199,11 @@ Sidebar.prototype.addFoldingHandler = function(title, content, funct) {
           }, (mxClient.IS_FF) ? 20 : 0);
         }
         else {
-          content.style.display = 'block';
+          content.style.display = 'flex';
         }
       }
       else {
-        content.style.display = 'block';
+        content.style.display = 'flex';
       }
 
       title.style.backgroundImage = 'url(\'' + this.expandedImage + '\')';
