@@ -3,15 +3,15 @@
 export const ACTION_TYPES = {
   RESET: 'Common/RESET',
   SET_LOADING: 'Common/SET_LOADING',
-  SET_HEADER_BACKGROUND: 'Common/SET_HEADER_BACKGROUND'
+  SET_FULL_SCREEN: 'Common/SET_FULL_SCREEN'
 };
 
 const initialState = {
   loading: false,
   displayLoading: false,
-  headerBackground: 'transparent url(https://ambient.elated-themes.com/wp-content/uploads/2017/03/footer-image-new.jpg)',
   requestFailure: false,
-  errorMessage: null
+  errorMessage: null,
+  isFullScreen: false
 };
 
 export type CommonState = Readonly<typeof initialState>;
@@ -19,10 +19,10 @@ export type CommonState = Readonly<typeof initialState>;
 // Reducer
 export default (state: CommonState = initialState, action): CommonState => {
   switch (action.type) {
-    case ACTION_TYPES.SET_HEADER_BACKGROUND:
+    case ACTION_TYPES.SET_FULL_SCREEN:
       return {
         ...state,
-        headerBackground: action.headerBackground
+        isFullScreen: action.payload
       };
     case ACTION_TYPES.SET_LOADING:
       return {
@@ -44,9 +44,9 @@ export const animationDisplayLoading = () => async (dispatch, getState) => {
   await dispatch(setDisplayLoading(false));
 };
 
-export const setHeaderBackground = headerBackground => ({
-  type: ACTION_TYPES.SET_HEADER_BACKGROUND,
-  headerBackground
+export const setFullScreen = isFullScreen => ({
+  type: ACTION_TYPES.SET_FULL_SCREEN,
+  payload: isFullScreen
 });
 export const setDisplayLoading = displayLoading => ({
   type: ACTION_TYPES.SET_LOADING,

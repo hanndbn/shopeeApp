@@ -4,10 +4,9 @@ import Stomp from 'webstomp-client';
 import { Observable } from 'rxjs'; // tslint:disable-line
 import { Observer } from 'rxjs/Observer'; // tslint:disable-line
 import { Storage } from 'react-jhipster';
-
-import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
+// import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
 import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
-import { SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { FAILURE, SUCCESS } from 'app/shared/reducers/action-type.util';
 
 let stompClient = null;
 
@@ -102,12 +101,12 @@ export default store => next => action => {
   if (action.type === SUCCESS(AUTH_ACTIONS.GET_SESSION)) {
     connect();
     if (!alreadyConnectedOnce) {
-      receive().subscribe(activity => {
-        return store.dispatch({
-          type: ADMIN_ACTIONS.WEBSOCKET_ACTIVITY_MESSAGE,
-          payload: activity
-        });
-      });
+      // receive().subscribe(activity => {
+      //   return store.dispatch({
+      //     type: ADMIN_ACTIONS.WEBSOCKET_ACTIVITY_MESSAGE,
+      //     payload: activity
+      //   });
+      // });
     }
   } else if (action.type === FAILURE(AUTH_ACTIONS.GET_SESSION)) {
     unsubscribe();

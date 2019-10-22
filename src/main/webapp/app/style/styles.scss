@@ -53,7 +53,13 @@ body::after {
 }
 
 .site-content {
-  min-height: calc(100vh - 400px);
+  height: calc(100vh - 70px);
+}
+
+.content-wrapper {
+  background-color: rgb(244, 245, 250);
+  box-shadow: inset 1px 1px 8px #8080805c;
+  margin-bottom: 20px;
 }
 
 .site-footer {
@@ -171,5 +177,11 @@ body::after {
   -ms-flex: 1; /* IE 10 */
   flex: 1;
   flex-wrap: wrap;
+}
+
+.btn-common {
+  padding: 10px 20px;
+  color: white;
+  background-color: rgb(207, 48, 52);
 }
 

@@ -1,61 +1,90 @@
+import './login.scss';
+
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
-
 import { IRootState } from 'app/shared/reducers';
-import { login } from 'app/shared/reducers/authentication';
-import LoginModal from './login-modal';
+import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { TITLE_HELMET } from 'app/config/constants';
+import * as commonAction from 'app/shared/common/common.reducer';
 
-export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
-
-export interface ILoginState {
-  showModal: boolean;
+export interface ILoginProp extends StateProps, DispatchProps {
+  setFullScreen: Function;
 }
 
-export class Login extends React.Component<ILoginProps, ILoginState> {
-  state: ILoginState = {
-    showModal: this.props.showModal
-  };
-
-  componentDidUpdate(prevProps: ILoginProps, prevState) {
-    if (this.props !== prevProps) {
-      this.setState({ showModal: this.props.showModal });
-    }
+export class Login extends React.Component<ILoginProp> {
+  componentDidMount() {
+    window.scrollTo(0, 0);
+    this.props.setFullScreen(true);
   }
 
-  handleLogin = (username, password, rememberMe = false) => {
-    this.props.login(username, password, rememberMe);
-  };
+  componentWillUnmount() {
+    this.props.setFullScreen(false);
+  }
 
-  handleClose = () => {
-    this.setState({ showModal: false });
-  };
+  componentDidUpdate(prevProps, prevState) {
+  }
 
   render() {
-    const { location, isAuthenticated } = this.props;
-    const { from } = location.state || { from: { pathname: '/', search: location.search } };
-    const { showModal } = this.state;
-    if (isAuthenticated) {
-      return <Redirect to={from} />;
-    }
+    const {} = this.props;
     return (
-      <LoginModal showModal={showModal} handleLogin={this.handleLogin} handleClose={this.handleClose} loginError={this.props.loginError} />
+      <div className="login-container"
+           style={{ backgroundImage: 'url(content/images/bg-login-giaovien.bmp)' }}
+      >
+        <Helmet>
+          <title>{`${TITLE_HELMET}`}</title>
+        </Helmet>
+        <div className="h-100">
+          <div className="row h-100">
+            <div className="col-12 col-md-6 h-100">
+              <div className="row justify-content-center align-items-center h-100">
+                <div className="col-8 login-wrapper">
+                  <div className="form-group">
+                    <div><img src="content/images/user-login.png"/></div>
+                  </div>
+                  <div className="form-group">
+                    <div className="login-title">ĐĂNG NHẬP</div>
+                  </div>
+                  <div className="form-group">
+                    <div>Tên đăng nhập</div>
+                    <input className="form-control" type="text"/>
+                  </div>
+                  <div className="form-group">
+                    <div>Mật Khẩu</div>
+                    <input className="form-control" type="text"/>
+                  </div>
+                  <div className="form-group row align-items-center justify-content-center">
+                    <input type="checkbox"/>
+                    <span>Lưu lại mật khẩu</span>
+                  </div>
+                  <div className="form-group">
+                    <button className="btn btn-common btn-login">Đăng nhập</button>
+                  </div>
+                  <div className="form-group">
+                    <a className="btn-link" href="#">Quên mật khẩu</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
 
-const mapStateToProps = ({ authentication }: IRootState) => ({
-  isAuthenticated: authentication.isAuthenticated,
-  loginError: authentication.loginError,
-  showModal: authentication.showModalLogin
-});
+const mapStateToProps = ({}: IRootState) => ({});
 
-const mapDispatchToProps = { login };
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  setFullScreen: isFullScreen => {
+    dispatch(commonAction.setFullScreen(isFullScreen));
+  }
+});
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Login);
+)(Login));

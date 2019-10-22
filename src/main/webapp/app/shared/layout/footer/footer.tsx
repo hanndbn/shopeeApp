@@ -1,6 +1,4 @@
 import './footer.scss';
-import './footer_copy.scss';
-
 import React from 'react';
 import { Col, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, Row } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
@@ -90,7 +88,7 @@ class Footer extends React.Component<IFooterProps, IFooterState> {
   }
 }
 
-const mapStateToProps = ({}: IRootState) => ({});
+const mapStateToProps = ({ common }: IRootState) => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   toTop: () => {

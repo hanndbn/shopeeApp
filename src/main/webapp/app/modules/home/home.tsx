@@ -2,10 +2,7 @@ import './home.scss';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Carousel from 'app/modules/carousel/carousel';
 import { IRootState } from 'app/shared/reducers';
-import { setHeaderBackground } from 'app/shared/common/common.reducer';
-import Projects from 'app/modules/projects/projects';
 import $ from 'jquery';
 import { withRouter } from 'react-router';
 import { TITLE_HELMET } from 'app/config/constants';
@@ -36,8 +33,6 @@ export class Home extends React.Component<IHomeProp> {
         <Helmet>
           <title>{`${TITLE_HELMET}`}</title>
         </Helmet>
-        <Carousel/>
-        <Projects hiddenHelmet="1"/>
       </div>
     );
   }
@@ -47,7 +42,6 @@ const mapStateToProps = ({ common }: IRootState) => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
-    dispatch(setHeaderBackground('transparent'));
   }
 });
 
