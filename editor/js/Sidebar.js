@@ -176,7 +176,7 @@ if (urlParams['sidebar-entries'] != 'large') {
   Sidebar.prototype.thumbPadding = (document.documentMode >= 5) ? 0 : 1;
   Sidebar.prototype.thumbBorder = 1;
   Sidebar.prototype.thumbWidth = 32;
-  Sidebar.prototype.thumbHeight = 30;
+  Sidebar.prototype.thumbHeight = 35;
   Sidebar.prototype.minThumbStrokeWidth = 1.3;
   Sidebar.prototype.thumbAntiAlias = true;
 }
@@ -884,14 +884,19 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', null, null, 'slide container', 'add-container-icon')
+    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', 'add-container-icon'),
+    this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Button', false, false, 'rect rectangle box'),
+    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Button', false, false, 'rounded rect rectangle box'),
+    this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
+      40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', 'add-text-icon'),
+    this.createVertexTemplateEntry('shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
+      200, 80, 'Image', 'Image', false, false, 'image', 'add-image-icon')
   ];
 
-  this.addPaletteFunctions('general', 'Container', (expand != null) ? expand : true, fns1);
+  this.addPaletteFunctions('general', 'Basic', (expand != null) ? expand : true, fns1);
 
   var fns2 = [
-    this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', null, null, 'rect rectangle box'),
-    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', null, null, 'rounded rect rectangle box')
+
     // this.createVertexTemplateEntry('whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Square', null, null, 'square'),
     // // Explicit strokecolor/fillcolor=none is a workaround to maintain transparent background regardless of current style
     // this.createVertexTemplateEntry('ellipse;whiteSpace=wrap;html=1;aspect=fixed;', 80, 80, '', 'Circle', null, null, 'circle'),
@@ -903,16 +908,15 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
     // this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;', 190, 120,
   ];
 
-  this.addPaletteFunctions('general', 'Shape', (expand != null) ? expand : true, fns2);
+  // this.addPaletteFunctions('general', 'Shape', (expand != null) ? expand : true, fns2);
 
   var fns3 = [
     // 	'<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
     // 	'Textbox', null, null, 'text textbox textarea'),
-    this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
-      40, 20, 'Text', 'Text', null, null, 'text textbox textarea label', 'add-text-icon')
+
   ];
 
-  this.addPaletteFunctions('general', 'Text', (expand != null) ? expand : true, fns3);
+  // this.addPaletteFunctions('general', 'Text', (expand != null) ? expand : true, fns3);
 
   var fns4 = [
     // 	'<h1>Heading</h1><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>',
@@ -927,19 +931,23 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       200, 80, '', 'Image', null, null, 'image', 'add-image-icon')
   ];
 
-  this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns5);
+  // this.addPaletteFunctions('general', 'Image', (expand != null) ? expand : true, fns5);
   const _self = this;
   requestModalListing(function(data) {
-    const componentModal = [];
     data.forEach(function(modalType) {
+      const componentModal = [];
       modalType.types.forEach(function(modalTypeDetail) {
         componentModal.push(
           _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};modalSiteUrl=https://viettest-a2c1e.firebaseapp.com/page/contact-form.html;`,
-            100, 40, modalTypeDetail.name, modalTypeDetail.name, true, true, 'button', `add-modal-${modalType.group_key}-${modalTypeDetail.key}`));
+            100, 40, modalTypeDetail.name, modalTypeDetail.name, false, false, 'button',
+            {
+              id: `add-modal-${modalType.group_key}-${modalTypeDetail.key}`,
+              imageId: `${modalType.group_key}/${modalTypeDetail.key}.png`
+            }
+          ));
       });
-
+      _self.addPaletteFunctions('general', modalType.group_name, (expand != null) ? expand : true, componentModal);
     });
-    _self.addPaletteFunctions('general', 'Modal', (expand != null) ? expand : true, componentModal);
   });
 };
 
@@ -1776,7 +1784,7 @@ Sidebar.prototype.createTitle = function(label) {
 /**
  * Creates a thumbnail for the given cells.
  */
-Sidebar.prototype.createThumb = function(cells, width, height, parent, title, showLabel, showTitle, realWidth, realHeight) {
+Sidebar.prototype.createThumb = function(cells, width, height, parent, title, showLabel, showTitle, realWidth, realHeight, option) {
   this.graph.labelsVisible = (showLabel == null || showLabel);
   var fo = mxClient.NO_FO;
   mxClient.NO_FO = Editor.prototype.originalNoForeignObject;
@@ -1787,82 +1795,99 @@ Sidebar.prototype.createThumb = function(cells, width, height, parent, title, sh
     (height - 2 * this.thumbBorder) / bounds.height) * 100) / 100;
   this.graph.view.scaleAndTranslate(s, Math.floor((width - bounds.width * s) / 2 / s - bounds.x),
     Math.floor((height - bounds.height * s) / 2 / s - bounds.y));
-  var node = null;
+  if (option && option.imageId) {
+    this.createCustomThumb(parent, option);
+  } else {
+    var node = null;
 
-  // For supporting HTML labels in IE9 standards mode the container is cloned instead
-  if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO &&
-    this.graph.view.getCanvas().ownerSVGElement != null) {
-    node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
-  }
-  // LATER: Check if deep clone can be used for quirks if container in DOM
-  else {
-    node = this.graph.container.cloneNode(false);
-    node.innerHTML = this.graph.container.innerHTML;
-
-    // Workaround for clipping in older IE versions
-    if (mxClient.IS_QUIRKS || document.documentMode == 8) {
-      node.firstChild.style.overflow = 'visible';
+    // For supporting HTML labels in IE9 standards mode the container is cloned instead
+    if (this.graph.dialect == mxConstants.DIALECT_SVG && !mxClient.NO_FO &&
+      this.graph.view.getCanvas().ownerSVGElement != null) {
+      node = this.graph.view.getCanvas().ownerSVGElement.cloneNode(true);
     }
-  }
+    // LATER: Check if deep clone can be used for quirks if container in DOM
+    else {
+      node = this.graph.container.cloneNode(false);
+      node.innerHTML = this.graph.container.innerHTML;
 
-  this.graph.getModel().clear();
-  mxClient.NO_FO = fo;
-
-  // Catch-all event handling
-  if (mxClient.IS_IE6) {
-    parent.style.backgroundImage = 'url(' + this.editorUi.editor.transparentImage + ')';
-  }
-
-  node.style.position = 'relative';
-  node.style.overflow = 'hidden';
-  node.style.left = this.thumbBorder + 'px';
-  node.style.top = this.thumbBorder + 'px';
-  node.style.width = width + 'px';
-  node.style.height = height + 'px';
-  node.style.visibility = '';
-  node.style.minWidth = '';
-  node.style.minHeight = '';
-
-  parent.appendChild(node);
-
-  if (showLabel) {
-    const componentLabel = document.createElement('div');
-    componentLabel.style.width = '100%';
-    componentLabel.innerHTML = title;
-    parent.appendChild(componentLabel);
-  }
-
-
-  // Adds title for sidebar entries
-  if (this.sidebarTitles && title != null && showTitle != false) {
-    var border = (mxClient.IS_QUIRKS) ? 2 * this.thumbPadding + 2 : 0;
-    parent.style.height = (this.thumbHeight + border + this.sidebarTitleSize + 8) + 'px';
-
-    var div = document.createElement('div');
-    div.style.fontSize = this.sidebarTitleSize + 'px';
-    div.style.color = '#303030';
-    div.style.textAlign = 'center';
-    div.style.whiteSpace = 'nowrap';
-
-    if (mxClient.IS_IE) {
-      div.style.height = (this.sidebarTitleSize + 12) + 'px';
+      // Workaround for clipping in older IE versions
+      if (mxClient.IS_QUIRKS || document.documentMode == 8) {
+        node.firstChild.style.overflow = 'visible';
+      }
     }
 
-    div.style.paddingTop = '4px';
-    mxUtils.write(div, title);
-    parent.appendChild(div);
+    this.graph.getModel().clear();
+    mxClient.NO_FO = fo;
+
+    // Catch-all event handling
+    if (mxClient.IS_IE6) {
+      parent.style.backgroundImage = 'url(' + this.editorUi.editor.transparentImage + ')';
+    }
+
+    node.style.position = 'relative';
+    node.style.overflow = 'hidden';
+    node.style.left = this.thumbBorder + 'px';
+    node.style.top = this.thumbBorder + 'px';
+    node.style.width = width + 'px';
+    node.style.height = height + 'px';
+    node.style.visibility = '';
+    node.style.minWidth = '';
+    node.style.minHeight = '';
+
+    parent.appendChild(node);
+
+    if (showLabel) {
+      const componentLabel = document.createElement('div');
+      componentLabel.style.width = '100%';
+      componentLabel.innerHTML = title;
+      parent.appendChild(componentLabel);
+    }
+
+
+    // Adds title for sidebar entries
+    if (this.sidebarTitles && title != null && showTitle != false) {
+      var border = (mxClient.IS_QUIRKS) ? 2 * this.thumbPadding + 2 : 0;
+      parent.style.height = (this.thumbHeight + border + this.sidebarTitleSize + 8) + 'px';
+
+      var div = document.createElement('div');
+      div.style.fontSize = this.sidebarTitleSize + 'px';
+      div.style.color = '#303030';
+      div.style.textAlign = 'center';
+      div.style.whiteSpace = 'nowrap';
+
+      if (mxClient.IS_IE) {
+        div.style.height = (this.sidebarTitleSize + 12) + 'px';
+      }
+
+      div.style.paddingTop = '4px';
+      mxUtils.write(div, title);
+      parent.appendChild(div);
+    }
   }
 
   return bounds;
 };
 
 /**
+ * Creates a thumbnail for the given cells.
+ */
+Sidebar.prototype.createCustomThumb = function(parent, option) {
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <div>
+        <img class="w-100 h-100" src="/content/images/editor/${option.imageId}"/>
+    </div>
+  `;
+  parent.appendChild(div);
+};
+
+/**
  * Creates and returns a new palette item for the given image.
  */
-Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted, id = null) {
+Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, width, height, allowCellsInserted, option = null) {
   var elt = document.createElement('a');
-  if (id) {
-    elt.id = id;
+  if (option && option.id) {
+    elt.id = option.id;
   }
   elt.className = 'geItem';
   elt.style.overflow = 'hidden';
@@ -1890,7 +1915,7 @@ Sidebar.prototype.createItem = function(cells, title, showLabel, showTitle, widt
     mxEvent.consume(evt);
   });
 
-  this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height);
+  this.createThumb(cells, this.thumbWidth, this.thumbHeight, elt, title, showLabel, showTitle, width, height, option);
   var bounds = new mxRectangle(0, 0, width, height);
 
   if (cells.length > 1 || cells[0].vertex) {
@@ -3038,22 +3063,22 @@ Sidebar.prototype.addClickHandler = function(elt, ds, cells) {
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplateEntry = function(style, width, height, value, title, showLabel, showTitle, tags, id = null) {
+Sidebar.prototype.createVertexTemplateEntry = function(style, width, height, value, title, showLabel, showTitle, tags, option = null) {
   tags = (tags != null && tags.length > 0) ? tags : title.toLowerCase();
 
   return this.addEntry(tags, mxUtils.bind(this, function() {
-    return this.createVertexTemplate(style, width, height, value, title, showLabel, showTitle, null, id);
+    return this.createVertexTemplate(style, width, height, value, title, showLabel, showTitle, null, option);
   }));
 };
 
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplate = function(style, width, height, value, title, showLabel, showTitle, allowCellsInserted, id = null) {
+Sidebar.prototype.createVertexTemplate = function(style, width, height, value, title, showLabel, showTitle, allowCellsInserted, option = null) {
   var cells = [new mxCell((value != null) ? value : '', new mxGeometry(0, 0, width, height), style)];
   cells[0].vertex = true;
 
-  return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted, id);
+  return this.createVertexTemplateFromCells(cells, width, height, title, showLabel, showTitle, allowCellsInserted, option);
 };
 
 /**
@@ -3074,10 +3099,10 @@ Sidebar.prototype.createVertexTemplateFromData = function(data, width, height, t
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel, showTitle, allowCellsInserted, id = null) {
+Sidebar.prototype.createVertexTemplateFromCells = function(cells, width, height, title, showLabel, showTitle, allowCellsInserted, option = null) {
   // Use this line to convert calls to this function with lots of boilerplate code for creating cells
   //console.trace('xml', Graph.compress(mxUtils.getXml(this.graph.encodeCells(cells))), cells);
-  return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted, id);
+  return this.createItem(cells, title, showLabel, showTitle, width, height, allowCellsInserted, option);
 };
 
 /**
@@ -3107,8 +3132,8 @@ Sidebar.prototype.createEdgeTemplate = function(style, width, height, value, tit
 /**
  * Creates a drop handler for inserting the given cells.
  */
-Sidebar.prototype.createEdgeTemplateFromCells = function(cells, width, height, title, showLabel, allowCellsInserted, id = null) {
-  return this.createItem(cells, title, showLabel, true, width, height, allowCellsInserted, id);
+Sidebar.prototype.createEdgeTemplateFromCells = function(cells, width, height, title, showLabel, allowCellsInserted, option = null) {
+  return this.createItem(cells, title, showLabel, true, width, height, allowCellsInserted, option);
 };
 
 /**
