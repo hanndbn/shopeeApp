@@ -1,0 +1,48 @@
+.nhapdiem-container {
+  padding: 20px 20px 30px;
+  font-size: 18px;
+
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #374A92;
+    margin-bottom: 20px;
+  }
+
+  .sub-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #2165FF;
+    margin-bottom: 20px;
+  }
+
+  .search-wrapper {
+    margin-bottom: 30px;
+  }
+
+  .custom-table {
+
+    div {
+      text-align: center;
+    }
+
+    .custom-table-header {
+      div {
+        background-color: #2165FF;
+        color: white;
+        padding: 15px 10px;
+      }
+    }
+
+    .custom-table-data {
+      background-color: white;
+      >div {
+        padding: 15px 10px;
+      }
+    }
+
+    .table-point{
+      padding: 0 5px;
+    }
+  }
+}

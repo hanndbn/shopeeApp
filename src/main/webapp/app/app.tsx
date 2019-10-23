@@ -4,7 +4,6 @@ import 'bootstrap';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card } from 'reactstrap';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { IRootState } from 'app/shared/reducers';
@@ -41,10 +40,10 @@ export class App extends React.Component<IAppProps> {
           }
           <div className="site-content">
             <div className="row h-100 no-gutters">
-              <div className={cn('col-3 col-md-2 h-100', { 'd-none': isFullScreen })}>
+              <div className={cn('col-3 col-md-3 col-xl-2 h-100', { 'd-none': isFullScreen })}>
                 <Sidebar/>
               </div>
-              <div className={cn('content-wrapper col-9 col-md-10', { 'col-12': isFullScreen })}>
+              <div className={cn('content-wrapper col-9 col-md-9 col-xl-10', { 'col-12': isFullScreen })}>
                 <div className="view-container" id="app-view-container">
                   <ErrorBoundary>
                     <AppRoutes/>
