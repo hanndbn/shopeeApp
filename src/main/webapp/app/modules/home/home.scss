@@ -75,9 +75,9 @@ body, html {
 }
 
 .slide-scroll-container {
-  //@media only screen and (min-width: 768px) {
-  //  position: absolute;
-  //}
+  @media only screen and (min-width: 768px) {
+    left: calc(50% + 135px);
+  }
   z-index: 1;
   position: fixed;
   height: 150px;
@@ -93,6 +93,10 @@ body, html {
 }
 
 .toTopBtn {
+  @media only screen and (min-width: 768px) {
+    top: 630px;
+    bottom: auto;
+  }
   z-index: 999;
   cursor: pointer;
   position: fixed;
@@ -123,6 +127,11 @@ body, html {
   width: 100%;
   bottom: 0;
   background-color: #d5d5d5;
+  @media only screen and (min-width: 768px) {
+    top: 686px;
+    width: 360px;
+    left: calc(50% - 180px);
+  }
 
   .slide-tab {
     height: 100%;
