@@ -13,6 +13,7 @@ import cn from 'classnames';
 import _ from 'lodash';
 import Slider from 'rc-slider';
 import * as infoModaAction from 'app/InfoModal/infoModal.reducer';
+import Hammer from 'hammerjs';
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -27,6 +28,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
 
 export class Home extends React.Component<IHomeProp, { input: any, content: any }> {
   private parentContainer: any = React.createRef();
+  private hammer: any = null;
 
   constructor(props) {
     super(props);
@@ -43,10 +45,41 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     window.scrollTo(0, 0);
     this.props.initScreen();
     window.addEventListener('resize', this.updateWindowDimensions);
+    this.hammer = Hammer(this.parentContainer.current);
+    this.hammer.on('swipeleft', e => this.swipeLeft(e, this));
+    this.hammer.on('swiperight', e => this.swipeRight(e, this));
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
+    this.hammer.off('swipeleft', this.swipeLeft);
+    this.hammer.off('swiperight', this.swipeRight);
+  }
+
+  swipeLeft(e, _self) {
+    if (_self.props.data) {
+      const { relation, elements } = _self.props.data;
+      const currentRelation = relation.find(v => v.source === _self.props.activeSlideId && v.target);
+      if (currentRelation) {
+        const nextSlide = elements.find(v => v.id === currentRelation.target && !v.parent);
+        if (nextSlide) {
+          _self.props.setActiveSlideId(nextSlide.id);
+        }
+      }
+    }
+  }
+
+  swipeRight(e, _self) {
+    if (_self.props.data) {
+      const { relation, elements } = _self.props.data;
+      const currentRelation = relation.find(v => v.target === _self.props.activeSlideId && v.source);
+      if (currentRelation) {
+        const nextSlide = elements.find(v => v.id === currentRelation.source && !v.parent);
+        if (nextSlide) {
+          _self.props.setActiveSlideId(nextSlide.id);
+        }
+      }
+    }
   }
 
   updateWindowDimensions() {
@@ -74,23 +107,21 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   parse2html(data, activeSlideId) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[ 0 ];
+    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
     return (
-      <div className={cn('slide-container')} id="slide-container" ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
-        <div className="d-flex justify-content-center h-100 w-100">
-          {this.slide2html(data, slide, null, null, activeSlideId)}
-        </div>
+      <div className="d-flex justify-content-center h-100 w-100">
+        {this.slide2html(data, slide, null, null, activeSlideId)}
       </div>
     );
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0) {
-    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
+    const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide[ 'parent' ];
+    const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -104,8 +135,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
-      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
+      const slideWidth = style['width'] ? style['width'] : 0;
+      const slideHeight = style['height'] ? style['height'] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -169,8 +200,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                  key={idx}
                  onClick={() => {
                    if (!isRoot) {
-                     if (slideStyle[ 'modalPopup' ] === '1' && slideStyle[ 'modalSiteUrl' ]) {
-                       this.props.displayModalUrl(slideStyle[ 'modalSiteUrl' ]);
+                     if (slideStyle['modalPopup'] === '1' && slideStyle['modalSiteUrl']) {
+                       this.props.displayModalUrl(slideStyle['modalSiteUrl']);
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
                      }
@@ -243,7 +274,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
           <div className="row">
             <div className="col-12 d-flex justify-content-center">
               {requestFailure && <div className="alert alert-danger">{errorMessage}</div>}
-              {displaySlide}
+              <div className={cn('slide-container')} id="slide-container" ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
+                {displaySlide}
+              </div>
             </div>
           </div>
           <div className="slide-tab-wrapper">
