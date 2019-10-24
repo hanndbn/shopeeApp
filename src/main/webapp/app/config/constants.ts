@@ -82,6 +82,7 @@ export const GET_CONTACT_US_ADDRESS_URL = '/wp-json/wp/v2/contact-us';
 export const GET_ABOUT_DATA_URL = '/wp-json/wp/v2/about';
 export const GET_HOME_DATA_URL = '/api/viewApp';
 export const SET_TRACKING_DATA = '/api/addTrackingApp';
+export const GET_MODAL_LISTING_URL = '/api/editorModalListing';
 
 export const ELEMENT_TYPE = {
   TEXT: 'text',

@@ -191,6 +191,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         };
       }
     }
+
     return (<div className={cn('slide', {
       'g-cursor-pointer': relation,
       'root-slide': isRoot,
@@ -200,8 +201,14 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                  key={idx}
                  onClick={() => {
                    if (!isRoot) {
-                     if (slideStyle['modalPopup'] === '1' && slideStyle['modalSiteUrl']) {
-                       this.props.displayModalUrl(slideStyle['modalSiteUrl']);
+                     if (slideStyle['modalPopup'] === '1' && this.props.modalListing) {
+                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle['modalType']);
+                       if (modalType && modalType.types) {
+                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle['modalTypeDetail']);
+                         if (modalTypeDetail) {
+                           this.props.displayModalUrl(modalTypeDetail.baseUrl + modalTypeDetail.hasExtendUrl ? slideStyle['modalSiteUrl'] : '');
+                         }
+                       }
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
                      }
@@ -290,8 +297,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 }
 
-const mapStateToProps = ({ home }: IRootState) => ({
+const mapStateToProps = ({ home, common }: IRootState) => ({
   data: home.data,
+  modalListing: common.modalListing,
   activeSlideId: home.activeSlideId,
   requestFailure: home.requestFailure,
   windowSize: home.windowSize,

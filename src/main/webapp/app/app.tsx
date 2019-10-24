@@ -10,8 +10,8 @@ import { IRootState } from 'app/shared/reducers';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AppRoutes from 'app/routes';
 import Loader from 'app/shared/layout/loader/loader';
-import { requestCategoryData } from 'app/modules/category/category.reducer';
 import InfoModal from 'app/InfoModal/infoModal';
+import { getModalListing } from 'app/shared/common/common.reducer';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -20,7 +20,7 @@ export interface IAppProps extends StateProps, DispatchProps {
 
 export class App extends React.Component<IAppProps> {
   componentDidMount() {
-    // this.props.getCommonData();
+    this.props.getCommonData();
     // this.props.getProfile();
   }
 
@@ -51,7 +51,7 @@ const mapStateToProps = ({ common, projects, contactUs, projectDetail, carousel 
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getCommonData: () => {
-    dispatch(requestCategoryData());
+    dispatch(getModalListing());
   }
 });
 

@@ -1,15 +1,19 @@
 // import { BASE_IMG_URL, GET_CAROUSEL_DATA } from 'app/config/constants';
 
+import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
+import axios from 'axios';
+import { GET_MODAL_LISTING_URL } from 'app/config/constants';
+
 export const ACTION_TYPES = {
   RESET: 'Common/RESET',
   SET_LOADING: 'Common/SET_LOADING',
-  SET_HEADER_BACKGROUND: 'Common/SET_HEADER_BACKGROUND'
+  GET_MODAL_LISTING: 'Common/GET_MODAL_LISTING'
 };
 
 const initialState = {
+  modalListing: [],
   loading: false,
   displayLoading: false,
-  headerBackground: 'transparent url(https://ambient.elated-themes.com/wp-content/uploads/2017/03/footer-image-new.jpg)',
   requestFailure: false,
   errorMessage: null
 };
@@ -19,10 +23,18 @@ export type CommonState = Readonly<typeof initialState>;
 // Reducer
 export default (state: CommonState = initialState, action): CommonState => {
   switch (action.type) {
-    case ACTION_TYPES.SET_HEADER_BACKGROUND:
+    case REQUEST(ACTION_TYPES.GET_MODAL_LISTING):
+      return {
+        ...state
+      };
+    case SUCCESS(ACTION_TYPES.GET_MODAL_LISTING):
       return {
         ...state,
-        headerBackground: action.headerBackground
+        modalListing: action.payload.data.data
+      };
+    case FAILURE(ACTION_TYPES.GET_MODAL_LISTING):
+      return {
+        ...state
       };
     case ACTION_TYPES.SET_LOADING:
       return {
@@ -44,9 +56,9 @@ export const animationDisplayLoading = () => async (dispatch, getState) => {
   await dispatch(setDisplayLoading(false));
 };
 
-export const setHeaderBackground = headerBackground => ({
-  type: ACTION_TYPES.SET_HEADER_BACKGROUND,
-  headerBackground
+export const getModalListing = () => ({
+  type: ACTION_TYPES.GET_MODAL_LISTING,
+  payload: axios.get(GET_MODAL_LISTING_URL)
 });
 export const setDisplayLoading = displayLoading => ({
   type: ACTION_TYPES.SET_LOADING,
