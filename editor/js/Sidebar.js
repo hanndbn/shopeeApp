@@ -884,13 +884,28 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', 'add-container-icon'),
-    this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Button', false, false, 'rect rectangle box'),
-    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Button', false, false, 'rounded rect rectangle box'),
+    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', {
+      id: 'add-container-icon',
+      imageId: 'BASIC/SLIDE.png'
+    }),
+    this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', false, false, 'rect rectangle box', {
+      id: 'add-rectangle-icon',
+      imageId: 'BASIC/RECTANGLE.png'
+    }),
+    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', false, false, 'rounded rect rectangle box', {
+      id: 'add-rectangle-icon',
+      imageId: 'BASIC/ROUNDED_RECTANGLE.png'
+    }),
     this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
-      40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', 'add-text-icon'),
+      40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', {
+        id: 'add-text-icon',
+        imageId: 'BASIC/TEXT.png'
+      }),
     this.createVertexTemplateEntry('shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
-      200, 80, 'Image', 'Image', false, false, 'image', 'add-image-icon')
+      200, 80, 'Image', 'Image', false, false, 'image', {
+        id: 'add-image-icon',
+        imageId: 'BASIC/IMAGE.png'
+      })
   ];
 
   this.addPaletteFunctions('general', 'Basic', (expand != null) ? expand : true, fns1);
