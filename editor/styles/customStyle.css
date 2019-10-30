@@ -102,10 +102,14 @@
 
 .navContainer {
   top: 0;
+  padding-top: 60px;
   position: absolute;
-  width: 130px;
+  width: 87px;
   height: 100%;
-  border-right: 1px solid #707070;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
 }
 
 .geSidebarContainer {
@@ -119,9 +123,8 @@
 }
 
 .nav-link {
-  height: 81px;
-  width: 81px;
-  background-color: #e8e8e8;
+  height: 50px;
+  width: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,6 +133,18 @@
   color: #707070 !important;
   text-align: center;
   cursor: pointer;
+}
+
+.nav-link img {
+  width: 35px;
+}
+
+.nav-link-client img {
+  margin-left: 12px;
+}
+
+.nav-link:hover {
+  background-color: #f9f9f9;
 }
 
 .header-container {
@@ -159,11 +174,13 @@
 }
 
 .root {
-  width: calc(100% - 130px);
+  width: calc(100% - 90px);
   height: 100%;
   position: absolute;
   left: 130px;
   padding: 10px 20px 10px 50px;
+  background-color: #f9f9f9;
+  left: 90px;
 }
 
 #editor-container {
@@ -247,23 +264,23 @@
   margin-right: 5px;
 }
 
-.btn-common{
+.btn-common {
   font-size: 12px;
   padding: 8px 20px;
 }
 
-.btn-submit{
+.btn-submit {
   color: white;
   background-color: #4C7A81;
 }
 
-.custom-modal-header{
+.custom-modal-header {
   background-color: #52A1A7;
   color: white;
   padding: 0.5rem;
 }
 
-.custom-modal-header .close{
+.custom-modal-header .close {
   color: white;
 }
 
