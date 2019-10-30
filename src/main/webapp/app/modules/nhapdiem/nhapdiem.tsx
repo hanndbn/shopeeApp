@@ -6,6 +6,7 @@ import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router';
 import { TITLE_HELMET } from 'app/config/constants';
 import { Helmet } from 'react-helmet';
+import ReactPaginate from 'react-paginate';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -109,13 +110,34 @@ export class NhapDiem extends React.Component<INhapDiemProp> {
               <div className="col-2">icon</div>
             </div>
           </div>
+          {pagination &&
+          !loading &&
+          pagination.numOfPages > 1 && (
+            <div className="paging-container d-flex justify-content-center">
+              <ReactPaginate
+                breakLabel={<a>...</a>}
+                breakClassName={'break-me'}
+                pageCount={pagination.totalRecords / pagination.pageSize <= 1 ? 1 : pagination.totalRecords / pagination.pageSize}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                onPageChange={setPageNumber}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'current'}
+                nextLabel={translateUtil('Next')}
+                previousLabel={translateUtil('Prev')}
+                forcePage={pagination.pageNumber - 1}
+              />
+              {/* End Pagination */}
+            </div>
+          )}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ common }: IRootState) => ({});
+const mapStateToProps = ({ common, nhapDiem }: IRootState) => ({});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {
