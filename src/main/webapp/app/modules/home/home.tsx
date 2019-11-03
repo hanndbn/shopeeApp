@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router';
-import { TITLE_HELMET } from 'app/config/constants';
+import { ELEMENT_TYPE, TITLE_HELMET } from 'app/config/constants';
 import { Helmet } from 'react-helmet';
 // import x2js from 'x2js';
 import * as homeAction from 'app/modules/home/home.reducer';
@@ -115,7 +115,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     );
   }
 
-  slide2html(data, slide, parentStyle, zoomVal, idx = 0) {
+  slide2html(data, slide, parentStyle, zoomVal, idx = 0, hasIFrame = false) {
     const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
@@ -192,6 +192,15 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
     }
 
+    const isGame = slideStyle['type'] === 'game';
+
+    if (isGame || hasIFrame) {
+      style = {
+        ...style,
+        zIndex: '999'
+      };
+    }
+
     return (<div className={cn('slide', {
       'g-cursor-pointer': relation,
       'root-slide': isRoot,
@@ -211,6 +220,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                        }
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
+                     } else if (slideStyle['type'] === ELEMENT_TYPE.HOME) {
+                       const firstSlide = data.elements.find(v => v.isFirstSlide);
+                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null);
                      }
                    }
                  }}
@@ -242,13 +254,22 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       <div className="slide-child"
            style={childStyle}
       >
-        {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, style, zoomVal, idxChild))}
-        {slide.value && <div
-          className="slide-value"
-          style={valueStyle}
-        >
-          <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
-        </div>}
+        {
+          <>
+            {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, style, zoomVal, idxChild, isGame))}
+            {slide.value && <div
+              className="slide-value"
+              style={valueStyle}
+            >
+              {
+                isGame ?
+                  <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/>
+                  :
+                  <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
+              }
+            </div>}
+          </>
+        }
       </div>
     </div>);
   }

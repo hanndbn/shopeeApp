@@ -3807,7 +3807,7 @@ StyleFormatPanel.prototype.addFill = function(container) {
   });
 
   container.appendChild(fillPanel);
-  container.appendChild(gradientPanel);
+  // container.appendChild(gradientPanel);
 
   // Adds custom colors
   var custom = this.getCustomColors();
@@ -4670,7 +4670,7 @@ StyleFormatPanel.prototype.addModalOps = function() {
   var editor = ui.editor;
   var graph = editor.graph;
   var ss = this.format.getSelectionState();
-  const modalOption = document.createElement("div");
+  const modalOption = document.createElement('div');
   modalOption.innerHTML =
     `
       <div class="geFormatSection modal-option-wrapper">
@@ -4703,43 +4703,43 @@ StyleFormatPanel.prototype.addModalOps = function() {
     `;
   var listener = mxUtils.bind(this, function() {
     ss = this.format.getSelectionState();
-    var modalPopupVal = mxUtils.getValue(ss.style, "modalPopup", false);
-    modalOption.querySelector("#modal-popup-check").checked = modalPopupVal;
+    var modalPopupVal = mxUtils.getValue(ss.style, 'modalPopup', false);
+    modalOption.querySelector('#modal-popup-check').checked = modalPopupVal;
 
     if (modalPopupVal) {
-      $(modalOption.querySelector("#modal-type-wrapper")).show();
+      $(modalOption.querySelector('#modal-type-wrapper')).show();
     } else {
-      $(modalOption.querySelector("#modal-type-wrapper")).hide();
+      $(modalOption.querySelector('#modal-type-wrapper')).hide();
     }
 
     // modal type
-    const modalTypeSelect = $(modalOption.querySelector("#modal-type"));
+    const modalTypeSelect = $(modalOption.querySelector('#modal-type'));
     modalTypeSelect.empty();
     modalFormListing.forEach(function(modalType) {
-      modalTypeSelect.append($("<option></option>").attr("value", modalType.group_key).text(modalType.group_name));
+      modalTypeSelect.append($('<option></option>').attr('value', modalType.group_key).text(modalType.group_name));
     });
-    var modalTypeVal = mxUtils.getValue(ss.style, "modalType", modalFormListing[0].group_key);
+    var modalTypeVal = mxUtils.getValue(ss.style, 'modalType', modalFormListing[0] ? modalFormListing[0].group_key : '');
     modalTypeSelect.val(modalTypeVal);
 
     // modal type detail
-    const modalTypeDetailSelect = $(modalOption.querySelector("#modal-type-detail"));
+    const modalTypeDetailSelect = $(modalOption.querySelector('#modal-type-detail'));
     modalTypeDetailSelect.empty();
     const selectedModalType = modalFormListing.find(function(modalType) {
       return modalType.group_key === modalTypeVal;
     });
     if (selectedModalType) {
       selectedModalType.types.forEach(function(modalTypeDetail) {
-        modalTypeDetailSelect.append($("<option></option>").attr("value", modalTypeDetail.key).text(modalTypeDetail.name));
+        modalTypeDetailSelect.append($('<option></option>').attr('value', modalTypeDetail.key).text(modalTypeDetail.name));
       });
 
-      $(modalOption.querySelector("#modal-site-url-wrapper")).show();
-      if (modalTypeVal == "SITE") {
-        $(modalOption.querySelector("#modal-site-url-wrapper")).show();
+      $(modalOption.querySelector('#modal-site-url-wrapper')).show();
+      if (modalTypeVal == 'SITE') {
+        $(modalOption.querySelector('#modal-site-url-wrapper')).show();
       } else {
-        $(modalOption.querySelector("#modal-site-url-wrapper")).hide();
+        $(modalOption.querySelector('#modal-site-url-wrapper')).hide();
       }
 
-      var modalTypeDetailVal = mxUtils.getValue(ss.style, "modalTypeDetail", selectedModalType.types[0].key);
+      var modalTypeDetailVal = mxUtils.getValue(ss.style, 'modalTypeDetail', selectedModalType.types ? selectedModalType.types[0].key : '');
       modalTypeDetailSelect.val(modalTypeDetailVal);
 
       const selectedModalTypeDetail = selectedModalType.types.find(function(modalTypeDetail) {
@@ -4749,8 +4749,8 @@ StyleFormatPanel.prototype.addModalOps = function() {
 
       // site url
       if (selectedModalTypeDetail) {
-        const modalSiteUrlVal = mxUtils.getValue(ss.style, "modalSiteUrl", selectedModalTypeDetail.url);
-        $(modalOption.querySelector("#modal-site-url")).val(modalSiteUrlVal);
+        const modalSiteUrlVal = mxUtils.getValue(ss.style, 'modalSiteUrl', selectedModalTypeDetail.url);
+        $(modalOption.querySelector('#modal-site-url')).val(modalSiteUrlVal);
       }
     }
   });
@@ -4764,36 +4764,36 @@ StyleFormatPanel.prototype.addModalOps = function() {
   listener();
 
   // -------------------------MODAL ACTION-------------------------------------
-  const modalPopupCheck = $(modalOption.querySelector("#modal-popup-check"));
+  const modalPopupCheck = $(modalOption.querySelector('#modal-popup-check'));
   modalPopupCheck.change(function(e) {
-    const value = modalPopupCheck.is(":checked") ? "1" : "0";
-    graph.setCellStyles("modalPopup", value, graph.getSelectionCells());
-    if (modalPopupCheck.is(":checked")) {
-      graph.setCellStyles("modalType", modalFormListing[0] && modalFormListing[0].group_key ?
-        modalFormListing[0] && modalFormListing[0].group_key : "", graph.getSelectionCells());
-      graph.setCellStyles("modalTypeDetail", modalFormListing[0] && modalFormListing[0].types && modalFormListing[0].types[0] ?
-        modalFormListing[0].types[0].key : "", graph.getSelectionCells());
-      graph.setCellStyles("modalSiteUrl", modalFormListing[0] && modalFormListing[0].types && modalFormListing[0].types[0] ?
-        modalFormListing[0].types[0].url : "", graph.getSelectionCells());
+    const value = modalPopupCheck.is(':checked') ? '1' : '0';
+    graph.setCellStyles('modalPopup', value, graph.getSelectionCells());
+    if (modalPopupCheck.is(':checked')) {
+      graph.setCellStyles('modalType', modalFormListing[0] && modalFormListing[0].group_key ?
+        modalFormListing[0] && modalFormListing[0].group_key : '', graph.getSelectionCells());
+      graph.setCellStyles('modalTypeDetail', modalFormListing[0] && modalFormListing[0].types && modalFormListing[0].types[0] ?
+        modalFormListing[0].types[0].key : '', graph.getSelectionCells());
+      graph.setCellStyles('modalSiteUrl', modalFormListing[0] && modalFormListing[0].types && modalFormListing[0].types[0] ?
+        modalFormListing[0].types[0].url : '', graph.getSelectionCells());
     }
   });
 
-  const modalTypeSelect = $(modalOption.querySelector("#modal-type"));
-  const modalTypeDetailSelect = $(modalOption.querySelector("#modal-type-detail"));
+  const modalTypeSelect = $(modalOption.querySelector('#modal-type'));
+  const modalTypeDetailSelect = $(modalOption.querySelector('#modal-type-detail'));
   modalTypeSelect.change(function(e) {
     const value = modalTypeSelect.val();
-    let detailValue = "";
-    let siteUrlValue = "";
+    let detailValue = '';
+    let siteUrlValue = '';
     const selectedModalType = modalFormListing.find(function(modalType) {
       return modalType.group_key === value;
     });
     if (selectedModalType) {
-      detailValue = selectedModalType.types && selectedModalType.types[0] ? selectedModalType.types[0].key : "";
-      siteUrlValue = selectedModalType.types && selectedModalType.types[0] ? selectedModalType.types[0].url : "";
+      detailValue = selectedModalType.types && selectedModalType.types[0] ? selectedModalType.types[0].key : '';
+      siteUrlValue = selectedModalType.types && selectedModalType.types[0] ? selectedModalType.types[0].url : '';
     }
-    graph.setCellStyles("modalType", value, graph.getSelectionCells());
-    graph.setCellStyles("modalTypeDetail", detailValue, graph.getSelectionCells());
-    graph.setCellStyles("modalSiteUrl", siteUrlValue, graph.getSelectionCells());
+    graph.setCellStyles('modalType', value, graph.getSelectionCells());
+    graph.setCellStyles('modalTypeDetail', detailValue, graph.getSelectionCells());
+    graph.setCellStyles('modalSiteUrl', siteUrlValue, graph.getSelectionCells());
   });
 
 
@@ -4809,17 +4809,17 @@ StyleFormatPanel.prototype.addModalOps = function() {
       });
       if (selectedModalTypeDetail) {
         const siteUrlValue = selectedModalTypeDetail.url;
-        graph.setCellStyles("modalSiteUrl", siteUrlValue, graph.getSelectionCells());
+        graph.setCellStyles('modalSiteUrl', siteUrlValue, graph.getSelectionCells());
       }
     }
-    graph.setCellStyles("modalTypeDetail", modalTypeDetailValue, graph.getSelectionCells());
+    graph.setCellStyles('modalTypeDetail', modalTypeDetailValue, graph.getSelectionCells());
 
   });
 
-  const modalSiteUrlInput = $(modalOption.querySelector("#modal-site-url"));
+  const modalSiteUrlInput = $(modalOption.querySelector('#modal-site-url'));
   modalSiteUrlInput.change(function(e) {
     const value = modalSiteUrlInput.val();
-    graph.setCellStyles("modalSiteUrl", value, graph.getSelectionCells());
+    graph.setCellStyles('modalSiteUrl', value, graph.getSelectionCells());
   });
 
   return modalOption;
@@ -4852,14 +4852,28 @@ DiagramFormatPanel.prototype.init = function() {
   var ui = this.editorUi;
   var editor = ui.editor;
   var graph = editor.graph;
+  var rect = new mxRectangle(graph.x, graph.y, graph.width, graph.height);
+  // console.log(graph.pageFormat);
 
-  this.container.appendChild(this.addView(this.createPanel()));
+
+  // this.container.appendChild(this.addView(this.createPanel()));
 
   if (graph.isEnabled()) {
-    this.container.appendChild(this.addOptions(this.createPanel()));
-    this.container.appendChild(this.addPaperSize(this.createPanel()));
-    this.container.appendChild(this.addStyleOps(this.createPanel()));
+    console.log(graph.getAllCells(0, 0, 1000000, 1000000));
+    const cells = graph.getAllCells(0, 0, 1000000, 1000000);
+    const content = document.createElement('div');
+
+    cells.forEach(function(cell) {
+      const cellContent = document.createElement('div');
+      cellContent.innerHTML = `<div>${cell.id}</div>`;
+      content.appendChild(cellContent);
+    });
+    this.container.appendChild(content);
   }
+
+
+  // this.container.appendChild(this.addPaperSize(this.createPanel()));
+  // this.container.appendChild(this.addStyleOps(this.createPanel()));
 };
 
 /**

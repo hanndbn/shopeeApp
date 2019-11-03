@@ -1866,7 +1866,8 @@ PageSetupDialog.getFormats = function() {
       graph.container.className = 'geDiagramContainer';
       canvas.style.backgroundPosition = position;
       canvas.style.backgroundColor = color;
-      canvas.style.backgroundImage = image;
+      canvas.style.backgroundImage = 'none';
+      canvas.style.backgroundColor = '';
     }
   };
 

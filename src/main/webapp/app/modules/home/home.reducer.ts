@@ -297,6 +297,12 @@ export const getStyle = (slide, slideStyle) => {
       cursor: `pointer`
     };
   }
+  // if (slideStyle['type'] === ELEMENT_TYPE.HOME) {
+  //   style = {
+  //     ...style,
+  //     zIndex: '999'
+  //   };
+  // }
 
   if (slide['parent']) {
     style = {

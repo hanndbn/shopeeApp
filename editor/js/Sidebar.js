@@ -884,7 +884,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', {
+    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 216, 468, '', 'Slide', false, false, 'slide container', {
       id: 'add-container-icon',
       imageId: 'BASIC/SLIDE.png'
     }),
@@ -905,6 +905,16 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       200, 80, 'Image', 'Image', false, false, 'image', {
         id: 'add-image-icon',
         imageId: 'BASIC/IMAGE.png'
+      }),
+    this.createVertexTemplateEntry('type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;',
+      216, 468, 'Game', 'Game', false, false, 'game', {
+        id: 'add-game-icon',
+        imageId: 'BASIC/GAME.png'
+      }),
+    this.createVertexTemplateEntry('type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/BASIC/HOME.svg;',
+      20, 20, '', '', false, false, 'image', {
+        id: 'add-home-icon',
+        imageId: 'BASIC/HOME.png'
       })
   ];
 
@@ -951,16 +961,28 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   requestModalListing(function(data) {
     data.forEach(function(modalType) {
       const componentModal = [];
-      modalType.types.forEach(function(modalTypeDetail) {
+      if (modalType.group_child) {
         componentModal.push(
-          _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};modalSiteUrl=https://viettest-a2c1e.firebaseapp.com/page/contact-form.html;`,
-            100, 40, modalTypeDetail.name, modalTypeDetail.name, false, false, 'button',
+          _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};${modalType.types && modalType.types.length > 0 ? `modalTypeDetail=${modalType.types[0].key};` : ''}`,
+            100, 40, modalType.group_name, modalType.group_name, false, false, modalType.group_name,
             {
-              id: `add-modal-${modalType.group_key}-${modalTypeDetail.key}`,
-              imageId: `${modalType.group_key}/${modalTypeDetail.key}.png`
+              id: `add-modal-${modalType.group_key}`,
+              imageId: `${modalType.group_key}/${modalType.group_key}.png`
             }
           ));
-      });
+      } else {
+        modalType.types.forEach(function(modalTypeDetail) {
+          componentModal.push(
+            _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};modalSiteUrl=https://viettest-a2c1e.firebaseapp.com/page/contact-form.html;`,
+              100, 40, modalTypeDetail.name, modalTypeDetail.name, false, false, 'button',
+              {
+                id: `add-modal-${modalType.group_key}-${modalTypeDetail.key}`,
+                imageId: `${modalType.group_key}/${modalTypeDetail.key}.png`
+              }
+            ));
+        });
+      }
+
       _self.addPaletteFunctions('general', modalType.group_name, (expand != null) ? expand : true, componentModal);
     });
   });

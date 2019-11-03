@@ -87,5 +87,7 @@ export const GET_MODAL_LISTING_URL = '/api/editorModalListing';
 export const ELEMENT_TYPE = {
   TEXT: 'text',
   IMAGE: 'image',
-  BUTTON: 'button'
+  BUTTON: 'button',
+  GAME: 'game',
+  HOME: 'home'
 };
