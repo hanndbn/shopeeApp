@@ -215,7 +215,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                        if (modalType && modalType.types) {
                          const modalTypeDetail = modalType.types.find(v => v.key === slideStyle['modalTypeDetail']);
                          if (modalTypeDetail) {
-                           this.props.displayModalUrl(modalTypeDetail.baseUrl + modalTypeDetail.hasExtendUrl ? slideStyle['modalSiteUrl'] : '');
+                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle['modalSiteUrl']) : ''));
                          }
                        }
                      } else if (relation) {

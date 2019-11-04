@@ -4733,11 +4733,6 @@ StyleFormatPanel.prototype.addModalOps = function() {
       });
 
       $(modalOption.querySelector('#modal-site-url-wrapper')).show();
-      if (modalTypeVal == 'SITE') {
-        $(modalOption.querySelector('#modal-site-url-wrapper')).show();
-      } else {
-        $(modalOption.querySelector('#modal-site-url-wrapper')).hide();
-      }
 
       var modalTypeDetailVal = mxUtils.getValue(ss.style, 'modalTypeDetail', selectedModalType.types ? selectedModalType.types[0].key : '');
       modalTypeDetailSelect.val(modalTypeDetailVal);
@@ -4749,7 +4744,12 @@ StyleFormatPanel.prototype.addModalOps = function() {
 
       // site url
       if (selectedModalTypeDetail) {
-        const modalSiteUrlVal = mxUtils.getValue(ss.style, 'modalSiteUrl', selectedModalTypeDetail.url);
+        if (selectedModalTypeDetail.hasExtendUrl) {
+          $(modalOption.querySelector('#modal-site-url-wrapper')).show();
+        } else {
+          $(modalOption.querySelector('#modal-site-url-wrapper')).hide();
+        }
+        const modalSiteUrlVal = ss.style['modalSiteUrl'] ? decodeURIComponent(ss.style['modalSiteUrl']) : '';
         $(modalOption.querySelector('#modal-site-url')).val(modalSiteUrlVal);
       }
     }
@@ -4773,13 +4773,13 @@ StyleFormatPanel.prototype.addModalOps = function() {
         modalFormListing[0] && modalFormListing[0].group_key : '', graph.getSelectionCells());
       graph.setCellStyles('modalTypeDetail', modalFormListing[0] && modalFormListing[0].types && modalFormListing[0].types[0] ?
         modalFormListing[0].types[0].key : '', graph.getSelectionCells());
-      graph.setCellStyles('modalSiteUrl', modalFormListing[0] && modalFormListing[0].types && modalFormListing[0].types[0] ?
-        modalFormListing[0].types[0].url : '', graph.getSelectionCells());
+      graph.setCellStyles('modalSiteUrl', '', graph.getSelectionCells());
     }
   });
 
   const modalTypeSelect = $(modalOption.querySelector('#modal-type'));
   const modalTypeDetailSelect = $(modalOption.querySelector('#modal-type-detail'));
+  const modalSiteUrlInput = $(modalOption.querySelector('#modal-site-url'));
   modalTypeSelect.change(function(e) {
     const value = modalTypeSelect.val();
     let detailValue = '';
@@ -4789,37 +4789,20 @@ StyleFormatPanel.prototype.addModalOps = function() {
     });
     if (selectedModalType) {
       detailValue = selectedModalType.types && selectedModalType.types[0] ? selectedModalType.types[0].key : '';
-      siteUrlValue = selectedModalType.types && selectedModalType.types[0] ? selectedModalType.types[0].url : '';
     }
     graph.setCellStyles('modalType', value, graph.getSelectionCells());
     graph.setCellStyles('modalTypeDetail', detailValue, graph.getSelectionCells());
-    graph.setCellStyles('modalSiteUrl', siteUrlValue, graph.getSelectionCells());
+    graph.setCellStyles('modalSiteUrl', '', graph.getSelectionCells());
   });
 
 
   modalTypeDetailSelect.change(function(e) {
-    const modalTypeValue = modalTypeSelect.val();
-    const modalTypeDetailValue = modalTypeDetailSelect.val();
-    const selectedModalType = modalFormListing.find(function(modalType) {
-      return modalType.group_key === modalTypeValue;
-    });
-    if (selectedModalType) {
-      const selectedModalTypeDetail = selectedModalType.types.find(function(modalTypeDetail) {
-        return modalTypeDetail.key === modalTypeDetailValue;
-      });
-      if (selectedModalTypeDetail) {
-        const siteUrlValue = selectedModalTypeDetail.url;
-        graph.setCellStyles('modalSiteUrl', siteUrlValue, graph.getSelectionCells());
-      }
-    }
-    graph.setCellStyles('modalTypeDetail', modalTypeDetailValue, graph.getSelectionCells());
-
+    graph.setCellStyles('modalTypeDetail', e.target.value, graph.getSelectionCells());
+    graph.setCellStyles('modalSiteUrl', '', graph.getSelectionCells());
   });
 
-  const modalSiteUrlInput = $(modalOption.querySelector('#modal-site-url'));
   modalSiteUrlInput.change(function(e) {
-    const value = modalSiteUrlInput.val();
-    graph.setCellStyles('modalSiteUrl', value, graph.getSelectionCells());
+    graph.setCellStyles('modalSiteUrl', e.target.value ? encodeURIComponent(e.target.value) : '', graph.getSelectionCells());
   });
 
   return modalOption;

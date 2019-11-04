@@ -884,7 +884,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 216, 468, '', 'Slide', false, false, 'slide container', {
+    this.createVertexTemplateEntry('container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', {
       id: 'add-container-icon',
       imageId: 'BASIC/SLIDE.png'
     }),
@@ -907,7 +907,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         imageId: 'BASIC/IMAGE.png'
       }),
     this.createVertexTemplateEntry('type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;',
-      216, 468, 'Game', 'Game', false, false, 'game', {
+      225, 400, 'Game', 'Game', false, false, 'game', {
         id: 'add-game-icon',
         imageId: 'BASIC/GAME.png'
       }),
