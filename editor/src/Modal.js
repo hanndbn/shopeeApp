@@ -62,6 +62,48 @@ var loadAppModal = function() {
   );
 };
 
+var showImageUpload = function() {
+  return (
+    `<div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header custom-modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Image</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row form-group">
+            <div class="col-3">Image</div>
+            <div class="col-9">
+                <input type="file" id="fileButton" name="fileButton" accept="image/*"
+                style="z-index: 999;position:relative"/>
+            </div>
+          </div>
+          <div class="row form-group text-center loading-wrapper" style="display: none">
+            <div class="col-12">Uploading...</div>
+          </div>
+          <div class="row form-group image-content-wrapper"  style="display: none">
+            <div class="col-3">Image Url</div>
+            <div class="col-9">
+                <input disabled class="form-control" type="text" id="imageUrl" name="imageUrl" style="z-index: 999;position:relative"/>
+            </div>
+          </div>
+          <div class="row">
+          <div class="col-9 offset-3">
+                <div class="text-danger" id="responseError"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-submit" id="useImage" disabled>Submit</button>
+        </div>
+      </div>
+    </div>`
+  );
+};
+
 
 var publishAppModal = function() {
   return (

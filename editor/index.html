@@ -7,6 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="static/js/uuid_v1@latest.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -142,5 +143,29 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 
 </div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-storage.js"></script>
+
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: 'AIzaSyArB1ijzH40Q0hl-6uPpYKZf3ro8v9yrNk',
+        authDomain: 'silverbullet-sandbox.firebaseapp.com',
+        databaseURL: 'https://silverbullet-sandbox.firebaseio.com',
+        projectId: 'silverbullet-sandbox',
+        storageBucket: 'silverbullet-sandbox.appspot.com',
+        messagingSenderId: '793753023114',
+        appId: '1:793753023114:web:d877511439636d325bf373'
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var storage = firebase.storage();
+</script>
 </body>
 </html>

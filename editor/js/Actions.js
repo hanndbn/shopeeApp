@@ -1078,6 +1078,7 @@ Actions.prototype.init = function() {
       var selectionState = graph.cellEditor.saveSelection();
 
       ui.showImageDialog(title, value, function(newValue, w, h) {
+        $('#myModal').modal('hide');
         // Inserts image into HTML text
         if (graph.cellEditor.isContentEditing()) {
           graph.cellEditor.restoreSelection(selectionState);

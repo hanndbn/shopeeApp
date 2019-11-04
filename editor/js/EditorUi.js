@@ -3327,25 +3327,67 @@ EditorUi.prototype.executeLayout = function(exec, animate, post) {
 EditorUi.prototype.showImageDialog = function(title, value, fn, ignoreExisting) {
   var cellEditor = this.editor.graph.cellEditor;
   var selState = cellEditor.saveSelection();
-  var newValue = mxUtils.prompt(title, value);
-  cellEditor.restoreSelection(selState);
 
-  if (newValue != null && newValue.length > 0) {
-    var img = new Image();
+  $('#myModal').html(showImageUpload());
+  $('#fileButton').change(function(e) {
+    for (let i = 0; i < e.target.files.length; i++) {
+      let imagesFile = e.target.files[i];
+      let uploadTask = storage.ref().child(uuidv1()).put(imagesFile);
+      uploadTask.on('state_changed', function(snapshot) {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        if (progress < 100) {
+          $('.image-content-wrapper').css('display', 'none');
+          $('.loading-wrapper').css('display', 'block');
+        }
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+        }
+      }, function(error) {
+        // Handle unsuccessful uploads
+      }, function() {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          $('#imageUrl').val(downloadURL);
+          $('.image-content-wrapper').css('display', 'flex');
+          $('.loading-wrapper').css('display', 'none');
+          $('#useImage').attr('disabled', false);
+        });
+      });
+    }
+  });
+  $('#useImage').click(function() {
+    // var newValue = mxUtils.prompt(title, value);
+    const newValue = $('#imageUrl').val();
+    cellEditor.restoreSelection(selState);
 
-    img.onload = function() {
-      fn(newValue, img.width, img.height);
-    };
-    img.onerror = function() {
+    if (newValue != null && newValue.length > 0) {
+      var img = new Image();
+
+      img.onload = function() {
+        fn(newValue, img.width, img.height);
+      };
+      img.onerror = function() {
+        fn(null);
+        mxUtils.alert(mxResources.get('fileNotFound'));
+      };
+
+      img.src = newValue;
+    }
+    else {
       fn(null);
-      mxUtils.alert(mxResources.get('fileNotFound'));
-    };
+    }
+  });
+  $('#myModal').modal('show');
 
-    img.src = newValue;
-  }
-  else {
-    fn(null);
-  }
 };
 
 /**

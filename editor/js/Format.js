@@ -4851,7 +4851,10 @@ DiagramFormatPanel.prototype.init = function() {
       cellContent.innerHTML = `<div>${cell.id}</div>`;
       content.appendChild(cellContent);
     });
-    this.container.appendChild(content);
+    // this.container.appendChild(content);
+    this.container.appendChild(this.addOptions(this.createPanel()));
+    this.container.appendChild(this.addPaperSize(this.createPanel()));
+    this.container.appendChild(this.addStyleOps(this.createPanel()));
   }
 
 

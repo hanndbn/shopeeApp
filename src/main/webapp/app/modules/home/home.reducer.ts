@@ -254,17 +254,20 @@ export const decode = (node, data) => {
 export const getSlideStyle = styleStr => {
   const slideStyle = {};
   styleStr && styleStr.split(';').map(v => {
-    const styleName = v.split('=')[0] ? v.split('=')[0] : null;
-    const styleValue = v.split('=')[1] ? v.split('=')[1] : null;
-    if (styleName === ELEMENT_TYPE.TEXT) {
-      slideStyle['elementStyle'] = ELEMENT_TYPE.TEXT;
-    } else if (styleName === ELEMENT_TYPE.IMAGE) {
-      slideStyle['elementStyle'] = ELEMENT_TYPE.IMAGE;
-    } else if (styleName === 'rounded' && styleValue === '1') {
-      slideStyle['elementStyle'] = ELEMENT_TYPE.BUTTON;
-    }
-    if (styleName !== null && styleValue !== null) {
-      slideStyle[styleName] = styleValue;
+    const equalIndex = v.indexOf('=');
+    if (equalIndex > 0) {
+      const styleName = v.substring(0, equalIndex);
+      const styleValue = v.substring(equalIndex + 1, v.length);
+      if (styleName === ELEMENT_TYPE.TEXT) {
+        slideStyle['elementStyle'] = ELEMENT_TYPE.TEXT;
+      } else if (styleName === ELEMENT_TYPE.IMAGE) {
+        slideStyle['elementStyle'] = ELEMENT_TYPE.IMAGE;
+      } else if (styleName === 'rounded' && styleValue === '1') {
+        slideStyle['elementStyle'] = ELEMENT_TYPE.BUTTON;
+      }
+      if (styleName !== null && styleValue !== null) {
+        slideStyle[styleName] = styleValue;
+      }
     }
   });
   return slideStyle;

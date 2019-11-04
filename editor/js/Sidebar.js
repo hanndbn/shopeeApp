@@ -902,7 +902,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         imageId: 'BASIC/TEXT.png'
       }),
     this.createVertexTemplateEntry('shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
-      200, 80, 'Image', 'Image', false, false, 'image', {
+      200, 80, '', '', false, false, 'image', {
         id: 'add-image-icon',
         imageId: 'BASIC/IMAGE.png'
       }),
