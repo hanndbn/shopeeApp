@@ -89,5 +89,6 @@ export const ELEMENT_TYPE = {
   IMAGE: 'image',
   BUTTON: 'button',
   GAME: 'game',
-  HOME: 'home'
+  HOME: 'home',
+  YOUTUBE: 'YOUTUBE'
 };

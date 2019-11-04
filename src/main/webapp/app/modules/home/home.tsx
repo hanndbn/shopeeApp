@@ -107,7 +107,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   parse2html(data, activeSlideId) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
+    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[ 0 ];
     return (
       <div className="d-flex justify-content-center h-100 w-100">
         {this.slide2html(data, slide, null, null, activeSlideId)}
@@ -116,12 +116,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0, hasIFrame = false) {
-    const slideStyle = homeAction.getSlideStyle(slide['style']);
+    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide['parent'];
+    const isRoot = !slide[ 'parent' ];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -135,8 +135,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style['width'] ? style['width'] : 0;
-      const slideHeight = style['height'] ? style['height'] : 0;
+      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
+      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -192,7 +192,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
     }
 
-    const isGame = slideStyle['type'] === 'game';
+    const isGame = slideStyle[ 'type' ] === 'game';
+    const isYoutube = slideStyle[ 'modalType' ] === 'MEDIA' && slideStyle[ 'modalTypeDetail' ] === 'YOUTUBE';
+    let youtubeID = '';
+    const modalSiteUrl = decodeURIComponent(slideStyle[ 'modalSiteUrl' ]);
+    if (modalSiteUrl && modalSiteUrl.split('https://www.youtube.com/watch?v=').length > 1) {
+      youtubeID = modalSiteUrl.split('https://www.youtube.com/watch?v=')[ 1 ];
+    }
 
     if (isGame || hasIFrame) {
       style = {
@@ -210,19 +216,19 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                  key={idx}
                  onClick={() => {
                    if (!isRoot) {
-                     if (slideStyle['modalPopup'] === '1' && this.props.modalListing) {
-                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle['modalType']);
+                     if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
+                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
                        if (modalType && modalType.types) {
-                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle['modalTypeDetail']);
-                         if (modalTypeDetail) {
-                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle['modalSiteUrl']) : ''));
+                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle[ 'modalTypeDetail' ]);
+                         if (modalTypeDetail && modalTypeDetail.key !== ELEMENT_TYPE.YOUTUBE) {
+                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle[ 'modalSiteUrl' ]) : ''));
                          }
                        }
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
-                     } else if (slideStyle['type'] === ELEMENT_TYPE.HOME) {
+                     } else if (slideStyle[ 'type' ] === ELEMENT_TYPE.HOME) {
                        const firstSlide = data.elements.find(v => v.isFirstSlide);
-                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null);
+                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[ 0 ] ? data.elements[ 0 ].id : null);
                      }
                    }
                  }}
@@ -263,9 +269,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
             >
               {
                 isGame ?
-                  <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/>
-                  :
-                  <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
+                  <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/> :
+                  isYoutube ?
+                    <iframe allowFullScreen={true}
+                            src={`https://www.youtube.com/embed/${youtubeID}?ecver=1&amp;iv_load_policy=1&amp;rel=0&amp;yt:stretch=16:9&amp;autohide=1&amp;color=red&amp;width=560&amp;width=560`}
+                            width="100%" height="100%" allowTransparency={true} frameBorder="0"/>
+                    :
+                    <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
               }
             </div>}
           </>
