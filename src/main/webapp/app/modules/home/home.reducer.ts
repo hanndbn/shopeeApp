@@ -325,8 +325,8 @@ export const getChildStyle = (slide, slideStyle) => {
     ...childStyle,
     // border: slideStyle['strokeColor'] === 'none' || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE ?
     //   '' : `1px solid ${this.getColorWithOpacity('#000000', opacityHex)}`,
-    borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
-    backgroundColor: slideStyle['fillColor'] ? `${getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
+    borderRadius: slideStyle['rounded'] === '1' ? '5px' : ''
+    // backgroundColor: slideStyle['fillColor'] ? `${getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
   };
   return childStyle;
 };
