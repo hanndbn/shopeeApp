@@ -4,4 +4,6 @@ var CONSTANT = {
   SAVE_NAME_API: SERVER_API_URL + '/saveApp',
   LOAD_DATA_API: SERVER_API_URL + '/openApp',
   LOAD_MODAL_LISTING_API: SERVER_API_URL + '/editorModalListing',
+  UPLOAD_FILE_API: SERVER_API_URL + '/upload',
+  GET_FILES_WITH_TYPE: SERVER_API_URL + '/getFilesWithType',
 };

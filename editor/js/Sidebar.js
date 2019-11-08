@@ -901,7 +901,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-text-icon',
         imageId: 'BASIC/TEXT.png'
       }),
-    this.createVertexTemplateEntry('shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
+    this.createVertexTemplateEntry('type=IMAGE;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
       200, 80, '', '', false, false, 'image', {
         id: 'add-image-icon',
         imageId: 'BASIC/IMAGE.png'
@@ -963,7 +963,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       const componentModal = [];
       if (modalType.group_child) {
         componentModal.push(
-          _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};${modalType.types && modalType.types.length > 0 ? `modalTypeDetail=${modalType.types[0].key};` : ''}`,
+          _self.createVertexTemplateEntry(`type=${modalType.group_key};rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};${modalType.types && modalType.types.length > 0 ? `modalTypeDetail=${modalType.types[0].key};` : ''}`,
             100, 40, modalType.group_name, modalType.group_name, false, false, modalType.group_name,
             {
               id: `add-modal-${modalType.group_key}`,
@@ -973,7 +973,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       } else {
         modalType.types.forEach(function(modalTypeDetail) {
           componentModal.push(
-            _self.createVertexTemplateEntry(`rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};`,
+            _self.createVertexTemplateEntry(`type=${modalTypeDetail.key};rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};`,
               100, 40, modalTypeDetail.name, modalTypeDetail.name, false, false, 'button',
               {
                 id: `add-modal-${modalType.group_key}-${modalTypeDetail.key}`,

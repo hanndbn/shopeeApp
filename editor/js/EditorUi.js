@@ -2775,7 +2775,7 @@ EditorUi.prototype.createUi = function() {
     this.menubar.container.appendChild(this.statusContainer);
 
     // Inserts into DOM
-    this.container.appendChild(this.menubarContainer);
+    // this.container.appendChild(this.menubarContainer);
   }
 
   // Creates the sidebar
