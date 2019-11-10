@@ -3576,7 +3576,7 @@ FileFormatPanel.prototype.init = function() {
   divImportImage.className = 'col-4 format-image-content';
   divImportImage.innerHTML = `
           <div id="upload-file">
-                <img src="/content/images/editor/icons/import.PNG"/>
+                <img src="/content/images/editor/icons/import.png"/>
           </div>
     `;
   $(fileContainer.querySelector('#format-image-content-wrapper')).append(divImportImage);
