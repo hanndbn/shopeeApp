@@ -140,32 +140,26 @@ var publishAppModal = function() {
   );
 };
 
-var imageUpload = function() {
+var fileUpload = function(fileType, label = '', accept = '*') {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header custom-modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Image</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Upload ${_.capitalize(label)}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="row form-group">
-            <div class="col-3">Image</div>
+            <div class="col-3">${_.capitalize(label)} File</div>
             <div class="col-9">
-                <input type="file" id="fileInput" name="fileInput" accept="image/*"
+                <input type="file" id="fileInput" name="fileInput" accept="${accept}"
                 style="z-index: 999;position:relative"/>
             </div>
           </div>
           <div class="row form-group text-center loading-wrapper" style="display: none">
             <div class="col-12">Uploading...</div>
-          </div>
-          <div class="row form-group image-content-wrapper"  style="display: none">
-            <div class="col-3">Image Url</div>
-            <div class="col-9">
-                <input disabled class="form-control" type="text" id="imageUrl" name="imageUrl" style="z-index: 999;position:relative"/>
-            </div>
           </div>
           <div class="row">
           <div class="col-9 offset-3">

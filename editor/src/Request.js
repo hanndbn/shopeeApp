@@ -134,4 +134,23 @@ function requestFilesWithType(userId, fileType, callback) {
   });
 }
 
+function requestDeleteImage(fileName, callback) {
+  $.ajax({
+    type: 'DELETE',
+    url: CONSTANT.DELETE_FILE,
+    data: JSON.stringify({
+      fileName: fileName
+    }),
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function(data) {
+      if (callback) {
+        callback(filesListing);
+      }
+    },
+    error: function(xhr) {
+    }
+  });
+}
+
 

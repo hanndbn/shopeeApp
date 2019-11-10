@@ -2844,7 +2844,7 @@ EditorUi.prototype.createUi = function() {
   document.getElementById('custom-footer-container').innerHTML = `
     <div class="row">
     <div class="col-6 d-flex">
-        <button class="action-btn submit-btn" id="load-btn">Load</button>
+        <button class="btn action-btn submit-btn" id="load-btn">Load</button>
     </div>
     <div class="col-6 justify-content-end d-flex">
         <button class="btn action-btn" id="back-btn">Back</button>

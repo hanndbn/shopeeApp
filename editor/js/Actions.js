@@ -56,11 +56,14 @@ Actions.prototype.init = function() {
     });
   }).isEnabled = isGraphEnabled;
   this.addAction('save', function() {
-    ui.saveFile(false);
+    const elt = document.getElementById('save-btn');
+    elt.dataset.added = 'false';
+    elt.click();
+    // ui.saveFile(false);
   }, null, null, Editor.ctrlKey + '+S').isEnabled = isGraphEnabled;
   this.addAction('saveAs...', function() {
     ui.saveFile(true);
-  }, null, null, Editor.ctrlKey + '+Shift+S').isEnabled = isGraphEnabled;
+  }, null, null, null).isEnabled = isGraphEnabled;
   this.addAction('export...', function() {
     ui.showDialog(new ExportDialog(ui).container, 300, 296, true, true);
   });
@@ -299,7 +302,7 @@ Actions.prototype.init = function() {
   this.addAction('editData...', function() {
     var cell = graph.getSelectionCell() || graph.getModel().getRoot();
     ui.showDataDialog(cell);
-  }, null, null, Editor.ctrlKey + '+M');
+  }, null, null, null);
   this.addAction('editTooltip...', function() {
     var graph = ui.editor.graph;
 
@@ -341,7 +344,7 @@ Actions.prototype.init = function() {
         graph.setLinkForCell(cell, (link.length > 0) ? link : null);
       });
     }
-  }, null, null, 'Alt+Shift+L');
+  }, null, null, null);
   this.put('insertImage', new Action(mxResources.get('image') + '...', function() {
     if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent())) {
       graph.clearSelection();

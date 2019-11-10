@@ -934,16 +934,16 @@ Menus.prototype.createPopupMenu = function(menu, cell, evt) {
         this.addMenuItems(menu, ['ungroup'], null, evt);
       }
 
-      if (graph.getSelectionCount() == 1) {
-        menu.addSeparator();
-        this.addMenuItems(menu, ['editData', 'editLink'], null, evt);
-
-        // Shows edit image action if there is an image in the style
-        if (graph.getModel().isVertex(cell) && mxUtils.getValue(state.style, mxConstants.STYLE_IMAGE, null) != null) {
-          menu.addSeparator();
-          this.addMenuItem(menu, 'image', null, evt).firstChild.nextSibling.innerHTML = mxResources.get('editImage') + '...';
-        }
-      }
+      // if (graph.getSelectionCount() == 1) {
+      //   menu.addSeparator();
+      //   this.addMenuItems(menu, ['editData', 'editLink'], null, evt);
+      //
+      //   // Shows edit image action if there is an image in the style
+      //   if (graph.getModel().isVertex(cell) && mxUtils.getValue(state.style, mxConstants.STYLE_IMAGE, null) != null) {
+      //     menu.addSeparator();
+      //     this.addMenuItem(menu, 'image', null, evt).firstChild.nextSibling.innerHTML = mxResources.get('editImage') + '...';
+      //   }
+      // }
     }
   }
   else {

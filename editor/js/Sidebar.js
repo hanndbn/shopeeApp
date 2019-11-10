@@ -901,6 +901,11 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-text-icon',
         imageId: 'BASIC/TEXT.png'
       }),
+    this.createVertexTemplateEntry('type=LINK;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
+      40, 20, 'Link', 'LINK', false, false, 'link', {
+        id: 'add-link-icon',
+        imageId: 'BASIC/LINK.png'
+      }),
     this.createVertexTemplateEntry('type=IMAGE;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
       200, 80, '', '', false, false, 'image', {
         id: 'add-image-icon',

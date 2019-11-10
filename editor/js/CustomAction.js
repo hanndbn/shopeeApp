@@ -75,9 +75,7 @@ CustomActions.prototype.init = function() {
   });
 
   $('#clone-container-btn').click(function() {
-    const elt = document.getElementById('clone-container-icon');
-    elt.dataset.added = 'false';
-    elt.click();
+    graph.setSelectionCells(graph.duplicateCells());
   });
 
   $('#add-text-btn').click(function() {

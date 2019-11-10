@@ -6,4 +6,5 @@ var CONSTANT = {
   LOAD_MODAL_LISTING_API: SERVER_API_URL + '/editorModalListing',
   UPLOAD_FILE_API: SERVER_API_URL + '/upload',
   GET_FILES_WITH_TYPE: SERVER_API_URL + '/getFilesWithType',
+  DELETE_FILE: SERVER_API_URL + '/deleteFile'
 };
