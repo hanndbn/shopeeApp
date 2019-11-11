@@ -9,12 +9,14 @@
     <link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
     <script type="text/javascript" src="static/js/uuid_v1@latest.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
+    <link rel="stylesheet" href="static/css/md-bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Bootstrap core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">-->
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -26,6 +28,13 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+<!--    <script type="text/javascript" src="static/js/md-bootstrap.min.js"></script>-->
+
+    <!-- One of the following themes -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
+
+    <!-- Modern or es5 bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
@@ -41,13 +50,13 @@
         // - chrome=0: Chromeless mode.
         var urlParams = (function(url) {
             var result = new Object();
-            var idx = url.lastIndexOf('?');
+            var idx = url.lastIndexOf("?");
 
             if (idx > 0) {
-                var params = url.substring(idx + 1).split('&');
+                var params = url.substring(idx + 1).split("&");
 
                 for (var i = 0; i < params.length; i++) {
-                    idx = params[i].indexOf('=');
+                    idx = params[i].indexOf("=");
 
                     if (idx > 0) {
                         result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
@@ -134,7 +143,7 @@
             mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
 
         // Fixes possible asynchronous requests
-        mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr) {
+        mxUtils.getAll([bundle, STYLE_PATH + "/default.xml"], function(xhr) {
             // Adds bundle text to resources
             mxResources.parse(xhr[0].getText());
 
@@ -143,9 +152,9 @@
             themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
             // Main
-            new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
+            new EditorUi(new Editor(urlParams["chrome"] == "0", themes));
         }, function() {
-            document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
+            document.body.innerHTML = "<center style=\"margin-top:10%;\">Error loading resource files. Please check browser console.</center>";
         });
     })();
 </script>
@@ -165,13 +174,13 @@
 <script>
     // Your web app's Firebase configuration
     var firebaseConfig = {
-        apiKey: 'AIzaSyArB1ijzH40Q0hl-6uPpYKZf3ro8v9yrNk',
-        authDomain: 'silverbullet-sandbox.firebaseapp.com',
-        databaseURL: 'https://silverbullet-sandbox.firebaseio.com',
-        projectId: 'silverbullet-sandbox',
-        storageBucket: 'silverbullet-sandbox.appspot.com',
-        messagingSenderId: '793753023114',
-        appId: '1:793753023114:web:d877511439636d325bf373'
+        apiKey: "AIzaSyArB1ijzH40Q0hl-6uPpYKZf3ro8v9yrNk",
+        authDomain: "silverbullet-sandbox.firebaseapp.com",
+        databaseURL: "https://silverbullet-sandbox.firebaseio.com",
+        projectId: "silverbullet-sandbox",
+        storageBucket: "silverbullet-sandbox.appspot.com",
+        messagingSenderId: "793753023114",
+        appId: "1:793753023114:web:d877511439636d325bf373"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);

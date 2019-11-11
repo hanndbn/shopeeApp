@@ -896,7 +896,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       id: 'add-rectangle-icon',
       imageId: 'BASIC/ROUNDED_RECTANGLE.png'
     }),
-    this.createVertexTemplateEntry('text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
+    this.createVertexTemplateEntry('type=TEXT;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
       40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', {
         id: 'add-text-icon',
         imageId: 'BASIC/TEXT.png'
