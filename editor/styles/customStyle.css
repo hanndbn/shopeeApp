@@ -1,3 +1,7 @@
+body div {
+  white-space: normal;
+}
+
 .geSidebarContainer *,
 .geSidebarContainer *::before,
 .geSidebarContainer *::after,
@@ -360,7 +364,9 @@
 }
 
 .format-link-wrapper {
+  font-size: 16px;
   font-family: 'Barlow', sans-serif;
+  color: #535353;
   border-color: #535353 !important;
   box-shadow: none !important;
 }
@@ -396,18 +402,24 @@
   left: 0;
 }
 
-.g-margin-left-10{
+.g-margin-left-10 {
   margin-left: 10px;
 }
 
-.select-box{
+.select-box {
   width: 100%;
   border-radius: 3px;
   border-bottom: 1px solid #ccc;
   position: relative;
 }
 
-.select-box::before{
+.input-box {
+  width: 100%;
+  border-radius: 3px;
+  position: relative;
+}
+
+.select-box::before {
   content: '';
   width: 10px;
   height: 10px;
@@ -421,7 +433,7 @@
   pointer-events: none;
 }
 
-.select-box select{
+.select-box select {
   width: 100%;
   height: 100%;
   padding: 10px 0 10px 0;
@@ -432,7 +444,7 @@
   background-color: #F9F9F9;
 }
 
-.select-wrapper{
+.select-wrapper {
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 15px;
@@ -440,24 +452,68 @@
 }
 
 .select-box .form-control:focus,
-.select-box .form-control:active{
+.select-box .form-control:active,
+.font-size-wrapper input:focus,
+.font-size-wrapper input:active {
   box-shadow: none;
   background-color: #F9F9F9;
+  outline: none;
 }
 
-.color-wrapper{
+.font-size-wrapper {
+  padding: 10px 0;
+  width: 100%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
-.format-color-preview{
-  width: 30px;
-  height: 30px;
-  border: 1px solid gray;
+
+.font-size-wrapper input {
+  height: 1rem;
+  border: none;
+  border-bottom: 1px dotted gray;
+  margin-left: 20px;
+  width: 50px;
+  background-color: #f9f9f9;
+  text-align: center;
 }
 
-.format-color-edit{
+.color-wrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.format-color-preview {
+  width: 45px;
+  height: 25px;
+  margin: 0 10px;
+  background-color: #f5f5f5;
+  background-image: linear-gradient(#f5f5f5 0px, #e1e1e1 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.format-color-preview > div {
+  width: 100%;
+  height: 100%;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+
+.format-color-edit {
   cursor: pointer;
   margin-left: 10px;
   font-size: 18px;
+}
+
+.extend-wrapper {
+  padding: 0;
+  margin-top: 20px;
 }
 
