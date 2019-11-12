@@ -74,5 +74,53 @@ var customUtils = {
     } finally {
       graph.getModel().endUpdate();
     }
+  },
+  deleteSelectionCell: function(graph) {
+    graph.escape();
+    const cells = graph.getDeletableCells(graph.getSelectionCells());
+
+    if (cells != null && cells.length > 0) {
+      const parents = (graph.selectParentAfterDelete) ? graph.model.getParents(cells) : null;
+      graph.removeCells(cells, includeEdges);
+
+      // Selects parents for easier editing of groups
+      if (parents != null) {
+        var select = [];
+
+        for (var i = 0; i < parents.length; i++) {
+          if (graph.model.contains(parents[i]) &&
+            (graph.model.isVertex(parents[i]) ||
+              graph.model.isEdge(parents[i]))) {
+            select.push(parents[i]);
+          }
+        }
+
+        graph.setSelectionCells(select);
+      }
+    }
+  },
+  deleteCellWidthId: function(graph, cell) {
+    graph.escape();
+    const cells = graph.getDeletableCells([cell]);
+
+    if (cells != null && cells.length > 0) {
+      const parents = (graph.selectParentAfterDelete) ? graph.model.getParents(cells) : null;
+      graph.removeCells(cells, true);
+
+      // Selects parents for easier editing of groups
+      if (parents != null) {
+        var select = [];
+
+        for (let i = 0; i < parents.length; i++) {
+          if (graph.model.contains(parents[i]) &&
+            (graph.model.isVertex(parents[i]) ||
+              graph.model.isEdge(parents[i]))) {
+            select.push(parents[i]);
+          }
+        }
+
+        graph.setSelectionCells(select);
+      }
+    }
   }
 };

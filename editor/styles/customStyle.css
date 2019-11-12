@@ -121,13 +121,13 @@ body div {
   /*border-left: 1px solid #707070;*/
 }
 
-.nav-item {
+.navContainer .nav-item {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-.nav-link {
+.navContainer .nav-link {
   height: 50px;
   width: 50px;
   display: flex;
@@ -135,20 +135,20 @@ body div {
   align-items: center;
   flex-wrap: wrap;
   font-size: 12px;
-  color: #707070 !important;
+  color: #707070;
   text-align: center;
   cursor: pointer;
 }
 
-.nav-link img {
+.navContainer .nav-link img {
   width: 35px;
 }
 
-.nav-link-client img {
+.navContainer .nav-link-client img {
   margin-left: 12px;
 }
 
-.nav-link:hover {
+.navContainer .nav-link:hover {
   background-color: #f9f9f9;
 }
 
@@ -517,21 +517,82 @@ body div {
   margin-top: 20px;
 }
 
-.g-margin-bottom-10{
-  margin-bottom: 10px;
-}
-
-.g-margin-top-10{
-  margin-top: 10px;
-}
-
-.tab-header-wrapper{
+.tab-header-wrapper {
   border-radius: 5px;
+  font-size: 12px;
 }
 
-.tab-header-content{
-  padding: 5px 0;
+.tab-header-content {
+  padding: 7px 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-transform: uppercase;
+  background-color: #E8E8E8;
+  color: #BCBCBC;
+  cursor: pointer;
+}
+
+.tab-header-content:first-child {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.tab-header-content:last-child {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.tab-header-content.active {
+  background-color: #52A1A7;
+  color: white;
+}
+
+
+.format-diagram-wrapper .nav-link{
+  height: auto;
+  width: auto;
+  color: #BCBCBC;
+  font-weight: 400;
+}
+
+.format-diagram-wrapper .nav-link.active{
+  color: white;
+}
+
+.format-diagram-wrapper .tab-content{
+  padding: 0;
+}
+
+.layer-card-wrapper{
+  background-color: #bedee0;
+  color: #343434;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.layer-card-close{
+  color: #db0000;
+  cursor: pointer;
+}
+
+.layer-card-id{
+  text-align: left;
+}
+
+
+.g-margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.g-margin-top-10 {
+  margin-top: 10px;
+}
+
+.g-margin-top-20 {
+  margin-top: 20px;
+}
+
+.g-font-weight-400 {
+  font-weight: 400;
 }
