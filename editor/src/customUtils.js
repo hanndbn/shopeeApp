@@ -16,5 +16,63 @@ var customUtils = {
       graph.setSelectionCells(select);
       graph.scrollCellToVisible(select[0]);
     }
+  },
+  updateCellWith: function(graph, width, isConstrain = false) {
+    graph.getModel().beginUpdate();
+    try {
+      const cells = graph.getSelectionCells();
+
+      for (let i = 0; i < cells.length; i++) {
+        if (graph.getModel().isVertex(cells[i])) {
+          let geo = graph.getCellGeometry(cells[i]);
+
+          if (geo != null) {
+            geo = geo.clone();
+
+            //set value
+            if (geo.width > 0) {
+              if (isConstrain) {
+                geo.height = Math.round((geo.height * width * 100) / geo.width) / 100;
+              }
+
+              geo.width = width;
+            }
+
+            graph.getModel().setGeometry(cells[i], geo);
+          }
+        }
+      }
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  },
+  updateCellHeight: function(graph, height, isConstrain = false) {
+    graph.getModel().beginUpdate();
+    try {
+      const cells = graph.getSelectionCells();
+
+      for (let i = 0; i < cells.length; i++) {
+        if (graph.getModel().isVertex(cells[i])) {
+          let geo = graph.getCellGeometry(cells[i]);
+
+          if (geo != null) {
+            geo = geo.clone();
+
+            //set value
+            if (geo.height > 0) {
+              if (isConstrain) {
+                geo.width = Math.round((geo.width * height * 100) / geo.height) / 100;
+              }
+
+              geo.height = height;
+            }
+
+            graph.getModel().setGeometry(cells[i], geo);
+          }
+        }
+      }
+    } finally {
+      graph.getModel().endUpdate();
+    }
   }
 };

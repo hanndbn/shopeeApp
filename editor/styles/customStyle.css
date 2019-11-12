@@ -517,3 +517,21 @@ body div {
   margin-top: 20px;
 }
 
+.g-margin-bottom-10{
+  margin-bottom: 10px;
+}
+
+.g-margin-top-10{
+  margin-top: 10px;
+}
+
+.tab-header-wrapper{
+  border-radius: 5px;
+}
+
+.tab-header-content{
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

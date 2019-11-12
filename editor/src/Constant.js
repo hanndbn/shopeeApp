@@ -1,6 +1,7 @@
 var SERVER_API_URL = 'https://us-central1-silverbullet-sandbox.cloudfunctions.net/api';
 var SERVER_URL = 'https://silverbullet-sandbox.firebaseapp.com/';
 var CONSTANT = {
+  MAX_WIDTH_CARD: 225,
   PATTERN_NUMBER: '^[0-9]+$',
   DEFAULT_FONTS: ['Helvetica ', 'Verdana', 'Times New Roman', 'Garamond', 'Comic Sans MS',
     'Courier New', 'Georgia', 'Lucida Console', 'Tahoma'],
