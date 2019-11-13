@@ -2,6 +2,8 @@ import React from 'react';
 import qs from 'querystring';
 import { setDisplayModal } from 'app/InfoModal/infoModal.reducer';
 import { store } from 'app/index';
+import { getMediaContent } from 'app/modules/home/home.reducer';
+import _ from 'lodash';
 
 export const paramObj = search => {
   const parsed = decodeURIComponent(search.replace(/[?]/g, '')).replace(/\+/g, ' ');
@@ -28,3 +30,29 @@ export const modalUrlLayout = (url = '') => (
     </div>
   </div>
 );
+
+export const modalMediaLayout = (type, url = '') => {
+  const mediaContent = getMediaContent(type, url);
+  const label = _.startCase(type ? _.toLower(type.replace('_', ' ')) : '');
+
+  return (
+    <div className="row no-gutters">
+      <div className="col-12 modal-header">
+        <div className="modal-header-content">{label} Content</div>
+      </div>
+      <div className="col-12 no-padding">
+        <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/>
+      </div>
+      <div className="col-12 text-right custom-modal-footer">
+        <button
+          className="btn btn-common btn-submit"
+          onClick={async () => {
+            await store.dispatch(setDisplayModal(false));
+          }}
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  );
+};

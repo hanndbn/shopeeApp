@@ -122,5 +122,20 @@ var customUtils = {
         graph.setSelectionCells(select);
       }
     }
+  },
+  setCellConnectable: function(format, editorUi) {
+    const editor = editorUi.editor;
+    const graph = editor.graph;
+    const ss = format.getSelectionState();
+    const isConnectable = ss.style.isConnectable ? ss.style.isConnectable === 1 : false;
+    graph.getModel().beginUpdate();
+    try {
+      const cells = graph.getSelectionCells();
+      cells.map(cell => {
+        cell.setConnectable(isConnectable);
+      });
+    } finally {
+      graph.getModel().endUpdate();
+    }
   }
 };

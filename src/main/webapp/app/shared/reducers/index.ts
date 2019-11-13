@@ -12,13 +12,7 @@ import activate, { ActivateState } from 'app/modules/account/activate/activate.r
 import password, { PasswordState } from 'app/modules/account/password/password.reducer';
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
-import carousel, { CarouselState } from 'app/modules/carousel/carousel.reducer';
 import common, { CommonState } from 'app/shared/common/common.reducer';
-import projects, { ProjectsState } from 'app/modules/projects/projects.reducer';
-import projectDetail, { ProjectDetailState } from 'app/modules/projectDetail/projectDetail.reducer';
-import category, { CategoryState } from 'app/modules/category/category.reducer';
-import contactUs, { ContactUsState } from 'app/modules/contactUs/contactUs.reducer';
-import about, { AboutState } from 'app/modules/about/about.reducer';
 import home, { HomeState } from 'app/modules/home/home.reducer';
 import infoModal, { InfoModalState } from 'app/InfoModal/infoModal.reducer';
 
@@ -35,13 +29,7 @@ export interface IRootState {
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
-  readonly carousel: CarouselState;
-  readonly projects: ProjectsState;
-  readonly projectDetail: ProjectDetailState;
-  readonly category: CategoryState;
-  readonly contactUs: ContactUsState;
   readonly common: CommonState;
-  readonly about: AboutState;
   readonly home: HomeState;
   readonly infoModal: InfoModalState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
@@ -59,13 +47,7 @@ const rootReducer = combineReducers<IRootState>({
   passwordReset,
   password,
   settings,
-  carousel,
-  projects,
-  projectDetail,
-  category,
-  contactUs,
   common,
-  about,
   home,
   infoModal,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */

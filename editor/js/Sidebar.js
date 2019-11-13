@@ -978,7 +978,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       } else {
         modalType.types.forEach(function(modalTypeDetail) {
           componentModal.push(
-            _self.createVertexTemplateEntry(`type=${modalTypeDetail.key};rounded=1;whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};`,
+            _self.createVertexTemplateEntry(`type=${modalTypeDetail.key};rounded=${modalType.group_key === 'MEDIA' ? '0' : '1'};whiteSpace=wrap;html=1;modalPopup=1;modalType=${modalType.group_key};modalTypeDetail=${modalTypeDetail.key};`,
               100, 40, modalTypeDetail.name, modalTypeDetail.name, false, false, 'button',
               {
                 id: `add-modal-${modalType.group_key}-${modalTypeDetail.key}`,

@@ -1,4 +1,4 @@
-import { modalUrlLayout } from 'app/shared/util/util';
+import { modalMediaLayout, modalUrlLayout } from 'app/shared/util/util';
 
 const ACTION_TYPES = {
   RESET: 'infoModal/RESET',
@@ -57,5 +57,10 @@ export const setModalContent = (modalContent, extendClass = '', toggleModal = tr
 
 export const displayModalUrl = (url = '') => async (dispatch, getState) => {
   dispatch(setModalContent(modalUrlLayout(url)));
+  dispatch(setDisplayModal(true));
+};
+
+export const displayModalMedia = (type, url = '') => async (dispatch, getState) => {
+  dispatch(setModalContent(modalMediaLayout(type, url)));
   dispatch(setDisplayModal(true));
 };

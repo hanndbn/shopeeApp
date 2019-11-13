@@ -22,6 +22,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
   setWindowSize: Function;
   setScrollPosition: Function;
   displayModalUrl: Function;
+  displayModalMedia: Function;
   location: any;
   match: any;
 }
@@ -193,12 +194,15 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     }
 
     const isGame = slideStyle[ 'type' ] === 'game';
-    const isYoutube = slideStyle[ 'modalType' ] === 'MEDIA' && slideStyle[ 'modalTypeDetail' ] === 'YOUTUBE';
-    let youtubeID = '';
-    const modalSiteUrl = decodeURIComponent(slideStyle[ 'modalSiteUrl' ]);
-    if (modalSiteUrl && modalSiteUrl.split('https://www.youtube.com/watch?v=').length > 1) {
-      youtubeID = modalSiteUrl.split('https://www.youtube.com/watch?v=')[ 1 ];
+    const isMedia = homeAction.isMedia(slideStyle[ 'type' ]);
+    let mediaContent = '';
+    let linkOpenInModal = false;
+    if (isMedia) {
+      mediaContent = homeAction.getMediaContent(slideStyle[ 'type' ], slideStyle[ 'linkUrl' ]);
+      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
     }
+    // console.log(isMedia)
+    // console.log(mediaContent)
 
     if (isGame || hasIFrame) {
       style = {
@@ -216,7 +220,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                  key={idx}
                  onClick={() => {
                    if (!isRoot) {
-                     if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
+                     if (isMedia && linkOpenInModal) {
+                       this.props.displayModalMedia(slideStyle[ 'type' ], decodeURIComponent(slideStyle[ 'linkUrl' ]));
+                     } else if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
                        const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
                        if (modalType && modalType.types) {
                          const modalTypeDetail = modalType.types.find(v => v.key === slideStyle[ 'modalTypeDetail' ]);
@@ -270,11 +276,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
               {
                 isGame ?
                   <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/> :
-                  isYoutube ?
-                    <iframe allowFullScreen={true}
-                            src={`https://www.youtube.com/embed/${youtubeID}?ecver=1&amp;iv_load_policy=1&amp;rel=0&amp;yt:stretch=16:9&amp;autohide=1&amp;color=red&amp;width=560&amp;width=560`}
-                            width="100%" height="100%" allowTransparency={true} frameBorder="0"/>
-                    :
+                  (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(mediaContent) }}/> :
                     <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
               }
             </div>}
@@ -365,6 +367,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   displayModalUrl: url => {
     dispatch(infoModaAction.displayModalUrl(url));
+  },
+  displayModalMedia: (type, url) => {
+    dispatch(infoModaAction.displayModalMedia(type, url));
   }
 });
 

@@ -5,7 +5,7 @@ const config = {
 export default config;
 
 // export const SERVER_API_URL = 'hanndbn.000webhostapp.com';
-export const SERVER_API_URL = process.env.SERVER_API_URL;
+export const SERVER_API_URL = 'https://us-central1-silverbullet-sandbox.cloudfunctions.net';
 
 export const TITLE_HELMET = 'FLOW';
 export const CONSTANT = {
@@ -73,16 +73,9 @@ export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDThh:mm';
 export const APP_WHOLE_NUMBER_FORMAT = '0,0';
 export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';
 
-export const GET_CAROUSEL_DATA_URL = '/wp-json/acf/v3/carousel?per_page=100';
-export const GET_CATEGORY_DATA_URL = '/wp-json/wp/v2/categories?per_page=100';
-export const GET_PROJECTS_DATA_URL = '/wp-json/wp/v2/projects?per_page=100';
-export const GET_PROJECT_DETAIL_DATA_URL = '/wp-json/wp/v2/projects/';
-export const POST_CONTACT_US_URL = '/wp-json/wp/v2/comments';
-export const GET_CONTACT_US_ADDRESS_URL = '/wp-json/wp/v2/contact-us';
-export const GET_ABOUT_DATA_URL = '/wp-json/wp/v2/about';
-export const GET_HOME_DATA_URL = '/api/viewApp';
-export const SET_TRACKING_DATA = '/api/addTrackingApp';
-export const GET_MODAL_LISTING_URL = '/api/editorModalListing';
+export const GET_HOME_DATA_URL = SERVER_API_URL + '/api/viewApp';
+export const SET_TRACKING_DATA = SERVER_API_URL + '/api/addTrackingApp';
+export const GET_MODAL_LISTING_URL = SERVER_API_URL + '/api/editorModalListing';
 
 export const ELEMENT_TYPE = {
   TEXT: 'text',
@@ -90,5 +83,8 @@ export const ELEMENT_TYPE = {
   BUTTON: 'button',
   GAME: 'game',
   HOME: 'home',
-  YOUTUBE: 'YOUTUBE'
+  YOUTUBE: 'YOUTUBE',
+  SPOTIFY: 'SPOTIFY',
+  VIMEO: 'VIMEO',
+  YOUTUBE_VERT: 'YOUTUBE_VERT'
 };
