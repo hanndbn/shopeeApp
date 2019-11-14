@@ -884,18 +884,18 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry('type=CARD;container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', {
+    this.createVertexTemplateEntry('type=CARD;isConnectable=1;container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', {
       id: 'add-container-icon',
       imageId: 'BASIC/SLIDE.png'
     }),
-    this.createVertexTemplateEntry('rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', false, false, 'rect rectangle box', {
+    this.createVertexTemplateEntry('rounded=0;isConnectable=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', false, false, 'rect rectangle box', {
       id: 'add-rectangle-icon',
       imageId: 'BASIC/RECTANGLE.png'
     }),
-    this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', false, false, 'rounded rect rectangle box', {
-      id: 'add-rectangle-icon',
-      imageId: 'BASIC/ROUNDED_RECTANGLE.png'
-    }),
+    // this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', false, false, 'rounded rect rectangle box', {
+    //   id: 'add-rectangle-icon',
+    //   imageId: 'BASIC/ROUNDED_RECTANGLE.png'
+    // }),
     this.createVertexTemplateEntry('type=TEXT;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
       40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', {
         id: 'add-text-icon',
