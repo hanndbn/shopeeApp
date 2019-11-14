@@ -15,7 +15,7 @@ export const modalUrlLayout = (url = '') => (
     <div className="col-12 modal-header">
       <div className="modal-header-content">Modal</div>
     </div>
-    <div className="col-12 no-padding">
+    <div className="col-12 no-padding content-wrapper">
       <iframe src={url} className="custom-iframe"/>
     </div>
     <div className="col-12 text-right custom-modal-footer">
@@ -31,8 +31,7 @@ export const modalUrlLayout = (url = '') => (
   </div>
 );
 
-export const modalMediaLayout = (type, url = '') => {
-  const mediaContent = getMediaContent(type, url);
+export const modalMediaLayout = (type, content) => {
   const label = _.startCase(type ? _.toLower(type.replace('_', ' ')) : '');
 
   return (
@@ -40,8 +39,8 @@ export const modalMediaLayout = (type, url = '') => {
       <div className="col-12 modal-header">
         <div className="modal-header-content">{label} Content</div>
       </div>
-      <div className="col-12 no-padding">
-        <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/>
+      <div className="col-12 content-wrapper content-media-wrapper">
+        <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: content }}/>
       </div>
       <div className="col-12 text-right custom-modal-footer">
         <button

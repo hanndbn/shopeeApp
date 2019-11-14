@@ -198,11 +198,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     let mediaContent = '';
     let linkOpenInModal = false;
     if (isMedia) {
-      mediaContent = homeAction.getMediaContent(slideStyle[ 'type' ], slideStyle[ 'linkUrl' ]);
+      mediaContent = homeAction.getMediaContent(slide.id, slideStyle[ 'type' ], slideStyle[ 'linkUrl' ], this.props.externalData);
       linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
     }
-    // console.log(isMedia)
-    // console.log(mediaContent)
 
     if (isGame || hasIFrame) {
       style = {
@@ -221,7 +219,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                  onClick={() => {
                    if (!isRoot) {
                      if (isMedia && linkOpenInModal) {
-                       this.props.displayModalMedia(slideStyle[ 'type' ], decodeURIComponent(slideStyle[ 'linkUrl' ]));
+                       this.props.displayModalMedia(slideStyle[ 'type' ], mediaContent);
                      } else if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
                        const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
                        if (modalType && modalType.types) {
@@ -276,7 +274,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
               {
                 isGame ?
                   <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/> :
-                  (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(mediaContent) }}/> :
+                  (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/> :
                     <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
               }
             </div>}
@@ -332,6 +330,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
 const mapStateToProps = ({ home, common }: IRootState) => ({
   data: home.data,
+  externalData: home.externalData,
   modalListing: common.modalListing,
   activeSlideId: home.activeSlideId,
   requestFailure: home.requestFailure,
@@ -368,8 +367,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   displayModalUrl: url => {
     dispatch(infoModaAction.displayModalUrl(url));
   },
-  displayModalMedia: (type, url) => {
-    dispatch(infoModaAction.displayModalMedia(type, url));
+  displayModalMedia: (type, content) => {
+    dispatch(infoModaAction.displayModalMedia(type, content));
   }
 });
 

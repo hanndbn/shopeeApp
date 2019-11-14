@@ -549,34 +549,35 @@ body div {
 }
 
 
-.format-diagram-wrapper .nav-link{
+.format-diagram-wrapper .nav-link {
   height: auto;
   width: auto;
   color: #BCBCBC;
   font-weight: 400;
 }
 
-.format-diagram-wrapper .nav-link.active{
+.format-diagram-wrapper .nav-link.active {
   color: white;
 }
 
-.format-diagram-wrapper .tab-content{
+.format-diagram-wrapper .tab-content {
   padding: 0;
 }
 
-.layer-card-wrapper{
+.layer-card-wrapper {
   background-color: #bedee0;
   color: #343434;
   padding: 5px 10px;
   margin-bottom: 10px;
   font-size: 12px;
 }
-.layer-card-close{
+
+.layer-card-close {
   color: #db0000;
   cursor: pointer;
 }
 
-.layer-card-id{
+.layer-card-id {
   text-align: left;
 }
 
@@ -595,4 +596,71 @@ body div {
 
 .g-font-weight-400 {
   font-weight: 400;
+}
+
+.input-title {
+  width: 50px;
+}
+
+.input-unit {
+  margin-left: 10px;
+}
+
+.font-size-wrapper .custom-select-box {
+  margin-left: 20px;
+}
+
+.custom-select-box {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  border: 1px solid #52A1A7;
+}
+
+.custom-select-box .checkmark {
+  width: 5px;
+  height: 10px;
+  border: solid #52A1A7;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  margin-bottom: 3px;
+}
+
+.input-select-value {
+  padding: 10px;
+}
+
+.input-select-content {
+  background-color: white;
+  width: 100%;
+  padding: 5px 0;
+  box-sizing: border-box;
+  box-shadow: 0 0 0px 1px #8080801a;
+  margin-top: -2px;
+  z-index: 999;
+  position: relative;
+}
+
+.input-select-item {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #52a1a7cc;
+  color: black;
+}
+
+.input-select-item:last-child{
+  border-bottom: none;
+}
+
+.input-select-item.active {
+  background-color: #52a1a7cc;
+  color: white;
+}
+
+.input-select-item:hover{
+  background-color: rgba(82, 162, 168, 0.6);
+  color: white;
 }

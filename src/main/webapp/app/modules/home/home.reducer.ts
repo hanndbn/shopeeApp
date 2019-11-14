@@ -18,6 +18,7 @@ const ACTION_TYPES = {
   SET_ACTIVE_SLIDE_ID: 'Home/SET_ACTIVE_SLIDE_ID',
   SET_WINDOW_SIZE: 'Home/SET_WINDOW_SIZE',
   SET_SCROLL_POSITION: 'Home/SET_SCROLL_POSITION',
+  SET_EXTERNAL_DATA: 'Home/SET_EXTERNAL_DATA',
   RESET: 'Home/RESET'
 };
 
@@ -32,7 +33,8 @@ const initialState = {
   loading: false,
   requestFailure: false,
   errorMessage: null,
-  scrollPosition: 100
+  scrollPosition: 100,
+  externalData: {}
 };
 
 export type HomeState = Readonly<typeof initialState>;
@@ -58,6 +60,17 @@ export default (state: HomeState = initialState, action): HomeState => {
         loading: false,
         requestFailure: true,
         errorMessage: action.payload.response.data.message
+      };
+    case ACTION_TYPES.SET_EXTERNAL_DATA:
+      return {
+        ...state,
+        externalData: {
+          ...state.externalData,
+          [ action.id ]: {
+            ...state.externalData[ action.id ],
+            [ action.dataType ]: action.data
+          }
+        }
       };
     case ACTION_TYPES.SET_HOME_DATA:
       return {
@@ -128,6 +141,7 @@ export const requestHomeData = appName => (dispatch, getState) => {
           appId: response.data.appId,
           data
         });
+        dispatch(getExternalData(data.elements));
       }
     })
     .catch(error => {
@@ -136,6 +150,22 @@ export const requestHomeData = appName => (dispatch, getState) => {
         type: FAILURE(ACTION_TYPES.GET_HOME_DATA)
       });
     });
+};
+
+export const getExternalData = (elements = []) => (dispatch, getState) => {
+  elements.map(element => {
+    const style: any = getSlideStyle(element.style);
+    if (style.type === ELEMENT_TYPE.VIMEO) {
+      const url = style.linkUrl;
+      if (url) {
+        axios.get(`https://vimeo.com/api/oembed.json?url=${url}&width=100%&height=100%`)
+          .then(response => {
+            // handle success
+            dispatch(setExternalData(element.id, style.type, response.data.html));
+          });
+      }
+    }
+  });
 };
 
 export const saveTrackingData = () => async (dispatch, getState) => {
@@ -189,6 +219,13 @@ export const setWindowSize = windowSize => ({
 export const setScrollPosition = scrollPosition => ({
   type: ACTION_TYPES.SET_SCROLL_POSITION,
   payload: scrollPosition
+});
+
+export const setExternalData = (id, dataType, data) => ({
+  type: ACTION_TYPES.SET_EXTERNAL_DATA,
+  id,
+  dataType,
+  data
 });
 
 export const reset = () => ({
@@ -275,7 +312,7 @@ export const getSlideStyle = styleStr => {
 
 export const getStyle = (slide, slideStyle) => {
   let style: any = {};
-  const isMediaContent = isMedia(slideStyle['type']);
+  const isMediaContent = isMedia(slideStyle[ 'type' ]);
   let linkOpenInModal = false;
   if (isMediaContent) {
     linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
@@ -417,7 +454,7 @@ export const getSlideContainerId = (id, elements) => {
   }
 };
 
-export const getMediaContent = (type, url) => {
+export const getMediaContent = (id, type, url, externalData) => {
   let content = '';
   url = decodeURIComponent(url);
   if (type === ELEMENT_TYPE.YOUTUBE || type === ELEMENT_TYPE.YOUTUBE_VERT) {
@@ -427,8 +464,14 @@ export const getMediaContent = (type, url) => {
         src=${`https://www.youtube.com/embed/${youtubeId}`}
         width="100%" height="100%" allowTransparency=${true} frameBorder="0"/>
     `;
-  } else if (type === ELEMENT_TYPE.VIMEO) {
-    // await content = await getVimeoContent(url);
+  } else if (type === ELEMENT_TYPE.VIMEO && externalData[id]) {
+    const slideData = externalData[id];
+    const divWrapper = document.createElement('div');
+    divWrapper.innerHTML = slideData[type];
+    const iframe = divWrapper.querySelector('iframe');
+    iframe.width = '100%';
+    iframe.height = '100%';
+    content = iframe.outerHTML;
   } else if (type === ELEMENT_TYPE.SPOTIFY) {
     content = `
     <iframe allowFullScreen=${true}

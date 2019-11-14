@@ -334,48 +334,42 @@ Format.prototype.refresh = function() {
 
   if (graph.isSelectionEmpty()) {
     this.panels.push(new CustomDiagramFormatPanel(this, ui, div));
-  } else if (graph.isEditing()) {
-    mxUtils.write(label, mxResources.get("text"));
-    div.appendChild(label);
-    this.panels.push(new TextFormatPanel(this, ui, div));
+    // } else if (graph.isEditing()) {
+    // mxUtils.write(label, mxResources.get("text"));
+    // div.appendChild(label);
+    // this.panels.push(new TextFormatPanel(this, ui, div));
   } else {
     if (this.getSelectionState().style.type === "CARD") {
       var cardPanel = div.cloneNode(false);
-      // stylePanel.style.display = 'none';
       this.panels.push(new CustomCardFormatPanel(this, ui, cardPanel));
       this.container.appendChild(cardPanel);
-      // this.panels.push(new StyleFormatPanel(this, ui, stylePanel));
+    } else if (this.getSelectionState().style.type === "RECTANGLE") {
+      var rectanglePanel = div.cloneNode(false);
+      this.panels.push(new CustomRectangleFormatPanel(this, ui, rectanglePanel));
+      this.container.appendChild(rectanglePanel);
     } else if (this.getSelectionState().style.type === "IMAGE") {
       var imagePanel = div.cloneNode(false);
-      // stylePanel.style.display = 'none';
       this.panels.push(new CustomFileFormatPanel(this, ui, imagePanel, "image", "image/*"));
       this.container.appendChild(imagePanel);
-      // this.panels.push(new StyleFormatPanel(this, ui, stylePanel));
     } else if (this.getSelectionState().style.type === "PDF") {
       var filePanel = div.cloneNode(false);
-      // stylePanel.style.display = 'none';
       this.panels.push(new CustomFileFormatPanel(this, ui, filePanel, "pdf", "application/pdf"));
       this.container.appendChild(filePanel);
-      // this.panels.push(new StyleFormatPanel(this, ui, stylePanel));
     } else if (this.getSelectionState().style.type === "TEXT") {
       const textPanel = div.cloneNode(false);
-      // stylePanel.style.display = 'none';
       this.panels.push(new CustomTextFormatPanel(this, ui, textPanel));
       this.container.appendChild(textPanel);
-      // this.panels.push(new StyleFormatPanel(this, ui, stylePanel));
     } else if (this.getSelectionState().style.type === "LINK"
-    || this.getSelectionState().style.type === "YOUTUBE"
-    || this.getSelectionState().style.type === "SPOTIFY"
-    || this.getSelectionState().style.type === "VIMEO"
-    || this.getSelectionState().style.type === "YOUTUBE_VERT"
+      || this.getSelectionState().style.type === "YOUTUBE"
+      || this.getSelectionState().style.type === "SPOTIFY"
+      || this.getSelectionState().style.type === "VIMEO"
+      || this.getSelectionState().style.type === "YOUTUBE_VERT"
     ) {
       var linkPanel = div.cloneNode(false);
-      // stylePanel.style.display = 'none';
       const type = this.getSelectionState().style.type;
-      const isMedia = !(this.getSelectionState().style.type === "LINK")
+      const isMedia = !(this.getSelectionState().style.type === "LINK");
       this.panels.push(new CustomLinkFormatPanel(this, ui, linkPanel, type, isMedia));
       this.container.appendChild(linkPanel);
-      // this.panels.push(new StyleFormatPanel(this, ui, stylePanel));
     } else {
       customUtils.setCellConnectable(this, ui);
       var containsLabel = this.getSelectionState().containsLabel;
@@ -3801,7 +3795,7 @@ CustomLinkFormatPanel.prototype.init = function() {
   const linkUrl = ss.style.linkUrl ? ss.style.linkUrl : "";
   const linkOpenInModal = ss.style.linkOpenInModal ? ss.style.linkOpenInModal : "0";
   const linkContainer = document.createElement("div");
-  const label = _.startCase(this.type ? _.toLower(this.type.replace('_', ' ')) : '');
+  const label = _.startCase(this.type ? _.toLower(this.type.replace("_", " ")) : "");
   linkContainer.innerHTML = `
   <div class="format-image-wrapper">
     <div class="format-image-header">${label} Editor</div>  
@@ -3813,28 +3807,17 @@ CustomLinkFormatPanel.prototype.init = function() {
           <input type="text" class="form-control" id="format-link-url" value="${linkUrl}" placeholder="Url">
           <!--<label for="format-link-url" class="${linkUrl.length > 0 ? "hidden" : ""}">Url</label>-->
         </div>
-        <div class="form-check w-100">
-            <input type="checkbox" class="form-check-input" id="format-link-open-in-modal" ${linkOpenInModal == "1" ? "checked" : ""}>
+        <div class="form-check w-100 d-flex">
+            <div class="custom-select-box mr-2" id="input-link-open-in-modal">
+                <span class="${linkOpenInModal == "1" ? "checkmark" : ""}"/>
+            </div>
             <label class="form-check-label" for="format-link-open-in-modal">Open link in Popup Modal</label>
         </div>
     </div>
   </div>
   `;
-  $(linkContainer.querySelector("#format-link-open-in-modal")).change(function(e) {
-    var select = null;
-    var cells = graph.getSelectionCells();
-    graph.getModel().beginUpdate();
-    try {
-      graph.setCellStyles("linkOpenInModal", e.target.checked ? "1" : "0", cells);
-    } finally {
-      graph.getModel().endUpdate();
-    }
-
-    if (select != null) {
-      graph.setSelectionCells(select);
-      graph.scrollCellToVisible(select[0]);
-    }
-    _self.format.refresh();
+  $(linkContainer.querySelector("#input-link-open-in-modal")).click(function(e) {
+    customUtils.setCellStyles(graph, { linkOpenInModal: linkOpenInModal == "1" ? "0" : "1" });
   });
   $(linkContainer.querySelector("#format-link-url")).change(function(e) {
     var select = null;
@@ -3864,7 +3847,7 @@ CustomLinkFormatPanel.prototype.init = function() {
   //   </div>
   // `
   // this.container.appendChild(expandDiv);
-  if(!this.isMedia){
+  if (!this.isMedia) {
     new CustomTextFormatPanel(this.format, this.editorUi, this.container, true);
   }
   // this.container.appendChild();
@@ -3916,6 +3899,7 @@ CustomCardFormatPanel.prototype.init = function() {
             <div class="font-size-wrapper">
                 <div class="">Height</div> 
                 <input type="text" maxlength="4" class="" value="${height}" id="input-height"/>
+                <div class="input-unit">%</div>
             </div>
             </div>
         </div>
@@ -3988,6 +3972,216 @@ CustomCardFormatPanel.prototype.destroy = function() {
   //   graph.getModel().endUpdate();
   // });
 
+};
+
+CustomRectangleFormatPanel = function(format, editorUi, container) {
+  CustomBaseFormatPanel.call(this, format, editorUi, container);
+  this.init();
+};
+
+CustomRectangleFormatPanel.prototype.init = function() {
+  const ui = this.editorUi;
+  const editor = ui.editor;
+  const graph = editor.graph;
+  const ss = this.format.getSelectionState();
+  const _self = this;
+
+  const fillColor = ss.style.fillColor ? ss.style.fillColor : "#ffffff";
+  const opacity = ss.style.opacity ? ss.style.opacity : "100";
+  const rounded = ss.style.rounded ? ss.style.rounded : 0;
+  // border type
+  let borderType = ss.style.borderType ? ss.style.borderType : "";
+  let strokeColor = ss.style.strokeColor ? ss.style.strokeColor : "#000000";
+  let dashed = ss.style.dashed ? ss.style.dashed : "";
+  let dashPattern = ss.style.dashPattern ? ss.style.dashPattern : "";
+  // if (strokeColor === "none") {
+  //   borderType = "none";
+  // } else if (!dashed) {
+  //   borderType = "solid";
+  // } else if (!dashPattern) {
+  //   borderType = "dash";
+  // } else if (dashPattern) {
+  //   borderType = "dotted";
+  // }
+
+  const height = ss.height ? ss.height : 0;
+  const width = ss.width ? ss.width : 0;
+  const cardContainer = document.createElement("div");
+  cardContainer.innerHTML = `
+  <div class="format-image-wrapper">
+    <div">
+      <div class="format-image-header">Rectangle Editor</div>
+      <hr/>
+    </div>  
+    <div class="format-link-wrapper row no-gutters">
+        <div class="color-wrapper g-margin-left-10 g-margin-bottom-10">
+            <div class="">Background Color</div> 
+            <div class="format-color-preview" id="format-color-picker">
+                <div style="background-color: ${fillColor ? fillColor : "#ffffff"}"></div>
+            </div>
+        </div>
+        <div class="select-wrapper g-margin-top-10">
+          <div class="input-box">
+            <div class="font-size-wrapper">
+                <div class="input-title">Height</div> 
+                <input type="text" maxlength="4" class="" value="${height}" id="input-height"/>
+                <div class="input-unit">px</div>
+            </div>
+          </div>
+          <div class="input-box">
+            <div class="font-size-wrapper">
+                <div class="input-title">Width</div> 
+                <input type="text" maxlength="4" class="" value="${width}" id="input-width"/>
+                <div class="input-unit">px</div>
+            </div>
+          </div>
+          <div class="input-box">
+            <div class="font-size-wrapper">
+                <div class="input-title">Opacity</div> 
+                <input type="text" maxlength="2" class="" value="${opacity}" id="input-opacity"/>
+                <div class="input-unit">%</div>
+            </div>
+          </div>
+          <div class="input-box">
+            <div class="font-size-wrapper">
+                <div class="input-title">Rounded</div>
+                <div class="custom-select-box" id="input-rounded">
+                    <span class="${rounded ? "checkmark" : ""}"/>
+                </div>
+            </div>
+          </div>
+          <div class="input-box">
+            <div class="">Border</div>
+            <div class="input-custom-select-wrapper">
+                <div class="select-box">
+                    <div class="input-select-value" id="input-select-value">${borderType ? borderType : "Select"}</div>
+                </div>
+                <div class="input-select-content" id="input-select-content" style="display: none">
+                    <div class="input-select-item ${borderType === "none" ? "active" : ""}" data-type="none">none</div>
+                    <div class="input-select-item ${borderType === "solid" ? "active" : ""}" data-type="solid">solid</div>
+                    <div class="input-select-item ${borderType === "dash" ? "active" : ""}" data-type="dash">dash</div>
+                    <div class="input-select-item ${borderType === "dotted" ? "active" : ""}" data-type="dotted">dotted</div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  `;
+
+  //handle change height
+  $(cardContainer.querySelector("#input-height")).change(function(e) {
+    if (e.target.value && (!new RegExp(CONSTANT.PATTERN_NUMBER).test(e.target.value))) {
+      _self.format.refresh();
+      return false;
+    }
+    customUtils.updateCellHeight(graph, parseInt(e.target.value), false);
+  });
+
+  //handle change width
+  $(cardContainer.querySelector("#input-width")).change(function(e) {
+    if (e.target.value && (!new RegExp(CONSTANT.PATTERN_NUMBER).test(e.target.value))) {
+      _self.format.refresh();
+      return false;
+    }
+    customUtils.updateCellWith(graph, parseInt(e.target.value), false);
+  });
+
+  //handle change opacity
+  $(cardContainer.querySelector("#input-opacity")).change(function(e) {
+    if (e.target.value && (!new RegExp(CONSTANT.PATTERN_NUMBER).test(e.target.value))) {
+      _self.format.refresh();
+      return false;
+    }
+    customUtils.setCellStyles(graph, { opacity: e.target.value });
+  });
+
+  //handle change rounded
+  $(cardContainer.querySelector("#input-rounded")).click(function(e) {
+    customUtils.setCellStyles(graph, { rounded: rounded ? 0 : 1 });
+  });
+
+  //handle change border
+  $(cardContainer.querySelector("#input-select-value")).click(function() {
+    $(cardContainer.querySelector("#input-select-content")).toggle();
+  });
+  window.addEventListener("click", this.clickHandle, false);
+  $(cardContainer.querySelectorAll(".input-select-item")).click(function(e) {
+    $(cardContainer.querySelector("#input-select-content")).hide();
+    const type = e.target.dataset.type;
+    let borderValue = {
+      borderType: type
+    };
+    if (type === "none") {
+      borderValue["strokeColor"] = "none";
+    } else if (type === "solid") {
+      borderValue["dashed"] = null;
+      borderValue["dashPattern"] = null;
+      borderValue["strokeColor"] = strokeColor;
+    } else if (type === "dash") {
+      borderValue["dashed"] = 1;
+      borderValue["dashPattern"] = null;
+      borderValue["strokeColor"] = strokeColor;
+    } else if (type === "dotted") {
+      borderValue["dashed"] = 1;
+      borderValue["dashPattern"] = "1 4";
+      borderValue["strokeColor"] = strokeColor;
+    }
+    customUtils.setCellStyles(graph, borderValue);
+  });
+
+
+  let i = 0;
+  $(cardContainer.querySelector("#format-color-picker")).click(function(e) {
+    const pickr = new Pickr({
+      el: "#format-color-picker",
+      useAsButton: true,
+      default: fillColor ? fillColor : "#ffffff",
+
+      components: {
+        preview: true,
+        opacity: true,
+        hue: true,
+
+        interaction: {
+          hex: true,
+          rgba: true,
+          hsla: false,
+          hsva: false,
+          cmyk: false,
+          input: true,
+          clear: false,
+          save: true
+        }
+      }
+    });
+    pickr.on("save", instance => {
+      const pickedColor = instance.toHEXA().toString();
+      customUtils.setCellStyles(graph, { fillColor: pickedColor });
+      pickr.hide();
+    });
+    if (i == 0) {
+      i++;
+      const elt = document.getElementById("format-color-picker");
+      elt.click();
+    }
+
+    // _self.format.refresh();
+  });
+  this.container.appendChild(cardContainer);
+};
+
+CustomRectangleFormatPanel.prototype.clickHandle = function(e) {
+  const inputValue = document.getElementById("input-select-value");
+  const inputContent = document.getElementById("input-select-content");
+  if (
+    (inputValue && !inputValue.contains(e.target))
+    && (inputContent && !inputContent.contains(e.target) && inputContent.style.display !== "none")) {
+    $("#input-select-content").hide();
+  }
+};
+CustomRectangleFormatPanel.prototype.destroy = function() {
+  window.removeEventListener("click", this.clickHandle, false);
 };
 
 /**

@@ -888,7 +888,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       id: 'add-container-icon',
       imageId: 'BASIC/SLIDE.png'
     }),
-    this.createVertexTemplateEntry('rounded=0;isConnectable=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', false, false, 'rect rectangle box', {
+    this.createVertexTemplateEntry('type=RECTANGLE;rounded=0;isConnectable=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', false, false, 'rect rectangle box', {
       id: 'add-rectangle-icon',
       imageId: 'BASIC/RECTANGLE.png'
     }),

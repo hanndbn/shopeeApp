@@ -60,7 +60,7 @@ export const displayModalUrl = (url = '') => async (dispatch, getState) => {
   dispatch(setDisplayModal(true));
 };
 
-export const displayModalMedia = (type, url = '') => async (dispatch, getState) => {
-  dispatch(setModalContent(modalMediaLayout(type, url)));
+export const displayModalMedia = (type, content) => async (dispatch, getState) => {
+  dispatch(setModalContent(modalMediaLayout(type, content)));
   dispatch(setDisplayModal(true));
 };
