@@ -892,10 +892,6 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
       id: 'add-rectangle-icon',
       imageId: 'BASIC/RECTANGLE.png'
     }),
-    // this.createVertexTemplateEntry('rounded=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rounded Rectangle', false, false, 'rounded rect rectangle box', {
-    //   id: 'add-rectangle-icon',
-    //   imageId: 'BASIC/ROUNDED_RECTANGLE.png'
-    // }),
     this.createVertexTemplateEntry('type=TEXT;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
       40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', {
         id: 'add-text-icon',
@@ -911,6 +907,10 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-image-icon',
         imageId: 'BASIC/IMAGE.png'
       }),
+    this.createVertexTemplateEntry('type=IMAGE_SLIDE;rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Image Slide', false, false, 'image slide', {
+      id: 'add-image-slide-icon',
+      imageId: 'BASIC/IMAGE_SLIDE.png'
+    }),
     this.createVertexTemplateEntry('type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;',
       225, 400, 'Game', 'Game', false, false, 'game', {
         id: 'add-game-icon',

@@ -351,6 +351,10 @@ Format.prototype.refresh = function() {
       var imagePanel = div.cloneNode(false);
       this.panels.push(new CustomFileFormatPanel(this, ui, imagePanel, "image", "image/*"));
       this.container.appendChild(imagePanel);
+    } else if (this.getSelectionState().style.type === "IMAGE_SLIDE") {
+      const imageSlidePanel = div.cloneNode(false);
+      this.panels.push(new CustomImageSlideFormatPanel(this, ui, imageSlidePanel, "image", "image/*"));
+      this.container.appendChild(imageSlidePanel);
     } else if (this.getSelectionState().style.type === "PDF") {
       var filePanel = div.cloneNode(false);
       this.panels.push(new CustomFileFormatPanel(this, ui, filePanel, "pdf", "application/pdf"));
@@ -3627,6 +3631,184 @@ CustomFileFormatPanel.prototype.init = function() {
 CustomFileFormatPanel.prototype.destroy = function() {
 };
 
+CustomImageSlideFormatPanel = function(format, editorUi, container, fileType = "", fileTypeAccept = "*") {
+  CustomBaseFormatPanel.call(this, format, editorUi, container);
+  this.fileType = fileType;
+  this.fileTypeAccept = fileTypeAccept;
+  this.fileSelected = null;
+  this.addedImage = [];
+  this.init();
+};
+
+CustomImageSlideFormatPanel.prototype.init = function() {
+  var ui = this.editorUi;
+  var editor = ui.editor;
+  var graph = editor.graph;
+  this.graph = graph;
+  const fileType = this.fileType;
+  const fileTypeAccept = this.fileTypeAccept;
+  var ss = this.format.getSelectionState();
+  const _self = this;
+  let imageSlide = ss.style.imageSlide ? decodeURIComponent(ss.style.imageSlide) : "";
+  imageSlide = imageSlide ? imageSlide.split(",") : [];
+  this.addedImage = imageSlide.map(v => {
+    return decodeURIComponent(v);
+  });
+
+  const imageSlideContainer = document.createElement("div");
+  imageSlideContainer.innerHTML = `
+  <div class="format-image-wrapper format-image-slide-wrapper">
+    <div class="format-image-header">Image Slide Editor</div>  
+    <hr/>
+    <div class="format-image-subheader">Select a list file</div>
+    <div class="row no-gutters format-image-content-wrapper" id="format-image-content-wrapper">
+       
+    </div>
+    <div class="format-image-addBtn">
+        <button class="btn btn-common btn-add-image" id="btn-add-image">Add</button>
+    </div>
+    <div class="format-image-subheader">Added image</div>
+    <div class="row no-gutters format-image-preview-wrapper" id="format-image-added-wrapper">
+    </div>
+  </div>
+  `;
+  filesListing[fileType] && filesListing[fileType].forEach(function(file) {
+    const divImage = document.createElement("div");
+    divImage.className = "col-4 format-image-content";
+    divImage.innerHTML = `
+          <div style="background-image: url(${fileType === "image" ? file.url : `/content/images/editor/icons/${fileType}.PNG`})" class="format-file-selector"
+          data-url="${file.url}"
+          data-name="${file.fileName}"
+          >
+                <!--<img class="image-format-img" src="${file.url}"/>-->
+                <span class="file-close format-close" data-name="${file.fileName}">x</span>
+          </div>
+    `;
+    $(imageSlideContainer.querySelector("#format-image-content-wrapper")).append(divImage);
+  });
+  const divImportImage = document.createElement("div");
+  divImportImage.className = "col-4 format-image-content";
+  divImportImage.innerHTML = `
+          <div id="upload-file">
+                <img src="/content/images/editor/icons/import.png"/>
+          </div>
+    `;
+  $(imageSlideContainer.querySelector("#format-image-content-wrapper")).append(divImportImage);
+
+
+  this.initAddedImage(imageSlideContainer);
+
+  $(imageSlideContainer.querySelector("#btn-add-image")).click(function(e) {
+    if (_self.fileSelected) {
+      _self.addedImage.push(_self.fileSelected.url);
+      const formated = _self.addedImage.map(v => {
+        return encodeURIComponent(v);
+      });
+      customUtils.setCellStyles(_self.graph, { imageSlide: formated.join(",") });
+      _self.initAddedImage(imageSlideContainer);
+    }
+  });
+
+  $(imageSlideContainer.querySelectorAll(".format-close")).click(function(e) {
+    const fileName = e.target.dataset && e.target.dataset.name ? e.target.dataset.name : "";
+    if (fileName) {
+      requestDeleteImage(fileName, function(data) {
+        const userid = "hannd";
+        requestFilesWithType(userid, fileType, function() {
+          _self.init();
+        });
+        swal("", "delete file success", "success");
+      });
+    }
+  });
+
+  $(imageSlideContainer.querySelectorAll(".format-file-selector")).click(function(e) {
+    const fileName = e.target.dataset && e.target.dataset.name ? e.target.dataset.name : "";
+    const url = e.target.dataset && e.target.dataset.url ? e.target.dataset.url : "";
+    if (fileName && url) {
+      const img = new Image();
+      $(imageSlideContainer.querySelectorAll(".format-file-selector")).removeClass("active");
+      img.onload = function() {
+        if (_self.fileSelected && _self.fileSelected.name === fileName) {
+          $(e.target).removeClass("active");
+          _self.fileSelected = null;
+        } else {
+          $(e.target).addClass("active");
+          _self.fileSelected = {
+            name: fileName,
+            url
+          };
+        }
+      };
+      img.onerror = function() {
+      };
+
+      img.src = url;
+    }
+  });
+
+
+  $(imageSlideContainer.querySelector("#upload-file")).click(function() {
+    $("#myModal").html(fileUpload(fileType, fileType.toUpperCase(), fileTypeAccept));
+    $("#fileButton").change(function(e) {
+      // let imagesFile = e.target.files[i];
+    });
+    $("#uploadFile").click(function(e) {
+      const formData = new FormData();
+      formData.append("file", $("#fileInput")[0].files[0]);
+      const userid = "hannd";
+      requestUploadFile(userid, formData, function(data) {
+        requestFilesWithType(userid, fileType, function() {
+          // $('.format-image-wrapper').empty();
+          _self.format.refresh();
+        });
+        swal("", `Upload file ${fileType.toUpperCase()} success`, "success");
+        $("#myModal").modal("hide");
+      });
+      // let imagesFile = e.target.files[i];
+    });
+    $("#myModal").modal("show");
+  });
+
+  this.container.appendChild(imageSlideContainer);
+};
+
+CustomImageSlideFormatPanel.prototype.initAddedImage = function(imageSlideContainer) {
+  const wrapper = $(imageSlideContainer.querySelector("#format-image-added-wrapper"));
+  wrapper.empty();
+  const _self = this;
+
+  this.addedImage.map((image, idx) => {
+    const previewImg = document.createElement("div");
+    previewImg.className = "col-12 d-flex align-items-center pb-1 mb-1";
+    previewImg.innerHTML = `
+        <img class="format-image-preview-img" src="${image}"/>
+         <div class="format-image-preview-remove" data-idx="${idx}">Remove</div>
+      `;
+    wrapper.append(previewImg);
+  });
+  $(imageSlideContainer.querySelectorAll(".format-image-preview-remove")).click(function(e) {
+    const targetIdx = e.target.dataset.idx;
+    _self.addedImage = _self.addedImage.filter((v, idx) => idx.toString() !== targetIdx);
+    const formated = _self.addedImage.map(v => {
+      return encodeURIComponent(v);
+    });
+    customUtils.setCellStyles(_self.graph, { imageSlide: formated.join(",") });
+    _self.initAddedImage(imageSlideContainer);
+  });
+
+  if (this.addedImage.length === 0) {
+    const noFile = document.createElement("div");
+    noFile.className = "col-12 d-flex align-items-center pb-1 mb-1";
+    noFile.innerHTML = `No file added`;
+    wrapper.scrollTop(wrapper.height);
+  }
+
+};
+
+CustomImageSlideFormatPanel.prototype.destroy = function() {
+};
+
 CustomTextFormatPanel = function(format, editorUi, container, hideHeader = false) {
   CustomBaseFormatPanel.call(this, format, editorUi, container);
   this.init(hideHeader);
@@ -3991,18 +4173,20 @@ CustomRectangleFormatPanel.prototype.init = function() {
   const rounded = ss.style.rounded ? ss.style.rounded : 0;
   // border type
   let borderType = ss.style.borderType ? ss.style.borderType : "";
-  let strokeColor = ss.style.strokeColor ? ss.style.strokeColor : "#000000";
-  let dashed = ss.style.dashed ? ss.style.dashed : "";
-  let dashPattern = ss.style.dashPattern ? ss.style.dashPattern : "";
-  // if (strokeColor === "none") {
-  //   borderType = "none";
-  // } else if (!dashed) {
-  //   borderType = "solid";
-  // } else if (!dashPattern) {
-  //   borderType = "dash";
-  // } else if (dashPattern) {
-  //   borderType = "dotted";
-  // }
+  let strokeColor = ss.style.strokeColor ? ss.style.strokeColor : "none";
+  console.log(ss.style.strokeColor);
+  console.log(strokeColor);
+  const dashed = ss.style.dashed ? ss.style.dashed : "";
+  const dashPattern = ss.style.dashPattern ? ss.style.dashPattern : "";
+  if (strokeColor === "none") {
+    borderType = "none";
+  } else if (!dashed) {
+    borderType = "solid";
+  } else if (!dashPattern) {
+    borderType = "dash";
+  } else if (dashPattern) {
+    borderType = "dotted";
+  }
 
   const height = ss.height ? ss.height : 0;
   const width = ss.width ? ss.width : 0;
@@ -4054,13 +4238,13 @@ CustomRectangleFormatPanel.prototype.init = function() {
             <div class="">Border</div>
             <div class="input-custom-select-wrapper">
                 <div class="select-box">
-                    <div class="input-select-value" id="input-select-value">${borderType ? borderType : "Select"}</div>
+                    <div class="input-select-value" id="input-select-value">${borderType ? _.startCase(borderType) : "Select"}</div>
                 </div>
                 <div class="input-select-content" id="input-select-content" style="display: none">
-                    <div class="input-select-item ${borderType === "none" ? "active" : ""}" data-type="none">none</div>
-                    <div class="input-select-item ${borderType === "solid" ? "active" : ""}" data-type="solid">solid</div>
-                    <div class="input-select-item ${borderType === "dash" ? "active" : ""}" data-type="dash">dash</div>
-                    <div class="input-select-item ${borderType === "dotted" ? "active" : ""}" data-type="dotted">dotted</div>
+                    <div class="input-select-item ${borderType === "none" ? "active" : ""}" data-type="none">No border</div>
+                    <div class="input-select-item ${borderType === "solid" ? "active" : ""}" data-type="solid">Solid</div>
+                    <div class="input-select-item ${borderType === "dash" ? "active" : ""}" data-type="dash">Dash</div>
+                    <div class="input-select-item ${borderType === "dotted" ? "active" : ""}" data-type="dotted">Dotted</div>
                 </div>
             </div>
           </div>
@@ -4113,21 +4297,24 @@ CustomRectangleFormatPanel.prototype.init = function() {
       borderType: type
     };
     if (type === "none") {
+      borderValue["dashed"] = null;
+      borderValue["dashPattern"] = null;
       borderValue["strokeColor"] = "none";
     } else if (type === "solid") {
       borderValue["dashed"] = null;
       borderValue["dashPattern"] = null;
-      borderValue["strokeColor"] = strokeColor;
+      borderValue["strokeColor"] = strokeColor !== "none" ? strokeColor : "#000000";
     } else if (type === "dash") {
       borderValue["dashed"] = 1;
       borderValue["dashPattern"] = null;
-      borderValue["strokeColor"] = strokeColor;
+      borderValue["strokeColor"] = strokeColor !== "none" ? strokeColor : "#000000";
     } else if (type === "dotted") {
       borderValue["dashed"] = 1;
       borderValue["dashPattern"] = "1 4";
-      borderValue["strokeColor"] = strokeColor;
+      borderValue["strokeColor"] = strokeColor !== "none" ? strokeColor : "#000000";
     }
     customUtils.setCellStyles(graph, borderValue);
+    _self.format.refresh();
   });
 
 

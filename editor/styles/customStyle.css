@@ -119,6 +119,7 @@ body div {
 
 .geSidebarContainer {
   /*border-left: 1px solid #707070;*/
+  overflow-y: hidden!important;
 }
 
 .navContainer .nav-item {
@@ -303,12 +304,34 @@ body div {
 }
 
 .format-image-content-wrapper {
-  max-height: 400px;
+  max-height: 250px;
   overflow-y: auto;
+  padding: 0 2px;
+}
+
+.format-image-preview-wrapper {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5px;
+  border: 1px solid #8080803b;
+}
+
+.format-image-preview-wrapper > div {
+  border-bottom: 1px solid #8080803b;
+  height: min-content;
+}
+
+.format-image-preview-wrapper > div:nth-last-child(1) {
+  border-bottom: none;
+}
+
+.format-image-slide-wrapper .format-image-content-wrapper{
+  max-height: 200px;
 }
 
 .format-image-content {
-  margin-bottom: 8px;
+  /*margin-bottom: 8px;*/
   padding: 8px;
   /*border: 1px solid #E8E8E8;*/
 
@@ -319,8 +342,8 @@ body div {
 }
 
 .format-image-content > div {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border: 1px solid #E8E8E8;
   display: flex;
   flex-wrap: wrap;
@@ -335,7 +358,7 @@ body div {
 }
 
 .format-image-content > div.active {
-  border: 2px solid red;
+  outline: 2px solid red;
 }
 
 .format-close {
@@ -642,6 +665,8 @@ body div {
   margin-top: -2px;
   z-index: 999;
   position: relative;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .input-select-item {
@@ -651,7 +676,7 @@ body div {
   color: black;
 }
 
-.input-select-item:last-child{
+.input-select-item:last-child {
   border-bottom: none;
 }
 
@@ -660,7 +685,45 @@ body div {
   color: white;
 }
 
-.input-select-item:hover{
+.input-select-item:hover {
   background-color: rgba(82, 162, 168, 0.6);
   color: white;
+}
+
+.format-image-addBtn {
+  text-align: right;
+}
+
+.btn-add-image {
+  background-color: #52a1a7;
+  color: white;
+  padding: 5px 15px;
+}
+
+.btn-add-image:hover {
+  color: white;
+}
+
+.format-image-preview-img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.format-image-preview-name {
+  flex: 1;
+  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.format-image-preview-remove {
+  width: 40px;
+  color: red;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  margin-left: 50px;
 }
