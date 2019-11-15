@@ -705,8 +705,9 @@ body div {
 }
 
 .format-image-preview-img {
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 70px;
+  max-height: 70px;
+  margin-left: 10px;
 }
 
 .format-image-preview-name {
@@ -723,7 +724,8 @@ body div {
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-right: 30px;
   align-self: flex-end;
-  margin-left: 50px;
+  flex: 1;
 }

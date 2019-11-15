@@ -3801,8 +3801,9 @@ CustomImageSlideFormatPanel.prototype.initAddedImage = function(imageSlideContai
     const noFile = document.createElement("div");
     noFile.className = "col-12 d-flex align-items-center pb-1 mb-1";
     noFile.innerHTML = `No file added`;
-    wrapper.scrollTop(wrapper.height);
+    wrapper.append(noFile);
   }
+  wrapper.scrollTop(wrapper.height);
 
 };
 
