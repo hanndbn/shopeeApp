@@ -12,6 +12,7 @@ import AppRoutes from 'app/routes';
 import Loader from 'app/shared/layout/loader/loader';
 import InfoModal from 'app/InfoModal/infoModal';
 import { getModalListing } from 'app/shared/common/common.reducer';
+import ReactGA from 'react-ga';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -22,6 +23,25 @@ export class App extends React.Component<IAppProps> {
   componentDidMount() {
     this.props.getCommonData();
     // this.props.getProfile();
+    this.initializeReactGA();
+  }
+
+  initializeReactGA() {
+    ReactGA.initialize('UA-148081507-2');
+    const location = this.props.location ? this.props.location.pathname + this.props.location.search : '/homepage';
+    ReactGA.pageview(location);
+  }
+
+  getSnapshotBeforeUpdate(prevProps) {
+    if (
+      this.props.location &&
+      prevProps.location &&
+      (this.props.location.pathname !== prevProps.location.pathname || this.props.location.search !== prevProps.location.search)
+    ) {
+      const newURL = this.props.location.pathname + this.props.location.search;
+      ReactGA.pageview(newURL);
+    }
+    return null;
   }
 
   render() {
