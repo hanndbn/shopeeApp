@@ -2,7 +2,7 @@
 
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 import axios from 'axios';
-import { GET_MODAL_LISTING_URL } from 'app/config/constants';
+import { CREATE_SESSION_ANALYTIC, END_SESSION_ANALYTIC, GET_MODAL_LISTING_URL } from 'app/config/constants';
 
 export const ACTION_TYPES = {
   RESET: 'Common/RESET',
@@ -60,6 +60,7 @@ export const getModalListing = () => ({
   type: ACTION_TYPES.GET_MODAL_LISTING,
   payload: axios.get(GET_MODAL_LISTING_URL)
 });
+
 export const setDisplayLoading = displayLoading => ({
   type: ACTION_TYPES.SET_LOADING,
   displayLoading

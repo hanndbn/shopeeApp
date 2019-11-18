@@ -17,6 +17,7 @@ import ReactGA from 'react-ga';
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
   getCommonData: Function;
+  createSession: Function;
 }
 
 export class App extends React.Component<IAppProps> {

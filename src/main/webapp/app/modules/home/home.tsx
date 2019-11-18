@@ -23,6 +23,7 @@ export interface IHomeProp extends StateProps, DispatchProps {
   setScrollPosition: Function;
   displayModalUrl: Function;
   displayModalMedia: Function;
+  endSessionAnalytic: Function;
   location: any;
   match: any;
 }
@@ -36,6 +37,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     window.addEventListener('beforeunload', ev => {
       ev.preventDefault();
       this.props.saveTrackingData();
+      this.props.endSessionAnalytic();
       return null;
     });
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
@@ -52,6 +54,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   componentWillUnmount() {
+    this.props.endSessionAnalytic();
     window.removeEventListener('resize', this.updateWindowDimensions);
     this.hammer.off('swipeleft', this.swipeLeft);
     this.hammer.off('swiperight', this.swipeRight);
@@ -88,10 +91,10 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState): any | null {
-    const preAppId = prevProps.match.params.appId ? prevProps.match.params.appId : '';
-    const currentAppId = this.props.match.params.appId ? this.props.match.params.appId : '';
-    if (preAppId !== currentAppId) {
-      this.props.initScreen();
+    const preAppName = prevProps.match.params.appName ? prevProps.match.params.appName : '';
+    const currentAppName = this.props.match.params.appName ? this.props.match.params.appName : '';
+    if (preAppName !== currentAppName) {
+      this.props.initScreen(preAppName);
     }
     return null;
   }
@@ -340,12 +343,18 @@ const mapStateToProps = ({ home, common }: IRootState) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: async () => {
+  initScreen: async (preAppName = null) => {
+    if (preAppName) {
+      dispatch(homeAction.endSessionAnalytic());
+    }
     await dispatch(homeAction.reset());
     await dispatch(homeAction.setWindowSize({ width: window.innerWidth, height: window.innerHeight }));
     const appName = ownProps.match.params.appName ? ownProps.match.params.appName : '';
     await dispatch(homeAction.requestHomeData(appName));
     await dispatch(homeAction.setTimeStart(new Date()));
+  },
+  endSessionAnalytic: () => {
+    dispatch(homeAction.endSessionAnalytic());
   },
   setCurrentIdx: idx => {
     dispatch(homeAction.setCurrentIdx(idx));

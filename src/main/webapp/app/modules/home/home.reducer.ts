@@ -1,5 +1,5 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
-import { ELEMENT_TYPE, GET_HOME_DATA_URL, SET_TRACKING_DATA } from 'app/config/constants';
+import { CREATE_SESSION_ANALYTIC, ELEMENT_TYPE, END_SESSION_ANALYTIC, GET_HOME_DATA_URL, SET_TRACKING_DATA } from 'app/config/constants';
 // import { BASE_IMG_URL, GET_HOME_DATA } from 'app/config/constants';
 import axios from 'axios';
 import moment from 'moment';
@@ -19,6 +19,7 @@ const ACTION_TYPES = {
   SET_WINDOW_SIZE: 'Home/SET_WINDOW_SIZE',
   SET_SCROLL_POSITION: 'Home/SET_SCROLL_POSITION',
   SET_EXTERNAL_DATA: 'Home/SET_EXTERNAL_DATA',
+  GET_ANALYTIC_ID: 'Common/GET_MODAL_LISTING',
   RESET: 'Home/RESET'
 };
 
@@ -27,6 +28,7 @@ const initialState = {
   activeSlideId: null,
   appId: null,
   trackingId: null,
+  analyticTrackingId: null,
   currentIdx: 0,
   timeStart: null,
   windowSize: null,
@@ -60,6 +62,16 @@ export default (state: HomeState = initialState, action): HomeState => {
         loading: false,
         requestFailure: true,
         errorMessage: action.payload.response.data.message
+      };
+    case REQUEST(ACTION_TYPES.GET_ANALYTIC_ID):
+      return {
+        ...state,
+        analyticTrackingId: null
+      };
+    case SUCCESS(ACTION_TYPES.GET_ANALYTIC_ID):
+      return {
+        ...state,
+        analyticTrackingId: action.payload.data.analyticTrackingId
       };
     case ACTION_TYPES.SET_EXTERNAL_DATA:
       return {
@@ -142,6 +154,7 @@ export const requestHomeData = appName => (dispatch, getState) => {
           data
         });
         dispatch(getExternalData(data.elements));
+        dispatch(createSessionAnalytic(response.data.appId));
       }
     })
     .catch(error => {
@@ -231,6 +244,19 @@ export const setExternalData = (id, dataType, data) => ({
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const createSessionAnalytic = appId => async (dispatch, getState) => {
+  dispatch({
+    type: ACTION_TYPES.GET_ANALYTIC_ID,
+    payload: axios.post(CREATE_SESSION_ANALYTIC, { appId })
+  });
+};
+
+export const endSessionAnalytic = () => async (dispatch, getState) => {
+  const analyticTrackingId = getState().home.analyticTrackingId;
+  const appId = getState().home.appId;
+  axios.put(END_SESSION_ANALYTIC, { appId, analyticTrackingId });
+};
 
 export const decode = (node, data) => {
   let obj = {};
@@ -464,10 +490,10 @@ export const getMediaContent = (id, type, url, externalData) => {
         src=${`https://www.youtube.com/embed/${youtubeId}`}
         width="100%" height="100%" allowTransparency=${true} frameBorder="0"/>
     `;
-  } else if (type === ELEMENT_TYPE.VIMEO && externalData[id]) {
-    const slideData = externalData[id];
+  } else if (type === ELEMENT_TYPE.VIMEO && externalData[ id ]) {
+    const slideData = externalData[ id ];
     const divWrapper = document.createElement('div');
-    divWrapper.innerHTML = slideData[type];
+    divWrapper.innerHTML = slideData[ type ];
     const iframe = divWrapper.querySelector('iframe');
     iframe.width = '100%';
     iframe.height = '100%';

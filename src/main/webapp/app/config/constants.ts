@@ -77,6 +77,9 @@ export const GET_HOME_DATA_URL = SERVER_API_URL + '/api/viewApp';
 export const SET_TRACKING_DATA = SERVER_API_URL + '/api/addTrackingApp';
 export const GET_MODAL_LISTING_URL = SERVER_API_URL + '/api/editorModalListing';
 
+export const CREATE_SESSION_ANALYTIC = SERVER_API_URL + '/api/createSessionAnalytic';
+export const END_SESSION_ANALYTIC = SERVER_API_URL + '/api/endSessionAnalytic';
+
 export const ELEMENT_TYPE = {
   TEXT: 'text',
   IMAGE: 'image',
