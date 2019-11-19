@@ -9,7 +9,7 @@ import { CONSTANTS, TITLE_HELMET } from 'app/config/constants';
 import * as commonAction from 'app/shared/common/common.reducer';
 import * as loginAction from 'app/modules/login/login.reducer';
 import _ from 'lodash';
-import { CustomInputText } from 'app/modules/inputCommon/CustomInputText';
+import CustomInputText from 'app/modules/inputCommon/CustomInputText';
 
 export interface ILoginProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -58,11 +58,11 @@ export class Login extends React.Component<ILoginProp> {
                   </div>
                   <div className="form-group">
                     <div>Tên đăng nhập</div>
-                    <CustomInputText/>
+                    <CustomInputText formType={'FORM_SHIPPING_FIELD'} fieldName={'fullName'}/>
                   </div>
                   <div className="form-group">
                     <div>Mật Khẩu</div>
-                    <CustomInputText/>
+                    <CustomInputText formType={'FORM_SHIPPING_FIELD'} fieldName={'mobilePhone1'}/>
                   </div>
                   <div className="form-group row align-items-center justify-content-center">
                     <input type="checkbox"/>

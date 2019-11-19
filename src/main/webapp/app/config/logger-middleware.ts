@@ -3,10 +3,14 @@ export default () => next => action => {
     const { type, payload, meta } = action;
 
     console.groupCollapsed(type);
-    // tslint:disable-next-line
-    console.log('Payload:', payload);
-    // tslint:disable-next-line
-    console.log('Meta:', meta);
+    // // tslint:disable-next-line
+    // console.log('Payload:', payload);
+    // // tslint:disable-next-line
+    // console.log('Meta:', meta);
+    Object.keys(action).map(k => {
+      // tslint:disable-next-line
+      console.log(k, action[k]);
+    });
     console.groupEnd();
   }
 
