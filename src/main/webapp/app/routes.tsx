@@ -16,7 +16,7 @@ const Routes = () => (
     {/*<ErrorBoundaryRoute path="/login" component={Login}/>*/}
     <Switch>
       <ErrorBoundaryRoute exact path="/" component={Home}/>
-      <ErrorBoundaryRoute path="/login" component={Login}/>
+      <ErrorBoundaryRoute path="/login/:role" component={Login}/>
       <ErrorBoundaryRoute path="/nhap-diem" component={NhapDiem}/>
       <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[ AUTHORITIES.USER ]}/>
     </Switch>

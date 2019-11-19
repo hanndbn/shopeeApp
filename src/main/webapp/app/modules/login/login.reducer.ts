@@ -4,11 +4,13 @@ import axios from 'axios';
 
 const ACTION_TYPES = {
   GET_LOGIN_DATA: 'Login/GET_LOGIN_DATA',
+  SET_LOGIN_ROLE: 'Login/SET_LOGIN_ROLE',
   RESET: 'Login/RESET'
 };
 
 const initialState = {
   loginData: [],
+  loginRole: 'STUDENT',
   loading: false,
   requestFailure: false,
   errorMessage: null
@@ -32,10 +34,15 @@ export default (state: LoginState = initialState, action): LoginState => {
       };
     case FAILURE(ACTION_TYPES.GET_LOGIN_DATA):
       return {
-        ...initialState,
+        ...state,
         loading: false,
         requestFailure: true,
         errorMessage: action.error
+      };
+    case ACTION_TYPES.SET_LOGIN_ROLE:
+      return {
+        ...state,
+        loginRole: action.payload
       };
     case ACTION_TYPES.RESET:
       return {
@@ -52,6 +59,11 @@ export const requestLoginData = () => async (dispatch, getState) => {
     payload: axios.get(``)
   });
 };
+
+export const setLoginRole = loginRole => ({
+  type: ACTION_TYPES.SET_LOGIN_ROLE,
+  payload: loginRole
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

@@ -7,7 +7,10 @@
   height: 100%;
 
   .login-wrapper {
+    max-width: 400px;
+    min-width: 400px;
     padding: 70px 50px;
+    //width: 500px;
     background-color: white;
     border-radius: 5px;
     text-align: center;
@@ -29,5 +32,29 @@
 
   .login-title {
     font-size: 25px;
+  }
+
+  .logo-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    @media only screen and (min-width: 768px) and (max-width: 991px) {
+      justify-content: center;
+    }
+
+    .logo-content {
+      max-width: 50%;
+      justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      @media only screen and (min-width: 768px) and (max-width: 991px) {
+        max-width: 70%;
+      }
+
+      img {
+        max-width: 100%;
+      }
+    }
   }
 }
