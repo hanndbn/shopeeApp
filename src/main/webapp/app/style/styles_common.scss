@@ -1,3 +1,19 @@
+.btn-action {
+  border: 1px solid #2165ff;
+  background-color: white;
+  color: #2165ff;
+  font-size: 14px;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #2165ff0a;
+  }
+  &:focus{
+    outline: none;
+    box-shadow: none;
+  }
+}
+
 .g-padding-0 {
   padding: 0;
 }

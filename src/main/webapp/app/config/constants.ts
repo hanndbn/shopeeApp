@@ -66,7 +66,7 @@ export const CONSTANTS = {
       PHONE_ERROR: 'Invalid phone number',
       OTHER_NUMBER_ERROR: 'Maximum 20 characters with no special characters',
       POST_CODE_ERROR: 'Maximum 5 characters with only digits.',
-      PASSWORD_ERROR: 'Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters',
+      PASSWORD_ERROR: 'Must contain at least 8 or more characters',
       EMAIL_ERROR: 'Invalid email address',
       LOGIN_ERROR: 'Wrong Email or Password'
     },
@@ -93,6 +93,7 @@ export const CONSTANTS = {
         '^(("[\\w-\\s]+")|([\\w-]+(?:\\.[\\w-]+)*)|("[\\w-\\s]+")([\\w-]+(?:\\.[\\w-]+)*))(@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-zA-Z]{2,6}(?:\\.[a-zA-Z]{2})?)$)|' +
         '(@\\[?((25[0-5]\\.|2[0-4][0-9]\\.|1[0-9]{2}\\.|[0-9]{1,2}\\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\\]?$)',
       PASSWORD: '(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}',
+      PASSWORD_2: '^.{8,32}$',
       ONLY_TEXT: '^[A-Za-z0-9_ ]{0,30}$',
       SPECIAL_SYMBOL: '[`!@#$%^&*(),-/~=+;\\\'.?":{}|\\\\<>\\[\\]]',
       SUB_SPECIAL_SYMBOL: '[`!@#$%^&*(),/~=+;\\\'.?":{}|\\\\<>\\[\\]]',
@@ -104,14 +105,14 @@ export const CONSTANTS = {
   }
 ;
 export const FORM_DEFINE = {
-  FORM_SHIPPING_FIELD: [
+  FORM_LOGIN: [
     {
-      id: 'fullName',
-      name: 'fullName',
-      fieldName: 'fullName',
+      id: 'userName',
+      name: 'userName',
+      fieldName: 'userName',
       type: 'text',
-      className: 'col-12',
-      placeholder: 'Full Name',
+      className: '',
+      placeholder: '',
       required: true,
       maxLength: 32,
       validPattern: CONSTANTS.FORM_PATTERN.NAME,
@@ -119,20 +120,20 @@ export const FORM_DEFINE = {
       invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
     },
     {
-      id: 'mobilePhone1',
-      name: 'mobilePhone1',
-      fieldName: 'mobilePhone1',
-      type: 'text',
+      name: 'password',
+      fieldName: 'password',
+      type: 'password',
       className: '',
-      placeholder: 'Mobile Phone',
       required: true,
-      validateWhenInput: true,
-      maxLength: 30,
-      validPattern: CONSTANTS.FORM_PATTERN.PHONE,
-      validatePatternInput: CONSTANTS.FORM_PATTERN.NUMBER,
-      invalidMessage: CONSTANTS.FORM_ERROR.PHONE_ERROR
+      valid_pattern: CONSTANTS.FORM_PATTERN.PASSWORD_2,
+      invalid_msg: CONSTANTS.FORM_ERROR.PASSWORD_ERROR
+    },
+    {
+      id: 'remember',
+      name: 'remember',
+      fieldName: 'remember',
+      type: 'remember',
+      className: ''
     }
   ]
 };
-
-export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDThh:mm';

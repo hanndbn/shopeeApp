@@ -7,10 +7,10 @@
     .sidebar-item {
       font-weight: 600;
       color: #2165FF;
-      font-size: 18px;
-      padding: 15px 20px;
+      font-size: 15px;
+      padding: 5px 20px;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       cursor: pointer;
 
       &.active {
@@ -21,8 +21,8 @@
     }
 
     .sidebar-sub-item {
-      padding: 10px 0 10px 40px;
-      font-size: 18px;
+      padding: 5px 0 5px 40px;
+      font-size: 15px;
       color: #707070;
       cursor: pointer;
       font-weight: 600;

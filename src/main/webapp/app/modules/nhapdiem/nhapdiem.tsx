@@ -22,13 +22,13 @@ export class NhapDiem extends React.Component<INhapDiemProp> {
   }
 
   render() {
-    const {} = this.props;
+    const { pagination } = this.props;
     return (
-      <div className="nhapdiem-container container-fluid">
+      <div className="nhapdiem-container">
         <Helmet>
           <title>{`${TITLE_HELMET}`}</title>
         </Helmet>
-        <div className="row">
+        <div className="row no-gutters">
           <div className="col-12 title">Nhập điểm</div>
           <div className="col-12 sub-title">Tìm Kiếm Điểm</div>
           <div className="col-12 search-wrapper">
@@ -110,34 +110,36 @@ export class NhapDiem extends React.Component<INhapDiemProp> {
               <div className="col-2">icon</div>
             </div>
           </div>
-          {pagination &&
-          !loading &&
-          pagination.numOfPages > 1 && (
-            <div className="paging-container d-flex justify-content-center">
-              <ReactPaginate
-                breakLabel={<a>...</a>}
-                breakClassName={'break-me'}
-                pageCount={pagination.totalRecords / pagination.pageSize <= 1 ? 1 : pagination.totalRecords / pagination.pageSize}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={2}
-                onPageChange={setPageNumber}
-                containerClassName={'pagination'}
-                subContainerClassName={'pages pagination'}
-                activeClassName={'current'}
-                nextLabel={translateUtil('Next')}
-                previousLabel={translateUtil('Prev')}
-                forcePage={pagination.pageNumber - 1}
-              />
-              {/* End Pagination */}
-            </div>
-          )}
+          {/*{pagination &&*/}
+          {/*!loading &&*/}
+          {/*pagination.numOfPages > 1 && (*/}
+            {/*<div className="paging-container d-flex justify-content-center">*/}
+              {/*<ReactPaginate*/}
+                {/*breakLabel={<a>...</a>}*/}
+                {/*breakClassName={'break-me'}*/}
+                {/*pageCount={pagination.totalRecords / pagination.pageSize <= 1 ? 1 : pagination.totalRecords / pagination.pageSize}*/}
+                {/*marginPagesDisplayed={1}*/}
+                {/*pageRangeDisplayed={2}*/}
+                {/*onPageChange={setPageNumber}*/}
+                {/*containerClassName={'pagination'}*/}
+                {/*subContainerClassName={'pages pagination'}*/}
+                {/*activeClassName={'current'}*/}
+                {/*nextLabel={translateUtil('Next')}*/}
+                {/*previousLabel={translateUtil('Prev')}*/}
+                {/*forcePage={pagination.pageNumber - 1}*/}
+              {/*/>*/}
+              {/*/!* End Pagination *!/*/}
+            {/*</div>*/}
+          {/*)}*/}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ common, nhapDiem }: IRootState) => ({});
+const mapStateToProps = ({ common, nhapDiem }: IRootState) => ({
+  pagination: nhapDiem.pagination,
+});
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: async () => {

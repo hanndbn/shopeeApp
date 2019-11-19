@@ -7,6 +7,8 @@ import authentication, { AuthenticationState } from './authentication';
 import common, { CommonState } from 'app/shared/common/common.reducer';
 import login, { LoginState } from 'app/modules/login/login.reducer';
 import inputCommon, { InputCommonState } from 'app/modules/inputCommon/inputCommon.reducer';
+import nhapDiem, { NhapDiemState } from 'app/modules/nhapdiem/nhapdiem.reducer';
+import managerClass, { ManagerClassState } from 'app/modules/managerClass/managerClass.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -17,6 +19,10 @@ export interface IRootState {
   readonly inputCommon: InputCommonState;
 
   readonly login: LoginState;
+
+  // giao vien
+  readonly nhapDiem: NhapDiemState;
+  readonly managerClass: ManagerClassState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -27,6 +33,9 @@ const rootReducer = combineReducers<IRootState>({
   common,
   inputCommon,
   login,
+
+  nhapDiem,
+  managerClass,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

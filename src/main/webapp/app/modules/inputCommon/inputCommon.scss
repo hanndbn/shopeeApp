@@ -1,5 +1,6 @@
 .custom-input-text-container {
-  margin-bottom: 10px;
+  margin-bottom: 2.2rem;
+  position: relative;
 
   input:focus {
     border-color: #3271FF;
@@ -13,10 +14,30 @@
     font-size: 0.75rem;
     color: #ff424f;
     text-align: left;
+    position: absolute;
   }
   .is-invalid-input {
     border-color: #ff424f;
     background-color: rgba(255, 66, 79, 0.05);
   }
 
+}
+
+.custom-input-checkbox {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  border: 1px solid #a2a0a0;
+
+  .checkmark {
+    width: 7px;
+    height: 13px;
+    border: solid #a2a0a0;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    margin-bottom: 3px;
+  }
 }

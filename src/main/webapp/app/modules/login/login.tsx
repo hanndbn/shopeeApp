@@ -10,10 +10,12 @@ import * as commonAction from 'app/shared/common/common.reducer';
 import * as loginAction from 'app/modules/login/login.reducer';
 import _ from 'lodash';
 import CustomInputText from 'app/modules/inputCommon/CustomInputText';
+import CustomInputCheckbox from 'app/modules/inputCommon/CustomInputCheckbox';
 
 export interface ILoginProp extends StateProps, DispatchProps {
   initScreen: Function;
   setFullScreen: Function;
+  requestLogin: Function;
   match: any;
 }
 
@@ -37,7 +39,7 @@ export class Login extends React.Component<ILoginProp> {
 
   render() {
     const { loginRole } = this.props;
-    const role = CONSTANTS.LIST_ROLE[ loginRole ] ? CONSTANTS.LIST_ROLE[ loginRole ] : {};
+    const role = CONSTANTS.LIST_ROLE[loginRole] ? CONSTANTS.LIST_ROLE[loginRole] : {};
     return (
       <div className="login-container"
            style={{ backgroundImage: 'url(content/images/login-bg.png)' }}
@@ -57,18 +59,18 @@ export class Login extends React.Component<ILoginProp> {
                     <div className="login-title">ĐĂNG NHẬP {role.title}</div>
                   </div>
                   <div className="form-group">
-                    <div>Tên đăng nhập</div>
-                    <CustomInputText formType={'FORM_SHIPPING_FIELD'} fieldName={'fullName'}/>
+                    <div className="mb-2">Tên đăng nhập</div>
+                    <CustomInputText formType={'FORM_LOGIN'} fieldName={'userName'}/>
                   </div>
                   <div className="form-group">
-                    <div>Mật Khẩu</div>
-                    <CustomInputText formType={'FORM_SHIPPING_FIELD'} fieldName={'mobilePhone1'}/>
+                    <div className="mb-2">Mật Khẩu</div>
+                    <CustomInputText formType={'FORM_LOGIN'} fieldName={'password'}/>
                   </div>
                   <div className="form-group row align-items-center justify-content-center">
-                    <input type="checkbox"/>
-                    <span>Lưu lại mật khẩu</span>
+                    <CustomInputCheckbox formType={'FORM_LOGIN'} fieldName={'remember'}/>
+                    <span className="ml-2">Lưu lại mật khẩu</span>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group" onClick={() => this.props.requestLogin()}>
                     <button className="btn btn-common btn-login">Đăng nhập</button>
                   </div>
                   <div className="form-group">
@@ -98,12 +100,15 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
     dispatch(loginAction.reset());
     const role = ownProps.match.params.role;
-    if (role && CONSTANTS.LIST_ROLE[ _.upperCase(role) ]) {
+    if (role && CONSTANTS.LIST_ROLE[_.upperCase(role)]) {
       dispatch(loginAction.setLoginRole(_.upperCase(role)));
     }
   },
   setFullScreen: isFullScreen => {
     dispatch(commonAction.setFullScreen(isFullScreen));
+  },
+  requestLogin: () => {
+    dispatch(loginAction.requestLogin());
   }
 });
 

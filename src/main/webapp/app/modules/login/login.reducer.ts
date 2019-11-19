@@ -1,6 +1,8 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 // import { BASE_IMG_URL, GET_LOGIN_DATA } from 'app/config/constants';
 import axios from 'axios';
+import { validateForm } from 'app/modules/inputCommon/inputCommon.reducer';
+import { FORM_DEFINE } from 'app/config/constants';
 
 const ACTION_TYPES = {
   GET_LOGIN_DATA: 'Login/GET_LOGIN_DATA',
@@ -53,11 +55,14 @@ export default (state: LoginState = initialState, action): LoginState => {
   }
 };
 
-export const requestLoginData = () => async (dispatch, getState) => {
-  await dispatch({
-    type: ACTION_TYPES.GET_LOGIN_DATA,
-    payload: axios.get(``)
-  });
+export const requestLogin = () => async (dispatch, getState) => {
+  const isValid = await dispatch(validateForm('FORM_LOGIN', FORM_DEFINE.FORM_LOGIN));
+  if (isValid) {
+    await dispatch({
+      type: ACTION_TYPES.GET_LOGIN_DATA,
+      payload: axios.get(``)
+    });
+  }
 };
 
 export const setLoginRole = loginRole => ({

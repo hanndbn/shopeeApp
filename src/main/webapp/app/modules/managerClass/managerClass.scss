@@ -1,9 +1,8 @@
-.nhapdiem-container {
+.table-container {
   padding: 20px 20px 30px;
-  font-size: 18px;
 
   .title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     color: #374A92;
     margin-bottom: 20px;
@@ -16,12 +15,20 @@
     margin-bottom: 20px;
   }
 
+  .action-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+
   .search-wrapper {
     margin-bottom: 30px;
   }
 
   .custom-table {
-
+    box-shadow: 1px 1px 1px #d3d3d3;
     div {
       text-align: center;
     }
@@ -30,7 +37,6 @@
       div {
         background-color: #2165FF;
         color: white;
-        font-weight: 600;
         padding: 10px 0;
       }
     }
@@ -40,10 +46,9 @@
       > div {
         padding: 10px 0;
       }
-    }
-
-    .custom-table-data:nth-child(2n + 1) {
-      background-color: #F8F8F8;
+      &:nth-child(2n+1) {
+        background-color: #F8F8F8;
+      }
     }
 
     .table-point {

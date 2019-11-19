@@ -8,6 +8,7 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import { AUTHORITIES } from 'app/config/constants';
 import NhapDiem from 'app/modules/nhapdiem/nhapdiem';
+import ManagerClass from 'app/modules/managerClass/managerClass';
 
 // tslint:enable
 
@@ -18,7 +19,8 @@ const Routes = () => (
       <ErrorBoundaryRoute exact path="/" component={Home}/>
       <ErrorBoundaryRoute path="/login/:role" component={Login}/>
       <ErrorBoundaryRoute path="/nhap-diem" component={NhapDiem}/>
-      <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[ AUTHORITIES.USER ]}/>
+      <ErrorBoundaryRoute path="/quan-ly-lop-hoc" component={ManagerClass}/>
+      <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
     </Switch>
   </div>
 );
