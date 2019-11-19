@@ -902,14 +902,14 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-link-icon',
         imageId: 'BASIC/LINK.png'
       }),
-    this.createVertexTemplateEntry('type=IMAGE;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg;',
-      200, 80, '', '', false, false, 'image', {
+    this.createVertexTemplateEntry('type=IMAGE;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;',
+      207, 138, '', '', false, false, 'image', {
         id: 'add-image-icon',
         imageId: 'BASIC/IMAGE.png'
       }),
     this.createVertexTemplateEntry('type=IMAGE_SLIDE;rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Image Slide', false, false, 'image slide', {
       id: 'add-image-slide-icon',
-      imageId: 'BASIC/IMAGE_SLIDE.png'
+      imageId: 'img/imagelist.png'
     }),
     this.createVertexTemplateEntry('type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;',
       225, 400, 'Game', 'Game', false, false, 'game', {
