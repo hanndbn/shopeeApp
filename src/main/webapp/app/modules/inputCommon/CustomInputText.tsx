@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router-dom';
+import cn from 'classnames';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -16,13 +17,16 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
   }
 
   render() {
-    const {} = this.props;
+    const { inputType, errorMessage } = this.props;
     return (
       <div className="custom-input-text-container">
-        <input className="form-control"/>
-        <div className="error-msg-wrapper">
-          error text
-        </div>
+        <input className={cn('form-control', 'is-invalid-input' : validateInput[ formType ] && validateInput[ formType ][ field_name ])} type={inputType}/>
+        {
+          errorMessage &&
+          <div className="error-msg-wrapper">
+            {errorMessage}
+          </div>
+        }
       </div>
     );
   }
