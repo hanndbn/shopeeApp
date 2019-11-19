@@ -13,7 +13,11 @@ $(document).ready(function() {
     // value = "Test";
     // return false;
     if ((source.style.indexOf("type=CARD") > -1 && target.style.indexOf("type=CARD") > -1)
-      || ((source.style.indexOf("type=BUTTON") > -1 && target.style.indexOf("type=CARD") > -1))) {
+      || ((source.style.indexOf("type=RECTANGLE") > -1 && target.style.indexOf("type=CARD") > -1))
+      || ((source.style.indexOf("type=IMAGE") > -1 && target.style.indexOf("type=CARD") > -1))
+      || ((source.style.indexOf("type=IMAGE") > -1 && target.style.indexOf("type=IMAGE") > -1))
+      || ((source.style.indexOf("type=RECTANGLE") > -1 && target.style.indexOf("type=IMAGE") > -1))
+    ) {
       return mxConnectionHandlerInsertEdge.apply(this, arguments);
     }
     return null;

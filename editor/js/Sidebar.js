@@ -902,7 +902,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-link-icon',
         imageId: 'BASIC/LINK.png'
       }),
-    this.createVertexTemplateEntry('type=IMAGE;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;',
+    this.createVertexTemplateEntry('type=IMAGE;isConnectable=1;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;',
       207, 138, '', '', false, false, 'image', {
         id: 'add-image-icon',
         imageId: 'BASIC/IMAGE.png'

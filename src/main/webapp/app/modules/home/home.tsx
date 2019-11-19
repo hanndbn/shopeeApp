@@ -198,10 +198,15 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
     const isGame = slideStyle[ 'type' ] === 'game';
     const isMedia = homeAction.isMedia(slideStyle[ 'type' ]);
+    const isLink = slideStyle[ 'type' ] === ELEMENT_TYPE.LINK;
     let mediaContent = '';
+    let linkUrl = '';
     let linkOpenInModal = false;
     if (isMedia) {
       mediaContent = homeAction.getMediaContent(slide.id, slideStyle[ 'type' ], slideStyle[ 'linkUrl' ], this.props.externalData);
+      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+    } else if (isLink) {
+      linkUrl = slideStyle[ 'linkUrl' ] ? slideStyle[ 'linkUrl' ] : '';
       linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
     }
 
@@ -221,7 +226,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                  key={idx}
                  onClick={() => {
                    if (!isRoot) {
-                     if (isMedia && linkOpenInModal) {
+                     if (isLink) {
+                       if (linkOpenInModal) {
+                         this.props.displayModalUrl(linkUrl);
+                       } else {
+                         window.location.href = linkUrl;
+                       }
+                     } else if (isMedia && linkOpenInModal) {
                        this.props.displayModalMedia(slideStyle[ 'type' ], mediaContent);
                      } else if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
                        const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
