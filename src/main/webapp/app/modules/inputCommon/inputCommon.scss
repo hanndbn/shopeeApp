@@ -8,10 +8,6 @@
     box-shadow: none;
   }
 
-  .custom-input-text-label {
-    font-size: 16px;
-  }
-
   .is-invalid-input {
     border-color: #ff424f;
     box-shadow: 0 0 0 3px rgba(221, 0, 0, .1);
@@ -21,6 +17,10 @@
     background-color: #e9ecef;
   }
 
+}
+
+.custom-input-text-label {
+  font-size: 16px;
 }
 
 .custom-input-checkbox {
