@@ -138,7 +138,7 @@ export class NhapDiem extends React.Component<INhapDiemProp> {
 }
 
 const mapStateToProps = ({ common, nhapDiem }: IRootState) => ({
-  pagination: nhapDiem.pagination,
+  pagination: nhapDiem.pagination
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

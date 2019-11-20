@@ -1,24 +1,24 @@
 .custom-input-text-container {
-  margin-bottom: 2.2rem;
+  margin-bottom: 2.5rem;
   position: relative;
+  font-size: 1rem;
 
   input:focus {
     border-color: #3271FF;
     box-shadow: none;
   }
 
-  .error-msg-wrapper {
-    display: block;
-    padding: 5px 0 0px;
-    line-height: 1.5;
-    font-size: 0.75rem;
-    color: #ff424f;
-    text-align: left;
-    position: absolute;
+  .custom-input-text-label {
+    font-size: 16px;
   }
+
   .is-invalid-input {
     border-color: #ff424f;
-    background-color: rgba(255, 66, 79, 0.05);
+    box-shadow: 0 0 0 3px rgba(221, 0, 0, .1);
+  }
+
+  &.readonly {
+    background-color: #e9ecef;
   }
 
 }
@@ -39,5 +39,82 @@
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
     margin-bottom: 3px;
+  }
+}
+
+.custom-select-container {
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+
+  .custom-select-label {
+    margin-top: 0.3rem;
+  }
+
+  .custom-select-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+
+    .form-control {
+      display: flex;
+      align-items: center;
+
+      &.is-focus {
+        border: 1px solid #3271FF;
+      }
+
+      &.readonly {
+        background-color: #e9ecef;
+      }
+    }
+  }
+
+  .custom-select-pop-up {
+    background-color: white;
+    z-index: 3;
+    position: absolute;
+    top: calc(2.25rem + 5px);
+    width: 100%;
+    border: 1px solid #ced4da;
+    box-shadow: 1px 1px 3px #ced4da63;
+    height: auto;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+  }
+
+  .custom-select-item {
+    padding: 0.4rem 1.5rem;
+    cursor: pointer;
+    display: block;
+
+    &:hover {
+      background-color: #3271ff26;
+      text-decoration: none;
+    }
+
+    &.selected {
+      background-color: #3271fff5;
+      color: white;
+      text-decoration: none;
+    }
+  }
+
+  .custom-select-icon {
+    position: absolute;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    border-top: 10px solid #999999;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
+
+  .is-invalid-input {
+    border-color: #ff424f;
+    box-shadow: 0 0 0 3px rgba(221, 0, 0, .1);
   }
 }

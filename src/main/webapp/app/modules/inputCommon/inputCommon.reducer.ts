@@ -5,6 +5,7 @@ import { CONSTANTS } from 'app/config/constants';
 const ACTION_TYPES = {
   SET_INPUT_VALUE: 'InputCommon/SET_INPUT_VALUE',
   SET_VALIDATE_INPUT: 'InputCommon/SET_VALIDATE_INPUT',
+  COPY_DATA_TO_INPUT: 'InputCommon/COPY_DATA_TO_INPUT',
   CLEAR_FORM: 'InputCommon/CLEAR_FORM',
   RESET: 'InputCommon/RESET'
 };
@@ -50,6 +51,18 @@ export default (state: InputCommonState = initialState, action): InputCommonStat
         inputValue: {
           ...state.inputValue,
           [ action.formType ]: {}
+        },
+        invalidFields: {
+          ...state.invalidFields,
+          [ action.formType ]: {}
+        }
+      };
+    case ACTION_TYPES.COPY_DATA_TO_INPUT:
+      return {
+        ...state,
+        inputValue: {
+          ...state.inputValue,
+          [ action.formType ]: action.data
         },
         invalidFields: {
           ...state.invalidFields,
@@ -114,6 +127,12 @@ export const validateForm = (formType, formDefine, isOnlyCheck = false) => async
   });
   return validData;
 };
+
+export const copyDataToInput = (formType, data) => ({
+  type: ACTION_TYPES.COPY_DATA_TO_INPUT,
+  formType,
+  data
+});
 
 export const clearForm = formType => ({
   type: ACTION_TYPES.CLEAR_FORM,

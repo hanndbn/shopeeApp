@@ -39,7 +39,7 @@ export class Login extends React.Component<ILoginProp> {
 
   render() {
     const { loginRole } = this.props;
-    const role = CONSTANTS.LIST_ROLE[loginRole] ? CONSTANTS.LIST_ROLE[loginRole] : {};
+    const role = CONSTANTS.LIST_ROLE[ loginRole ] ? CONSTANTS.LIST_ROLE[ loginRole ] : {};
     return (
       <div className="login-container"
            style={{ backgroundImage: 'url(content/images/login-bg.png)' }}
@@ -58,18 +58,10 @@ export class Login extends React.Component<ILoginProp> {
                   <div className="form-group">
                     <div className="login-title">ĐĂNG NHẬP {role.title}</div>
                   </div>
-                  <div className="form-group">
-                    <div className="mb-2">Tên đăng nhập</div>
-                    <CustomInputText formType={'FORM_LOGIN'} fieldName={'userName'}/>
-                  </div>
-                  <div className="form-group">
-                    <div className="mb-2">Mật Khẩu</div>
-                    <CustomInputText formType={'FORM_LOGIN'} fieldName={'password'}/>
-                  </div>
-                  <div className="form-group row align-items-center justify-content-center">
-                    <CustomInputCheckbox formType={'FORM_LOGIN'} fieldName={'remember'}/>
-                    <span className="ml-2">Lưu lại mật khẩu</span>
-                  </div>
+                  <CustomInputText formType={'FORM_LOGIN'} fieldName={'userName'}/>
+                  <CustomInputText formType={'FORM_LOGIN'} fieldName={'password'}/>
+                  <CustomInputCheckbox formType={'FORM_LOGIN'} fieldName={'remember'}/>
+
                   <div className="form-group" onClick={() => this.props.requestLogin()}>
                     <button className="btn btn-common btn-login">Đăng nhập</button>
                   </div>
@@ -100,7 +92,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
     dispatch(loginAction.reset());
     const role = ownProps.match.params.role;
-    if (role && CONSTANTS.LIST_ROLE[_.upperCase(role)]) {
+    if (role && CONSTANTS.LIST_ROLE[ _.upperCase(role) ]) {
       dispatch(loginAction.setLoginRole(_.upperCase(role)));
     }
   },

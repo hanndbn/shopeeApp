@@ -13,6 +13,7 @@ import * as inputCommonAction from 'app/modules/inputCommon/inputCommon.reducer'
 export interface ICustomInputTextProp extends StateProps, DispatchProps {
   formType: any;
   fieldName: any;
+  isReadOnly: any;
   setInputValue: Function;
   validateInputValue: Function;
 }
@@ -24,43 +25,56 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
 
   render() {
     const { formType, fieldName, inputValue, invalidFields } = this.props;
-    if (!formType || !fieldName || !FORM_DEFINE[ formType ] || !FORM_DEFINE[ formType ].find(v => v.fieldName === fieldName)) return null;
-    const formDefine = FORM_DEFINE[ formType ].find(v => v.fieldName === fieldName);
+    if (!formType || !fieldName || !FORM_DEFINE[ formType ] || !FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
+    const formDefine = FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName);
     const {
-      id = null,
-      name = null,
-      type = CONSTANTS.FORM_TYPE.TEXT,
-      className = '',
-      placeholder = null,
-      maxLength = null,
-      validatePatternInput = ''
+      classWrapper = '',
+      label = '',
+      labelClass = '',
+      inputType = CONSTANTS.FORM_TYPE.TEXT,
+      inputName = null,
+      inputClass = '',
+      inputReadOnly = false,
+      inputPlaceHolder = null,
+      inputMaxLength = null,
+      typingPattern = ''
     } = formDefine;
     const value = inputValue[ formType ] && inputValue[ formType ][ fieldName ] ? inputValue[ formType ][ fieldName ] : '';
     const errorMessage = invalidFields[ formType ] && invalidFields[ formType ][ fieldName ] ? invalidFields[ formType ][ fieldName ] : '';
+    const isReadOnly = this.props.isReadOnly || inputReadOnly;
     return (
-      <div className="custom-input-text-container">
-        <input className={cn(`form-control ${className}`, { 'is-invalid-input': !!errorMessage })}
-               type={type}
-               id={id}
-               name={name}
-               placeholder={placeholder}
-               maxLength={maxLength}
-               value={value}
-               onChange={e => {
-                 if (e.target.value
-                   && (validatePatternInput && !new RegExp(validatePatternInput).test(e.target.value))) {
-                   return;
-                 }
-                 this.props.setInputValue(formType, fieldName, e.target.value);
-               }}
-               onBlur={e => this.props.validateInputValue(formType, e.target.value, formDefine)}
-        />
-        {
-          errorMessage &&
-          <div className="error-msg-wrapper">
-            {errorMessage}
+      <div className={classWrapper}>
+        <div className="row no-gutters">
+          {
+            label && <div className={`custom-input-text-label ${labelClass}`}>{label}</div>
+          }
+          <div className={`custom-input-text-container ${inputClass}`}>
+            <input className={cn(`form-control`, {
+              'is-invalid-input': !!errorMessage,
+              'readonly': isReadOnly
+            })}
+                   type={inputType}
+                   name={inputName}
+                   placeholder={inputPlaceHolder}
+                   maxLength={inputMaxLength}
+                   value={value}
+                   onChange={e => {
+                     if (e.target.value
+                       && (typingPattern && !new RegExp(typingPattern).test(e.target.value))) {
+                       return;
+                     }
+                     this.props.setInputValue(formType, fieldName, e.target.value);
+                   }}
+                   onBlur={e => this.props.validateInputValue(formType, e.target.value, formDefine)}
+            />
+            {
+              errorMessage &&
+              <div className="error-msg-wrapper">
+                {errorMessage}
+              </div>
+            }
           </div>
-        }
+        </div>
       </div>
     );
   }

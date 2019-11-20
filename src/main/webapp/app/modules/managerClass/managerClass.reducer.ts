@@ -1,14 +1,19 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
+import axios from 'axios';
+import { FORM_DEFINE, REQUEST_API } from 'app/config/constants';
+import { copyDataToInput } from 'app/modules/inputCommon/inputCommon.reducer';
 // import { BASE_IMG_URL, GET_MANAGER_CLASS_DATA } from 'app/config/constants';
 
 const ACTION_TYPES = {
   GET_MANAGER_CLASS_DATA: 'ManagerClass/GET_MANAGER_CLASS_DATA',
+  GET_MANAGER_CLASS_DETAIL_DATA: 'ManagerClass/GET_MANAGER_CLASS_DETAIL_DATA',
   SET_PAGE_NUMBER: 'Search/SET_PAGE_NUMBER',
   RESET: 'ManagerClass/RESET'
 };
 
 const initialState = {
   managerClassData: [],
+  managerClassDetail: {},
   loading: false,
   requestFailure: false,
   errorMessage: null,
@@ -41,7 +46,25 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
       };
     case FAILURE(ACTION_TYPES.GET_MANAGER_CLASS_DATA):
       return {
-        ...initialState,
+        ...state,
+        loading: false,
+        requestFailure: true,
+        errorMessage: action.error
+      };
+    case REQUEST(ACTION_TYPES.GET_MANAGER_CLASS_DETAIL_DATA):
+      return {
+        ...state,
+        loading: true
+      };
+    case SUCCESS(ACTION_TYPES.GET_MANAGER_CLASS_DETAIL_DATA):
+      return {
+        ...state,
+        loading: false,
+        managerClassDetail: action.payload.data
+      };
+    case FAILURE(ACTION_TYPES.GET_MANAGER_CLASS_DETAIL_DATA):
+      return {
+        ...state,
         loading: false,
         requestFailure: true,
         errorMessage: action.error
@@ -67,16 +90,27 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
 };
 
 export const requestManagerClassData = () => async (dispatch, getState) => {
-  const lang = getState().locale && getState().locale.currentLocale ? getState().locale.currentLocale : 'en';
-  const q = getState().search.searchInput;
-  const pagination = {
-    ...getState().search.pagination,
-    pageNumber: getState().search.pagination.pageNumber
-  };
-  // await dispatch({
-  //   type: ACTION_TYPES.GET_MANAGER_CLASS_DATA,
-  //   payload: axios.get(GET_MANAGER_CLASS_DATA, { pagination, lang })
-  // });
+  // const pagination = {
+  //   ...getState().search.pagination,
+  //   pageNumber: getState().search.pagination.pageNumber
+  // };
+  await dispatch({
+    type: ACTION_TYPES.GET_MANAGER_CLASS_DATA,
+    payload: axios.get(REQUEST_API.GET_MANAGER_CLASS_DATA)
+  });
+};
+
+export const requestManagerClassDetailData = () => async (dispatch, getState) => {
+  // const pagination = {
+  //   ...getState().search.pagination,
+  //   pageNumber: getState().search.pagination.pageNumber
+  // };
+  await dispatch({
+    type: ACTION_TYPES.GET_MANAGER_CLASS_DETAIL_DATA,
+    payload: axios.get(REQUEST_API.GET_MANAGER_CLASS_DETAIL)
+  });
+  const managerClassDetail = getState().managerClass.managerClassDetail;
+  dispatch(copyDataToInput(FORM_DEFINE.FORM_MANAGER_CLASS.id, managerClassDetail));
 };
 
 export const setPageNumber = pageNumber => ({

@@ -105,35 +105,252 @@ export const CONSTANTS = {
   }
 ;
 export const FORM_DEFINE = {
-  FORM_LOGIN: [
-    {
-      id: 'userName',
-      name: 'userName',
-      fieldName: 'userName',
-      type: 'text',
-      className: '',
-      placeholder: '',
-      required: true,
-      maxLength: 32,
-      validPattern: CONSTANTS.FORM_PATTERN.NAME,
-      invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
-      invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
-    },
-    {
-      name: 'password',
-      fieldName: 'password',
-      type: 'password',
-      className: '',
-      required: true,
-      valid_pattern: CONSTANTS.FORM_PATTERN.PASSWORD_2,
-      invalid_msg: CONSTANTS.FORM_ERROR.PASSWORD_ERROR
-    },
-    {
-      id: 'remember',
-      name: 'remember',
-      fieldName: 'remember',
-      type: 'remember',
-      className: ''
-    }
-  ]
+  FORM_LOGIN: {
+    id: 'FORM_LOGIN',
+    fields: [
+      {
+        fieldName: 'userName',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-12',
+        label: 'Tên đăng nhập',
+        labelClass: 'col-12 text-center mb-1',
+        inputType: 'text',
+        inputName: 'userName',
+        inputClass: 'col-12',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        required: true,
+        validPattern: CONSTANTS.FORM_PATTERN.NAME,
+        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
+        typingPattern: '',
+        invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
+      },
+      {
+        fieldName: 'password',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-12',
+        label: 'Mật Khẩu',
+        labelClass: 'col-12 text-center mb-1',
+        inputType: 'password',
+        inputName: 'password',
+        inputClass: 'col-12',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        required: true,
+        valid_pattern: CONSTANTS.FORM_PATTERN.PASSWORD_2,
+        invalid_msg: CONSTANTS.FORM_ERROR.PASSWORD_ERROR
+      },
+      {
+        fieldName: 'remember',
+        fieldType: CONSTANTS.FORM_TYPE.CHECKBOX,
+        classWrapper: 'col-12 mt-2',
+        label: 'Lưu lại mật khẩu',
+        labelClass: '',
+        isRevertLabel: false,
+        inputName: 'remember',
+        inputClass: ''
+      }
+    ]
+  },
+  FORM_MANAGER_CLASS: {
+    id: 'FORM_MANAGER_CLASS',
+    fields: [
+      {
+        fieldName: 'idSchool',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-6',
+        label: 'Mã trường học',
+        labelClass: 'col-4',
+        inputType: 'text',
+        inputName: 'idSchool',
+        inputClass: 'col-7',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        inputReadOnly: true,
+        required: true,
+        validPattern: CONSTANTS.FORM_PATTERN.NAME,
+        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
+        typingPattern: '',
+        invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
+      },
+      {
+        fieldName: 'nameSchool',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-6',
+        label: 'Tên trường học',
+        labelClass: 'col-4',
+        inputType: 'text',
+        inputName: 'nameSchool',
+        inputClass: 'col-7',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        inputReadOnly: true,
+        required: true,
+        validPattern: CONSTANTS.FORM_PATTERN.NAME,
+        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
+        typingPattern: '',
+        invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
+      },
+      {
+        fieldName: 'schoolYear',
+        fieldType: CONSTANTS.FORM_TYPE.SELECT,
+        classWrapper: 'col-6',
+        label: 'Tên lớp học',
+        labelClass: 'col-4',
+        defaultLabel: 'Select',
+        inputName: 'class',
+        inputClass: 'col-7',
+        required: true,
+        selectData: [
+          {
+            label: '2018-2019',
+            value: '2018-2019'
+          },
+          {
+            label: '2019-2020',
+            value: '2019-2020'
+          }
+        ]
+      },
+      {
+        fieldName: 'groupOfClass',
+        fieldType: CONSTANTS.FORM_TYPE.SELECT,
+        classWrapper: 'col-6',
+        label: 'Khối lớp',
+        labelClass: 'col-4',
+        defaultLabel: 'Select',
+        inputName: 'class',
+        inputClass: 'col-7',
+        required: true,
+        selectData: [
+          {
+            label: '10',
+            value: '10'
+          },
+          {
+            label: '11',
+            value: '11'
+          },
+          {
+            label: '12',
+            value: '12'
+          }
+        ]
+      },
+      {
+        fieldName: 'typeClass',
+        fieldType: CONSTANTS.FORM_TYPE.SELECT,
+        classWrapper: 'col-6',
+        label: 'Ban học',
+        labelClass: 'col-4',
+        defaultLabel: 'Select',
+        inputName: 'class',
+        inputClass: 'col-7',
+        required: false,
+        selectData: [
+          {
+            label: 'Ban Cơ Bản',
+            value: 'A'
+          },
+          {
+            label: 'Ban Nâng Cao',
+            value: 'B'
+          },
+          {
+            label: 'Ban Năng Khiếu',
+            value: 'C'
+          }
+        ]
+      },
+      {
+        fieldName: 'idClass',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-6',
+        label: 'Mã lớp học',
+        labelClass: 'col-4',
+        inputType: 'text',
+        inputName: 'idClass',
+        inputClass: 'col-7',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        required: true,
+        validPattern: CONSTANTS.FORM_PATTERN.NAME,
+        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
+        typingPattern: '',
+        invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
+      },
+      {
+        fieldName: 'nameClass',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-6',
+        label: 'Tên lớp học',
+        labelClass: 'col-4',
+        inputType: 'text',
+        inputName: 'nameClass',
+        inputClass: 'col-7',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        required: true,
+        validPattern: CONSTANTS.FORM_PATTERN.NAME,
+        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
+        typingPattern: '',
+        invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
+      },
+      {
+        fieldName: 'teacherManage',
+        fieldType: CONSTANTS.FORM_TYPE.SELECT,
+        classWrapper: 'col-6',
+        label: 'Giáo viên chủ nhiệm',
+        labelClass: 'col-4',
+        defaultLabel: 'Select',
+        inputName: 'class',
+        inputClass: 'col-7',
+        required: false,
+        selectData: []
+      },
+      {
+        fieldName: 'professionalClass',
+        fieldType: CONSTANTS.FORM_TYPE.SELECT,
+        classWrapper: 'col-6',
+        label: 'Lớp chuyên',
+        labelClass: 'col-4',
+        defaultLabel: 'Select',
+        inputName: 'class',
+        inputClass: 'col-7',
+        required: false,
+        selectData: [
+          {
+            label: 'Có',
+            value: '1'
+          },
+          {
+            label: 'Không',
+            value: '0'
+          }
+        ]
+      },
+      {
+        fieldName: 'totalStudent',
+        fieldType: CONSTANTS.FORM_TYPE.TEXT,
+        classWrapper: 'col-6',
+        label: 'Sĩ Số',
+        labelClass: 'col-4',
+        inputType: 'text',
+        inputName: 'totalStudent',
+        inputClass: 'col-7',
+        inputPlaceHolder: '',
+        inputMaxLength: 32,
+        required: false,
+        validPattern: CONSTANTS.FORM_PATTERN.NUMBER,
+        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
+        typingPattern: CONSTANTS.FORM_PATTERN.NUMBER,
+        invalidMessage: CONSTANTS.FORM_ERROR.OTHER_NUMBER_ERROR
+      }
+    ]
+  }
+};
+
+export const REQUEST_API = {
+  GET_MANAGER_CLASS_DATA: 'http://171.244.0.59:3000/api/classes/school/SS005',
+  GET_MANAGER_CLASS_DETAIL: 'http://171.244.0.59:3000/api/classes/10A3'
 };
