@@ -6,26 +6,33 @@ import { copyDataToInput } from 'app/modules/inputCommon/inputCommon.reducer';
 
 const ACTION_TYPES = {
   GET_MANAGER_CLASS_DATA: 'ManagerClass/GET_MANAGER_CLASS_DATA',
+  CLEAR_MANAGER_CLASS_DATA: 'ManagerClass/CLEAR_MANAGER_CLASS_DATA',
   GET_MANAGER_CLASS_DETAIL_DATA: 'ManagerClass/GET_MANAGER_CLASS_DETAIL_DATA',
-  SET_PAGE_NUMBER: 'Search/SET_PAGE_NUMBER',
+  SET_ACTIVE_ID: 'ManagerClass/SET_ACTIVE_ID',
+  SET_PAGE_NUMBER: 'ManagerClass/SET_PAGE_NUMBER',
   RESET: 'ManagerClass/RESET'
 };
 
 const initialState = {
+  // listing screen params
   managerClassData: [],
-  managerClassDetail: {},
-  loading: false,
-  requestFailure: false,
-  errorMessage: null,
   pagination: {
     total: 0,
     totalPage: 0,
     page: {
-      page: 1,
-      pageSize: 12,
+      page: 0,
+      pageSize: 2,
       sort: {}
     }
-  }
+  },
+  // detail screen params
+  activeId: null,
+  managerClassDetail: {},
+
+  // shared params
+  loading: false,
+  requestFailure: false,
+  errorMessage: null
 };
 
 export type ManagerClassState = Readonly<typeof initialState>;
@@ -42,7 +49,13 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
       return {
         ...state,
         loading: false,
-        managerClassData: action.payload.data
+        managerClassData: action.payload.data.data,
+        pagination: {
+          ...state.pagination,
+          total: action.payload.data.total,
+          totalPage: action.payload.data.totalPage,
+          page: action.payload.data.totalPage
+        }
       };
     case FAILURE(ACTION_TYPES.GET_MANAGER_CLASS_DATA):
       return {
@@ -69,6 +82,17 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
         requestFailure: true,
         errorMessage: action.error
       };
+    case ACTION_TYPES.CLEAR_MANAGER_CLASS_DATA:
+      return {
+        ...state,
+        managerClassData: [],
+        pagination: initialState.pagination
+      };
+    case ACTION_TYPES.SET_ACTIVE_ID:
+      return {
+        ...state,
+        activeId: action.payload
+      };
     case ACTION_TYPES.SET_PAGE_NUMBER:
       return {
         ...state,
@@ -89,14 +113,19 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
   }
 };
 
-export const requestManagerClassData = () => async (dispatch, getState) => {
-  // const pagination = {
-  //   ...getState().search.pagination,
-  //   pageNumber: getState().search.pagination.pageNumber
-  // };
-  await dispatch({
+export const requestManagerClassData = () => (dispatch, getState) => {
+  const pagination = getState().managerClass.pagination;
+  const schoolId = getState().userInfo.userInfoData.schoolId;
+  const params = {
+    pageSize: pagination.page.pageSize,
+    page: pagination.page.page,
+    criteria: {
+      school_id: schoolId
+    }
+  };
+  dispatch({
     type: ACTION_TYPES.GET_MANAGER_CLASS_DATA,
-    payload: axios.get(REQUEST_API.GET_MANAGER_CLASS_DATA)
+    payload: axios.get(REQUEST_API.GET_MANAGER_CLASS_DATA, { params })
   });
 };
 
@@ -113,9 +142,18 @@ export const requestManagerClassDetailData = () => async (dispatch, getState) =>
   dispatch(copyDataToInput(FORM_DEFINE.FORM_MANAGER_CLASS.id, managerClassDetail));
 };
 
+export const clearManagerClassData = () => ({
+  type: ACTION_TYPES.CLEAR_MANAGER_CLASS_DATA
+});
+
 export const setPageNumber = pageNumber => ({
   type: ACTION_TYPES.SET_PAGE_NUMBER,
   payload: pageNumber
+});
+
+export const setActiveId = activeId => ({
+  type: ACTION_TYPES.SET_ACTIVE_ID,
+  payload: activeId
 });
 
 export const reset = () => ({

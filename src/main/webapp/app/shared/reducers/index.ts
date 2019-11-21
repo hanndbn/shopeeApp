@@ -9,6 +9,7 @@ import login, { LoginState } from 'app/modules/login/login.reducer';
 import inputCommon, { InputCommonState } from 'app/modules/inputCommon/inputCommon.reducer';
 import nhapDiem, { NhapDiemState } from 'app/modules/nhapdiem/nhapdiem.reducer';
 import managerClass, { ManagerClassState } from 'app/modules/managerClass/managerClass.reducer';
+import userInfo, { UserInfoState } from 'app/modules/userInfo/userInfo.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -23,6 +24,9 @@ export interface IRootState {
   // giao vien
   readonly nhapDiem: NhapDiemState;
   readonly managerClass: ManagerClassState;
+
+  readonly userInfo: UserInfoState;
+
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -36,6 +40,8 @@ const rootReducer = combineReducers<IRootState>({
 
   nhapDiem,
   managerClass,
+
+  userInfo,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

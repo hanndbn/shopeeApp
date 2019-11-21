@@ -351,6 +351,10 @@ export const FORM_DEFINE = {
 };
 
 export const REQUEST_API = {
-  GET_MANAGER_CLASS_DATA: 'http://171.244.0.59:3000/api/classes/school/SS005',
+  GET_MANAGER_CLASS_DATA: 'http://171.244.0.59:3000/api/classes/info',
   GET_MANAGER_CLASS_DETAIL: 'http://171.244.0.59:3000/api/classes/10A3'
+};
+
+export const SCREEN_PATH = {
+  MANAGER_CLASS: '/quan-ly-lop-hoc'
 };

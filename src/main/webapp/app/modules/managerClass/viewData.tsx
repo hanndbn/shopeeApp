@@ -6,11 +6,18 @@ import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router';
 import Loading from 'app/shared/Loader/loading';
 import * as managerClassAction from 'app/modules/managerClass/managerClass.reducer';
+import ReactPaginate from 'react-paginate';
+import qs from 'querystring';
+import { paramObj } from 'app/shared/util/util';
+import { SCREEN_PATH } from 'app/config/constants';
+import _ from 'lodash';
 
 // import { getCategory } from "app/shared/reducers/category";
 
 export interface IViewDataProp extends StateProps, DispatchProps {
   initScreen: Function;
+  setPageNumber: Function;
+  reset: Function;
   location: any;
 }
 
@@ -18,6 +25,15 @@ export class ViewData extends React.Component<IViewDataProp> {
   componentDidMount() {
     window.scrollTo(0, 0);
     this.props.initScreen();
+  }
+
+  getSnapshotBeforeUpdate(prevProps: Readonly<IViewDataProp>, prevState: Readonly<{}>): any | null {
+    const currentParams = paramObj(this.props.location.search);
+    const prevParams = paramObj(prevProps.location.search);
+    if (currentParams['page'] !== prevParams['page']) {
+      this.props.initScreen();
+    }
+    return null;
   }
 
   render() {
@@ -47,8 +63,8 @@ export class ViewData extends React.Component<IViewDataProp> {
                   <div className="row no-gutters custom-table-data">
                     <div className="col-12">No record found</div>
                   </div> :
-                  managerClassData.map((v, idx) => (
-                    <div className="row no-gutters custom-table-data">
+                  managerClassData && managerClassData.map((v, idx) => (
+                    <div className="row no-gutters custom-table-data" key={idx}>
                       <div className="col-1">{idx + 1}</div>
                       <div className="col-1">{v.groupOfClass}</div>
                       <div className="col-1">{v.idClass}</div>
@@ -63,27 +79,27 @@ export class ViewData extends React.Component<IViewDataProp> {
             </> : <Loading/>
           }
         </div>
-        {/*{pagination &&*/}
-        {/*!loading &&*/}
-        {/*pagination.numOfPages > 1 && (*/}
-        {/*<div className="paging-container d-flex justify-content-center">*/}
-        {/*<ReactPaginate*/}
-        {/*breakLabel={<a>...</a>}*/}
-        {/*breakClassName={'break-me'}*/}
-        {/*pageCount={pagination.totalRecords / pagination.pageSize <= 1 ? 1 : pagination.totalRecords / pagination.pageSize}*/}
-        {/*marginPagesDisplayed={1}*/}
-        {/*pageRangeDisplayed={2}*/}
-        {/*onPageChange={setPageNumber}*/}
-        {/*containerClassName={'pagination'}*/}
-        {/*subContainerClassName={'pages pagination'}*/}
-        {/*activeClassName={'current'}*/}
-        {/*nextLabel={translateUtil('Next')}*/}
-        {/*previousLabel={translateUtil('Prev')}*/}
-        {/*forcePage={pagination.pageNumber - 1}*/}
-        {/*/>*/}
-        {/*/!* End Pagination *!/*/}
-        {/*</div>*/}
-        {/*)}*/}
+        {pagination &&
+        !loading &&
+        pagination.totalPage > 1 && (
+          <div className="paging-container d-flex justify-content-center">
+            <ReactPaginate
+              breakLabel={<a>...</a>}
+              breakClassName={'break-me'}
+              pageCount={pagination.totalPage}
+              marginPagesDisplayed={1}
+              pageRangeDisplayed={2}
+              onPageChange={this.props.setPageNumber}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'current'}
+              nextLabel={'Next'}
+              previousLabel={'Prev'}
+              forcePage={pagination.page.page - 1}
+            />
+            {/* End Pagination */}
+          </div>
+        )}
       </>
     );
   }
@@ -96,8 +112,23 @@ const mapStateToProps = ({ common, managerClass }: IRootState) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: () => {
-    dispatch(managerClassAction.requestManagerClassData());
+  initScreen: async (isReset = false) => {
+    isReset && await dispatch(managerClassAction.reset());
+    const params = paramObj(ownProps.location.search);
+    const page = params['page'] && _.isInteger(_.toInteger(params['page'])) && _.toInteger(params['page']) > 0 ? _.toInteger(params['page']) - 1 : 0;
+    await dispatch(managerClassAction.setPageNumber(page));
+    await dispatch(managerClassAction.requestManagerClassData());
+  },
+  setPageNumber: async e => {
+    dispatch(managerClassAction.clearManagerClassData());
+    await new Promise(resolve => setTimeout(resolve, 100));
+    window.scrollTo(0, 0);
+    const params = paramObj(ownProps.location.search);
+    params.page = e.selected + 1;
+    ownProps.history.push(`${SCREEN_PATH.MANAGER_CLASS}?${qs.stringify(params)}`);
+  },
+  reset: () => {
+    managerClassAction.reset();
   }
 });
 

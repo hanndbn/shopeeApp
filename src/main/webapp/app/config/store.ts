@@ -1,31 +1,92 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunkMiddleware from 'redux-thunk';
 import reducer, { IRootState } from 'app/shared/reducers';
-import DevTools from './devtools';
 import errorMiddleware from './error-middleware';
-import notificationMiddleware from './notification-middleware';
 import loggerMiddleware from './logger-middleware';
-import websocketMiddleware from './websocket-middleware';
-import { loadingBarMiddleware } from 'react-redux-loading-bar';
+import { createTransform, persistReducer } from 'redux-persist';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import storageSession from 'redux-persist/lib/storage/session';
 
-const defaultMiddlewares = [
-  thunkMiddleware,
-  errorMiddleware,
-  notificationMiddleware,
-  promiseMiddleware(),
-  loadingBarMiddleware(),
-  websocketMiddleware,
-  loggerMiddleware
-];
+const defaultMiddlewares = [thunkMiddleware, errorMiddleware, promiseMiddleware(), loggerMiddleware];
 const composedMiddlewares = middlewares =>
   process.env.NODE_ENV === 'development'
-    ? compose(
-        applyMiddleware(...defaultMiddlewares, ...middlewares),
-        DevTools.instrument()
-      )
+    ? composeWithDevTools(
+    applyMiddleware(...defaultMiddlewares, ...middlewares)
+    // DevTools.instrument()
+    )
     : compose(applyMiddleware(...defaultMiddlewares, ...middlewares));
 
-const initialize = (initialState?: IRootState, middlewares = []) => createStore(reducer, initialState, composedMiddlewares(middlewares));
+const myTransform = createTransform(
+  // transform state being rehydrated
+  (inboundState, key) => {
+    if (key === 'itemDetail') {
+      return {
+        ...inboundState,
+        loadedAttribute: false,
+        loading: false,
+        requestFailure: false,
+        displayViewPaymentOption: false
+      };
+    } else if (key === 'category') {
+      return {
+        ...inboundState,
+        loading: false,
+        menuExpand: false
+      };
+    } else if (key === 'common') {
+      return {
+        ...inboundState,
+        loadedAttribute: true,
+        offlineMode: false
+      };
+    } else if (key === 'infoModal') {
+      return {
+        ...inboundState,
+        displayModal: false,
+        modalContent: ''
+      };
+    } else if (key === 'checkout') {
+      return {
+        ...inboundState,
+        loading: false,
+        requestFailure: false
+      };
+    } else if (key === 'pageCommon') {
+      return {
+        ...inboundState,
+        loading: false,
+        requestFailure: false,
+        postContactUsStatus: false
+      };
+    } else if (key === 'user') {
+      return {
+        ...inboundState,
+        loading: false,
+        displayRegisterForm: false,
+        loadingCheckAuthenticate: false,
+        requestLoginFailure: false,
+        requestRegisterFailure: false,
+        requestForgotPasswordFailure: false,
+        requestForgotPasswordSuccess: false
+      };
+    } else {
+      return { ...inboundState };
+    }
+  },
+  (outboundState, key) => outboundState
+);
+
+const persistConfig = {
+  key: 'root',
+  storage: storageSession,
+  transforms: [myTransform],
+  whitelist: ['payment', 'itemDetail', 'category', 'carousel', 'user', 'locale']
+};
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+const initialize = (initialState?: IRootState, middlewares = []) =>
+  createStore(persistedReducer, initialState, composedMiddlewares(middlewares));
 
 export default initialize;
