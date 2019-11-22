@@ -36,6 +36,9 @@ export class ViewData extends React.Component<IViewDataProp> {
     return null;
   }
 
+  componentDidUpdate(prevProps: Readonly<IViewDataProp>, prevState: Readonly<{}>, snapshot?: any): void {
+  }
+
   render() {
     const { managerClassData, pagination, loading } = this.props;
     return (
@@ -95,7 +98,7 @@ export class ViewData extends React.Component<IViewDataProp> {
               activeClassName={'current'}
               nextLabel={'Next'}
               previousLabel={'Prev'}
-              forcePage={pagination.page.page - 1}
+              forcePage={pagination.page.page}
             />
             {/* End Pagination */}
           </div>
@@ -120,9 +123,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     await dispatch(managerClassAction.requestManagerClassData());
   },
   setPageNumber: async e => {
-    dispatch(managerClassAction.clearManagerClassData());
-    await new Promise(resolve => setTimeout(resolve, 100));
-    window.scrollTo(0, 0);
     const params = paramObj(ownProps.location.search);
     params.page = e.selected + 1;
     ownProps.history.push(`${SCREEN_PATH.MANAGER_CLASS}?${qs.stringify(params)}`);

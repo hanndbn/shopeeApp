@@ -6,6 +6,7 @@ import errorMiddleware from './error-middleware';
 import loggerMiddleware from './logger-middleware';
 import { createTransform, persistReducer } from 'redux-persist';
 import { composeWithDevTools } from 'redux-devtools-extension';
+// @ts-ignore
 import storageSession from 'redux-persist/lib/storage/session';
 
 const defaultMiddlewares = [thunkMiddleware, errorMiddleware, promiseMiddleware(), loggerMiddleware];
@@ -87,6 +88,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 const initialize = (initialState?: IRootState, middlewares = []) =>
+  // @ts-ignore
   createStore(persistedReducer, initialState, composedMiddlewares(middlewares));
 
 export default initialize;

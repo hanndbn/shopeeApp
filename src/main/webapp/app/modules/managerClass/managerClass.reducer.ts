@@ -54,7 +54,10 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
           ...state.pagination,
           total: action.payload.data.total,
           totalPage: action.payload.data.totalPage,
-          page: action.payload.data.totalPage
+          page: {
+            ...state.pagination.page,
+            page: action.payload.data.page.page
+          }
         }
       };
     case FAILURE(ACTION_TYPES.GET_MANAGER_CLASS_DATA):

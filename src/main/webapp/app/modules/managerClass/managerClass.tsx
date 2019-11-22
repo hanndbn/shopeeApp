@@ -6,11 +6,9 @@ import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router';
 import { TITLE_HELMET } from 'app/config/constants';
 import { Helmet } from 'react-helmet';
+import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import ViewData from 'app/modules/managerClass/viewData';
 import EditData from 'app/modules/managerClass/editData';
-import { paramObj } from 'app/shared/util/util';
-import * as managerClassAction from 'app/modules/managerClass/managerClass.reducer';
-import _ from 'lodash';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -25,18 +23,6 @@ export class ManagerClass extends React.Component<INhapDiemProp> {
     this.props.initScreen();
   }
 
-  // getSnapshotBeforeUpdate(prevProps: Readonly<INhapDiemProp>, prevState: Readonly<{}>): any | null {
-  //   const currentParams = paramObj(this.props.location.search);
-  //   const prevParams = paramObj(prevProps.location.search);
-  //   if (currentParams['activeId'] !== prevParams['activeId']) {
-  //     this.props.initScreen();
-  //   }
-  //   return null;
-  // }
-
-  // componentDidUpdate(prevProps: Readonly<INhapDiemProp>, prevState: Readonly<{}>, snapshot?: any): void {
-  // }
-
   render() {
     const { managerClassData, pagination, loading } = this.props;
     return (
@@ -46,9 +32,8 @@ export class ManagerClass extends React.Component<INhapDiemProp> {
         </Helmet>
         <div className="row no-gutters">
           <div className="col-12 title">QUẢN LÝ LỚP HỌC</div>
-          {
-            this.props.activeId ? <EditData/> : <ViewData/>
-          }
+          <ErrorBoundaryRoute exact={true} path="/quan-ly-lop-hoc" component={ViewData}/>
+          <ErrorBoundaryRoute path="/quan-ly-lop-hoc/edit" component={EditData}/>
         </div>
       </div>
     );
@@ -58,18 +43,11 @@ export class ManagerClass extends React.Component<INhapDiemProp> {
 const mapStateToProps = ({ common, managerClass }: IRootState) => ({
   managerClassData: managerClass.managerClassData,
   loading: managerClass.loading,
-  activeId: managerClass.activeId,
   pagination: managerClass.pagination
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   initScreen: () => {
-    const params = paramObj(ownProps.location.search);
-    const activeId = params['activeId'] ? params['activeId'] : null;
-    dispatch(managerClassAction.setActiveId(activeId));
-    const page = params['page'] && _.isInteger(_.toInteger(params['page'])) && _.toInteger(params['page']) > 0 ? _.toInteger(params['page']) - 1 : 0;
-    dispatch(managerClassAction.setPageNumber(page));
-    dispatch(managerClassAction.requestManagerClassData());
   }
 });
 
