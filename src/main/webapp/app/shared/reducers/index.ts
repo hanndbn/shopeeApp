@@ -15,6 +15,7 @@ import passwordReset, { PasswordResetState } from 'app/modules/account/password-
 import common, { CommonState } from 'app/shared/common/common.reducer';
 import home, { HomeState } from 'app/modules/home/home.reducer';
 import infoModal, { InfoModalState } from 'app/InfoModal/infoModal.reducer';
+import imageSlide, { ImageSlideState } from 'app/modules/imageSlide/imageSlide.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -32,6 +33,7 @@ export interface IRootState {
   readonly common: CommonState;
   readonly home: HomeState;
   readonly infoModal: InfoModalState;
+  readonly imageSlide: ImageSlideState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -50,6 +52,7 @@ const rootReducer = combineReducers<IRootState>({
   common,
   home,
   infoModal,
+  imageSlide,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

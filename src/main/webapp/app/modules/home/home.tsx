@@ -68,6 +68,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       if (currentRelation) {
         const nextSlide = elements.find(v => v.id === currentRelation.target && !v.parent);
         if (nextSlide) {
+          const slideFlipped = _self.props.slideFlipped;
+          slideFlipped.push(_self.props.activeSlideId);
+          _self.props.setSlideFlipped(slideFlipped);
           _self.props.setActiveSlideId(nextSlide.id);
         }
       }
@@ -81,6 +84,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       if (currentRelation) {
         const nextSlide = elements.find(v => v.id === currentRelation.source && !v.parent);
         if (nextSlide) {
+          const slideFlipped = _self.props.slideFlipped.filter(v => v !== nextSlide.id);
+          _self.props.setSlideFlipped(slideFlipped);
           _self.props.setActiveSlideId(nextSlide.id);
         }
       }
@@ -109,15 +114,20 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       ((e.target.scrollTop) / (e.target.scrollHeight - this.props.windowSize.height)) * 100);
   }
 
-  parse2html(data, activeSlideId) {
+  parse2html(data, activeSlideId, slideFlipped = []) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
-    return (
-      <div className="d-flex justify-content-center h-100 w-100">
-        {this.slide2html(data, slide, null, null, activeSlideId)}
-      </div>
-    );
+    const rootSlide = this.getRootSlides(data);
+    return rootSlide.map((v, idx) => (
+      <React.Fragment key={idx}>
+        <div
+          className={cn('d-flex justify-content-center h-100 w-100 slide-content-wrapper', {
+            active: v.id === activeSlideId,
+            flipped: slideFlipped.indexOf(v.id) > -1
+          })}>
+          {this.slide2html(data, v, null, null, v.id)}
+        </div>
+      </React.Fragment>));
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0, hasIFrame = false) {
@@ -321,7 +331,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
 
   getRootSlides(data) {
     const { root, elements, relation } = data;
-    const listRootSlide = elements ? elements.filter(v => !v.parent) : [];
+    const listRootSlide = [];
+    elements && elements.map(v => {
+      if (!v.parent) {
+        listRootSlide.push(v);
+      }
+    });
     // const firstSlide = data.elements ? data.elements.find(v => v.isFirstSlide) : null;
     // if (firstSlide) {
     //   const stackSlide = data.relation.filter(v => v.source === firstSlide.id);
@@ -330,28 +345,9 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return listRootSlide;
   }
 
-  getImageSlideLayout(imageSlides) {
-    return (
-      <div className="w-100 h-100 image-slide-wrapper">
-        <div className="image-slide-sub-wrapper">
-          {
-            imageSlides.map((v, idx) =>
-              <React.Fragment key={idx}>
-                <div className="image-slide-content-wrapper">
-                  <div className="image-slide-content" style={{ backgroundImage: `url(${v})` }}/>
-                </div>
-                <div className="image-slide-hr"/>
-              </React.Fragment>
-            )
-          }
-        </div>
-      </div>
-    );
-  }
-
   render() {
-    const { data, requestFailure, errorMessage, saveTrackingData, setCurrentIdx, activeSlideId }: any = this.props;
-    const displaySlide = this.parse2html(data, activeSlideId);
+    const { data, requestFailure, errorMessage, saveTrackingData, setCurrentIdx, activeSlideId, slideFlipped }: any = this.props;
+    const displaySlide = this.parse2html(data, activeSlideId, slideFlipped);
     const listRootSlide = this.getRootSlides(data);
     return (
       <div className="">
@@ -386,6 +382,7 @@ const mapStateToProps = ({ home, common }: IRootState) => ({
   requestFailure: home.requestFailure,
   windowSize: home.windowSize,
   scrollPosition: home.scrollPosition,
+  slideFlipped: home.slideFlipped,
   errorMessage: home.errorMessage
 });
 
@@ -425,6 +422,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   displayModalMedia: (type, content) => {
     dispatch(infoModaAction.displayModalMedia(type, content));
+  },
+  setSlideFlipped: slideFlipped => {
+    dispatch(homeAction.setSlideFlipped(slideFlipped));
   }
 });
 

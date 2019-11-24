@@ -1,51 +1,51 @@
 import React from 'react';
 import './imageSlide.scss';
 import { connect } from 'react-redux';
-import BScroll from '@better-scroll/core';
+// import BScroll from '@better-scroll/core';
 import cn from 'classnames';
+import { IRootState } from 'app/shared/reducers';
+import * as imageSlideAction from 'app/modules/imageSlide/imageSlide.reducer';
 // import MouseWheel from '@better-scroll/mouse-wheel/';
 //
 // BScroll.use(MouseWheel);
 
 export interface IImageSlideProps extends StateProps, DispatchProps {
   imageSlides: any;
+  setBsElement: any;
+  setActiveId: any;
 }
 
-export class ImageSlide extends React.Component<IImageSlideProps, { activeId: any }> {
-  private bs = null;
+export class ImageSlide extends React.Component<IImageSlideProps> {
+  // private bs = null;
   private element: any = React.createRef();
   private imagesRef: any = [];
 
   constructor(props) {
     super(props);
-    this.state = {
-      activeId: 0
-    };
   }
 
-  componentDidMount() {
-    this.bs = new BScroll(this.element.current, {
+  async componentDidMount() {
+    // @ts-ignore
+    const bs: any = new BScroll(this.element.current, {
       scrollY: true,
       click: true,
       probeType: 3 // listening scroll hook
     });
-    this._registerHooks(['scroll', 'scrollEnd'], pos => {
-      // console.log(this.imagesRef);
-      // console.log(this.imagesRef);
+    await this.props.setBsElement(bs);
+    await this._registerHooks(['scroll', 'scrollEnd'], pos => {
       const el = this.imagesRef.find(v => {
         return Math.abs(pos.y) > (v.offsetTop - 5) && Math.abs(pos.y) < (v.offsetTop - 5 + v.offsetHeight);
       });
-      if (el) {
-        this.setState({
-          activeId: el.dataset.idx
-        });
+      if (el && el.dataset.idx !== this.props.activeId) {
+        this.props.setActiveId(el.dataset.idx);
       }
     });
   }
 
   _registerHooks(hookNames, handler) {
     hookNames.forEach(name => {
-      this.bs.on(name, handler);
+      // @ts-ignore
+      this.props.bs.on(name, handler);
     });
   }
 
@@ -71,7 +71,7 @@ export class ImageSlide extends React.Component<IImageSlideProps, { activeId: an
         <div className="image-slide-scrollbar-wrapper">
           <div className="image-slide-scrollbar-content">
             {
-              this.props.imageSlides.map((v, idx) => <div key={idx} className={cn('image-slide-scrollbar', { active: parseInt(this.state.activeId, 10) === idx })}/>)
+              this.props.imageSlides.map((v, idx) => <div key={idx} className={cn('image-slide-scrollbar', { active: parseInt(String(this.props.activeId), 10) === idx })}/>)
             }
           </div>
         </div>
@@ -80,9 +80,19 @@ export class ImageSlide extends React.Component<IImageSlideProps, { activeId: an
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({ imageSlide }: IRootState) => ({
+  bs: imageSlide.bs,
+  activeId: imageSlide.activeId
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  setBsElement: bsElement => {
+    dispatch(imageSlideAction.setBsElemnet(bsElement));
+  },
+  setActiveId: activeId => {
+    dispatch(imageSlideAction.setActiveId(activeId));
+  }
+});
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

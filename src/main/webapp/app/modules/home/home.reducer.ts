@@ -19,7 +19,8 @@ const ACTION_TYPES = {
   SET_WINDOW_SIZE: 'Home/SET_WINDOW_SIZE',
   SET_SCROLL_POSITION: 'Home/SET_SCROLL_POSITION',
   SET_EXTERNAL_DATA: 'Home/SET_EXTERNAL_DATA',
-  GET_ANALYTIC_ID: 'Common/GET_MODAL_LISTING',
+  GET_ANALYTIC_ID: 'Home/GET_ANALYTIC_ID',
+  SET_SLIDE_FLIPPED: 'SET_SLIDE_FLIPPED',
   RESET: 'Home/RESET'
 };
 
@@ -27,6 +28,7 @@ const initialState = {
   data: {},
   activeSlideId: null,
   appId: null,
+  slideFlipped: [],
   trackingId: null,
   analyticTrackingId: null,
   currentIdx: 0,
@@ -118,6 +120,11 @@ export default (state: HomeState = initialState, action): HomeState => {
       return {
         ...state,
         scrollPosition: action.payload
+      };
+    case ACTION_TYPES.SET_SLIDE_FLIPPED:
+      return {
+        ...state,
+        slideFlipped: action.payload
       };
     case ACTION_TYPES.RESET:
       return {
@@ -239,6 +246,11 @@ export const setExternalData = (id, dataType, data) => ({
   id,
   dataType,
   data
+});
+
+export const setSlideFlipped = slideFlipped => ({
+  type: ACTION_TYPES.SET_SLIDE_FLIPPED,
+  payload: slideFlipped
 });
 
 export const reset = () => ({
