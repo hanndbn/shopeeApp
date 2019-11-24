@@ -78,9 +78,9 @@ export default (state: HomeState = initialState, action): HomeState => {
         ...state,
         externalData: {
           ...state.externalData,
-          [ action.id ]: {
-            ...state.externalData[ action.id ],
-            [ action.dataType ]: action.data
+          [action.id]: {
+            ...state.externalData[action.id],
+            [action.dataType]: action.data
           }
         }
       };
@@ -147,7 +147,7 @@ export const requestHomeData = appName => (dispatch, getState) => {
         };
         await decode(node, data);
         const firstSlide = data.elements.find(v => v.isFirstSlide);
-        await dispatch(setActiveSlideId(firstSlide ? firstSlide.id : data.elements[ 0 ] ? data.elements[ 0 ].id : null));
+        await dispatch(setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null));
         await dispatch({
           type: SUCCESS(ACTION_TYPES.GET_HOME_DATA),
           appId: response.data.appId,
@@ -261,12 +261,12 @@ export const endSessionAnalytic = () => async (dispatch, getState) => {
 export const decode = (node, data) => {
   let obj = {};
   if (node != null && node.nodeType === 1) {
-    obj[ 'name' ] = node.nodeName;
+    obj['name'] = node.nodeName;
     // decodeAttributes
     const attrs = node.attributes;
     for (const attr of attrs) {
       if (attr.nodeName !== 'name') {
-        obj[ attr.nodeName ] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
+        obj[attr.nodeName] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
       }
     }
     // decodeChildren
@@ -276,28 +276,28 @@ export const decode = (node, data) => {
       if (child.nodeType === 1) {
         let childObj = decode(child, data);
         if (childObj) {
-          if (childObj[ 'name' ] === 'mxGeometry') {
+          if (childObj['name'] === 'mxGeometry') {
             obj = {
               ...obj,
-              x: childObj[ 'x' ],
-              y: childObj[ 'y' ],
-              width: childObj[ 'width' ],
-              height: childObj[ 'height' ]
+              x: childObj['x'],
+              y: childObj['y'],
+              width: childObj['width'],
+              height: childObj['height']
             };
-          } else if (childObj[ 'name' ] === 'mxCell' && childObj[ 'vertex' ] === 1) {
+          } else if (childObj['name'] === 'mxCell' && childObj['vertex'] === 1) {
             // element not arrow add element
-            const parentId = childObj[ 'parent' ] ? childObj[ 'parent' ] : '';
+            const parentId = childObj['parent'] ? childObj['parent'] : '';
             if (!data.elements.find(v => v.id === parentId)) {
               childObj = _.omit(childObj, 'parent');
             }
             data.elements.push(childObj);
-          } else if (childObj[ 'name' ] === 'mxCell' && (childObj[ 'source' ] || childObj[ 'target' ])) {
+          } else if (childObj['name'] === 'mxCell' && (childObj['source'] || childObj['target'])) {
             // element is arrow add relationship
-            const relation = data.relation.find(v => v.source === childObj[ 'source' ] && v.target === childObj[ 'target' ]);
+            const relation = data.relation.find(v => v.source === childObj['source'] && v.target === childObj['target']);
             if (!relation) {
               data.relation.push({
-                source: childObj[ 'source' ],
-                target: childObj[ 'target' ]
+                source: childObj['source'],
+                target: childObj['target']
               });
             }
           }
@@ -322,14 +322,14 @@ export const getSlideStyle = styleStr => {
       const styleName = v.substring(0, equalIndex);
       const styleValue = v.substring(equalIndex + 1, v.length);
       if (styleName === ELEMENT_TYPE.TEXT) {
-        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.TEXT;
+        slideStyle['elementStyle'] = ELEMENT_TYPE.TEXT;
       } else if (styleName === ELEMENT_TYPE.IMAGE) {
-        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.IMAGE;
+        slideStyle['elementStyle'] = ELEMENT_TYPE.IMAGE;
       } else if (styleName === 'rounded' && styleValue === '1') {
-        slideStyle[ 'elementStyle' ] = ELEMENT_TYPE.BUTTON;
+        slideStyle['elementStyle'] = ELEMENT_TYPE.BUTTON;
       }
       if (styleName !== null && styleValue !== null) {
-        slideStyle[ styleName ] = styleValue;
+        slideStyle[styleName] = styleValue;
       }
     }
   });
@@ -338,31 +338,35 @@ export const getSlideStyle = styleStr => {
 
 export const getStyle = (slide, slideStyle) => {
   let style: any = {};
-  const isMediaContent = isMedia(slideStyle[ 'type' ]);
+  const isMediaContent = isMedia(slideStyle['type']);
+  const isImageSlide = slideStyle['type'] === ELEMENT_TYPE.IMAGE_SLIDE;
   let linkOpenInModal = false;
   if (isMediaContent) {
-    linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+    linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
   }
   // add common style
-  const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
+  const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
   style = {
     ...style,
-    border: slideStyle[ 'strokeColor' ] === 'none' || slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.IMAGE || (isMediaContent && !linkOpenInModal) ?
+    border: slideStyle['strokeColor'] === 'none'
+    || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE
+    || (isMediaContent && !linkOpenInModal)
+    || isImageSlide ?
       '' : `1px solid ${getColorWithOpacity('#000000', opacityHex)}`,
-    width: slide[ 'width' ],
-    height: slide[ 'height' ],
+    width: slide['width'],
+    height: slide['height'],
     fontSize: slideStyle.fontSize ? `${slideStyle.fontSize}px` : '',
-    fontFamily: slideStyle[ 'fontFamily' ] ? `${slideStyle[ 'fontFamily' ]}` : '',
-    borderRadius: slideStyle[ 'rounded' ] === '1' ? '5px' : '',
-    backgroundColor: slideStyle[ 'fillColor' ] ? `${getColorWithOpacity(slideStyle[ 'fillColor' ], opacityHex)}` : ''
+    fontFamily: slideStyle['fontFamily'] ? `${slideStyle['fontFamily']}` : '',
+    borderRadius: slideStyle['rounded'] === '1' ? '5px' : '',
+    backgroundColor: slideStyle['fillColor'] ? `${getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
   };
   // add special style
-  if (slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.IMAGE) {
+  if (slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE) {
     style = {
       ...style,
-      backgroundImage: `url(${slideStyle[ 'image' ]})`
+      backgroundImage: `url(${slideStyle['image']})`
     };
-  } else if (slideStyle[ 'elementStyle' ] === ELEMENT_TYPE.BUTTON) {
+  } else if (slideStyle['elementStyle'] === ELEMENT_TYPE.BUTTON) {
     style = {
       ...style,
       cursor: `pointer`
@@ -375,7 +379,7 @@ export const getStyle = (slide, slideStyle) => {
   //   };
   // }
 
-  if (slide[ 'parent' ]) {
+  if (slide['parent']) {
     style = {
       ...style,
       position: 'absolute',
@@ -388,12 +392,12 @@ export const getStyle = (slide, slideStyle) => {
 
 export const getChildStyle = (slide, slideStyle) => {
   let childStyle: any = {};
-  const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
+  const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
   childStyle = {
     ...childStyle,
     // border: slideStyle['strokeColor'] === 'none' || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE ?
     //   '' : `1px solid ${this.getColorWithOpacity('#000000', opacityHex)}`,
-    borderRadius: slideStyle[ 'rounded' ] === '1' ? '5px' : ''
+    borderRadius: slideStyle['rounded'] === '1' ? '5px' : ''
     // backgroundColor: slideStyle['fillColor'] ? `${getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
   };
   return childStyle;
@@ -401,64 +405,64 @@ export const getChildStyle = (slide, slideStyle) => {
 
 export const getValueStyle = (slide, slideStyle) => {
   let valueStyle: any = {};
-  const opacityHex = slideStyle[ 'opacity' ] != null ? parseInt(slideStyle[ 'opacity' ], 10) : '';
+  const opacityHex = slideStyle['opacity'] != null ? parseInt(slideStyle['opacity'], 10) : '';
   valueStyle = {
     ...valueStyle,
-    color: slideStyle[ 'fontColor' ] ? slideStyle[ 'fontColor' ] : '',
-    backgroundColor: slideStyle[ 'labelBackgroundColor' ] && slideStyle[ 'labelBackgroundColor' ] !== 'none' ?
-      `${getColorWithOpacity(slideStyle[ 'labelBackgroundColor' ], opacityHex)}` : ''
+    color: slideStyle['fontColor'] ? slideStyle['fontColor'] : '',
+    backgroundColor: slideStyle['labelBackgroundColor'] && slideStyle['labelBackgroundColor'] !== 'none' ?
+      `${getColorWithOpacity(slideStyle['labelBackgroundColor'], opacityHex)}` : ''
     // border: (slideStyle['labelBorderColor'] && slideStyle['labelBorderColor'] !== 'none') ?
     //   `1px solid ${this.getColorWithOpacity(slideStyle['labelBorderColor'], opacityHex)}` : ''
   };
 
   // set align
-  if (slideStyle[ 'labelPosition' ] !== 'center') {
-    if (slideStyle[ 'labelPosition' ] === 'left') {
+  if (slideStyle['labelPosition'] !== 'center') {
+    if (slideStyle['labelPosition'] === 'left') {
       valueStyle = {
         ...valueStyle,
-        right: `${slide[ 'width' ]}px`
+        right: `${slide['width']}px`
       };
-    } else if (slideStyle[ 'labelPosition' ] === 'right') {
+    } else if (slideStyle['labelPosition'] === 'right') {
       valueStyle = {
         ...valueStyle,
-        left: `${slide[ 'width' ]}px`
+        left: `${slide['width']}px`
       };
     }
   }
 
   // set vertical align
-  if (slideStyle[ 'verticalLabelPosition' ] !== 'middle') {
-    if (slideStyle[ 'verticalLabelPosition' ] === 'top') {
+  if (slideStyle['verticalLabelPosition'] !== 'middle') {
+    if (slideStyle['verticalLabelPosition'] === 'top') {
       valueStyle = {
         ...valueStyle,
-        bottom: `${slide[ 'height' ]}px`
+        bottom: `${slide['height']}px`
       };
-    } else if (slideStyle[ 'labelPosition' ] === 'bottom') {
+    } else if (slideStyle['labelPosition'] === 'bottom') {
       valueStyle = {
         ...valueStyle,
-        top: `${slide[ 'height' ]}px`
+        top: `${slide['height']}px`
       };
     }
   }
   // set font style
-  if (slideStyle[ 'fontStyle' ]) {
-    const fontStyleArray = parseInt(slideStyle[ 'fontStyle' ], 10).toString(2).split('');
+  if (slideStyle['fontStyle']) {
+    const fontStyleArray = parseInt(slideStyle['fontStyle'], 10).toString(2).split('');
     valueStyle = {
       ...valueStyle,
-      fontWeight: fontStyleArray[ 0 ] === '1' ? 'bold' : '',
-      fontStyle: fontStyleArray[ 1 ] === '1' ? 'italic' : '',
-      textDecoration: fontStyleArray[ 1 ] === '1' ? 'underline' : ''
+      fontWeight: fontStyleArray[0] === '1' ? 'bold' : '',
+      fontStyle: fontStyleArray[1] === '1' ? 'italic' : '',
+      textDecoration: fontStyleArray[1] === '1' ? 'underline' : ''
     };
   }
 
   // set padding
   valueStyle = {
     ...valueStyle,
-    padding: slideStyle[ 'spacing' ] ? `${slideStyle[ 'spacing' ]}px` : '',
-    paddingLeft: slideStyle[ 'spacingLeft' ] ? `${slideStyle[ 'spacingLeft' ]}px` : '',
-    paddingRight: slideStyle[ 'spacingRight' ] ? `${slideStyle[ 'spacingRight' ]}px` : '',
-    paddingBottom: slideStyle[ 'spacingBottom' ] ? `${slideStyle[ 'spacingBottom' ]}px` : '',
-    paddingTop: slideStyle[ 'spacingTop' ] ? `${slideStyle[ 'spacingTop' ]}px` : ''
+    padding: slideStyle['spacing'] ? `${slideStyle['spacing']}px` : '',
+    paddingLeft: slideStyle['spacingLeft'] ? `${slideStyle['spacingLeft']}px` : '',
+    paddingRight: slideStyle['spacingRight'] ? `${slideStyle['spacingRight']}px` : '',
+    paddingBottom: slideStyle['spacingBottom'] ? `${slideStyle['spacingBottom']}px` : '',
+    paddingTop: slideStyle['spacingTop'] ? `${slideStyle['spacingTop']}px` : ''
   };
   return valueStyle;
 };
@@ -490,10 +494,10 @@ export const getMediaContent = (id, type, url, externalData) => {
         src=${`https://www.youtube.com/embed/${youtubeId}`}
         width="100%" height="100%" allowTransparency=${true} frameBorder="0"/>
     `;
-  } else if (type === ELEMENT_TYPE.VIMEO && externalData[ id ]) {
-    const slideData = externalData[ id ];
+  } else if (type === ELEMENT_TYPE.VIMEO && externalData[id]) {
+    const slideData = externalData[id];
     const divWrapper = document.createElement('div');
-    divWrapper.innerHTML = slideData[ type ];
+    divWrapper.innerHTML = slideData[type];
     const iframe = divWrapper.querySelector('iframe');
     iframe.width = '100%';
     iframe.height = '100%';
@@ -512,8 +516,8 @@ export const getYoutubeId = url => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
 
-  if (match && match[ 2 ].length === 11) {
-    return match[ 2 ];
+  if (match && match[2].length === 11) {
+    return match[2];
   } else {
     return 'error';
   }

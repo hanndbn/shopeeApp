@@ -14,6 +14,7 @@ import _ from 'lodash';
 import Slider from 'rc-slider';
 import * as infoModaAction from 'app/InfoModal/infoModal.reducer';
 import Hammer from 'hammerjs';
+import ImageSlide from 'app/modules/imageSlide/imageSlide';
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -111,7 +112,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   parse2html(data, activeSlideId) {
     const { root, elements, relation } = data;
     if (!elements) return;
-    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[ 0 ];
+    const slide = activeSlideId ? elements.find(v => v.id === activeSlideId) : elements[0];
     return (
       <div className="d-flex justify-content-center h-100 w-100">
         {this.slide2html(data, slide, null, null, activeSlideId)}
@@ -120,12 +121,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0, hasIFrame = false) {
-    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
+    const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide[ 'parent' ];
+    const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -139,8 +140,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
-      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
+      const slideWidth = style['width'] ? style['width'] : 0;
+      const slideHeight = style['height'] ? style['height'] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -196,18 +197,24 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
     }
 
-    const isGame = slideStyle[ 'type' ] === 'game';
-    const isMedia = homeAction.isMedia(slideStyle[ 'type' ]);
-    const isLink = slideStyle[ 'type' ] === ELEMENT_TYPE.LINK;
+    const elementType = slideStyle['type'] ? slideStyle['type'] : '';
+    const isGame = elementType === 'game';
+    const isMedia = homeAction.isMedia(elementType);
+    const isLink = elementType === ELEMENT_TYPE.LINK;
+    const isImageSlide = elementType === ELEMENT_TYPE.IMAGE_SLIDE;
     let mediaContent = '';
     let linkUrl = '';
     let linkOpenInModal = false;
+    let imageSlides = [];
     if (isMedia) {
-      mediaContent = homeAction.getMediaContent(slide.id, slideStyle[ 'type' ], slideStyle[ 'linkUrl' ], this.props.externalData);
-      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+      mediaContent = homeAction.getMediaContent(slide.id, elementType, slideStyle['linkUrl'], this.props.externalData);
+      linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
     } else if (isLink) {
-      linkUrl = slideStyle[ 'linkUrl' ] ? slideStyle[ 'linkUrl' ] : '';
-      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+      linkUrl = slideStyle['linkUrl'] ? slideStyle['linkUrl'] : '';
+      linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
+    } else if (isImageSlide) {
+      const listImageStr = slideStyle['imageSlide'] ? slideStyle['imageSlide'] : '';
+      imageSlides = decodeURIComponent(listImageStr).split(',');
     }
 
     if (isGame || hasIFrame) {
@@ -233,20 +240,20 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                          window.location.href = linkUrl;
                        }
                      } else if (isMedia && linkOpenInModal) {
-                       this.props.displayModalMedia(slideStyle[ 'type' ], mediaContent);
-                     } else if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
-                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
+                       this.props.displayModalMedia(elementType, mediaContent);
+                     } else if (slideStyle['modalPopup'] === '1' && this.props.modalListing) {
+                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle['modalType']);
                        if (modalType && modalType.types) {
-                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle[ 'modalTypeDetail' ]);
+                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle['modalTypeDetail']);
                          if (modalTypeDetail && modalTypeDetail.key !== ELEMENT_TYPE.YOUTUBE) {
-                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle[ 'modalSiteUrl' ]) : ''));
+                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle['modalSiteUrl']) : ''));
                          }
                        }
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
-                     } else if (slideStyle[ 'type' ] === ELEMENT_TYPE.HOME) {
+                     } else if (elementType === ELEMENT_TYPE.HOME) {
                        const firstSlide = data.elements.find(v => v.isFirstSlide);
-                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[ 0 ] ? data.elements[ 0 ].id : null);
+                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null);
                      }
                    }
                  }}
@@ -281,17 +288,27 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         {
           <>
             {childs && childs.length > 0 && childs.map((child, idxChild) => this.slide2html(data, child, style, zoomVal, idxChild, isGame))}
-            {slide.value && <div
-              className="slide-value"
-              style={valueStyle}
-            >
-              {
-                isGame ?
-                  <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/> :
-                  (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/> :
+            {
+              (isGame || (isMedia && !linkOpenInModal) || isImageSlide) ?
+                <div
+                  className="slide-value"
+                  style={valueStyle}
+                >
+                  {
+                    isGame ?
+                      <iframe src="https://phanducminh.github.io/scratchcard/" className="custom-iframe w-100 h-100 bg-white"/> :
+                      (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/> :
+                        isImageSlide ? <ImageSlide imageSlides={imageSlides}/> : ''
+                  }
+                </div> :
+                slide.value ?
+                  <div
+                    className="slide-value"
+                    style={valueStyle}
+                  >
                     <div dangerouslySetInnerHTML={{ __html: this.decodeHTMLEntities(slide.value) }}/>
-              }
-            </div>}
+                  </div> : ''
+            }
           </>
         }
       </div>
@@ -311,6 +328,25 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     //   stackSlide.map(v=> )
     // }
     return listRootSlide;
+  }
+
+  getImageSlideLayout(imageSlides) {
+    return (
+      <div className="w-100 h-100 image-slide-wrapper">
+        <div className="image-slide-sub-wrapper">
+          {
+            imageSlides.map((v, idx) =>
+              <React.Fragment key={idx}>
+                <div className="image-slide-content-wrapper">
+                  <div className="image-slide-content" style={{ backgroundImage: `url(${v})` }}/>
+                </div>
+                <div className="image-slide-hr"/>
+              </React.Fragment>
+            )
+          }
+        </div>
+      </div>
+    );
   }
 
   render() {
