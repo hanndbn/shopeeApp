@@ -49,17 +49,6 @@ export class EditData extends React.Component<IEditDataProp> {
                 formType: FORM_DEFINE.FORM_MANAGER_CLASS.id,
                 fieldName: v.fieldName
               };
-              if (v.fieldName === 'teacherManage') {
-                const selectData = [];
-                const teacherManagerData = this.props.referData[ 'teacherManager' ] ? this.props.referData[ 'teacherManager' ] : [];
-                teacherManagerData.map(k => {
-                  selectData.push({
-                    label: k.nameTeacher,
-                    value: k.teacherId
-                  });
-                });
-                data[ 'selectData' ] = selectData;
-              }
               return (
                 <CustomInput key={idx} {...data}/>
               );

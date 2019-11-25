@@ -12,12 +12,14 @@ import { paramObj } from 'app/shared/util/util';
 import { SCREEN_PATH } from 'app/config/constants';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
+import * as infoModalAction from 'app/shared/InfoModal/infoModal.reducer';
 
 // import { getCategory } from "app/shared/reducers/category";
 
 export interface IViewDataProp extends StateProps, DispatchProps {
   initListingScreen: Function;
   setPageNumber: Function;
+  displayConfirmDeleteModal: Function;
   reset: Function;
   location: any;
   history: any;
@@ -32,7 +34,7 @@ export class ViewData extends React.Component<IViewDataProp> {
   getSnapshotBeforeUpdate(prevProps: Readonly<IViewDataProp>, prevState: Readonly<{}>): any | null {
     const currentParams = paramObj(this.props.location.search);
     const prevParams = paramObj(prevProps.location.search);
-    if (currentParams[ 'page' ] !== prevParams[ 'page' ]) {
+    if (currentParams['page'] !== prevParams['page']) {
       this.props.initListingScreen();
     }
     return null;
@@ -91,7 +93,9 @@ export class ViewData extends React.Component<IViewDataProp> {
                       <div className="col-1">
                         <div className="action-icon-wrapper">
                           <Link to={`${SCREEN_PATH.MANAGER_CLASS}/edit/${v.idClass}`} className="action-icon"><span className="far fa-edit"/></Link>
-                          <div className="action-icon"><span className="far fa-trash-alt"/></div>
+                          <div className="action-icon"
+                               onClick={() => this.props.displayConfirmDeleteModal()}
+                          ><span className="far fa-trash-alt"/></div>
                         </div>
                       </div>
                     </div>
@@ -136,7 +140,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   initListingScreen: async (isReset = false) => {
     isReset && await dispatch(managerClassAction.reset());
     const params = paramObj(ownProps.location.search);
-    const page = params[ 'page' ] && _.isInteger(_.toInteger(params[ 'page' ])) && _.toInteger(params[ 'page' ]) > 0 ? _.toInteger(params[ 'page' ]) - 1 : 0;
+    const page = params['page'] && _.isInteger(_.toInteger(params['page'])) && _.toInteger(params['page']) > 0 ? _.toInteger(params['page']) - 1 : 0;
     await dispatch(managerClassAction.setPageNumber(page));
     await dispatch(managerClassAction.requestManagerClassData());
   },
@@ -144,6 +148,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     const params = paramObj(ownProps.location.search);
     params.page = e.selected + 1;
     ownProps.history.push(`${SCREEN_PATH.MANAGER_CLASS}?${qs.stringify(params)}`);
+  },
+  displayConfirmDeleteModal: () => {
+    dispatch(infoModalAction.displayConfirmDeleteModal());
   },
   reset: () => {
     managerClassAction.reset();

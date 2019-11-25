@@ -13,7 +13,8 @@ import Header from 'app/shared/layout/header/header';
 import Sidebar from 'app/shared/layout/sidebar/sidebar';
 import Loader from 'app/shared/layout/loader/loader';
 import cn from 'classnames';
-import { setDefaultSelectFormData } from 'app/shared/common/common.reducer';
+import { getCommonReferData, setDefaultSelectFormData } from 'app/shared/common/common.reducer';
+import InfoModal from 'app/shared/InfoModal/infoModal';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -59,6 +60,7 @@ export class App extends React.Component<IAppProps> {
           {/*<Footer/>*/}
           {/*</div>*/}
           {/*}*/}
+          <InfoModal/>
         </div>
       </Router>
     );
@@ -73,6 +75,7 @@ const mapStateToProps = ({ common }: IRootState) => ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getCommonData: () => {
     dispatch(setDefaultSelectFormData());
+    dispatch(getCommonReferData());
   }
 });
 

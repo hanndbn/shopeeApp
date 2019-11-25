@@ -10,6 +10,7 @@ import inputCommon, { InputCommonState } from 'app/modules/inputCommon/inputComm
 import nhapDiem, { NhapDiemState } from 'app/modules/nhapdiem/nhapdiem.reducer';
 import managerClass, { ManagerClassState } from 'app/modules/managerClass/managerClass.reducer';
 import userInfo, { UserInfoState } from 'app/modules/userInfo/userInfo.reducer';
+import infoModal, { InfoModalState } from 'app/shared/InfoModal/infoModal.reducer';
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
@@ -18,6 +19,7 @@ export interface IRootState {
   readonly locale: LocaleState;
   readonly common: CommonState;
   readonly inputCommon: InputCommonState;
+  readonly infoModal: InfoModalState;
 
   readonly login: LoginState;
 
@@ -36,6 +38,7 @@ const rootReducer = combineReducers<IRootState>({
   locale,
   common,
   inputCommon,
+  infoModal,
   login,
 
   nhapDiem,

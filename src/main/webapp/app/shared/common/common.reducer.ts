@@ -1,13 +1,16 @@
 // import { BASE_IMG_URL, GET_CAROUSEL_DATA } from 'app/config/constants';
 
-import { DEFAULT_FORM_DATA } from 'app/config/constants';
+import { DEFAULT_FORM_DATA, REQUEST_API } from 'app/config/constants';
 import { getGroupOfClass, getSchoolYear } from 'app/shared/util/util';
+import axios from 'axios';
+import { SUCCESS } from 'app/shared/reducers/action-type.util';
 
 export const ACTION_TYPES = {
   RESET: 'Common/RESET',
   SET_LOADING: 'Common/SET_LOADING',
   SET_FULL_SCREEN: 'Common/SET_FULL_SCREEN',
-  SET_DEFAULT_SELECT_FORM_DATA: 'Common/SET_DEFAULT_SELECT_FORM_DATA'
+  SET_DEFAULT_SELECT_FORM_DATA: 'Common/SET_DEFAULT_SELECT_FORM_DATA',
+  GET_TEACHER_MANAGER: 'Common/GET_TEACHER_MANAGER'
 };
 
 const initialState = {
@@ -39,6 +42,17 @@ export default (state: CommonState = initialState, action): CommonState => {
         ...state,
         displayLoading: action.displayLoading
       };
+    case SUCCESS(ACTION_TYPES.GET_TEACHER_MANAGER):
+      return {
+        ...state,
+        defaultSelectFormData: {
+          ...state.defaultSelectFormData,
+          [action.meta.key]: action.payload.data.map(k => ({
+            label: k.nameTeacher,
+            value: k.teacherId
+          }))
+        }
+      };
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -64,10 +78,15 @@ export const setDefaultSelectFormData = () => async (dispatch, getState) => {
   });
 };
 
-export const animationDisplayLoading = () => async (dispatch, getState) => {
-  await dispatch(setDisplayLoading(true));
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  await dispatch(setDisplayLoading(false));
+export const getCommonReferData = () => async (dispatch, getState) => {
+  const schoolId = getState().userInfo.schools[0].id;
+  await dispatch({
+    type: ACTION_TYPES.GET_TEACHER_MANAGER,
+    payload: axios.get(`${REQUEST_API.GET_TEACHER_MANAGER}/${schoolId}`),
+    meta: {
+      key: 'teacherManage'
+    }
+  });
 };
 
 export const setFullScreen = isFullScreen => ({

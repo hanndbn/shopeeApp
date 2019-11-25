@@ -9,7 +9,6 @@ const ACTION_TYPES = {
   CLEAR_MANAGER_CLASS_DATA: 'ManagerClass/CLEAR_MANAGER_CLASS_DATA',
   GET_MANAGER_CLASS_DETAIL_DATA: 'ManagerClass/GET_MANAGER_CLASS_DETAIL_DATA',
   SET_REFER_DATA: 'ManagerClass/SET_REFER_DATA',
-  GET_TEACHER_MANAGER: 'ManagerClass/GET_TEACHER_MANAGER',
   SET_PAGE_NUMBER: 'ManagerClass/SET_PAGE_NUMBER',
   RESET: 'ManagerClass/RESET'
 };
@@ -86,14 +85,14 @@ export default (state: ManagerClassState = initialState, action): ManagerClassSt
         errorMessage: action.error
       };
     // start get refer data
-    case SUCCESS(ACTION_TYPES.GET_TEACHER_MANAGER):
-      return {
-        ...state,
-        referData: {
-          ...state.referData,
-          [ action.meta.key ]: action.payload.data
-        }
-      };
+    // case SUCCESS(ACTION_TYPES.GET_TEACHER_MANAGER):
+    //   return {
+    //     ...state,
+    //     referData: {
+    //       ...state.referData,
+    //       [ action.meta.key ]: action.payload.data
+    //     }
+    //   };
     // end get refer data
     case ACTION_TYPES.CLEAR_MANAGER_CLASS_DATA:
       return {
@@ -157,14 +156,14 @@ export const requestManagerClassDetailData = activeId => async (dispatch, getSta
 };
 
 export const getReferData = () => async (dispatch, getState) => {
-  const schoolId = getState().userInfo.schools[ 0 ].id;
-  await dispatch({
-    type: ACTION_TYPES.GET_TEACHER_MANAGER,
-    payload: axios.get(`${REQUEST_API.GET_TEACHER_MANAGER}/${schoolId}`),
-    meta: {
-      key: 'teacherManager'
-    }
-  });
+  // const schoolId = getState().userInfo.schools[ 0 ].id;
+  // await dispatch({
+  //   type: ACTION_TYPES.GET_TEACHER_MANAGER,
+  //   payload: axios.get(`${REQUEST_API.GET_TEACHER_MANAGER}/${schoolId}`),
+  //   meta: {
+  //     key: 'teacherManager'
+  //   }
+  // });
 };
 
 export const submitData = history => async (dispatch, getState) => {
