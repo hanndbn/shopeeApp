@@ -25,7 +25,6 @@ export interface IHomeProp extends StateProps, DispatchProps {
   displayModalUrl: Function;
   displayModalMedia: Function;
   endSessionAnalytic: Function;
-  setSlideFlipped: Function;
   location: any;
   match: any;
 }
@@ -93,39 +92,6 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     }
   }
 
-  previousSlide() {
-    const data: any = this.props.data;
-    if (data) {
-      const { relation, elements } = data;
-      const currentRelation = relation.find(v => v.target === this.props.activeSlideId && v.source);
-      if (currentRelation) {
-        const nextSlide = elements.find(v => v.id === currentRelation.source && !v.parent);
-        if (nextSlide) {
-          const slideFlipped = this.props.slideFlipped.filter(v => v !== nextSlide.id);
-          this.props.setSlideFlipped(slideFlipped);
-          this.props.setActiveSlideId(nextSlide.id);
-        }
-      }
-    }
-  }
-
-  nextSlide() {
-    const data: any = this.props.data;
-    if (data) {
-      const { relation, elements } = data;
-      const currentRelation = relation.find(v => v.source === this.props.activeSlideId && v.target);
-      if (currentRelation) {
-        const nextSlide = elements.find(v => v.id === currentRelation.target && !v.parent);
-        if (nextSlide) {
-          const slideFlipped = this.props.slideFlipped;
-          slideFlipped.push(this.props.activeSlideId);
-          this.props.setSlideFlipped(slideFlipped);
-          this.props.setActiveSlideId(nextSlide.id);
-        }
-      }
-    }
-  }
-
   updateWindowDimensions() {
     this.props.setWindowSize({ width: window.innerWidth, height: window.innerHeight - 4 });
   }
@@ -143,34 +109,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     this.parentContainer.current.scrollTop = 0;
   }
 
-  scrollParentEvent(e) {
-    this.props.setScrollPosition(100 -
-      ((e.target.scrollTop) / (e.target.scrollHeight - this.props.windowSize.height)) * 100);
-  }
-
-  parse2html(data, activeSlideId, slideFlipped = []) {
-    const { root, elements, relation } = data;
-    if (!elements) return;
-    const rootSlide = this.getRootSlides(data);
-    return rootSlide.map((v, idx) => (
-      <React.Fragment key={idx}>
-        <div
-          className={cn('d-flex justify-content-center h-100 w-100 slide-content-wrapper', {
-            active: v.id === activeSlideId,
-            flipped: slideFlipped.indexOf(v.id) > -1
-          })}>
-          {this.slide2html(data, v, null, null, v.id)}
-        </div>
-      </React.Fragment>));
-  }
-
   slide2html(data, slide, parentStyle, zoomVal, idx = 0, hasIFrame = false) {
-    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
+    const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide[ 'parent' ];
+    const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -184,8 +129,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         windowWidth = 360;
         windowHeight = 640;
       }
-      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
-      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
+      const slideWidth = style['width'] ? style['width'] : 0;
+      const slideHeight = style['height'] ? style['height'] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -241,7 +186,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
     }
 
-    const elementType = slideStyle[ 'type' ] ? slideStyle[ 'type' ] : '';
+    const elementType = slideStyle['type'] ? slideStyle['type'] : '';
     const isGame = elementType === 'game';
     const isMedia = homeAction.isMedia(elementType);
     const isLink = elementType === ELEMENT_TYPE.LINK;
@@ -251,13 +196,13 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     let linkOpenInModal = false;
     let imageSlides = [];
     if (isMedia) {
-      mediaContent = homeAction.getMediaContent(slide.id, elementType, slideStyle[ 'linkUrl' ], this.props.externalData);
-      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+      mediaContent = homeAction.getMediaContent(slide.id, elementType, slideStyle['linkUrl'], this.props.externalData);
+      linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
     } else if (isLink) {
-      linkUrl = slideStyle[ 'linkUrl' ] ? slideStyle[ 'linkUrl' ] : '';
-      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+      linkUrl = slideStyle['linkUrl'] ? slideStyle['linkUrl'] : '';
+      linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
     } else if (isImageSlide) {
-      const listImageStr = slideStyle[ 'imageSlide' ] ? slideStyle[ 'imageSlide' ] : '';
+      const listImageStr = slideStyle['imageSlide'] ? slideStyle['imageSlide'] : '';
       imageSlides = decodeURIComponent(listImageStr).split(',');
     }
 
@@ -285,19 +230,19 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                        }
                      } else if (isMedia && linkOpenInModal) {
                        this.props.displayModalMedia(elementType, mediaContent);
-                     } else if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
-                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
+                     } else if (slideStyle['modalPopup'] === '1' && this.props.modalListing) {
+                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle['modalType']);
                        if (modalType && modalType.types) {
-                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle[ 'modalTypeDetail' ]);
+                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle['modalTypeDetail']);
                          if (modalTypeDetail && modalTypeDetail.key !== ELEMENT_TYPE.YOUTUBE) {
-                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle[ 'modalSiteUrl' ]) : ''));
+                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle['modalSiteUrl']) : ''));
                          }
                        }
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
                      } else if (elementType === ELEMENT_TYPE.HOME) {
                        const firstSlide = data.elements.find(v => v.isFirstSlide);
-                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[ 0 ] ? data.elements[ 0 ].id : null);
+                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null);
                      }
                    }
                  }}
@@ -363,53 +308,18 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     return str.replace(/&#(\d+)/g, (match, dec) => String.fromCharCode(dec));
   }
 
-  getRootSlides(data) {
-    const { root, elements, relation } = data;
-    const listRootSlide = [];
-    elements && elements.map(v => {
-      if (!v.parent) {
-        listRootSlide.push(v);
-      }
-    });
-    // const firstSlide = data.elements ? data.elements.find(v => v.isFirstSlide) : null;
-    // if (firstSlide) {
-    //   const stackSlide = data.relation.filter(v => v.source === firstSlide.id);
-    //   stackSlide.map(v=> )
-    // }
-    return listRootSlide;
-  }
-
   render() {
-    const { data, requestFailure, errorMessage, saveTrackingData, setCurrentIdx, activeSlideId, slideFlipped }: any = this.props;
-    const displaySlide = this.parse2html(data, activeSlideId, slideFlipped);
-    const listRootSlide = this.getRootSlides(data);
+    const { data, slide, activeSlideId, slideFlipped }: any = this.props;
     return (
-      <div className="">
-        <Helmet>
-          <title>{`${TITLE_HELMET}`}</title>
-        </Helmet>
-        <div className="">
-          <div className="row">
-            <div className="col-12 d-flex justify-content-center">
-              {requestFailure && <div className="alert alert-danger">{errorMessage}</div>}
-              <div className={cn('slide-container')} id="slide-container" ref={this.parentContainer} onScroll={e => this.scrollParentEvent(e)}>
-                {displaySlide}
-              </div>
-            </div>
-          </div>
-          <div className="slide-tab-wrapper">
-            {listRootSlide && listRootSlide.map((slide, idx) =>
-              <div key={idx} style={{ width: `${100 / listRootSlide.length}%` }} className={cn('slide-tab', { active: slide.id === activeSlideId })}/>
-            )}
-          </div>
-          <div className="card-arrow-btn back-btn"
-               onClick={() => this.previousSlide()}
-          />
-          <div className="card-arrow-btn next-btn"
-               onClick={() => this.nextSlide()}
-          />
+      <React.Fragment>
+        <div
+          className={cn('d-flex justify-content-center h-100 w-100 slide-content-wrapper', {
+            active: slide.id === activeSlideId,
+            flipped: slideFlipped.indexOf(slide.id) > -1
+          })}>
+          {this.slide2html(data, slide, null, null, slide.id)}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
@@ -427,25 +337,6 @@ const mapStateToProps = ({ home, common }: IRootState) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: async (preAppName = null) => {
-    if (preAppName) {
-      dispatch(homeAction.endSessionAnalytic());
-    }
-    await dispatch(homeAction.reset());
-    await dispatch(homeAction.setWindowSize({ width: window.innerWidth, height: window.innerHeight }));
-    const appName = ownProps.match.params.appName ? ownProps.match.params.appName : '';
-    await dispatch(homeAction.requestHomeData(appName));
-    await dispatch(homeAction.setTimeStart(new Date()));
-  },
-  endSessionAnalytic: () => {
-    dispatch(homeAction.endSessionAnalytic());
-  },
-  setCurrentIdx: idx => {
-    dispatch(homeAction.setCurrentIdx(idx));
-  },
-  saveTrackingData: () => {
-    dispatch(homeAction.saveTrackingData());
-  },
   setActiveSlideId: async id => {
     await dispatch(homeAction.setActiveSlideId(id));
     await dispatch(homeAction.saveTrackingData());

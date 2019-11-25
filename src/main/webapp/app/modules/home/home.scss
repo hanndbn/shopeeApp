@@ -204,6 +204,7 @@ body, html {
   overflow: hidden;
   background-color: black;
   height: 200px;
+
   .image-slide-sub-wrapper {
     width: 100%;
     height: auto;
@@ -236,7 +237,6 @@ body, html {
     line-height: 0;
     width: 100%;
     height: 100%;
-    cursor: pointer;
     color: transparent;
     border: 0;
     outline: none;
@@ -245,13 +245,16 @@ body, html {
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
+
     .image-slide-scrollbar-content {
       padding: 5px;
       background-color: #0000001a;
       border-radius: 2px;
     }
+
     .image-slide-scrollbar {
       display: block;
+
       &:after {
         font-size: 20px;
         line-height: 14px;
@@ -266,6 +269,7 @@ body, html {
         padding: 2px;
         -webkit-font-smoothing: antialiased;
       }
+
       &.active:after {
         opacity: 0.8;
         color: #15a7b3;
@@ -277,13 +281,13 @@ body, html {
 .slide-content-wrapper {
   position: absolute;
   background-color: white;
-  cursor: pointer;
   color: #000;
   transition: 1.5s transform;
   transform-style: preserve-3d;
   transform-origin: left center;
   z-index: 0;
   opacity: 0;
+
   &.active {
     z-index: 1;
     opacity: 1;
@@ -299,4 +303,34 @@ body, html {
 
 .slide-content-wrapper.active + .slide-content-wrapper {
   opacity: 1;
+}
+
+
+.card-arrow-btn {
+
+}
+
+.card-arrow-btn {
+  display: none;
+  @media only screen and (min-width: 768px) {
+    display: block;
+    position: fixed;
+    top: 370px;
+    color: white;
+    height: 30px;
+    width: 30px;
+    border-top: 2px solid #52A1A7;
+    border-right: 2px solid #52A1A7;
+    cursor: pointer;
+  }
+
+  &.back-btn {
+    left: calc(50% - 220px);
+    transform: rotate(-135deg);
+  }
+
+  &.next-btn {
+    left: calc(50% + 200px);
+    transform: rotate(45deg);
+  }
 }
