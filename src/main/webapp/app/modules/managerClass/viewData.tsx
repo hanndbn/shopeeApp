@@ -11,27 +11,29 @@ import qs from 'querystring';
 import { paramObj } from 'app/shared/util/util';
 import { SCREEN_PATH } from 'app/config/constants';
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
 
 // import { getCategory } from "app/shared/reducers/category";
 
 export interface IViewDataProp extends StateProps, DispatchProps {
-  initScreen: Function;
+  initListingScreen: Function;
   setPageNumber: Function;
   reset: Function;
   location: any;
+  history: any;
 }
 
 export class ViewData extends React.Component<IViewDataProp> {
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.initScreen();
+    this.props.initListingScreen();
   }
 
   getSnapshotBeforeUpdate(prevProps: Readonly<IViewDataProp>, prevState: Readonly<{}>): any | null {
     const currentParams = paramObj(this.props.location.search);
     const prevParams = paramObj(prevProps.location.search);
-    if (currentParams['page'] !== prevParams['page']) {
-      this.props.initScreen();
+    if (currentParams[ 'page' ] !== prevParams[ 'page' ]) {
+      this.props.initListingScreen();
     }
     return null;
   }
@@ -44,20 +46,31 @@ export class ViewData extends React.Component<IViewDataProp> {
     return (
       <>
         <div className="col-12 action-wrapper">
-          <button className="btn btn-action">Lớp học</button>
-          <button className="btn btn-action ml-2">Import</button>
-          <button className="btn btn-action ml-2">Export</button>
+          <button className="btn btn-action"
+                  onClick={() => this.props.history.push(`${SCREEN_PATH.MANAGER_CLASS}/add`)}
+          >
+            <span className="fal fa-plus mr-1"/>
+            <span>Lớp học</span>
+          </button>
+          <button className="btn btn-action ml-2">
+            <span className="fal fa-cloud-upload mr-1"/>
+            <span>Import</span>
+          </button>
+          <button className="btn btn-action ml-2">
+            <span className="fal fa-cloud-download mr-1"/>
+            <span>Export</span>
+          </button>
         </div>
         <div className="col-12 custom-table">
           <div className="row custom-table-header no-gutters">
             <div className="col-1">STT</div>
             <div className="col-1">Tên khối</div>
-            <div className="col-1">Mã lớp</div>
-            <div className="col-1">Tên lớp</div>
-            <div className="col-1">Sĩ Số</div>
+            <div className="col-2">Mã lớp</div>
+            <div className="col-2">Tên lớp</div>
+            <div className="col-1">Sĩ số</div>
             <div className="col-3">Giáo viên chủ nhiệm</div>
-            <div className="col-2">Lớp chuyên</div>
-            <div className="col-2">Action</div>
+            <div className="col-1">Lớp chuyên</div>
+            <div className="col-1">Action</div>
           </div>
           {!loading ?
             <>
@@ -70,12 +83,17 @@ export class ViewData extends React.Component<IViewDataProp> {
                     <div className="row no-gutters custom-table-data" key={idx}>
                       <div className="col-1">{idx + 1}</div>
                       <div className="col-1">{v.groupOfClass}</div>
-                      <div className="col-1">{v.idClass}</div>
-                      <div className="col-1">{v.nameClass}</div>
+                      <div className="col-2">{v.idClass}</div>
+                      <div className="col-2">{v.nameClass}</div>
                       <div className="col-1">{v.totalStudent}</div>
                       <div className="col-3">{v.teacherManage}</div>
-                      <div className="col-2">{v.professionalClass}</div>
-                      <div className="col-2">Action</div>
+                      <div className="col-1">{v.professionalClass}</div>
+                      <div className="col-1">
+                        <div className="action-icon-wrapper">
+                          <Link to={`${SCREEN_PATH.MANAGER_CLASS}/edit/${v.idClass}`} className="action-icon"><span className="far fa-edit"/></Link>
+                          <div className="action-icon"><span className="far fa-trash-alt"/></div>
+                        </div>
+                      </div>
                     </div>
                   ))
               }
@@ -115,10 +133,10 @@ const mapStateToProps = ({ common, managerClass }: IRootState) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: async (isReset = false) => {
+  initListingScreen: async (isReset = false) => {
     isReset && await dispatch(managerClassAction.reset());
     const params = paramObj(ownProps.location.search);
-    const page = params['page'] && _.isInteger(_.toInteger(params['page'])) && _.toInteger(params['page']) > 0 ? _.toInteger(params['page']) - 1 : 0;
+    const page = params[ 'page' ] && _.isInteger(_.toInteger(params[ 'page' ])) && _.toInteger(params[ 'page' ]) > 0 ? _.toInteger(params[ 'page' ]) - 1 : 0;
     await dispatch(managerClassAction.setPageNumber(page));
     await dispatch(managerClassAction.requestManagerClassData());
   },

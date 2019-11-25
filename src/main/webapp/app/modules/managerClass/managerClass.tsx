@@ -33,7 +33,8 @@ export class ManagerClass extends React.Component<INhapDiemProp> {
         <div className="row no-gutters">
           <div className="col-12 title">QUẢN LÝ LỚP HỌC</div>
           <ErrorBoundaryRoute exact={true} path="/quan-ly-lop-hoc" component={ViewData}/>
-          <ErrorBoundaryRoute path="/quan-ly-lop-hoc/edit" component={EditData}/>
+          <ErrorBoundaryRoute path="/quan-ly-lop-hoc/edit/:activeId" component={EditData}/>
+          <ErrorBoundaryRoute path="/quan-ly-lop-hoc/add" component={EditData}/>
         </div>
       </div>
     );

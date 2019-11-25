@@ -37,16 +37,17 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
       inputReadOnly = false,
       inputPlaceHolder = null,
       inputMaxLength = null,
-      typingPattern = ''
+      typingPattern = '',
+      required = false
     } = formDefine;
-    const value = inputValue[ formType ] && inputValue[ formType ][ fieldName ] ? inputValue[ formType ][ fieldName ] : '';
-    const errorMessage = invalidFields[ formType ] && invalidFields[ formType ][ fieldName ] ? invalidFields[ formType ][ fieldName ] : '';
+    const value = inputValue[ formType ] && inputValue[ formType ].hasOwnProperty(fieldName) ? inputValue[ formType ][ fieldName ] : '';
+    const errorMessage = invalidFields[ formType ] && invalidFields[ formType ].hasOwnProperty(fieldName) ? invalidFields[ formType ][ fieldName ] : '';
     const isReadOnly = this.props.isReadOnly || inputReadOnly;
     return (
       <div className={classWrapper}>
         <div className="row no-gutters">
           {
-            label && <div className={`custom-input-text-label ${labelClass}`}>{label}</div>
+            label && <div className={`custom-input-text-label ${required ? 'label-require' : ''} ${labelClass}`}>{label}</div>
           }
           <div className={`custom-input-text-container ${inputClass}`}>
             <input className={cn(`form-control`, {
@@ -58,6 +59,7 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
                    placeholder={inputPlaceHolder}
                    maxLength={inputMaxLength}
                    value={value}
+                   readOnly={isReadOnly}
                    onChange={e => {
                      if (e.target.value
                        && (typingPattern && !new RegExp(typingPattern).test(e.target.value))) {
@@ -65,7 +67,7 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
                      }
                      this.props.setInputValue(formType, fieldName, e.target.value);
                    }}
-                   onBlur={e => this.props.validateInputValue(formType, e.target.value, formDefine)}
+                   onBlur={e => !isReadOnly && this.props.validateInputValue(formType, e.target.value, formDefine)}
             />
             {
               errorMessage &&

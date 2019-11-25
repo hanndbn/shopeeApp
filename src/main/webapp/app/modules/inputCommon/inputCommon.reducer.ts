@@ -6,6 +6,7 @@ const ACTION_TYPES = {
   SET_INPUT_VALUE: 'InputCommon/SET_INPUT_VALUE',
   SET_VALIDATE_INPUT: 'InputCommon/SET_VALIDATE_INPUT',
   COPY_DATA_TO_INPUT: 'InputCommon/COPY_DATA_TO_INPUT',
+  COPY_REQUIRED_DATA_TO_INPUT: 'InputCommon/COPY_REQUIRED_DATA_TO_INPUT',
   CLEAR_FORM: 'InputCommon/CLEAR_FORM',
   RESET: 'InputCommon/RESET'
 };
@@ -62,11 +63,25 @@ export default (state: InputCommonState = initialState, action): InputCommonStat
         ...state,
         inputValue: {
           ...state.inputValue,
-          [ action.formType ]: action.data
+          [ action.formType ]: {
+            ...state.inputValue[ action.formType ],
+            ...action.data
+          }
         },
         invalidFields: {
           ...state.invalidFields,
           [ action.formType ]: {}
+        }
+      };
+    case ACTION_TYPES.COPY_REQUIRED_DATA_TO_INPUT:
+      return {
+        ...state,
+        inputValue: {
+          ...state.inputValue,
+          [ action.formType ]: {
+            ...state.inputValue[ action.formType ],
+            ...action.data
+          }
         }
       };
     case ACTION_TYPES.RESET:
@@ -111,25 +126,31 @@ export const validateForm = (formType, formDefine, isOnlyCheck = false) => async
   const formInputValue = getState().inputCommon.inputValue[ formType ];
   let validData = true;
   formDefine.map(field => {
-    const fieldValue = formInputValue && formInputValue[ field.field_name ] ? formInputValue[ field.field_name ] : '';
+    const fieldValue = formInputValue && formInputValue[ field.fieldName ] ? formInputValue[ field.fieldName ] : '';
     let errorMessage = CONSTANTS.FORM_ERROR.VALID;
     if (field.required && !fieldValue) {
       validData = false;
       errorMessage = CONSTANTS.FORM_ERROR.EMPTY_ERROR;
     } else if (
-      (field.valid_pattern && !new RegExp(field.valid_pattern).test(fieldValue)) ||
-      (field.invalid_pattern && new RegExp(field.invalid_pattern).test(fieldValue))
+      (field.validPattern && !new RegExp(field.validPattern).test(fieldValue)) ||
+      (field.invalidPattern && new RegExp(field.invalidPattern).test(fieldValue))
     ) {
       validData = false;
       errorMessage = field.invalid_msg;
     }
-    dispatch(setInvalidField(formType, field.field_name, errorMessage));
+    dispatch(setInvalidField(formType, field.fieldName, errorMessage));
   });
   return validData;
 };
 
 export const copyDataToInput = (formType, data) => ({
   type: ACTION_TYPES.COPY_DATA_TO_INPUT,
+  formType,
+  data
+});
+
+export const copyRequireDataToInput = (formType, data) => ({
+  type: ACTION_TYPES.COPY_REQUIRED_DATA_TO_INPUT,
   formType,
   data
 });

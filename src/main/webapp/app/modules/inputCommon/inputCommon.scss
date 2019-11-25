@@ -21,6 +21,17 @@
 
 .custom-input-text-label {
   font-size: 16px;
+  padding-right: 0.5rem !important;
+  padding-top: 0.3rem;
+  position: relative;
+
+  &.label-require:after {
+    content: '*';
+    color: #ff424f;
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 17px;
+  }
 }
 
 .custom-input-checkbox {
@@ -47,7 +58,17 @@
   margin-bottom: 2.5rem;
 
   .custom-select-label {
-    margin-top: 0.3rem;
+    position: relative;
+    padding-top: 0.3rem;
+    padding-right: 0.5rem;
+
+    &.label-require:after {
+      content: '*';
+      color: #ff424f;
+      margin-left: 5px;
+      font-weight: bold;
+      font-size: 17px;
+    }
   }
 
   .custom-select-field {

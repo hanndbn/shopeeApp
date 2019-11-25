@@ -13,6 +13,7 @@ import Header from 'app/shared/layout/header/header';
 import Sidebar from 'app/shared/layout/sidebar/sidebar';
 import Loader from 'app/shared/layout/loader/loader';
 import cn from 'classnames';
+import { setDefaultSelectFormData } from 'app/shared/common/common.reducer';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -71,7 +72,7 @@ const mapStateToProps = ({ common }: IRootState) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getCommonData: () => {
-    // dispatch(requestCategoryData());
+    dispatch(setDefaultSelectFormData());
   }
 });
 

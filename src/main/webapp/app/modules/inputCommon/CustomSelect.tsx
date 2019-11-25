@@ -53,7 +53,7 @@ export class CustomSelect extends React.Component<ICustomSelectProp, { displayPo
       if (popupVisited && displayPopup) {
         const formDefine = FORM_DEFINE[ formType ] ? FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName) : null;
         if (formDefine) {
-          const value = inputValue[ formType ] && inputValue[ formType ][ fieldName ] ? inputValue[ formType ][ fieldName ] : '';
+          const value = inputValue[ formType ] && inputValue[ formType ][fieldName] ? inputValue[ formType ][ fieldName ] : '';
           this.props.validateInputValue(formType, value, formDefine);
         }
       }
@@ -74,10 +74,18 @@ export class CustomSelect extends React.Component<ICustomSelectProp, { displayPo
       labelClass = '',
       defaultLabel = 'Select',
       inputName = null,
-      inputClass = ''
+      inputClass = '',
+      required = false
     } = formDefine;
-    const selectData = this.props.selectData ? this.props.selectData : formDefine.selectData ? formDefine.selectData : [];
-    const value = inputValue[ formType ] && inputValue[ formType ][ fieldName ] ? inputValue[ formType ][ fieldName ] : '';
+    let selectData = [];
+    if (this.props.selectData) {
+      selectData = this.props.selectData;
+    } else if (formDefine.selectData) {
+      selectData = formDefine.selectData;
+    } else if (this.props.defaultSelectFormData && this.props.defaultSelectFormData[ fieldName ]) {
+      selectData = this.props.defaultSelectFormData[ fieldName ];
+    }
+    const value = inputValue[ formType ] && inputValue[ formType ][fieldName] ? inputValue[ formType ][ fieldName ] : '';
     const selectedItem = selectData.find(v => value && v.value === value);
     const displayLabel = selectedItem ? selectedItem.label : defaultLabel;
     const errorMessage = invalidFields[ formType ] && invalidFields[ formType ][ fieldName ] ? invalidFields[ formType ][ fieldName ] : '';
@@ -85,13 +93,14 @@ export class CustomSelect extends React.Component<ICustomSelectProp, { displayPo
       <div className={`${classWrapper} custom-select-container`}>
         <div className="row no-gutters">
           {
-            label && <div className={`custom-select-label ${labelClass}`}>{label}</div>
+            label && <div className={`custom-select-label ${required ? 'label-require' : ''} ${labelClass}`}>{label}</div>
           }
           <div className={inputClass} id={`${formType}-${fieldName}`}>
             <div className="custom-select-field" onClick={() => !this.props.isReadOnly && this.setDisplayPopup(true)}>
               <div className={cn('form-control',
-                { 'is-focus': this.state.displayPopup,
-                'is-invalid-input': !!errorMessage,
+                {
+                  'is-focus': this.state.displayPopup,
+                  'is-invalid-input': !!errorMessage,
                   'readonly': this.props.isReadOnly
                 })}>
                 <div>{displayLabel}</div>
@@ -132,9 +141,10 @@ export class CustomSelect extends React.Component<ICustomSelectProp, { displayPo
   }
 }
 
-const mapStateToProps = ({ inputCommon }: IRootState) => ({
+const mapStateToProps = ({ inputCommon, common }: IRootState) => ({
   inputValue: inputCommon.inputValue,
-  invalidFields: inputCommon.invalidFields
+  invalidFields: inputCommon.invalidFields,
+  defaultSelectFormData: common.defaultSelectFormData
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

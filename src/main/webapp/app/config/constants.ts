@@ -104,6 +104,33 @@ export const CONSTANTS = {
     }
   }
 ;
+
+export const DEFAULT_FORM_DATA = {
+  typeClass: [
+    {
+      value: 'CB',
+      label: 'Ban Cơ Bản'
+    },
+    {
+      value: 'NC',
+      label: 'Ban Nâng Cao'
+    },
+    {
+      value: 'NK',
+      label: 'Năng Khiếu'
+    }
+  ],
+  professionalClass: [
+    {
+      value: 'true',
+      label: 'Có'
+    },
+    {
+      value: 'false',
+      label: 'Không'
+    }
+  ]
+};
 export const FORM_DEFINE = {
   FORM_LOGIN: {
     id: 'FORM_LOGIN',
@@ -137,7 +164,7 @@ export const FORM_DEFINE = {
         inputPlaceHolder: '',
         inputMaxLength: 32,
         required: true,
-        valid_pattern: CONSTANTS.FORM_PATTERN.PASSWORD_2,
+        validPattern: CONSTANTS.FORM_PATTERN.PASSWORD_2,
         invalid_msg: CONSTANTS.FORM_ERROR.PASSWORD_ERROR
       },
       {
@@ -195,22 +222,13 @@ export const FORM_DEFINE = {
         fieldName: 'schoolYear',
         fieldType: CONSTANTS.FORM_TYPE.SELECT,
         classWrapper: 'col-6',
-        label: 'Tên lớp học',
+        label: 'Niên khóa',
         labelClass: 'col-4',
         defaultLabel: 'Select',
         inputName: 'class',
         inputClass: 'col-7',
         required: true,
-        selectData: [
-          {
-            label: '2018-2019',
-            value: '2018-2019'
-          },
-          {
-            label: '2019-2020',
-            value: '2019-2020'
-          }
-        ]
+        selectData: null
       },
       {
         fieldName: 'groupOfClass',
@@ -222,20 +240,7 @@ export const FORM_DEFINE = {
         inputName: 'class',
         inputClass: 'col-7',
         required: true,
-        selectData: [
-          {
-            label: '10',
-            value: '10'
-          },
-          {
-            label: '11',
-            value: '11'
-          },
-          {
-            label: '12',
-            value: '12'
-          }
-        ]
+        selectData: null
       },
       {
         fieldName: 'typeClass',
@@ -247,20 +252,7 @@ export const FORM_DEFINE = {
         inputName: 'class',
         inputClass: 'col-7',
         required: false,
-        selectData: [
-          {
-            label: 'Ban Cơ Bản',
-            value: 'A'
-          },
-          {
-            label: 'Ban Nâng Cao',
-            value: 'B'
-          },
-          {
-            label: 'Ban Năng Khiếu',
-            value: 'C'
-          }
-        ]
+        selectData: null
       },
       {
         fieldName: 'idClass',
@@ -303,10 +295,10 @@ export const FORM_DEFINE = {
         label: 'Giáo viên chủ nhiệm',
         labelClass: 'col-4',
         defaultLabel: 'Select',
-        inputName: 'class',
+        inputName: 'teacherManage',
         inputClass: 'col-7',
         required: false,
-        selectData: []
+        selectData: null
       },
       {
         fieldName: 'professionalClass',
@@ -315,36 +307,28 @@ export const FORM_DEFINE = {
         label: 'Lớp chuyên',
         labelClass: 'col-4',
         defaultLabel: 'Select',
-        inputName: 'class',
+        inputName: 'professionalClass',
         inputClass: 'col-7',
         required: false,
-        selectData: [
-          {
-            label: 'Có',
-            value: '1'
-          },
-          {
-            label: 'Không',
-            value: '0'
-          }
-        ]
+        selectData: null
       },
       {
         fieldName: 'totalStudent',
         fieldType: CONSTANTS.FORM_TYPE.TEXT,
         classWrapper: 'col-6',
-        label: 'Sĩ Số',
+        label: 'Sĩ số',
         labelClass: 'col-4',
         inputType: 'text',
         inputName: 'totalStudent',
         inputClass: 'col-7',
         inputPlaceHolder: '',
         inputMaxLength: 32,
+        inputReadOnly: true,
         required: false,
-        validPattern: CONSTANTS.FORM_PATTERN.NUMBER,
-        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
-        typingPattern: CONSTANTS.FORM_PATTERN.NUMBER,
-        invalidMessage: CONSTANTS.FORM_ERROR.OTHER_NUMBER_ERROR
+        validPattern: '',
+        invalidPattern: '',
+        typingPattern: '',
+        invalidMessage: ''
       }
     ]
   }
@@ -352,7 +336,8 @@ export const FORM_DEFINE = {
 
 export const REQUEST_API = {
   GET_MANAGER_CLASS_DATA: 'http://171.244.0.59:3000/api/classes/info',
-  GET_MANAGER_CLASS_DETAIL: 'http://171.244.0.59:3000/api/classes/10A3'
+  GET_MANAGER_CLASS_DETAIL: 'http://171.244.0.59:3000/api/classes',
+  GET_TEACHER_MANAGER: 'http://171.244.0.59:3000/api/teacher/getBySchoolId'
 };
 
 export const SCREEN_PATH = {

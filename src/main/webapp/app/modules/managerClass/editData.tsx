@@ -11,44 +11,92 @@ import * as managerClassAction from 'app/modules/managerClass/managerClass.reduc
 // import { getCategory } from "app/shared/reducers/category";
 
 export interface IEditDataProp extends StateProps, DispatchProps {
-  initScreen: Function;
+  initDetailScreen: Function;
+  submitData: Function;
+  history: any;
   location: any;
+  match: any;
 }
 
 export class EditData extends React.Component<IEditDataProp> {
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.initScreen();
+    this.props.initDetailScreen();
+  }
+
+  getSnapshotBeforeUpdate(prevProps: Readonly<IEditDataProp>, prevState: Readonly<{}>): any | null {
+    if (prevProps.match.params.activeId !== this.props.match.params.activeId) {
+      this.props.initDetailScreen();
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps: Readonly<IEditDataProp>, prevState: Readonly<{}>, snapshot?: any): void {
   }
 
   render() {
-    const { managerClassData, loading } = this.props;
+    // const { managerClassData, loading } = this.props;
+
     return (
       <div className="edit-container w-100">
         <div className="row no-gutters">
-          {FORM_DEFINE.FORM_MANAGER_CLASS.fields.map((v, idx) =>
-            <CustomInput key={idx}
-                         {...{
-                           fieldType: v.fieldType,
-                           formType: FORM_DEFINE.FORM_MANAGER_CLASS.id,
-                           fieldName: v.fieldName
-                         }}/>
+          <div className="col-12 text-center edit-title">
+            THÔNG TIN LỚP HỌC
+          </div>
+          {FORM_DEFINE.FORM_MANAGER_CLASS.fields.map((v, idx) => {
+              const data = {
+                fieldType: v.fieldType,
+                formType: FORM_DEFINE.FORM_MANAGER_CLASS.id,
+                fieldName: v.fieldName
+              };
+              if (v.fieldName === 'teacherManage') {
+                const selectData = [];
+                const teacherManagerData = this.props.referData[ 'teacherManager' ] ? this.props.referData[ 'teacherManager' ] : [];
+                teacherManagerData.map(k => {
+                  selectData.push({
+                    label: k.nameTeacher,
+                    value: k.teacherId
+                  });
+                });
+                data[ 'selectData' ] = selectData;
+              }
+              return (
+                <CustomInput key={idx} {...data}/>
+              );
+            }
           )}
+          <div className="col-12 text-center mt-4">
+            <div className="edit-action-wrapper">
+              <button className="btn edit-action-btn edit-action-cancel"
+                      onClick={() => this.props.history.goBack()}
+              >Hủy
+              </button>
+              <button className="btn edit-action-btn edit-action-submit"
+                      onClick={() => this.props.submitData()}
+              >Lưu
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ common, managerClass }: IRootState) => ({
+const mapStateToProps = ({ managerClass }: IRootState) => ({
   managerClassData: managerClass.managerClassData,
   loading: managerClass.loading,
-  pagination: managerClass.pagination
+  referData: managerClass.referData
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  initScreen: () => {
-    dispatch(managerClassAction.requestManagerClassDetailData());
+  initDetailScreen: async () => {
+    await dispatch(managerClassAction.getReferData());
+    const activeId = ownProps.match.params.activeId;
+    await dispatch(managerClassAction.requestManagerClassDetailData(activeId));
+  },
+  submitData: () => {
+    dispatch(managerClassAction.submitData(history));
   }
 });
 

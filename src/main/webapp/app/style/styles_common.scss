@@ -92,7 +92,19 @@
 .edit-container {
   margin-top: 2rem;
   background-color: white;
-  padding: 50px 50px;
+  padding: 30px 50px;
+
+  .form-control,
+  .custom-select-item {
+    color: #334690;
+  }
+
+  .edit-title {
+    font-size: 24px;
+    color: #374A92;
+    font-weight: 600;
+    margin-bottom: 3rem;
+  }
 }
 
 .paging-container {
@@ -117,14 +129,59 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none;
-    /* Non-prefixed version, currently
-                                     supported by Chrome and Opera */
   }
 
   li.current a {
     border: 1px solid #f2f2f4;
     background-color: #2165FF;
-    color: #fff;
+    color: white;
+  }
+}
+
+.action-icon-wrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  .action-icon {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+    color: #2165FF;
+    border-radius: 30px;
+    border: 1px solid #EBEBEB;
+    box-shadow: 0 0 1px 0px #000000;
+
+    &:hover {
+      background-color: #2165ff0f;
+    }
+  }
+}
+
+.edit-action-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .edit-action-btn {
+    padding: 0.5rem 1rem;
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 100px;
+    margin-right: 1rem;
+    color: white;
+  }
+
+  .edit-action-submit {
+    background-image: linear-gradient(to right, #2065ff, #6090fff0);
+    box-shadow: 0 0 2px 0 #2065ff73;
+  }
+
+  .edit-action-cancel {
+    background-image: linear-gradient(to right, #E6314C, #E6314Ceb);
+    box-shadow: 0 0 2px 0 #e7324d73;
   }
 }
 
