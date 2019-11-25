@@ -15,6 +15,7 @@ import Loader from 'app/shared/layout/loader/loader';
 import cn from 'classnames';
 import { getCommonReferData, setDefaultSelectFormData } from 'app/shared/common/common.reducer';
 import InfoModal from 'app/shared/InfoModal/infoModal';
+import { displayConfirmDeleteModal } from 'app/shared/InfoModal/infoModal.reducer';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -74,6 +75,7 @@ const mapStateToProps = ({ common }: IRootState) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   getCommonData: () => {
+    dispatch(displayConfirmDeleteModal());
     dispatch(setDefaultSelectFormData());
     dispatch(getCommonReferData());
   }
