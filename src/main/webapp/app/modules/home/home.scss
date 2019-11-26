@@ -287,6 +287,8 @@ body, html {
   transform-origin: left center;
   z-index: 0;
   opacity: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   &.active {
     z-index: 1;
