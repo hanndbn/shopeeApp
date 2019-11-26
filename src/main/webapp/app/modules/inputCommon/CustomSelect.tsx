@@ -15,7 +15,7 @@ export interface ICustomSelectProp extends StateProps, DispatchProps {
   fieldName: any;
   selectData: any;
   isReadOnly: any;
-  formDefines: any;
+  fieldsDefines: any;
   setInputValue: Function;
   validateInputValue: Function;
 }
@@ -46,12 +46,12 @@ export class CustomSelect extends React.Component<ICustomSelectProp, { displayPo
   }
 
   handleClickOutside(event) {
-    const { formType, fieldName, inputValue, formDefines = {} } = this.props;
+    const { formType, fieldName, inputValue, fieldsDefines = {} } = this.props;
     const { displayPopup, popupVisited } = this.state;
     const wrapperRef = formType ? $(`#${formType}-${fieldName}`)[ 0 ] : null;
     if (wrapperRef && !wrapperRef.contains(event.target)) {
       if (popupVisited && displayPopup) {
-        const formDefine = formDefines[ formType ] ? formDefines[ formType ].fields.find(v => v.fieldName === fieldName) : null;
+        const formDefine = fieldsDefines.find(v => v.fieldName === fieldName);
         if (formDefine) {
           const value = inputValue[ formType ] && inputValue[ formType ][ fieldName ] ? inputValue[ formType ][ fieldName ] : '';
           this.props.validateInputValue(formType, value, formDefine);
@@ -65,9 +65,9 @@ export class CustomSelect extends React.Component<ICustomSelectProp, { displayPo
   }
 
   render() {
-    const { formType, fieldName, inputValue, invalidFields, formDefines = {} } = this.props;
-    if (!formType || !fieldName || !formDefines[ formType ] || !formDefines[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
-    const formDefine = formDefines[ formType ].fields.find(v => v.fieldName === fieldName);
+    const { formType, fieldName, inputValue, invalidFields, fieldsDefines = [] } = this.props;
+    if (!formType || !fieldName || !fieldsDefines.find(v => v.fieldName === fieldName)) return null;
+    const formDefine = fieldsDefines.find(v => v.fieldName === fieldName);
     const {
       classWrapper = '',
       label = '',

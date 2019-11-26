@@ -14,7 +14,7 @@ export interface ICustomInputTextProp extends StateProps, DispatchProps {
   formType: any;
   fieldName: any;
   isReadOnly: any;
-  formDefines: any;
+  fieldsDefines: any;
   setInputValue: Function;
   validateInputValue: Function;
 }
@@ -25,9 +25,9 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
   }
 
   render() {
-    const { formType, fieldName, inputValue, invalidFields, formDefines = {} } = this.props;
-    if (!formType || !fieldName || !formDefines[ formType ] || !formDefines[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
-    const formDefine = formDefines[ formType ].fields.find(v => v.fieldName === fieldName);
+    const { formType, fieldName, inputValue, invalidFields, fieldsDefines = [] } = this.props;
+    if (!formType || !fieldName || !fieldsDefines.find(v => v.fieldName === fieldName)) return null;
+    const formDefine = fieldsDefines.find(v => v.fieldName === fieldName);
     const {
       classWrapper = '',
       label = '',

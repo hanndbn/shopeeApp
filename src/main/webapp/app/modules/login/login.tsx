@@ -9,8 +9,8 @@ import { CONSTANTS, TITLE_HELMET } from 'app/config/constants';
 import * as commonAction from 'app/shared/common/common.reducer';
 import * as loginAction from 'app/modules/login/login.reducer';
 import _ from 'lodash';
-import CustomInputText from 'app/modules/inputCommon/CustomInputText';
-import CustomInputCheckbox from 'app/modules/inputCommon/CustomInputCheckbox';
+import CustomInput from 'app/modules/inputCommon/CustomInput';
+import { FORM_LOGIN } from 'app/modules/login/formDefine';
 
 export interface ILoginProp extends StateProps, DispatchProps {
   initScreen: Function;
@@ -58,12 +58,23 @@ export class Login extends React.Component<ILoginProp> {
                   <div className="form-group">
                     <div className="login-title">ĐĂNG NHẬP {role.title}</div>
                   </div>
-                  <CustomInputText formType={'FORM_LOGIN'} fieldName={'userName'}/>
-                  <CustomInputText formType={'FORM_LOGIN'} fieldName={'password'}/>
-                  <CustomInputCheckbox formType={'FORM_LOGIN'} fieldName={'remember'}/>
-
-                  <div className="form-group" onClick={() => this.props.requestLogin()}>
-                    <button className="btn btn-common btn-login">Đăng nhập</button>
+                  {FORM_LOGIN.fields.map((v, idx) => {
+                      const data = {
+                        fieldType: v.fieldType,
+                        formType: FORM_LOGIN.id,
+                        fieldName: v.fieldName,
+                        fieldsDefines: FORM_LOGIN.fields
+                      };
+                      return (
+                        <CustomInput key={idx} {...data}/>
+                      );
+                    }
+                  )}
+                  <div className="form-group">
+                    <button className="btn btn-common btn-login"
+                            onClick={() => this.props.requestLogin()}
+                    >Đăng nhập
+                    </button>
                   </div>
                   <div className="form-group">
                     <a className="btn-link" href="#">Quên mật khẩu</a>

@@ -48,7 +48,7 @@ export class EditData extends React.Component<IEditDataProp> {
                 fieldType: v.fieldType,
                 formType: FORM_MANAGER_CLASS.EDIT_FORM.id,
                 fieldName: v.fieldName,
-                formDefines: FORM_MANAGER_CLASS
+                fieldsDefines: FORM_MANAGER_CLASS.EDIT_FORM.fields
               };
               return (
                 <CustomInput key={idx} {...data}/>

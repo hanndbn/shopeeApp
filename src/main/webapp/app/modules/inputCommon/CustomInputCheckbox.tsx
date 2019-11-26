@@ -13,7 +13,7 @@ import cn from 'classnames';
 export interface ICustomInputCheckbox extends StateProps, DispatchProps {
   formType: any;
   fieldName: any;
-  formDefines: any;
+  fieldsDefines: any;
   setInputValue: Function;
   validateInputValue: Function;
 }
@@ -24,9 +24,9 @@ export class CustomInputCheckbox extends React.Component<ICustomInputCheckbox> {
   }
 
   render() {
-    const { formType, fieldName, inputValue, formDefines = {} } = this.props;
-    if (!formType || !fieldName || !formDefines[ formType ] || !formDefines[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
-    const formDefine = formDefines[ formType ].fields.find(v => v.fieldName === fieldName);
+    const { formType, fieldName, inputValue, fieldsDefines = {} } = this.props;
+    if (!formType || !fieldName || !fieldsDefines.find(v => v.fieldName === fieldName)) return null;
+    const formDefine = fieldsDefines.find(v => v.fieldName === fieldName);
     const {
       classWrapper = '',
       label = '',

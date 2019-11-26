@@ -2,7 +2,8 @@ import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util'
 // import { BASE_IMG_URL, GET_LOGIN_DATA } from 'app/config/constants';
 import axios from 'axios';
 import { validateForm } from 'app/modules/inputCommon/inputCommon.reducer';
-import { FORM_DEFINE } from 'app/config/constants';
+import { REQUEST_API } from 'app/config/constants';
+import { FORM_LOGIN } from 'app/modules/login/formDefine';
 
 const ACTION_TYPES = {
   GET_LOGIN_DATA: 'Login/GET_LOGIN_DATA',
@@ -56,12 +57,26 @@ export default (state: LoginState = initialState, action): LoginState => {
 };
 
 export const requestLogin = () => async (dispatch, getState) => {
-  const isValid = await dispatch(validateForm('FORM_LOGIN', FORM_DEFINE.FORM_LOGIN));
+  const isValid = await dispatch(validateForm(FORM_LOGIN.id, FORM_LOGIN.fields));
   if (isValid) {
-    await dispatch({
-      type: ACTION_TYPES.GET_LOGIN_DATA,
-      payload: axios.get(``)
-    });
+    const formInputValue = getState().inputCommon.inputValue[ FORM_LOGIN.id ];
+    FORM_LOGIN.fields.filter(v => !formInputValue.hasOwnProperty(v.fieldName))
+      .map(v => {
+        formInputValue[ v.fieldName ] = '';
+      });
+    axios({
+      method: 'POST',
+      url: REQUEST_API.LOGIN_API,
+      data: formInputValue
+    })
+      .then(response => {
+        console.log('success');
+        // handle success
+      })
+      .catch(error => {
+        // handle error
+        console.log('false');
+      });
   }
 };
 

@@ -145,57 +145,9 @@ export const DEFAULT_FORM_DATA = {
     }
   ]
 };
-export const FORM_DEFINE = {
-  FORM_LOGIN: {
-    id: 'FORM_LOGIN',
-    fields: [
-      {
-        fieldName: 'userName',
-        fieldType: CONSTANTS.FORM_TYPE.TEXT,
-        classWrapper: 'col-12',
-        label: 'Tên đăng nhập',
-        labelClass: 'col-12 text-center mb-1',
-        inputType: 'text',
-        inputName: 'userName',
-        inputClass: 'col-12',
-        inputPlaceHolder: '',
-        inputMaxLength: 32,
-        required: true,
-        validPattern: CONSTANTS.FORM_PATTERN.NAME,
-        invalidPattern: CONSTANTS.FORM_PATTERN.SPECIAL_SYMBOL,
-        typingPattern: '',
-        invalidMessage: CONSTANTS.FORM_ERROR.NAME_ERROR
-      },
-      {
-        fieldName: 'password',
-        fieldType: CONSTANTS.FORM_TYPE.TEXT,
-        classWrapper: 'col-12',
-        label: 'Mật Khẩu',
-        labelClass: 'col-12 text-center mb-1',
-        inputType: 'password',
-        inputName: 'password',
-        inputClass: 'col-12',
-        inputPlaceHolder: '',
-        inputMaxLength: 32,
-        required: true,
-        validPattern: CONSTANTS.FORM_PATTERN.PASSWORD_2,
-        invalid_msg: CONSTANTS.FORM_ERROR.PASSWORD_ERROR
-      },
-      {
-        fieldName: 'remember',
-        fieldType: CONSTANTS.FORM_TYPE.CHECKBOX,
-        classWrapper: 'col-12 mt-2',
-        label: 'Lưu lại mật khẩu',
-        labelClass: '',
-        isRevertLabel: false,
-        inputName: 'remember',
-        inputClass: ''
-      }
-    ]
-  }
-};
 
 export const REQUEST_API = {
+  LOGIN_API: 'http://171.244.0.59:3000/api/users/login',
   GET_MANAGER_CLASS_DATA: 'http://171.244.0.59:3000/api/classes/info',
   GET_MANAGER_CLASS_DETAIL: 'http://171.244.0.59:3000/api/classes',
   GET_TEACHER_MANAGER: 'http://171.244.0.59:3000/api/teacher/getBySchoolId'

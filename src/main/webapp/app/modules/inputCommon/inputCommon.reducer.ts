@@ -136,7 +136,7 @@ export const validateForm = (formType, formDefine, isOnlyCheck = false) => async
       (field.invalidPattern && new RegExp(field.invalidPattern).test(fieldValue))
     ) {
       validData = false;
-      errorMessage = field.invalid_msg;
+      errorMessage = field.invalidMessage;
     }
     dispatch(setInvalidField(formType, field.fieldName, errorMessage));
   });
