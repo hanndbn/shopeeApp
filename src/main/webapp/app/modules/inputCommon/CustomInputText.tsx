@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router-dom';
 import cn from 'classnames';
-import { CONSTANTS, FORM_DEFINE } from 'app/config/constants';
+import { CONSTANTS } from 'app/config/constants';
 import * as inputCommonAction from 'app/modules/inputCommon/inputCommon.reducer';
 
 // import { getCategory } from "app/shared/reducers/category";
@@ -14,6 +14,7 @@ export interface ICustomInputTextProp extends StateProps, DispatchProps {
   formType: any;
   fieldName: any;
   isReadOnly: any;
+  formDefines: any;
   setInputValue: Function;
   validateInputValue: Function;
 }
@@ -24,9 +25,9 @@ export class CustomInputText extends React.Component<ICustomInputTextProp> {
   }
 
   render() {
-    const { formType, fieldName, inputValue, invalidFields } = this.props;
-    if (!formType || !fieldName || !FORM_DEFINE[ formType ] || !FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
-    const formDefine = FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName);
+    const { formType, fieldName, inputValue, invalidFields, formDefines = {} } = this.props;
+    if (!formType || !fieldName || !formDefines[ formType ] || !formDefines[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
+    const formDefine = formDefines[ formType ].fields.find(v => v.fieldName === fieldName);
     const {
       classWrapper = '',
       label = '',

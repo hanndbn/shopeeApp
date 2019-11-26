@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router-dom';
-import { FORM_DEFINE } from 'app/config/constants';
+// import { FORM_DEFINE } from 'app/config/constants';
 import * as inputCommonAction from 'app/modules/inputCommon/inputCommon.reducer';
 import cn from 'classnames';
 
@@ -13,6 +13,7 @@ import cn from 'classnames';
 export interface ICustomInputCheckbox extends StateProps, DispatchProps {
   formType: any;
   fieldName: any;
+  formDefines: any;
   setInputValue: Function;
   validateInputValue: Function;
 }
@@ -23,9 +24,9 @@ export class CustomInputCheckbox extends React.Component<ICustomInputCheckbox> {
   }
 
   render() {
-    const { formType, fieldName, inputValue } = this.props;
-    if (!formType || !fieldName || !FORM_DEFINE[ formType ] || !FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
-    const formDefine = FORM_DEFINE[ formType ].fields.find(v => v.fieldName === fieldName);
+    const { formType, fieldName, inputValue, formDefines = {} } = this.props;
+    if (!formType || !fieldName || !formDefines[ formType ] || !formDefines[ formType ].fields.find(v => v.fieldName === fieldName)) return null;
+    const formDefine = formDefines[ formType ].fields.find(v => v.fieldName === fieldName);
     const {
       classWrapper = '',
       label = '',

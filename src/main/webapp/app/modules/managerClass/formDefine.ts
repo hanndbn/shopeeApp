@@ -2,11 +2,11 @@ import { CONSTANTS } from 'app/config/constants';
 
 export const FORM_MANAGER_CLASS = {
   LISTING_FORM: {
-    id: 'FORM_MANAGER_CLASS_LISTING',
+    id: 'LISTING_FORM',
     fields: []
   },
   EDIT_FORM: {
-    id: 'FORM_MANAGER_CLASS_EDITING',
+    id: 'EDIT_FORM',
     fields: [
       {
         fieldName: 'idSchool',

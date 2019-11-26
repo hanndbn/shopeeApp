@@ -14,11 +14,22 @@ export const AUTHORITIES = {
   USER: 'ROLE_USER'
 };
 
-export const messages = {
+export const MESSAGES = {
   DATA_ERROR_ALERT: 'Internal Error',
+  CANCEL_BTN_LABEL: 'Cancel',
+  OK_BTN_LABEL: 'OK',
+  DELETE_BTN_LABEL: 'Delete',
   SUCCESS: 'Success',
   ERROR: 'Error',
-  Warning: 'Warning'
+  WARNING: 'Warning',
+  ADD_RECORD_SUCCESS: 'Thêm mới bản ghi thành công!',
+  EDIT_RECORD_SUCCESS: 'Cập nhật bản ghi thành công!',
+  DELETE_RECORD_SUCCESS: 'Xóa bản ghi thành công!',
+  ADD_RECORD_ERROR: 'Có lỗi xảy ra trong quá trình thêm mới bản ghi!',
+  EDIT_RECORD_ERROR: 'Có lỗi xảy ra trong quá trình cập nhật bản ghi!',
+  DELETE_RECORD_ERROR: 'Có lỗi xảy ra trong quá trình xóa bản ghi!',
+  DELETE_WARNING: '',
+  DELETE_MESSAGE: 'Bạn có chắc chắn muốn xóa bản ghi này?'
 };
 export const CONSTANTS = {
     LIST_ROLE: {

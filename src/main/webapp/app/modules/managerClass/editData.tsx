@@ -4,7 +4,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router';
-import { FORM_DEFINE } from 'app/config/constants';
 import CustomInput from 'app/modules/inputCommon/CustomInput';
 import * as managerClassAction from 'app/modules/managerClass/managerClass.reducer';
 import { FORM_MANAGER_CLASS } from 'app/modules/managerClass/formDefine';
@@ -48,7 +47,8 @@ export class EditData extends React.Component<IEditDataProp> {
               const data = {
                 fieldType: v.fieldType,
                 formType: FORM_MANAGER_CLASS.EDIT_FORM.id,
-                fieldName: v.fieldName
+                fieldName: v.fieldName,
+                formDefines: FORM_MANAGER_CLASS
               };
               return (
                 <CustomInput key={idx} {...data}/>
@@ -63,7 +63,7 @@ export class EditData extends React.Component<IEditDataProp> {
               </button>
               <button className="btn edit-action-btn edit-action-submit"
                       onClick={() => this.props.submitData()}
-              >Lưu
+              >{this.props.match.params.activeId ? 'Cập nhật' : 'Thêm'}
               </button>
             </div>
           </div>
@@ -86,7 +86,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     await dispatch(managerClassAction.requestManagerClassDetailData(activeId));
   },
   submitData: () => {
-    dispatch(managerClassAction.submitData(history));
+    dispatch(managerClassAction.submitData(ownProps.history));
   }
 });
 

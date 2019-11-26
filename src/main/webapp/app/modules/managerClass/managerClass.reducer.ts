@@ -1,8 +1,10 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 import axios from 'axios';
-import { REQUEST_API } from 'app/config/constants';
+import { MESSAGES, REQUEST_API } from 'app/config/constants';
 import { clearForm, copyDataToInput, copyRequireDataToInput, validateForm } from 'app/modules/inputCommon/inputCommon.reducer';
 import { FORM_MANAGER_CLASS } from 'app/modules/managerClass/formDefine';
+import { successLayout } from 'app/shared/InfoModal/modalLayout';
+import { setDisplayModal, setModalContent } from 'app/shared/InfoModal/infoModal.reducer';
 // import { BASE_IMG_URL, GET_MANAGER_CLASS_DATA } from 'app/config/constants';
 
 const ACTION_TYPES = {
@@ -183,15 +185,45 @@ export const submitData = history => async (dispatch, getState) => {
     })
       .then(response => {
         // handle success
-        console.log(response);
+        dispatch(setModalContent(successLayout(() => {
+          history.goBack();
+        }, {
+          title: MESSAGES.SUCCESS,
+          message: existedId ? MESSAGES.EDIT_RECORD_SUCCESS : MESSAGES.ADD_RECORD_SUCCESS
+        })));
+        dispatch(setDisplayModal(true));
       })
       .catch(error => {
         // handle error
-        console.log(error);
+        dispatch(setModalContent(successLayout(() => null, {
+          title: '',
+          message: existedId ? MESSAGES.EDIT_RECORD_ERROR : MESSAGES.ADD_RECORD_ERROR
+        })));
+        dispatch(setDisplayModal(true));
       });
-  } else {
-    console.log('data invalid');
   }
+};
+
+export const deleteData = (id, history) => async (dispatch, getState) => {
+  axios.delete(`${REQUEST_API.GET_MANAGER_CLASS_DETAIL}/${id}`).then(response => {
+    // handle success
+    dispatch(setModalContent(successLayout(() => {
+      dispatch(requestManagerClassData());
+    }, {
+      title: MESSAGES.SUCCESS,
+      message: MESSAGES.DELETE_RECORD_SUCCESS
+    })));
+    dispatch(setDisplayModal(true));
+  })
+    .catch(error => {
+      // handle error
+      dispatch(setModalContent(successLayout(() => null, {
+        title: '',
+        message: MESSAGES.DELETE_RECORD_ERROR,
+        labelConfirmBtn: MESSAGES.OK_BTN_LABEL
+      })));
+      dispatch(setDisplayModal(true));
+    });
 };
 
 export const clearManagerClassData = () => ({
