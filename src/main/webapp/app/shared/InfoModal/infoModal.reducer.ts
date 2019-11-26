@@ -1,4 +1,4 @@
-import { WarningLayout } from 'app/shared/InfoModal/modalLayout';
+import { warningLayout } from 'app/shared/InfoModal/modalLayout';
 
 const ACTION_TYPES = {
   RESET: 'infoModal/RESET',
@@ -56,6 +56,6 @@ export const setModalContent = (modalContent, extendClass = '', toggleModal = tr
 });
 
 export const displayConfirmDeleteModal = (callback = null) => (dispatch, getState) => {
-  dispatch(setModalContent(WarningLayout()));
+  dispatch(setModalContent(warningLayout()));
   dispatch(setDisplayModal(true));
 };

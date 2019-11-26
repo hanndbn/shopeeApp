@@ -182,4 +182,15 @@
       }
     }
   }
+
+  .custom-btn-cancel{
+    font-size: 14px;
+    min-width: 100px;
+    background-color: rgba(186, 192, 198, 0.68);
+    color: black;
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+  }
 }

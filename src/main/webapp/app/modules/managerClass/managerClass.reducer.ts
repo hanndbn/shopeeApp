@@ -1,7 +1,8 @@
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 import axios from 'axios';
-import { FORM_DEFINE, REQUEST_API } from 'app/config/constants';
+import { REQUEST_API } from 'app/config/constants';
 import { clearForm, copyDataToInput, copyRequireDataToInput, validateForm } from 'app/modules/inputCommon/inputCommon.reducer';
+import { FORM_MANAGER_CLASS } from 'app/modules/managerClass/formDefine';
 // import { BASE_IMG_URL, GET_MANAGER_CLASS_DATA } from 'app/config/constants';
 
 const ACTION_TYPES = {
@@ -137,20 +138,20 @@ export const requestManagerClassData = () => (dispatch, getState) => {
 };
 
 export const requestManagerClassDetailData = activeId => async (dispatch, getState) => {
-  await dispatch(clearForm(FORM_DEFINE.FORM_MANAGER_CLASS.id));
+  await dispatch(clearForm(FORM_MANAGER_CLASS.EDIT_FORM.id));
   if (activeId) {
     await dispatch({
       type: ACTION_TYPES.GET_MANAGER_CLASS_DETAIL_DATA,
       payload: axios.get(`${REQUEST_API.GET_MANAGER_CLASS_DETAIL}/${activeId}`)
     });
     const managerClassDetail = getState().managerClass.managerClassDetail;
-    await dispatch(copyDataToInput(FORM_DEFINE.FORM_MANAGER_CLASS.id, managerClassDetail));
+    await dispatch(copyDataToInput(FORM_MANAGER_CLASS.EDIT_FORM.id, managerClassDetail));
   }
   const school = getState().userInfo.schools ? getState().userInfo.schools[ 0 ] : {};
   const _idSchool = school._id ? school._id : '';
   const idSchool = school.id ? school.id : '';
   const nameSchool = school.name ? school.name : '';
-  dispatch(copyRequireDataToInput(FORM_DEFINE.FORM_MANAGER_CLASS.id, {
+  dispatch(copyRequireDataToInput(FORM_MANAGER_CLASS.EDIT_FORM.id, {
     _idSchool, idSchool, nameSchool
   }));
 };
@@ -167,10 +168,10 @@ export const getReferData = () => async (dispatch, getState) => {
 };
 
 export const submitData = history => async (dispatch, getState) => {
-  const isValid = await dispatch(validateForm(FORM_DEFINE.FORM_MANAGER_CLASS.id, FORM_DEFINE.FORM_MANAGER_CLASS.fields));
+  const isValid = await dispatch(validateForm(FORM_MANAGER_CLASS.EDIT_FORM.id, FORM_MANAGER_CLASS.EDIT_FORM.fields));
   if (isValid) {
-    const formInputValue = getState().inputCommon.inputValue[ FORM_DEFINE.FORM_MANAGER_CLASS.id ];
-    FORM_DEFINE.FORM_MANAGER_CLASS.fields.filter(v => !formInputValue.hasOwnProperty(v.fieldName))
+    const formInputValue = getState().inputCommon.inputValue[ FORM_MANAGER_CLASS.EDIT_FORM.id ];
+    FORM_MANAGER_CLASS.EDIT_FORM.fields.filter(v => !formInputValue.hasOwnProperty(v.fieldName))
       .map(v => {
         formInputValue[ v.fieldName ] = '';
       });

@@ -7,6 +7,7 @@ import { withRouter } from 'react-router';
 import { FORM_DEFINE } from 'app/config/constants';
 import CustomInput from 'app/modules/inputCommon/CustomInput';
 import * as managerClassAction from 'app/modules/managerClass/managerClass.reducer';
+import { FORM_MANAGER_CLASS } from 'app/modules/managerClass/formDefine';
 
 // import { getCategory } from "app/shared/reducers/category";
 
@@ -43,10 +44,10 @@ export class EditData extends React.Component<IEditDataProp> {
           <div className="col-12 text-center edit-title">
             THÔNG TIN LỚP HỌC
           </div>
-          {FORM_DEFINE.FORM_MANAGER_CLASS.fields.map((v, idx) => {
+          {FORM_MANAGER_CLASS.EDIT_FORM.fields.map((v, idx) => {
               const data = {
                 fieldType: v.fieldType,
-                formType: FORM_DEFINE.FORM_MANAGER_CLASS.id,
+                formType: FORM_MANAGER_CLASS.EDIT_FORM.id,
                 fieldName: v.fieldName
               };
               return (
