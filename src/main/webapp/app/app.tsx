@@ -9,10 +9,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { IRootState } from 'app/shared/reducers';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import AppRoutes from 'app/routes';
-import Loader from 'app/shared/layout/loader/loader';
 import InfoModal from 'app/InfoModal/infoModal';
 import { getModalListing } from 'app/shared/common/common.reducer';
 import ReactGA from 'react-ga';
+import Loader from 'app/Loader/loader';
 
 export interface IAppProps extends StateProps, DispatchProps {
   location: any;
@@ -50,7 +50,7 @@ export class App extends React.Component<IAppProps> {
     return (
       <Router>
         <div className="site">
-          {displayLoading && <Loader/>}
+          <Loader isDisplay={displayLoading}/>
           {/*<ToastContainer position={toast.POSITION.TOP_LEFT as ToastPosition} className="toastify-container" toastClassName="toastify-toast" />*/}
           <div className="site-content">
             <div className="view-container" id="app-view-container">
@@ -66,8 +66,8 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ common }: IRootState) => ({
-  displayLoading: common.displayLoading
+const mapStateToProps = ({ common, home }: IRootState) => ({
+  displayLoading: common.displayLoading || home.loading
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

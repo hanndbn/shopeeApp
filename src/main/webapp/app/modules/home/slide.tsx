@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { IRootState } from 'app/shared/reducers';
 import { withRouter } from 'react-router';
-import { ELEMENT_TYPE, TITLE_HELMET } from 'app/config/constants';
+import { ELEMENT_TYPE } from 'app/config/constants';
 import { Helmet } from 'react-helmet';
 // import x2js from 'x2js';
 import * as homeAction from 'app/modules/home/home.reducer';
@@ -16,7 +16,7 @@ import * as infoModaAction from 'app/InfoModal/infoModal.reducer';
 import Hammer from 'hammerjs';
 import ImageSlide from 'app/modules/imageSlide/imageSlide';
 
-export interface IHomeProp extends StateProps, DispatchProps {
+export interface ISlideProp extends StateProps, DispatchProps {
   initScreen: Function;
   saveTrackingData: Function;
   setActiveSlideId: Function;
@@ -25,43 +25,33 @@ export interface IHomeProp extends StateProps, DispatchProps {
   displayModalUrl: Function;
   displayModalMedia: Function;
   endSessionAnalytic: Function;
+  setSlideFlipped: Function;
   location: any;
   match: any;
 }
 
-export class Home extends React.Component<IHomeProp, { input: any, content: any }> {
+export class Slide extends React.Component<ISlideProp> {
   private parentContainer: any = React.createRef();
   private hammer: any = null;
 
   constructor(props) {
     super(props);
-    window.addEventListener('beforeunload', ev => {
-      ev.preventDefault();
-      this.props.saveTrackingData();
-      this.props.endSessionAnalytic();
-      return null;
-    });
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    this.props.initScreen();
-    window.addEventListener('resize', this.updateWindowDimensions);
     this.hammer = Hammer(this.parentContainer.current);
     this.hammer.on('swipeleft', e => this.swipeLeft(e, this));
     this.hammer.on('swiperight', e => this.swipeRight(e, this));
   }
 
   componentWillUnmount() {
-    this.props.endSessionAnalytic();
-    window.removeEventListener('resize', this.updateWindowDimensions);
     this.hammer.off('swipeleft', this.swipeLeft);
     this.hammer.off('swiperight', this.swipeRight);
   }
 
   swipeLeft(e, _self) {
+    // console.log('left');
     if (_self.props.data) {
       const { relation, elements } = _self.props.data;
       const currentRelation = relation.find(v => v.source === _self.props.activeSlideId && v.target);
@@ -78,6 +68,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   swipeRight(e, _self) {
+    // console.log('right');
     if (_self.props.data) {
       const { relation, elements } = _self.props.data;
       const currentRelation = relation.find(v => v.target === _self.props.activeSlideId && v.source);
@@ -90,19 +81,6 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
         }
       }
     }
-  }
-
-  updateWindowDimensions() {
-    this.props.setWindowSize({ width: window.innerWidth, height: window.innerHeight - 4 });
-  }
-
-  getSnapshotBeforeUpdate(prevProps, prevState): any | null {
-    const preAppName = prevProps.match.params.appName ? prevProps.match.params.appName : '';
-    const currentAppName = this.props.match.params.appName ? this.props.match.params.appName : '';
-    if (preAppName !== currentAppName) {
-      this.props.initScreen(preAppName);
-    }
-    return null;
   }
 
   toTopHandle() {
@@ -309,7 +287,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   render() {
-    const { data, slide, activeSlideId, slideFlipped }: any = this.props;
+    const { data, activeSlideId, slideFlipped, slide }: any = this.props;
     return (
       <React.Fragment>
         <div
@@ -337,6 +315,25 @@ const mapStateToProps = ({ home, common }: IRootState) => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  initScreen: async (preAppName = null) => {
+    if (preAppName) {
+      dispatch(homeAction.endSessionAnalytic());
+    }
+    await dispatch(homeAction.reset());
+    await dispatch(homeAction.setWindowSize({ width: window.innerWidth, height: window.innerHeight }));
+    const appName = ownProps.match.params.appName ? ownProps.match.params.appName : '';
+    await dispatch(homeAction.requestHomeData(appName));
+    await dispatch(homeAction.setTimeStart(new Date()));
+  },
+  endSessionAnalytic: () => {
+    dispatch(homeAction.endSessionAnalytic());
+  },
+  setCurrentIdx: idx => {
+    dispatch(homeAction.setCurrentIdx(idx));
+  },
+  saveTrackingData: () => {
+    dispatch(homeAction.saveTrackingData());
+  },
   setActiveSlideId: async id => {
     await dispatch(homeAction.setActiveSlideId(id));
     await dispatch(homeAction.saveTrackingData());
@@ -365,4 +362,4 @@ type DispatchProps = typeof mapDispatchToProps;
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Home));
+)(Slide));

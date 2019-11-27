@@ -63,6 +63,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   swipeLeft(e, _self) {
+    // console.log('left');
     if (_self.props.data) {
       const { relation, elements } = _self.props.data;
       const currentRelation = relation.find(v => v.source === _self.props.activeSlideId && v.target);
@@ -79,6 +80,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   swipeRight(e, _self) {
+    // console.log('right');
     if (_self.props.data) {
       const { relation, elements } = _self.props.data;
       const currentRelation = relation.find(v => v.target === _self.props.activeSlideId && v.source);
