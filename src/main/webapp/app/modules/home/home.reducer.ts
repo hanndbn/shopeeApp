@@ -352,6 +352,7 @@ export const getStyle = (slide, slideStyle) => {
   let style: any = {};
   const isMediaContent = isMedia(slideStyle['type']);
   const isImageSlide = slideStyle['type'] === ELEMENT_TYPE.IMAGE_SLIDE;
+  const isSocial = slideStyle['type'] === ELEMENT_TYPE.SOCIAL;
   let linkOpenInModal = false;
   if (isMediaContent) {
     linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
@@ -363,7 +364,8 @@ export const getStyle = (slide, slideStyle) => {
     border: slideStyle['strokeColor'] === 'none'
     || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE
     || (isMediaContent && !linkOpenInModal)
-    || isImageSlide ?
+    || isImageSlide
+    || isSocial ?
       '' : `1px solid ${getColorWithOpacity('#000000', opacityHex)}`,
     width: slide['width'],
     height: slide['height'],

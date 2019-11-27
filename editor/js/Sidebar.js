@@ -886,26 +886,26 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   var fns1 = [
     this.createVertexTemplateEntry('type=CARD;isConnectable=1;container=1;rounded=0;whiteSpace=wrap;html=1;', 225, 400, '', 'Slide', false, false, 'slide container', {
       id: 'add-container-icon',
-      imageId: 'BASIC/SLIDE.png'
+      imageId: 'img/SLIDE.png'
     }),
     this.createVertexTemplateEntry('type=RECTANGLE;rounded=0;isConnectable=1;whiteSpace=wrap;html=1;', 120, 60, '', 'Rectangle', false, false, 'rect rectangle box', {
       id: 'add-rectangle-icon',
-      imageId: 'BASIC/RECTANGLE.png'
+      imageId: 'img/RECTANGLE.png'
     }),
     this.createVertexTemplateEntry('type=TEXT;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
       40, 20, 'Text', 'Text', false, false, 'text textbox textarea label', {
         id: 'add-text-icon',
-        imageId: 'BASIC/TEXT.png'
+        imageId: 'img/TEXT.png'
       }),
     this.createVertexTemplateEntry('type=LINK;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;',
       40, 20, 'Link', 'LINK', false, false, 'link', {
         id: 'add-link-icon',
-        imageId: 'BASIC/LINK.png'
+        imageId: 'img/LINK.png'
       }),
     this.createVertexTemplateEntry('type=IMAGE;isConnectable=1;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;',
       207, 138, '', '', false, false, 'image', {
         id: 'add-image-icon',
-        imageId: 'BASIC/IMAGE.png'
+        imageId: 'img/IMAGE.png'
       }),
     this.createVertexTemplateEntry('type=IMAGE_SLIDE;rounded=0;whiteSpace=wrap;html=1;', 120, 60, '', 'Image Slide', false, false, 'image slide', {
       id: 'add-image-slide-icon',
@@ -914,12 +914,12 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
     this.createVertexTemplateEntry('type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;',
       225, 400, 'Game', 'Game', false, false, 'game', {
         id: 'add-game-icon',
-        imageId: 'BASIC/GAME.png'
+        imageId: 'img/GAME.png'
       }),
     this.createVertexTemplateEntry('type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/BASIC/HOME.svg;',
       20, 20, '', '', false, false, 'image', {
         id: 'add-home-icon',
-        imageId: 'BASIC/HOME.png'
+        imageId: 'img/HOME.png'
       })
   ];
 
@@ -972,7 +972,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
             100, 40, modalType.group_name, modalType.group_name, false, false, modalType.group_name,
             {
               id: `add-modal-${modalType.group_key}`,
-              imageId: `${modalType.group_key}/${modalType.group_key}.png`
+              imageId: `img/${modalType.group_key}.png`
             }
           ));
       } else {
@@ -982,7 +982,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
               100, 40, modalTypeDetail.name, modalTypeDetail.name, false, false, 'button',
               {
                 id: `add-modal-${modalType.group_key}-${modalTypeDetail.key}`,
-                imageId: `${modalType.group_key}/${modalTypeDetail.key}.png`
+                imageId: `img/${modalTypeDetail.key}.png`
               }
             ));
         });
