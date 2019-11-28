@@ -4390,9 +4390,9 @@ CustomSocialFormatPanel.prototype.init = function() {
 
   const shareSocial = ss.style.shareSocial ? ss.style.shareSocial : '';
   const shareSocialList = shareSocial ? shareSocial.split(',') : [];
+  const shareLink = shareSocialList.includes('link');
   const shareFacebook = shareSocialList.includes('facebook');
   const shareTwitter = shareSocialList.includes('twitter');
-  const shareGoogle = shareSocialList.includes('google');
   const sharePinterest = shareSocialList.includes('pinterest');
   const socialContainer = document.createElement('div');
   socialContainer.innerHTML = `
@@ -4413,16 +4413,16 @@ CustomSocialFormatPanel.prototype.init = function() {
             <label class="form-check-label" for="format-link-open-in-modal">Share in Twitter</label>
         </div>
         <div class="form-check w-100 d-flex mb-2">
-            <div class="custom-select-box mr-2 select-option pointer-event"  data-social="google">
-                <span class="${shareGoogle ? 'checkmark' : ''}"/>
-            </div>
-            <label class="form-check-label" for="format-link-open-in-modal">Share in Google+</label>
-        </div>
-        <div class="form-check w-100 d-flex mb-2">
             <div class="custom-select-box mr-2 select-option"  data-social="pinterest">
                 <span class="${sharePinterest ? 'checkmark' : ''}"/>
             </div>
             <label class="form-check-label" for="format-link-open-in-modal">Share in Pinterest</label>
+        </div>
+        <div class="form-check w-100 d-flex mb-2">
+            <div class="custom-select-box mr-2 select-option pointer-event"  data-social="link">
+                <span class="${shareLink ? 'checkmark' : ''}"/>
+            </div>
+            <label class="form-check-label" for="format-link-open-in-modal">Copy Link</label>
         </div>
     </div>
   </div>
