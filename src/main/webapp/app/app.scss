@@ -4,19 +4,10 @@
 @import "~bootstrap/scss/bootstrap";
 @import "style/styles";
 @import "style/styles_common";
-@import "style/font/fontawesome-pro-5.0.13/css/all.css";
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 @import '~elegant-icons/style.css';
 @import '~rc-slider/assets/index.css';
-
-body {
-  font-family: "futurastd-bold", sans-serif;
-  font-weight: 400;
-  color: #2d2d2d;
-  background: white;
-  margin: 0;
-}
 
 body,
 h1,
