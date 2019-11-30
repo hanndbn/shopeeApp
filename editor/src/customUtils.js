@@ -1,8 +1,8 @@
 var customUtils = {
-  setCellStyles: function(graph, attrs) {
+  setCellStyles: function(graph, attrs, cell = null) {
     if (!graph || !attrs) return;
     const select = null;
-    const cells = graph.getSelectionCells();
+    const cells = cell ? [cell] : graph.getSelectionCells();
     graph.getModel().beginUpdate();
     try {
       Object.keys(attrs).map(key => {

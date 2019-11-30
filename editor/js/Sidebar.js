@@ -916,7 +916,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-game-icon',
         imageId: 'img/GAME.png'
       }),
-    this.createVertexTemplateEntry('type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/BASIC/HOME.svg;',
+    this.createVertexTemplateEntry('type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/HOME.svg;',
       20, 20, '', '', false, false, 'image', {
         id: 'add-home-icon',
         imageId: 'img/HOME.png'

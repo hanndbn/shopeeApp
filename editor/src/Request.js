@@ -1,5 +1,6 @@
 var modalFormListing = [];
 var filesListing = {};
+var editorUiGlobal = {};
 $(document).ready(function() {
   // requestModalListing();
   requestFilesWithType("hannd", "image");

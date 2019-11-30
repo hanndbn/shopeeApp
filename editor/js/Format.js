@@ -4086,7 +4086,7 @@ CustomCardFormatPanel.prototype.init = function() {
             <div class="font-size-wrapper">
                 <div class="">Height</div> 
                 <input type="text" maxlength="4" class="" value="${height}" id="input-height"/>
-                <div class="input-unit">%</div>
+                <div class="input-unit">px</div>
             </div>
             </div>
         </div>
@@ -4179,8 +4179,6 @@ CustomRectangleFormatPanel.prototype.init = function() {
   // border type
   let borderType = ss.style.borderType ? ss.style.borderType : '';
   let strokeColor = ss.style.strokeColor ? ss.style.strokeColor : 'none';
-  console.log(ss.style.strokeColor);
-  console.log(strokeColor);
   const dashed = ss.style.dashed ? ss.style.dashed : '';
   const dashPattern = ss.style.dashPattern ? ss.style.dashPattern : '';
   if (strokeColor === 'none') {
@@ -5735,15 +5733,15 @@ CustomDiagramFormatPanel.prototype.init = function() {
   diagramContainer.innerHTML = `
   <div class="format-image-wrapper format-diagram-wrapper">
     <div class="row no-gutters tab-header-wrapper nav" role="tablist">
-        <div class="nav-item nav-link col-6 tab-header-content active" id="inspector-tab" data-toggle="tab" href="#inspector" role="tab" aria-controls="inspector" aria-selected="true">Inspector</div>
-        <div class="nav-item nav-link col-6 tab-header-content" id="layer-tab"  data-toggle="tab" href="#layer" role="tab" aria-controls="layer" aria-selected="false">Layer</div>
-    </div>  
+        <div class="nav-item nav-link col-6 tab-header-content" id="inspector-tab" data-toggle="tab" href="#inspector" role="tab" aria-controls="inspector" aria-selected="true">Inspector</div>
+        <div class="nav-item nav-link col-6 tab-header-content active" id="layer-tab"  data-toggle="tab" href="#layer" role="tab" aria-controls="layer" aria-selected="false">Layer</div>
+    </div>
     <div class="format-link-wrapper row no-gutters">
         <div class="tab-content w-100">
-              <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="inspector-tab" id="inspector">
+                <div class="tab-pane fade" role="tabpanel" aria-labelledby="inspector-tab" id="inspector">
                     <div class="format-image-header g-margin-top-20 g-font-weight-400">Inspector Editor</div>
                 </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="layer-tab" id="layer">
+                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="layer-tab" id="layer">
                     <div class="format-image-header g-margin-top-20 g-font-weight-400">Layer Editor</div>
                     <div class="g-margin-top-20" id="format-layer-content"></div>
                 </div>  
@@ -5753,25 +5751,58 @@ CustomDiagramFormatPanel.prototype.init = function() {
   `;
   // console.log(graph.pageFormat);
   if (graph.isEnabled()) {
-    const cells = graph.getAllCells(0, 0, 1000000, 1000000);
+    const cells = graph.getModel().cells ? graph.getModel().cells : [];
     const content = document.createElement('div');
-    cells.forEach(function(cell) {
+
+    // add header
+    const header = document.createElement('div');
+    header.innerHTML = `
+    <div class="row no-gutters layer-card-wrapper header">
+            <div class="col-3 text-center">Fist Card</div>
+            <div class="col-6 text-center">Card Id</div>
+            <div class="col-3 text-center">Action </div>
+        </div>
+    `;
+    content.appendChild(header);
+    Object.keys(cells).map((k) => {
+      const cell = cells[k];
       const cellInfo = _self.format.getCellInfo(cell);
       if (cellInfo.style.type === 'CARD') {
+        const isFirstCard = cellInfo.style.isFirstCard === 1;
         const cellContent = document.createElement('div');
         cellContent.innerHTML = `
         <div class="row no-gutters layer-card-wrapper">
-            <div class="col-9 layer-card-id">Card ${cell.id}</div>
-            <div class="col-3 layer-card-close" data-id="${cell.id}">Delete</div>
+            <div class="col-3 layer-cart-first-slide d-flex justify-content-center align-items-center">
+                <div class="custom-input-checkbox ${isFirstCard ? 'checked' : ''}" data-id="${cell.id}"></div>
+            </div>
+            <div class="col-6 layer-card-id text-center">Card ${cell.id}</div>
+            <div class="col-3 layer-card-close d-flex justify-content-center align-items-center" data-id="${cell.id}">Delete</div>
         </div>
       `;
         content.appendChild(cellContent);
       }
     });
 
+    $(content.querySelectorAll('.custom-input-checkbox')).click(function(e) {
+      Object.keys(cells).map((k) => {
+        const cell = cells[k];
+        const cellInfo = _self.format.getCellInfo(cell);
+        const isFirstCard = cellInfo.style.isFirstCard === 1;
+        if (cell.id === this.dataset.id && !isFirstCard) {
+          customUtils.setCellStyles(graph, { isFirstCard: '1', strokeColor: '#FF0000' }, cell);
+        } else {
+          customUtils.setCellStyles(graph, { isFirstCard: null, strokeColor: null }, cell);
+        }
+      });
+    });
+
     $(content.querySelectorAll('.layer-card-close')).click(function(e) {
-      const deleteCell = cells.find(v => v.id === this.dataset.id);
-      customUtils.deleteCellWidthId(graph, deleteCell);
+      Object.keys(cells).map((k) => {
+        const cell = cells[k];
+        if (cell.id === this.dataset.id) {
+          customUtils.deleteCellWidthId(graph, cell);
+        }
+      });
     });
 
     const formatLayerContent = $(diagramContainer.querySelector('#format-layer-content'));

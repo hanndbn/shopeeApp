@@ -25,7 +25,7 @@ const ACTION_TYPES = {
 };
 
 const initialState = {
-  data: {},
+  data: [],
   activeSlideId: null,
   appId: null,
   slideFlipped: [],
@@ -144,25 +144,33 @@ export const requestHomeData = appName => (dispatch, getState) => {
     .then(async response => {
       // handle success
       const content = response.data.content ? response.data.content : '';
-      const doc = new DOMParser().parseFromString(content, 'text/xml');
-      if (doc) {
-        const node = doc.documentElement;
-        const data = {
-          root: {},
-          elements: [],
-          relation: []
-        };
-        await decode(node, data);
-        const firstSlide = data.elements.find(v => v.isFirstSlide);
-        await dispatch(setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null));
-        await dispatch({
-          type: SUCCESS(ACTION_TYPES.GET_HOME_DATA),
-          appId: response.data.appId,
-          data
-        });
-        dispatch(getExternalData(data.elements));
-        dispatch(createSessionAnalytic(response.data.appId));
+      const contentList = content.split('%;%');
+      const dataList = [];
+      contentList.map(async v => {
+        const doc = new DOMParser().parseFromString(v, 'text/xml');
+        if (doc) {
+          const node = doc.documentElement;
+          const data = {
+            root: {},
+            elements: [],
+            relation: []
+          };
+          await decode(node, data);
+          // await dispatch(getExternalData(data.elements));
+          dataList.push(data);
+        }
+      });
+      if (dataList.length > 0) {
+        const firstSlide = dataList[0].elements.find(v => v.isFirstSlide);
+        await dispatch(setActiveSlideId(firstSlide ? firstSlide.id : dataList[0].elements[0] ? dataList[0].elements[0].id : null));
       }
+
+      await dispatch({
+        type: SUCCESS(ACTION_TYPES.GET_HOME_DATA),
+        appId: response.data.appId,
+        data: dataList
+      });
+      dispatch(createSessionAnalytic(response.data.appId));
     })
     .catch(error => {
       // handle error

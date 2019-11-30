@@ -10,7 +10,6 @@
     <script type="text/javascript" src="static/js/uuid_v1@latest.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 
-    <link rel="stylesheet" href="static/css/md-bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Bootstrap core CSS -->
@@ -25,13 +24,6 @@
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
-<!--    <script type="text/javascript" src="static/js/md-bootstrap.min.js"></script>-->
-
-    <!-- One of the following themes -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
 
     <!-- Modern or es5 bundle -->
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
@@ -154,7 +146,7 @@
             themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
             // Main
-            new EditorUi(new Editor(urlParams["chrome"] == "0", themes));
+            editorUiGlobal = new EditorUi(new Editor(urlParams["chrome"] == "0", themes));
         }, function() {
             document.body.innerHTML = "<center style=\"margin-top:10%;\">Error loading resource files. Please check browser console.</center>";
         });

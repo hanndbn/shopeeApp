@@ -2,15 +2,15 @@ body div {
   white-space: normal;
 }
 
-.geSidebarContainer *,
-.geSidebarContainer *::before,
-.geSidebarContainer *::after,
-.geDialog,
-.geDialog *,
-.geDialog *::before,
-.geDialog *::after {
-  box-sizing: content-box;
-}
+/*.geSidebarContainer *,*/
+/*.geSidebarContainer *::before,*/
+/*.geSidebarContainer *::after,*/
+/*.geDialog,*/
+/*.geDialog *,*/
+/*.geDialog *::before,*/
+/*.geDialog *::after {*/
+  /*box-sizing: content-box;*/
+/*}*/
 
 .save-publish-panel-header {
   position: relative;
@@ -590,9 +590,14 @@ body div {
 .layer-card-wrapper {
   background-color: #bedee0;
   color: #343434;
-  padding: 5px 10px;
-  margin-bottom: 10px;
+  padding: 10px 10px;
+  /* margin-bottom: 10px; */
   font-size: 12px;
+  border-bottom: 1px solid #a6a6a6;
+}
+.layer-card-wrapper.header{
+  color: white;
+  background-color: #52a1a7;
 }
 
 .layer-card-close {
@@ -728,4 +733,29 @@ body div {
   padding-right: 30px;
   align-self: flex-end;
   flex: 1;
+}
+
+.custom-input-checkbox{
+  height: 18px;
+  width: 18px;
+  border: 1px solid gray;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.custom-input-checkbox.checked{
+  border-color: rgb(220, 0, 78);
+}
+
+.custom-input-checkbox.checked:after{
+  content: '';
+  width: 63%;
+  top: 3px;
+  height: 63%;
+  background-color: rgb(220, 0, 78);
+  position: absolute;
+  border-radius: 100%;
 }
