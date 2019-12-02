@@ -6,7 +6,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { IRootState } from 'app/shared/reducers';
 import { reset } from 'app/shared/common/common.reducer';
 import { connect } from 'react-redux';
-import { HEADER_LINK } from 'app/config/constants';
 
 export interface IHeaderProps {
   headerBackground: any;
@@ -50,22 +49,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
                     </span>
                   </button>
                   <div className="navbar-collapse collapse" id="navbarNav">
-                    <ul className="navbar-nav header-menu-wrapper">
-                      {
-                        HEADER_LINK.map((item, idx) =>
-                          <li className="nav-item active" key={idx}
-                              data-toggle="collapse"
-                              data-target="#navbarNav"
-                              aria-controls="navbarNav"
-                              aria-expanded="false"
-                          >
-                            <Link className="nav-link" to={item.pathname}>
-                              <span className="nav-text">{item.title}</span>
-                            </Link>
-                          </li>
-                        )
-                      }
-                    </ul>
+                    <ul className="navbar-nav header-menu-wrapper"/>
                   </div>
                 </nav>
               </div>

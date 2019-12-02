@@ -4527,7 +4527,6 @@ CustomPDMFormatPanel.prototype.init = function() {
       ]
     });
     customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
-    _self.format.refresh();
   });
 
   $(pdmContainer.querySelectorAll(".add-pack")).click(function(e) {
@@ -4541,7 +4540,6 @@ CustomPDMFormatPanel.prototype.init = function() {
       });
     }
     customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
-    _self.format.refresh();
   });
 
   $(pdmContainer.querySelectorAll(".delete-pack")).click(function(e) {
@@ -4553,7 +4551,7 @@ CustomPDMFormatPanel.prototype.init = function() {
       row.packs = row.packs.filter(v => v.packId !== packId);
     }
     customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
-    _self.format.refresh();
+    // _self.format.refresh();
   });
 
   $(pdmContainer.querySelectorAll(".pack-name")).change(function(e) {
@@ -4571,7 +4569,6 @@ CustomPDMFormatPanel.prototype.init = function() {
       }
     }
     customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
-    _self.format.refresh();
   });
 
   this.container.appendChild(pdmContainer);
