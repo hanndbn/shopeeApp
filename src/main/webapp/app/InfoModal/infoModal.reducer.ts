@@ -1,4 +1,4 @@
-import { modalMediaLayout, modalUrlLayout } from 'app/shared/util/util';
+import { modalMediaLayout, modalPDMLayoutError, modalPDMLayoutSuccess, modalUrlLayout } from 'app/shared/util/util';
 
 const ACTION_TYPES = {
   RESET: 'infoModal/RESET',
@@ -62,5 +62,15 @@ export const displayModalUrl = (url = '') => async (dispatch, getState) => {
 
 export const displayModalMedia = (type, content) => async (dispatch, getState) => {
   dispatch(setModalContent(modalMediaLayout(type, content)));
+  dispatch(setDisplayModal(true));
+};
+
+export const displayModalPDMSuccess = appName => async (dispatch, getState) => {
+  dispatch(setModalContent(modalPDMLayoutSuccess(appName)));
+  dispatch(setDisplayModal(true));
+};
+
+export const displayModalPDMError = () => async (dispatch, getState) => {
+  dispatch(setModalContent(modalPDMLayoutError()));
   dispatch(setDisplayModal(true));
 };

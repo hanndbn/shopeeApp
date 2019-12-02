@@ -361,7 +361,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                       (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/> :
                         isImageSlide ? <ImageSlide imageSlides={imageSlides}/> :
                           isSocial ? <Social shareSocialList={shareSocialList} width={style.widthValue}/> :
-                            isPDM ? <Pdm pdmInfo={pdmInfo}/> : ''
+                            isPDM ? <Pdm pdmInfo={pdmInfo} cardId={slide.id}/> : ''
                   }
                 </div> :
                 slide.value ?
