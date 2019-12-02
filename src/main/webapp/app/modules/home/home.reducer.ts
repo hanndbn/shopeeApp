@@ -181,7 +181,6 @@ export const requestHomeData = appName => (dispatch, getState) => {
                 && dataElement.elements.find(y => {
                   return x.target === y.id && y.style && y.style.indexOf('CARD') > -1;
                 }));
-              console.log(dataElement);
               if (relation) {
                 lastCard = relation.target;
               }
@@ -190,7 +189,6 @@ export const requestHomeData = appName => (dispatch, getState) => {
           }
           data.elements = [...data.elements, ...dataElement.elements];
           data.relation = [...data.relation, ...dataElement.relation];
-          console.log(data.elements);
         }
       });
       if (firstCardApp) {
@@ -393,6 +391,7 @@ export const getStyle = (slide, slideStyle) => {
   const isMediaContent = isMedia(slideStyle['type']);
   const isImageSlide = slideStyle['type'] === ELEMENT_TYPE.IMAGE_SLIDE;
   const isSocial = slideStyle['type'] === ELEMENT_TYPE.SOCIAL;
+  const isPDM = slideStyle['type'] === ELEMENT_TYPE.PERSONAL_DESIGN_MANAGER;
   let linkOpenInModal = false;
   if (isMediaContent) {
     linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
@@ -405,7 +404,8 @@ export const getStyle = (slide, slideStyle) => {
     || slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE
     || (isMediaContent && !linkOpenInModal)
     || isImageSlide
-    || isSocial ?
+    || isSocial
+    || isPDM ?
       '' : `1px solid ${getColorWithOpacity('#000000', opacityHex)}`,
     width: slide['width'],
     height: slide['height'],
