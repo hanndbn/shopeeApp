@@ -9,7 +9,7 @@ body div {
 /*.geDialog *,*/
 /*.geDialog *::before,*/
 /*.geDialog *::after {*/
-  /*box-sizing: content-box;*/
+/*box-sizing: content-box;*/
 /*}*/
 
 .save-publish-panel-header {
@@ -326,7 +326,7 @@ body div {
   border-bottom: none;
 }
 
-.format-image-slide-wrapper .format-image-content-wrapper{
+.format-image-slide-wrapper .format-image-content-wrapper {
   max-height: 200px;
 }
 
@@ -492,7 +492,7 @@ body div {
 }
 
 .font-size-wrapper input {
-  height: 1rem;
+  height: 1.5rem;
   border: none;
   border-bottom: 1px dotted gray;
   margin-left: 20px;
@@ -571,7 +571,6 @@ body div {
   color: white;
 }
 
-
 .format-diagram-wrapper .nav-link {
   height: auto;
   width: auto;
@@ -595,7 +594,8 @@ body div {
   font-size: 12px;
   border-bottom: 1px solid #a6a6a6;
 }
-.layer-card-wrapper.header{
+
+.layer-card-wrapper.header {
   color: white;
   background-color: #52a1a7;
 }
@@ -608,7 +608,6 @@ body div {
 .layer-card-id {
   text-align: left;
 }
-
 
 .g-margin-bottom-10 {
   margin-bottom: 10px;
@@ -735,7 +734,7 @@ body div {
   flex: 1;
 }
 
-.custom-input-checkbox{
+.custom-input-checkbox {
   height: 18px;
   width: 18px;
   border: 1px solid gray;
@@ -746,11 +745,11 @@ body div {
   position: relative;
 }
 
-.custom-input-checkbox.checked{
+.custom-input-checkbox.checked {
   border-color: rgb(220, 0, 78);
 }
 
-.custom-input-checkbox.checked:after{
+.custom-input-checkbox.checked:after {
   content: '';
   width: 63%;
   top: 3px;
@@ -758,4 +757,27 @@ body div {
   background-color: rgb(220, 0, 78);
   position: absolute;
   border-radius: 100%;
+}
+
+.pdm-input-wrapper.font-size-wrapper {
+  padding: 5px 0;
+}
+
+.pdm-input-wrapper.font-size-wrapper {
+  margin-left: 10px;
+}
+
+.pdm-input-wrapper.font-size-wrapper input {
+  border: 1px solid gray;
+  height: 2rem;
+  margin-left: 0;
+}
+
+.g-cursor-pointer {
+  cursor: pointer;
+}
+
+#add-row{
+  color: #03767e;
+  border-color: #52A1A7;
 }

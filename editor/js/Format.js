@@ -355,10 +355,14 @@ Format.prototype.refresh = function() {
       const imageSlidePanel = div.cloneNode(false);
       this.panels.push(new CustomImageSlideFormatPanel(this, ui, imageSlidePanel, 'image', 'image/*'));
       this.container.appendChild(imageSlidePanel);
-    } else if (this.getSelectionState().style.type === 'PDF') {
-      var filePanel = div.cloneNode(false);
-      this.panels.push(new CustomFileFormatPanel(this, ui, filePanel, 'pdf', 'application/pdf'));
-      this.container.appendChild(filePanel);
+    } else if (this.getSelectionState().style.type === 'IMAGE_SLIDE') {
+      const imageSlidePanel = div.cloneNode(false);
+      this.panels.push(new CustomImageSlideFormatPanel(this, ui, imageSlidePanel, 'image', 'image/*'));
+      this.container.appendChild(imageSlidePanel);
+    } else if (this.getSelectionState().style.type === 'PERSONAL_DESIGN_MANAGER') {
+      const pdmPanel = div.cloneNode(false);
+      this.panels.push(new CustomPDMFormatPanel(this, ui, pdmPanel));
+      this.container.appendChild(pdmPanel);
     } else if (this.getSelectionState().style.type === 'TEXT') {
       const textPanel = div.cloneNode(false);
       this.panels.push(new CustomTextFormatPanel(this, ui, textPanel));
@@ -4441,6 +4445,96 @@ CustomSocialFormatPanel.prototype.init = function() {
 };
 
 CustomSocialFormatPanel.prototype.destroy = function() {
+};
+
+CustomPDMFormatPanel = function(format, editorUi, container) {
+  CustomBaseFormatPanel.call(this, format, editorUi, container);
+  this.init();
+};
+
+CustomPDMFormatPanel.prototype.init = function() {
+  const ui = this.editorUi;
+  const editor = ui.editor;
+  const graph = editor.graph;
+  const ss = this.format.getSelectionState();
+  const _self = this;
+
+  let pdmInfo = ss.style.pdmInfo ? JSON.parse(ss.style.pdmInfo) : {};
+
+  const pdmContainer = document.createElement('div');
+  pdmContainer.innerHTML = `
+  <div class="format-image-wrapper">
+    <div class="format-image-header">Personal Design Manager Editor</div>  
+    <hr/>
+        <div id="add-row" class="btn g-cursor-pointer">
+                <img src="/content/images/editor/icons/import.png"/>
+                <span class="ml-2">Add row</span>
+          </div>
+    <div id="row-content" class="w-100">
+        
+    </div>
+  </div>
+  `;
+  $('#row-content').empty();
+  pdmInfo.map(v => {
+    $('#row-content')
+  });
+
+
+  $(pdmContainer.querySelector('#add-row')).click(function(e) {
+    const rowId = uuidv1();
+    const idx = $('#row-content>div').length + 1;
+    const rowContent = pdmContainer.querySelector('#row-content');
+    const packContent = document.createElement('div');
+    packContent.className = 'row no-gutters';
+    packContent.innerHTML = `
+      <div class="col-12">
+            <hr/>
+        </div>
+      <div class="col-6 pl-2 mb-2">Row ${idx}</div>
+      <div id="add-pack-${rowId}" class="col-6  mb-2"><span class="text-danger ml-2 ">Add pack</span></div>
+        <div class="col-12">
+            <div id="pack-detail-content-${rowId}" data-row="${idx}"></div>
+        </div>
+       
+      `;
+    $(packContent.querySelectorAll(`#add-pack-${rowId}`)).click(e => {
+      const packId = uuidv1();
+      const row = this.dataset.row;
+      const idx1 = $(`#pack-detail-content-${rowId}>div`).length + 1;
+      pdmInfo[packId] = {
+        packId: packId,
+        row: row
+      };
+      const packDetailContent = document.createElement('div');
+      packDetailContent.className = 'row no-gutters';
+      packDetailContent.innerHTML = `
+          <div class="col-8">
+                    <div class="input-box">
+                      <div class="font-size-wrapper pdm-input-wrapper">
+                          <input type="text" maxlength="4" class="form-control w-100 mr-3 text-left" value="pack ${idx1}" data-id="${packId}"/>
+                      </div>
+                    </div>
+                </div>
+          <div class="col-4 d-flex justify-content-center align-items-center">
+            <a class="far fa-edit mr-2" href="?appId=App24"></a>
+            <span class="far fa-trash-alt"></span>
+          </div>
+      `;
+      pdmContainer.querySelector(`#pack-detail-content-${rowId}`).appendChild(packDetailContent);
+      customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
+    });
+
+    rowContent.appendChild(packContent);
+  });
+
+  $(pdmContainer.querySelectorAll('.format-close')).click(function(e) {
+  });
+
+  this.container.appendChild(pdmContainer);
+};
+
+CustomPDMFormatPanel.prototype.destroy = function() {
 };
 
 /**

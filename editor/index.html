@@ -11,7 +11,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/content/font/fontawesome-pro/css/all.css">
     <!-- Bootstrap core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
@@ -31,11 +32,6 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
     <link rel="stylesheet" type="text/css" href="styles/customStyle.css">
-    <script type="text/javascript" src="src/Request.js"></script>
-    <script type="text/javascript" src="src/Constant.js"></script>
-    <script type="text/javascript" src="src/Modal.js"></script>
-    <script type="text/javascript" src="src/customUtils.js"></script>
-    <script type="text/javascript" src="src/CustomImplement.js"></script>
     <script type="text/javascript">
         // Parses URL parameters. Supported parameters are:
         // - lang=xy: Specifies the language of the user interface.
@@ -82,6 +78,13 @@
     <script type="text/javascript" src="js/Toolbar.js"></script>
     <script type="text/javascript" src="js/Dialogs.js"></script>
 
+
+    <script type="text/javascript" src="src/CustomInit.js"></script>
+    <script type="text/javascript" src="src/Request.js"></script>
+    <script type="text/javascript" src="src/Constant.js"></script>
+    <script type="text/javascript" src="src/Modal.js"></script>
+    <script type="text/javascript" src="src/customUtils.js"></script>
+    <script type="text/javascript" src="src/CustomImplement.js"></script>
 </head>
 <body class="geEditor">
 <div class="navContainer">
@@ -121,37 +124,6 @@
     <div id="editor-container"></div>
     <div id="custom-footer-container" class="custom-footer-container"></div>
 </div>
-<script type="text/javascript">
-    // Extends EditorUi to update I/O action states based on availability of backend
-    (function() {
-        var editorUiInit = EditorUi.prototype.init;
-
-        EditorUi.prototype.init = function() {
-            editorUiInit.apply(this, arguments);
-        };
-
-        // Adds required resources (disables loading of fallback properties, this can only
-        // be used if we know that all keys are defined in the language specific file)
-        mxResources.loadDefaultBundle = false;
-        var bundle = mxResources.getDefaultBundle(RESOURCE_BASE, mxLanguage) ||
-            mxResources.getSpecialBundle(RESOURCE_BASE, mxLanguage);
-
-        // Fixes possible asynchronous requests
-        mxUtils.getAll([bundle, STYLE_PATH + "/default.xml"], function(xhr) {
-            // Adds bundle text to resources
-            mxResources.parse(xhr[0].getText());
-
-            // Configures the default graph theme
-            var themes = new Object();
-            themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
-
-            // Main
-            editorUiGlobal = new EditorUi(new Editor(urlParams["chrome"] == "0", themes));
-        }, function() {
-            document.body.innerHTML = "<center style=\"margin-top:10%;\">Error loading resource files. Please check browser console.</center>";
-        });
-    })();
-</script>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
 

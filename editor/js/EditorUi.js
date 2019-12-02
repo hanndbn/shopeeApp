@@ -2848,7 +2848,7 @@ EditorUi.prototype.createUi = function() {
     </div>
     <div class="col-6 justify-content-end d-flex">
         <button class="btn action-btn" id="back-btn">Back</button>
-        <button class="btn action-btn submit-btn" id="save-btn">Save & Next</button>
+        <button class="btn action-btn submit-btn" id="save-btn">Save</button>
     </div>
     </div>
     `;
@@ -3255,10 +3255,12 @@ EditorUi.prototype.save = function(name) {
       // 		return;
       // 	}
       // }
-      var data = {
+      const data = {
         appId: this.editor.getAppId(),
         appName: name,
-        content: xml.toString()
+        content: xml.toString(),
+        cardId: this.editor.getCardId(),
+        packId: this.editor.getPackId()
       };
       requestSaveApp(data, this);
     } catch (e) {
@@ -3270,7 +3272,7 @@ EditorUi.prototype.save = function(name) {
 EditorUi.prototype.loadData = function(name) {
   if (name != null) {
     try {
-      var data = {
+      const data = {
         appName: name
       };
       requestLoadDataApp(data, this);

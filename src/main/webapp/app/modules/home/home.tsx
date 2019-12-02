@@ -168,12 +168,12 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   slide2html(data, slide, parentStyle, zoomVal, idx = 0, hasIFrame = false) {
-    const slideStyle = homeAction.getSlideStyle(slide[ 'style' ]);
+    const slideStyle = homeAction.getSlideStyle(slide['style']);
     let style: any = homeAction.getStyle(slide, slideStyle);
     const childStyle: any = homeAction.getChildStyle(slide, slideStyle);
     let valueStyle: any = homeAction.getValueStyle(slide, slideStyle);
     const childs = data.elements.filter(v => v.parent === slide.id);
-    const isRoot = !slide[ 'parent' ];
+    const isRoot = !slide['parent'];
     const relation = data.relation.find(v => v.source === slide.id && v.target);
     let nextSlideId = null;
     if (relation) {
@@ -187,8 +187,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       windowHeight = 640;
     }
     if (isRoot) {
-      const slideWidth = style[ 'width' ] ? style[ 'width' ] : 0;
-      const slideHeight = style[ 'height' ] ? style[ 'height' ] : 0;
+      const slideWidth = style['width'] ? style['width'] : 0;
+      const slideHeight = style['height'] ? style['height'] : 0;
       const screenRatio = windowHeight / windowWidth;
       const needHeightEditor = slideWidth * screenRatio;
       const slideRatio = slideHeight / slideWidth;
@@ -245,7 +245,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       }
     }
 
-    const elementType = slideStyle[ 'type' ] ? slideStyle[ 'type' ] : '';
+    const elementType = slideStyle['type'] ? slideStyle['type'] : '';
     const isGame = elementType === 'game';
     const isMedia = homeAction.isMedia(elementType);
     const isLink = elementType === ELEMENT_TYPE.LINK;
@@ -257,16 +257,16 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
     let imageSlides = [];
     let shareSocialList = [];
     if (isMedia) {
-      mediaContent = homeAction.getMediaContent(slide.id, elementType, slideStyle[ 'linkUrl' ], this.props.externalData);
-      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+      mediaContent = homeAction.getMediaContent(slide.id, elementType, slideStyle['linkUrl'], this.props.externalData);
+      linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
     } else if (isLink) {
-      linkUrl = slideStyle[ 'linkUrl' ] ? slideStyle[ 'linkUrl' ] : '';
-      linkOpenInModal = slideStyle[ 'linkOpenInModal' ] === '1';
+      linkUrl = slideStyle['linkUrl'] ? slideStyle['linkUrl'] : '';
+      linkOpenInModal = slideStyle['linkOpenInModal'] === '1';
     } else if (isImageSlide) {
-      const listImageStr = slideStyle[ 'imageSlide' ] ? slideStyle[ 'imageSlide' ] : '';
+      const listImageStr = slideStyle['imageSlide'] ? slideStyle['imageSlide'] : '';
       imageSlides = decodeURIComponent(listImageStr).split(',');
     } else if (isSocial) {
-      const shareSocial = slideStyle[ 'shareSocial' ] ? slideStyle[ 'shareSocial' ] : '';
+      const shareSocial = slideStyle['shareSocial'] ? slideStyle['shareSocial'] : '';
       shareSocialList = shareSocial ? shareSocial.split(',') : [];
     }
 
@@ -296,19 +296,19 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                        this.props.displayModalMedia(elementType, mediaContent);
                      } else if (isSocial) {
 
-                     } else if (slideStyle[ 'modalPopup' ] === '1' && this.props.modalListing) {
-                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle[ 'modalType' ]);
+                     } else if (slideStyle['modalPopup'] === '1' && this.props.modalListing) {
+                       const modalType = this.props.modalListing.find(v => v.group_key === slideStyle['modalType']);
                        if (modalType && modalType.types) {
-                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle[ 'modalTypeDetail' ]);
+                         const modalTypeDetail = modalType.types.find(v => v.key === slideStyle['modalTypeDetail']);
                          if (modalTypeDetail && modalTypeDetail.key !== ELEMENT_TYPE.YOUTUBE) {
-                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle[ 'modalSiteUrl' ]) : ''));
+                           this.props.displayModalUrl(modalTypeDetail.baseUrl + (modalTypeDetail.hasExtendUrl ? decodeURIComponent(slideStyle['modalSiteUrl']) : ''));
                          }
                        }
                      } else if (relation) {
                        this.props.setActiveSlideId(nextSlideId);
                      } else if (elementType === ELEMENT_TYPE.HOME) {
                        const firstSlide = data.elements.find(v => v.isFirstSlide);
-                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[ 0 ] ? data.elements[ 0 ].id : null);
+                       this.props.setActiveSlideId(firstSlide ? firstSlide.id : data.elements[0] ? data.elements[0].id : null);
                      }
                    }
                  }}
@@ -372,7 +372,17 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
   }
 
   decodeHTMLEntities(str) {
-    return str.replace(/&#(\d+)/g, (match, dec) => String.fromCharCode(dec));
+    if (str && typeof str === 'string') {
+      const element = document.createElement('div');
+      // strip script/html tags
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
   }
 
   getRootSlides(data) {

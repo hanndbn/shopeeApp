@@ -55,6 +55,26 @@ Editor = function(chromeless, themes, model, graph, editable) {
     return this.appId;
   };
 
+  // Sets the status and fires a statusChanged event
+  this.setPackId = function(value) {
+    this.packId = value;
+  };
+
+  // Sets the status and fires a statusChanged event
+  this.getPackId = function() {
+    return this.packId;
+  };
+
+  // Sets the status and fires a statusChanged event
+  this.setCardId = function(value) {
+    this.cardId = value;
+  };
+
+  // Sets the status and fires a statusChanged event
+  this.getCardId = function() {
+    return this.cardId;
+  };
+
   // Sets persistent graph state defaults
   this.graph.resetViewOnRootChange = false;
   this.init();

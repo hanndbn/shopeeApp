@@ -916,6 +916,11 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: 'add-game-icon',
         imageId: 'img/GAME.png'
       }),
+    this.createVertexTemplateEntry('type=PERSONAL_DESIGN_MANAGER;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;',
+      225, 400, 'Personal Design Manager', 'Personal Design Manager', false, false, 'pdm', {
+        id: 'add-pdm-icon',
+        imageId: 'img/GAME.png'
+      }),
     this.createVertexTemplateEntry('type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/HOME.svg;',
       20, 20, '', '', false, false, 'image', {
         id: 'add-home-icon',

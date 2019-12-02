@@ -25,7 +25,7 @@ const ACTION_TYPES = {
 };
 
 const initialState = {
-  data: [],
+  data: {},
   activeSlideId: null,
   appId: null,
   slideFlipped: [],
@@ -145,30 +145,62 @@ export const requestHomeData = appName => (dispatch, getState) => {
       // handle success
       const content = response.data.content ? response.data.content : '';
       const contentList = content.split('%;%');
-      const dataList = [];
-      contentList.map(async v => {
+      const data = {
+        elements: [],
+        relation: []
+      };
+      let firstCardApp = '';
+      let lastCard = '';
+      await contentList.map(async (v, idx) => {
         const doc = new DOMParser().parseFromString(v, 'text/xml');
         if (doc) {
           const node = doc.documentElement;
-          const data = {
-            root: {},
+          const dataElement = {
             elements: [],
             relation: []
           };
-          await decode(node, data);
+          await decode(node, dataElement);
           // await dispatch(getExternalData(data.elements));
-          dataList.push(data);
+          let firstCard = dataElement.elements.find(k => k.style && k.style.indexOf('isFirstSlide=1') > -1);
+          firstCard = firstCard ? firstCard.id : dataElement.elements.length > 0 ? dataElement.elements[0].id : '';
+          if (firstCard) {
+            if (lastCard) {
+              data.relation.push({
+                source: lastCard,
+                target: firstCard
+              });
+            }
+            if (!firstCardApp) {
+              firstCardApp = firstCard;
+            }
+            lastCard = firstCard;
+            let nextCard = firstCard;
+            while (nextCard) {
+              const relation = dataElement.relation.find(x => x.source === nextCard
+                && x.target
+                && dataElement.elements.find(y => {
+                  return x.target === y.id && y.style && y.style.indexOf('CARD') > -1;
+                }));
+              console.log(dataElement);
+              if (relation) {
+                lastCard = relation.target;
+              }
+              nextCard = relation ? relation.target : '';
+            }
+          }
+          data.elements = [...data.elements, ...dataElement.elements];
+          data.relation = [...data.relation, ...dataElement.relation];
+          console.log(data.elements);
         }
       });
-      if (dataList.length > 0) {
-        const firstSlide = dataList[0].elements.find(v => v.isFirstSlide);
-        await dispatch(setActiveSlideId(firstSlide ? firstSlide.id : dataList[0].elements[0] ? dataList[0].elements[0].id : null));
+      if (firstCardApp) {
+        await dispatch(setActiveSlideId(firstCardApp));
       }
 
       await dispatch({
         type: SUCCESS(ACTION_TYPES.GET_HOME_DATA),
         appId: response.data.appId,
-        data: dataList
+        data
       });
       dispatch(createSessionAnalytic(response.data.appId));
     })
@@ -286,7 +318,7 @@ export const decode = (node, data) => {
     const attrs = node.attributes;
     for (const attr of attrs) {
       if (attr.nodeName !== 'name') {
-        obj[attr.nodeName] = attr.value !== '' && Number.isInteger(parseInt(attr.value, 10)) ? parseInt(attr.value, 10) : attr.value;
+        obj[attr.nodeName] = attr.value !== '' && _.isInteger(_.toNumber(attr.value)) ? _.toNumber(attr.value) : attr.value;
       }
     }
     // decodeChildren
@@ -326,9 +358,9 @@ export const decode = (node, data) => {
       child = tmp;
     }
     // data.elements.push(obj);
-    if (node.nodeName === 'mxGraphModel') {
-      data.root = _.omit(obj, 'child');
-    }
+    // if (node.nodeName === 'mxGraphModel') {
+    //   data.root = _.omit(obj, 'child');
+    // }
     return obj;
   }
   return null;

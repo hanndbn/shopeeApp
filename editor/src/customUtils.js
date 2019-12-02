@@ -137,5 +137,19 @@ var customUtils = {
     } finally {
       graph.getModel().endUpdate();
     }
+  },
+  getUrlParams: () => {
+    const params = {};
+    window.location.search.substring(1).split('&').map(v => {
+      const equalIndex = v.indexOf('=');
+      if (equalIndex > 0) {
+        const paramName = v.substring(0, equalIndex);
+        const paramValue = v.substring(equalIndex + 1, v.length);
+        if (paramName !== null) {
+          params[paramName] = paramValue ? paramValue : '';
+        }
+      }
+    });
+    return params;
   }
 };
