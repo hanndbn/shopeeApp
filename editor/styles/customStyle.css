@@ -764,7 +764,7 @@ body div {
 }
 
 .pdm-input-wrapper.font-size-wrapper {
-  margin-left: 10px;
+  /*margin-left: 10px;*/
 }
 
 .pdm-input-wrapper.font-size-wrapper input {
@@ -777,7 +777,34 @@ body div {
   cursor: pointer;
 }
 
-#add-row{
+#add-row {
   color: #03767e;
   border-color: #52A1A7;
+}
+
+.custom-btn {
+  padding: 5px 10px;
+  color: white;
+  border-radius: 5px;
+  font-size: 13px;
+  box-shadow: 0 0 1px #737373;
+  cursor: pointer;
+}
+
+.add-btn {
+  background-color: #52a1a7;
+}
+
+.delete-btn {
+  background-color: #dc0714;
+}
+
+.add-link {
+  text-decoration: underline;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.row-name{
+  border-radius: 0;
 }

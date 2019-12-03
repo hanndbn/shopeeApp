@@ -4481,23 +4481,31 @@ CustomPDMFormatPanel.prototype.init = function() {
     rowContent.className = "row no-gutters";
     rowContent.innerHTML = `
       <div class="col-12">
-            <hr/>
-        </div>
-      <div class="col-6 pl-2 mb-2">Row ${v.rowId}</div>
-      <div id="add-pack-${v.rowId}" class="col-6  mb-2 text-right add-pack" data-row="${v.rowId}">
-        <span class="text-danger ml-2">Add pack</span>
+        <hr/>
       </div>
-        <div class="col-12">
-            <div id="pack-detail-content-${v.rowId}" data-row="${v.rowId}"></div>
+      <div class="col-8 pl-2 mb-2">
+        <div class="input-box">
+              <div class="font-size-wrapper p-0">
+                  <input type="text" class="form-control w-100 p-0 ml-0 text-left row-name" value="${v.rowName}" data-row="${v.rowId}"/>
+              </div>
         </div>
-       
+      </div>
+      <div id="add-pack-${v.rowId}" class="col-4 mb-2 text-center">
+        <span class="custom-btn delete-btn delete-row" data-row="${v.rowId}">Delete</span>
+      </div>
+      <div class="col-12">
+          <div id="pack-detail-content-${v.rowId}" data-row="${v.rowId}"></div>
+      </div>
+       <div id="add-pack-${v.rowId}" class="col-12 mb-2 pl-2">
+        <span class="add-link add-pack" data-row="${v.rowId}">Add pack</span>
+      </div>
       `;
 
     v.packs && v.packs.map(k => {
       const packContent = document.createElement("div");
       packContent.className = "row no-gutters";
       packContent.innerHTML = `
-          <div class="col-8">
+          <div class="col-8 pl-2">
                     <div class="input-box">
                       <div class="font-size-wrapper pdm-input-wrapper">
                           <input type="text" class="form-control w-100 mr-3 text-left pack-name" value="${k.packName}" data-row="${v.rowId}" data-pack="${k.packId}"/>
@@ -4518,7 +4526,8 @@ CustomPDMFormatPanel.prototype.init = function() {
 
   $(pdmContainer.querySelector("#add-row")).click(function(e) {
     pdmInfo.push({
-      rowId: _.toString(pdmInfo.length + 1),
+      rowName: `Row ${_.toString(pdmInfo.length + 1)}`,
+      rowId: uuidv1(),
       packs: [
         {
           packId: uuidv1(),
@@ -4527,6 +4536,35 @@ CustomPDMFormatPanel.prototype.init = function() {
       ]
     });
     customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
+  });
+
+  $(pdmContainer.querySelectorAll(".delete-row")).click(function(e) {
+    const rowId = e.currentTarget.dataset.row;
+    pdmInfo = pdmInfo.filter(v => v.rowId !== rowId);
+    customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
+    // _self.format.refresh();
+  });
+
+  $(pdmContainer.querySelectorAll(".row-name")).change(function(e) {
+    const rowId = e.currentTarget.dataset.row;
+    const rowIdx = pdmInfo.findIndex(v => v.rowId === rowId);
+    if (rowIdx > -1) {
+      const row = pdmInfo[rowIdx];
+      row.rowName = e.target.value;
+    }
+    customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
+  });
+
+  $(pdmContainer.querySelectorAll(".delete-pack")).click(function(e) {
+    const rowId = e.currentTarget.dataset.row;
+    const packId = e.currentTarget.dataset.pack;
+    const rowIdx = pdmInfo.findIndex(v => v.rowId === rowId);
+    if (rowIdx > -1) {
+      const row = pdmInfo[rowIdx];
+      row.packs = row.packs.filter(v => v.packId !== packId);
+    }
+    customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });
+    // _self.format.refresh();
   });
 
   $(pdmContainer.querySelectorAll(".add-pack")).click(function(e) {
@@ -4561,11 +4599,11 @@ CustomPDMFormatPanel.prototype.init = function() {
     if (rowIdx > -1) {
       const row = pdmInfo[rowIdx];
       const packIdx = row.packs.findIndex(k => k.packId === packId);
-      if(packIdx > -1){
+      if (packIdx > -1) {
         row.packs[packIdx] = {
           ...row.packs[packIdx],
           packName: e.target.value
-        }
+        };
       }
     }
     customUtils.setCellStyles(graph, { pdmInfo: JSON.stringify(pdmInfo) });

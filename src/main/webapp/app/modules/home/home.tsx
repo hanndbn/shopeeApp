@@ -20,8 +20,8 @@ import Pdm from 'app/modules/pdm/pdm';
 
 export interface IHomeProp extends StateProps, DispatchProps {
   initScreen: Function;
-  saveTrackingData: Function;
   setActiveSlideId: Function;
+  saveTrackingData: Function;
   setWindowSize: Function;
   setScrollPosition: Function;
   displayModalUrl: Function;

@@ -228,12 +228,12 @@ export const getExternalData = (elements = []) => (dispatch, getState) => {
 
 export const saveTrackingData = () => async (dispatch, getState) => {
   const timeStart = getState().home.timeStart ? getState().home.timeStart : null;
-  const currentIdx = getState().home.activeSlideId;
+  const activeSlideId = getState().home.activeSlideId;
   const appId = getState().home.appId;
   if (!timeStart || !appId) return;
   const displayTime = moment().diff(timeStart);
   let data: any = {
-    appId, slide: `Slide Id ${currentIdx}`,
+    appId, slide: `Slide Id ${activeSlideId}`,
     time: displayTime
   };
   const trackingId = getState().home.trackingId ? getState().home.trackingId : null;
