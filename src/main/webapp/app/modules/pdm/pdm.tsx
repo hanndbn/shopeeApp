@@ -64,43 +64,52 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNu
     const disabled = inValidSelected || !this.state.phoneNumber;
     return (
       <div className="w-100 h-100 pdm-container">
-        {
-          pdmInfo && pdmInfo.map((v, idx) => {
-            const row = v.rowId;
-            return (<div className="row d-flex no-gutters" key={idx}>
-              {
-                v.packs && v.packs.map((pack, idxPack) => {
-                  const packId = pack.packId;
-                  return (<div className={cn('pdm-pack', { selected: this.state.packSelected[row] === packId })} key={idxPack}
-                               onClick={() => {
-                                 const packSelected = {
-                                   ...this.state.packSelected,
-                                   [row]: packId
-                                 };
-                                 this.setState({ packSelected });
-                               }}
-                  >{pack.packName}</div>);
-                })
-              }
-            </div>);
-          })
-        }
-        <div className="w-100 mb-3">
-          <input className="form-control pdm-input" placeholder="Enter phone number"
-                 value={this.state.phoneNumber}
-                 onChange={e => {
-                   if (e.target.value && (!new RegExp(FORM_PATTERN.NUMBER).test(e.target.value))) {
-                     return;
-                   }
-                   this.setState({ phoneNumber: e.target.value });
-                 }}
-          />
-        </div>
-        <div className="w-100">
-          <button className="btn btn-common btn-submit-pdm w-100" disabled={disabled}
-                  onClick={() => this.handleGenerateApp()}
-          >Request
-          </button>
+        <div className="pdm-wrapper">
+          <div className="pdm-title">
+            Personalise Custom Design
+          </div>
+          {
+            pdmInfo && pdmInfo.map((v, idx) => {
+              const row = v.rowId;
+              return (<div className="row d-flex no-gutters" key={idx}>
+                <div className="col-12 pdm-subject">{v.rowName}</div>
+                {
+                  v.packs && v.packs.map((pack, idxPack) => {
+                    const packId = pack.packId;
+                    return (<div className={cn('pdm-pack', { selected: this.state.packSelected[row] === packId })} key={idxPack}
+                                 onClick={() => {
+                                   const packSelected = {
+                                     ...this.state.packSelected,
+                                     [row]: packId
+                                   };
+                                   this.setState({ packSelected });
+                                 }}
+                    >
+                      <span className="pdm-pack-check"/>
+                      <span>{pack.packName}</span>
+                    </div>);
+                  })
+                }
+              </div>);
+            })
+          }
+          <div className="w-100 mb-3">
+            <input className="form-control pdm-input" placeholder="Enter phone number"
+                   value={this.state.phoneNumber}
+                   onChange={e => {
+                     if (e.target.value && (!new RegExp(FORM_PATTERN.NUMBER).test(e.target.value))) {
+                       return;
+                     }
+                     this.setState({ phoneNumber: e.target.value });
+                   }}
+            />
+          </div>
+          <div className="w-100">
+            <button className="btn btn-common btn-submit-pdm w-100" disabled={disabled}
+                    onClick={() => this.handleGenerateApp()}
+            >Request
+            </button>
+          </div>
         </div>
       </div>
     );

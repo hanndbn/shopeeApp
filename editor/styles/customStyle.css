@@ -667,8 +667,8 @@ body div {
 }
 
 .custom-select-box .checkmark {
-  width: 5px;
-  height: 10px;
+  width: 8px;
+  height: 13px;
   border: solid #52A1A7;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
