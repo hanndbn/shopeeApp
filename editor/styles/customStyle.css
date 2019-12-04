@@ -14,11 +14,10 @@ body div {
 
 .save-publish-panel-header {
   position: relative;
-  height: 126px;
   border-radius: 8px 8px 0 0;
-  background-color: #3899ec;
+  background-color: #0090a2;
   box-sizing: border-box;
-  padding-top: 35px;
+  padding: 30px 10px 10px 10px;
   text-align: center;
 }
 
@@ -42,26 +41,46 @@ body div {
   white-space: nowrap;
 }
 
-.save-publish-panel-header button, .confirm-panel-header button {
+.custom-dialog .close, .confirm-panel-header .close {
   border-radius: 50%;
   border: 0;
   position: absolute;
   width: 25px;
   height: 25px;
-  top: 24px;
-  right: 24px;
-  background-color: #2b81cb;
+  top: 10px;
+  right: 10px;
+  background-color: white;
   box-sizing: border-box;
   line-height: 20px;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-.publish-dialog .modal-content {
+.custom-dialog .close:before {
+  position: absolute;
+  content: '';
+  width: 10px;
+  border-bottom: 1px solid black;
+  transform: rotate(45deg);
+}
+
+.custom-dialog .close:after {
+  position: absolute;
+  content: '';
+  width: 10px;
+  border-bottom: 1px solid #000000ab;
+  transform: rotate(135deg);
+}
+
+.custom-dialog .modal-content {
   background-color: transparent;
   border: none;
 }
 
-.publish-dialog .modal-body, .publish-dialog .modal-footer {
+.custom-dialog .modal-body, .custom-dialog .modal-footer {
   background-color: white;
 }
 
@@ -805,6 +824,52 @@ body div {
   cursor: pointer;
 }
 
-.row-name{
+.row-name {
   border-radius: 0;
+}
+
+
+.custom-dialog-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-dialog-icon .icon-success {
+  width: 88px;
+  height: 88px;
+  border: 4px solid #ffffffc9;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.custom-dialog-icon .icon-success:after {
+  content: '';
+  position: absolute;
+  width: 23px;
+  height: 50px;
+  top: 9px;
+  left: 30px;
+  border-bottom: 4px solid #ffffffc9;
+  border-right: 4px solid #ffffffc9;
+  transform: rotate(45deg);
+}
+
+.custom-dialog .modal-body {
+  color: #3e495f;
+}
+
+.custom-dialog .dialog-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 10px;
+  color: white;
+}
+
+.custom-dialog .modal-footer {
+
 }

@@ -12,3 +12,8 @@ var CONSTANT = {
   GET_FILES_WITH_TYPE: SERVER_API_URL + '/getFilesWithType',
   DELETE_FILE: SERVER_API_URL + '/deleteFile'
 };
+const MESSASE = {
+  SAVE_APP_SUCCESS: 'Your App successfully saved',
+  UPDATE_APP_SUCCESS: 'Your App successfully updated',
+  LOAD_APP_SUCCESS: 'App loaded successfully!',
+};

@@ -62,7 +62,7 @@ var loadAppModal = function() {
   );
 };
 
-var showImageUpload = function() {
+const showImageUpload = function() {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -105,14 +105,12 @@ var showImageUpload = function() {
 };
 
 
-var publishAppModal = function() {
+const publishAppModal = function() {
   return (
-    `<div class="modal-dialog publish-dialog" role="document">
+    `<div class="modal-dialog custom-dialog publish-dialog" role="document">
       <div class="modal-content">
           <div class="save-publish-panel-header">
-          <button class="close" data-dismiss="modal">
-          <svg width="25" height="25" viewBox="0 0 25 25" class="symbol symbol-headerCloseButton"><path d="M11.793 12.5L8.146 8.854 7.793 8.5l.707-.707.354.353 3.646 3.647 3.646-3.647.354-.353.707.707-.353.354-3.647 3.646 3.647 3.646.353.354-.707.707-.354-.353-3.646-3.647-3.646 3.647-.354.353-.707-.707.353-.354 3.647-3.646z"></path></svg>
-          </button>
+          <span class="close close-modal" data-dismiss="modal"/>
             <div class="title">Your changes were saved</div>
             <div class="subtitle">Publish to see your changes live at the following domain:</div>
           </div>
@@ -132,7 +130,7 @@ var publishAppModal = function() {
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-secondary close-modal" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-common btn-submit" id="publishApp">Publish</button>
         </div>
       </div>
@@ -140,7 +138,7 @@ var publishAppModal = function() {
   );
 };
 
-var fileUpload = function(fileType, label = '', accept = '*') {
+const fileUpload = function(fileType, label = "", accept = "*") {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -170,6 +168,32 @@ var fileUpload = function(fileType, label = '', accept = '*') {
         <div class="modal-footer">
           <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-common btn-submit" id="uploadFile">Upload</button>
+        </div>
+      </div>
+    </div>`
+  );
+};
+
+const successModalLayout = function(message) {
+  return (
+    `<div class="modal-dialog custom-dialog success-dialog" role="document">
+      <div class="modal-content">
+          <div class="save-publish-panel-header">
+          <span class="close close-modal" data-dismiss="modal"/>
+           <div class="custom-dialog-icon">
+                <span class="icon-success"></span>
+            </div>
+            <div class="dialog-title">Success</div>
+          </div>
+        <div class="modal-body">
+          <div class="row no-gutters">
+            <div class="col-12 text-center">
+               ${message}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-common btn-secondary close-modal" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>`

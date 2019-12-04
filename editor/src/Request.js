@@ -3,8 +3,8 @@ var filesListing = {};
 var editorUiGlobal = {};
 $(document).ready(function() {
   // requestModalListing();
-  requestFilesWithType('hannd', 'image');
-  requestFilesWithType('hannd', 'pdf');
+  requestFilesWithType("hannd", "image");
+  requestFilesWithType("hannd", "pdf");
   // const urlParams = customUtils.getUrlParams();
 });
 
@@ -21,43 +21,43 @@ function requestAPI(method, url, data, successCallback, failureCallback) {
 
 function requestSaveApp(requestData, editorUi) {
   $.ajax({
-    type: 'POST',
+    type: "POST",
     url: CONSTANT.SAVE_NAME_API,
     data: JSON.stringify(requestData),
-    dataType: 'json',
-    contentType: 'application/json',
+    dataType: "json",
+    contentType: "application/json",
     success: function(data) {
-      $('#myModal').modal('hide');
+      $("#myModal").modal("hide");
       editorUi.editor.setModified(false);
       editorUi.editor.setFilename(`${requestData.appName}`);
-      $('#header-app-name').html(`- ${requestData.appName}`);
+      $("#header-app-name").html(`- ${requestData.appName}`);
       if (data.appId) {
         editorUi.editor.setAppId(data.appId);
-        swal('', 'save data success', 'success');
+        $("#myModal").html(successModalLayout(MESSASE.SAVE_APP_SUCCESS));
       } else {
-        swal('', 'update data success', 'success');
+        $("#myModal").html(successModalLayout(MESSASE.UPDATE_APP_SUCCESS));
       }
-      $('#publishItem').prop('hidden', false);
+      $("#myModal").modal("show");
+      $("#publishItem").prop("hidden", false);
       editorUi.updateDocumentTitle();
     },
     error: function(xhr) {
-      swal('', _.upperFirst(xhr.responseJSON.message), 'error');
+      $("#responseError").html(xhr.responseJSON.code + " : " + xhr.responseJSON.message);
     }
   });
 }
 
 function requestLoadDataApp(data, editorUi, showPopup = true, callbackSuccess = null, callbackFail = null) {
   $.ajax({
-    type: 'POST',
+    type: "POST",
     url: CONSTANT.LOAD_DATA_API,
     data: JSON.stringify(data),
-    dataType: 'json',
-    contentType: 'application/json',
+    dataType: "json",
+    contentType: "application/json",
     success: function(data) {
-      $('#myModal').modal('hide');
       // $('#save-btn').prop('disabled', false);
-      $('#header-app-name').html(`- ${data.appName}`);
-      $('#publishItem').prop('hidden', false);
+      $("#header-app-name").html(`- ${data.appName}`);
+      $("#publishItem").prop("hidden", false);
       // editorUi.editor.setStatus('load data success');
       editorUi.editor.setModified(true);
       editorUi.editor.setFilename(data.appName);
@@ -73,11 +73,13 @@ function requestLoadDataApp(data, editorUi, showPopup = true, callbackSuccess = 
       if (callbackSuccess) {
         callbackSuccess(data);
       }
-      showPopup && swal('', 'Load data success', 'success');
+      if(showPopup){
+        $("#myModal").html(successModalLayout(MESSASE.LOAD_APP_SUCCESS));
+        $("#myModal").modal("show");
+      }
     },
     error: function(xhr) {
-      console.log(xhr);
-      swal('', _.upperFirst(xhr.responseJSON.message), 'error');
+      $("#responseError").html(xhr.responseJSON.code + " : " + xhr.responseJSON.message);
       if (callbackFail) {
         callbackFail(xhr);
       }
@@ -88,9 +90,9 @@ function requestLoadDataApp(data, editorUi, showPopup = true, callbackSuccess = 
 
 function requestModalListing(callback) {
   $.ajax({
-    type: 'GET',
+    type: "GET",
     url: CONSTANT.LOAD_MODAL_LISTING_API,
-    contentType: 'application/json',
+    contentType: "application/json",
     success: function(data) {
       modalFormListing = data.data;
       if (callback) {
@@ -104,11 +106,11 @@ function requestModalListing(callback) {
 
 function requestUploadFile(userid, data, callback) {
   $.ajax({
-    type: 'POST',
+    type: "POST",
     url: CONSTANT.UPLOAD_FILE_API,
     data: data,
     beforeSend: function(request) {
-      request.setRequestHeader('userid', userid ? userid : 'hannd');
+      request.setRequestHeader("userid", userid ? userid : "hannd");
     },
     processData: false,  // tell jQuery not to process the data
     contentType: false,  // tell jQuery not to set contentType
@@ -124,14 +126,14 @@ function requestUploadFile(userid, data, callback) {
 
 function requestFilesWithType(userId, fileType, callback) {
   $.ajax({
-    type: 'POST',
+    type: "POST",
     url: CONSTANT.GET_FILES_WITH_TYPE,
     data: JSON.stringify({
       userId: userId,
       fileType: fileType
     }),
-    dataType: 'json',
-    contentType: 'application/json',
+    dataType: "json",
+    contentType: "application/json",
     success: function(data) {
       filesListing[fileType] = data.data;
       if (callback) {
@@ -145,13 +147,13 @@ function requestFilesWithType(userId, fileType, callback) {
 
 function requestDeleteImage(fileName, callback) {
   $.ajax({
-    type: 'DELETE',
+    type: "DELETE",
     url: CONSTANT.DELETE_FILE,
     data: JSON.stringify({
       fileName: fileName
     }),
-    dataType: 'json',
-    contentType: 'application/json',
+    dataType: "json",
+    contentType: "application/json",
     success: function(data) {
       if (callback) {
         callback(filesListing);
