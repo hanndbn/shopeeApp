@@ -16,11 +16,12 @@ export interface IPdmProps extends StateProps, DispatchProps {
   displayModalPDMError: Function;
 }
 
-export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNumber: any }> {
+export class Pdm extends React.Component<IPdmProps, { packSelected: any, fullName: any, phoneNumber: any }> {
   constructor(props) {
     super(props);
     this.state = {
       packSelected: {},
+      fullName: '',
       phoneNumber: ''
     };
   }
@@ -31,7 +32,7 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNu
   handleGenerateApp() {
     const packIds = [];
     this.props.pdmInfo && this.props.pdmInfo.map(v => {
-      const packId = this.state.packSelected[v.rowId];
+      const packId = this.state.packSelected[ v.rowId ];
       if (packId) {
         packIds.push(packId);
       }
@@ -40,6 +41,7 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNu
       appId: this.props.appId,
       cardId: this.props.cardId,
       packIds,
+      fullName: this.state.fullName,
       phoneNumber: this.state.phoneNumber
     };
     axios.post(GENERATE_APP_API, data)
@@ -57,11 +59,11 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNu
     const { pdmInfo } = this.props;
     let inValidSelected = false;
     pdmInfo && pdmInfo.map(v => {
-      if (!this.state.packSelected[v.rowId]) {
+      if (!this.state.packSelected[ v.rowId ]) {
         inValidSelected = true;
       }
     });
-    const disabled = inValidSelected || !this.state.phoneNumber;
+    const disabled = inValidSelected || !this.state.phoneNumber || !this.state.fullName;
     return (
       <div className="w-100 h-100 pdm-container">
         <div className="pdm-wrapper">
@@ -76,11 +78,11 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNu
                 {
                   v.packs && v.packs.map((pack, idxPack) => {
                     const packId = pack.packId;
-                    return (<div className={cn('pdm-pack', { selected: this.state.packSelected[row] === packId })} key={idxPack}
+                    return (<div className={cn('pdm-pack', { selected: this.state.packSelected[ row ] === packId })} key={idxPack}
                                  onClick={() => {
                                    const packSelected = {
                                      ...this.state.packSelected,
-                                     [row]: packId
+                                     [ row ]: packId
                                    };
                                    this.setState({ packSelected });
                                  }}
@@ -93,6 +95,14 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, phoneNu
               </div>);
             })
           }
+          <div className="w-100 mb-3">
+            <input className="form-control pdm-input" placeholder="Enter full name"
+                   value={this.state.fullName}
+                   onChange={e => {
+                     this.setState({ fullName: e.target.value });
+                   }}
+            />
+          </div>
           <div className="w-100 mb-3">
             <input className="form-control pdm-input" placeholder="Enter phone number"
                    value={this.state.phoneNumber}
