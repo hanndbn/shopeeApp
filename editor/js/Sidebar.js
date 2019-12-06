@@ -865,44 +865,44 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
   // this.addPaletteFunctions('general', 'First Slide', (expand != null) ? expand : true, fns0);
 
   var fns1 = [
-    this.createVertexTemplateEntry("type=CARD;isConnectable=1;container=1;rounded=0;whiteSpace=wrap;html=1;", 225, 400, "", "Slide", false, false, "slide container", {
+    this.createVertexTemplateEntry("type=CARD;isConnectable=1;container=1;rounded=0;whiteSpace=wrap;html=1;rotatable=0;", 225, 400, "", "Slide", false, false, "slide container", {
       id: "add-container-icon",
       imageId: "img/SLIDE.png"
     }),
-    this.createVertexTemplateEntry("type=RECTANGLE;rounded=0;isConnectable=1;whiteSpace=wrap;html=1;", 120, 60, "", "Rectangle", false, false, "rect rectangle box", {
+    this.createVertexTemplateEntry("type=RECTANGLE;rounded=0;isConnectable=1;whiteSpace=wrap;html=1;rotatable=0;", 120, 60, "", "Rectangle", false, false, "rect rectangle box", {
       id: "add-rectangle-icon",
       imageId: "img/RECTANGLE.png"
     }),
-    this.createVertexTemplateEntry("type=TEXT;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;",
+    this.createVertexTemplateEntry("type=TEXT;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;rotatable=0;",
       40, 20, "Text", "Text", false, false, "text textbox textarea label", {
         id: "add-text-icon",
         imageId: "img/TEXT.png"
       }),
-    this.createVertexTemplateEntry("type=LINK;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;",
+    this.createVertexTemplateEntry("type=LINK;text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;rotatable=0;",
       40, 20, "Link", "LINK", false, false, "link", {
         id: "add-link-icon",
         imageId: "img/LINK.png"
       }),
-    this.createVertexTemplateEntry("type=IMAGE;isConnectable=1;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;",
+    this.createVertexTemplateEntry("type=IMAGE;isConnectable=1;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;rotatable=0;",
       207, 138, "", "", false, false, "image", {
         id: "add-image-icon",
         imageId: "img/IMAGE.png"
       }),
-    this.createVertexTemplateEntry("type=IMAGE_SLIDE;rounded=0;whiteSpace=wrap;html=1;", 120, 60, "", "Image Slide", false, false, "image slide", {
+    this.createVertexTemplateEntry("type=IMAGE_SLIDE;rounded=0;whiteSpace=wrap;html=1;rotatable=0;", 120, 60, "", "Image Slide", false, false, "image slide", {
       id: "add-image-slide-icon",
       imageId: "img/imagelist.png"
     }),
-    this.createVertexTemplateEntry("type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;",
+    this.createVertexTemplateEntry("type=game;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;rotatable=0;",
       225, 400, "Game", "Game", false, false, "game", {
         id: "add-game-icon",
         imageId: "img/GAME.png"
       }),
-    this.createVertexTemplateEntry("type=PERSONAL_DESIGN_MANAGER;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;",
+    this.createVertexTemplateEntry("type=PERSONAL_DESIGN_MANAGER;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;rotatable=0;",
       225, 400, "Personal Design Manager", "Personal Design Manager", false, false, "pdm", {
         id: "add-pdm-icon",
         imageId: "img/GAME.png"
       }),
-    this.createVertexTemplateEntry("type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/HOME.svg;",
+    this.createVertexTemplateEntry("type=home;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/HOME.svg;rotatable=0;",
       20, 20, "", "", false, false, "image", {
         id: "add-home-icon",
         imageId: "img/HOME.png"

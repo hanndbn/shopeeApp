@@ -12,6 +12,7 @@ EditorUi = function(editor, container, lightbox) {
   this.container = document.getElementById('editor-container');
 
   var graph = this.editor.graph;
+  graph.setExtendParents(false);
   graph.lightbox = lightbox;
 
   // Faster scrollwheel zoom is possible with CSS transforms
