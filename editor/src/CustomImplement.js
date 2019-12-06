@@ -116,4 +116,12 @@ $(document).ready(function() {
     }
     return removeCells.apply(this, arguments);
   };
+  const isCellSelectable = mxGraph.prototype.isCellSelectable;
+  mxGraph.prototype.isCellSelectable = function(cell) {
+    if(cell && cell.style && cell.style.indexOf('type=CARD_LABEL') > -1){
+      return;
+    }
+    return isCellSelectable.apply(this, arguments);
+  };
 });
+
