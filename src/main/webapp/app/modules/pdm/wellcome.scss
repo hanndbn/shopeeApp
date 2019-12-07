@@ -1,0 +1,25 @@
+.well-come-container {
+  padding: 2px;
+  width: 100%;
+  height: calc(100% - 5px);;
+
+  .well-come-wrapper {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    text-align: right;
+
+    .well-come-content {
+      width: 100%;
+      padding: 40px;
+      margin-top: 15vh;
+      -webkit-box-pack: end;
+      justify-content: flex-end;
+      font-size: 25px;
+      line-height: 1.5;
+      .name {
+        color: red;
+      }
+    }
+  }
+}

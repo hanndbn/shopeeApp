@@ -459,6 +459,9 @@ body div {
   width: 100%;
   border-radius: 3px;
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .select-box::before {
@@ -687,15 +690,15 @@ body div {
   box-shadow: 0 0 0px 1px #8080801a;
   margin-top: -2px;
   z-index: 999;
-  position: relative;
   max-height: 200px;
   overflow-y: auto;
+  position: absolute;
 }
 
 .input-select-item {
   padding: 5px 10px;
   cursor: pointer;
-  border-bottom: 1px solid #52a1a7cc;
+  border-bottom: 1px solid #f3f3f3;
   color: black;
 }
 

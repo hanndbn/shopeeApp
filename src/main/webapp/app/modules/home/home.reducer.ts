@@ -151,6 +151,23 @@ export const requestHomeData = appName => (dispatch, getState) => {
       };
       let firstCardApp = '';
       let lastCard = '';
+
+      // if app gen by pdm add well come card
+      if (response.data.appDetail) {
+        const wellComeCard = {
+          height: 400,
+          id: 'well-come-card',
+          name: 'mxCell',
+          style: `type=WELL_COME_CARD;fullName=${response.data.appDetail.fullName};container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;rotatable=0;`,
+          value: '',
+          width: 225,
+          x: -320,
+          y: 9
+        };
+        data.elements.push(wellComeCard);
+        firstCardApp = wellComeCard.id;
+        lastCard = wellComeCard.id;
+      }
       await contentList.map(async (v, idx) => {
         const doc = new DOMParser().parseFromString(v, 'text/xml');
         if (doc) {

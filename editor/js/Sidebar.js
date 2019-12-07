@@ -3067,8 +3067,8 @@ Sidebar.prototype.createVertexTemplate = function(style, width, height, value, t
   var cells = [new mxCell((value != null) ? value : "", new mxGeometry(0, 0, width, height), style)];
   cells[0].vertex = true;
   if (style.indexOf("type=CARD") > -1) {
-    const labelCell = new mxCell("label1", new mxGeometry(60, -50, 100, 30),
-      "type=CARD_LABEL;rounded=1;whiteSpace=wrap;html=1;strokeColor=none;deletable=0;resizable=0;movable=0;cloneable=0;rotatable=0");
+    const labelCell = new mxCell(`Card ${uuidv1().substr(0, 4)}`, new mxGeometry(60, -50, 100, 30),
+      "type=CARD_LABEL;rounded=1;whiteSpace=wrap;html=1;strokeColor=none;deletable=0;resizable=0;movable=0;cloneable=0;rotatable=0;");
     labelCell.vertex = true;
     labelCell.connectable = false;
     cells[0].insert(labelCell);
