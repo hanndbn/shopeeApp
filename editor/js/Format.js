@@ -4073,6 +4073,9 @@ CustomCardFormatPanel.prototype.init = function() {
   const fillColor = ss.style.fillColor ? ss.style.fillColor : '#ffffff';
   const height = ss.height ? ss.height : 0;
   const imageType = ss.style.imageType ? ss.style.imageType : 'none';
+  const imageUrl = ss.style.imageUrl ? decodeURIComponent(ss.style.imageUrl) : '';
+  const fileSelectedStr = ss.style.fileSelected ? decodeURIComponent(ss.style.fileSelected) : '';
+  const fileSelected = fileSelectedStr ? JSON.parse(fileSelectedStr) : [];
 
   // get card name
   const cells = graph.getSelectionCells();
@@ -4106,10 +4109,12 @@ CustomCardFormatPanel.prototype.init = function() {
             </div>
         </div>
         
-        <div class="select-wrapper g-margin-top-10">
+        <div class="select-wrapper g-margin-top-10 mb-0">
           <div class="input-box">
             <div class="w-100">Background Image</div>
             <div id="custom-select-wrapper" class="flex-fill"></div>
+          </div>
+          <div class="input-box" id="image-selection-container">
           </div>
         </div>
         
@@ -4187,9 +4192,34 @@ CustomCardFormatPanel.prototype.init = function() {
   });
 
   const handleSelect = (type) => {
-    const data = {
-      imageType: type
+    let data = {
+      imageType: type,
+      shape: null,
+      imageAspect: null,
+      image: null
     };
+
+    if (type === 'url') {
+      if (imageUrl) {
+        data = {
+          ...data,
+          shape: 'image',
+          imageAspect: 0,
+          image: imageUrl
+        };
+      }
+    } else if (type === 'library') {
+      const file = fileSelected[0] ? fileSelected[0] : null;
+      if (file) {
+        data = {
+          ...data,
+          shape: 'image',
+          imageAspect: 0,
+          image: file.url
+        };
+      }
+    }
+
     customUtils.setCellStyles(graph, data);
     _self.format.refresh();
   };
@@ -4216,6 +4246,17 @@ CustomCardFormatPanel.prototype.init = function() {
   cardContainer.querySelector('#custom-select-wrapper').innerHTML = '';
   cardContainer.querySelector('#custom-select-wrapper').appendChild(layout);
 
+  // image data select
+  const imageData = {
+    type: imageType,
+    imageUrl,
+    fileSelected,
+    graph,
+    _self
+  };
+  const { layoutImageSelect } = customLayout.customImageSelect(imageData);
+  cardContainer.querySelector('#image-selection-container').innerHTML = '';
+  cardContainer.querySelector('#image-selection-container').appendChild(layoutImageSelect);
 
   this.container.appendChild(cardContainer);
 };

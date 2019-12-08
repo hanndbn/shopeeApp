@@ -1,0 +1,24 @@
+.font-size-wrapper .image-url-input {
+  border: 1px solid gray;
+  height: 2rem;
+  text-align: left;
+  padding-left: 0.5rem;
+  font-size: 13px;
+}
+
+.image-preview {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  background-color: #52a1a714;
+}
+
+.image-library-wrapper {
+  height: 500px;
+  overflow-y: auto;
+  padding: 10px 0px 10px 10px;
+}
+
+.image-library-dialog{
+  max-width: 570px;
+}

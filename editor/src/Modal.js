@@ -138,7 +138,7 @@ const publishAppModal = function() {
   );
 };
 
-const fileUpload = function(fileType, label = "", accept = "*") {
+const fileUpload = function(fileType, label = '', accept = '*') {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -172,6 +172,140 @@ const fileUpload = function(fileType, label = "", accept = "*") {
       </div>
     </div>`
   );
+};
+
+const changeImageUrl = function(imageUrl, graph) {
+  const changeImageUrlContainer = document.createElement('div');
+  changeImageUrlContainer.innerHTML = `<div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header custom-modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Image Url</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row form-group">
+            <div class="col-3">Url</div>
+            <div class="col-9">
+                <input class="form-control" value="${imageUrl}" id="input-image-url"/>
+            </div>
+          </div>
+          <div class="row">
+          <div class="col-9 offset-3">
+                <div class="text-danger" id="responseError"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-submit" disabled id="save-image-url">Save</button>
+        </div>
+      </div>
+    </div>`;
+  $(changeImageUrlContainer.querySelector('#save-image-url')).click(function(e) {
+    const imageUrl = changeImageUrlContainer.querySelector('#input-image-url').value;
+    const responseError = $(changeImageUrlContainer.querySelector('#responseError'));
+    const img = new Image();
+    img.onload = function() {
+      const updateData = {
+        shape: 'image',
+        imageAspect: 0,
+        image: imageUrl,
+        imageUrl: encodeURIComponent(imageUrl)
+      };
+      customUtils.setCellStyles(graph, updateData, false);
+      $('#myModal').modal('hide');
+    };
+    img.onerror = function() {
+      responseError.html('URL invalid');
+    };
+    img.src = imageUrl;
+  });
+  $(changeImageUrlContainer.querySelector('#input-image-url')).keyup(function(e) {
+    const responseError = $(changeImageUrlContainer.querySelector('#responseError'));
+    const saveBtn = $(changeImageUrlContainer.querySelector('#save-image-url'));
+    if (e.target.value === '') {
+      responseError.html('Url must not empty');
+      saveBtn.prop('disabled', true);
+    } else {
+      responseError.empty();
+      saveBtn.prop('disabled', false);
+    }
+  });
+  return changeImageUrlContainer;
+};
+
+const selectionFileModal = function(data) {
+  const { fileType = '', fileTypeAccept = '*', fileSelected = [], isSelectMulti = false, callback } = data;
+  const changeImageUrlContainer = document.createElement('div');
+  changeImageUrlContainer.innerHTML = `<div class="modal-dialog image-library-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header custom-modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Image library</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-0">
+        <div class="row no-gutters image-library-wrapper">
+         ${
+    filesListing[fileType].map(file => `
+        <div class="format-image-content">
+          <div style="background-image: url(${fileType === 'image' ? file.url : `/content/images/editor/icons/${fileType}.PNG`})" class="format-file-selector ${fileSelected && fileSelected === file.fileName ? 'active' : ''}"
+          data-url="${file.url}"
+          data-name="${file.fileName}"
+          >
+                <span class="file-close format-close" data-name="${file.fileName}">x</span>
+          </div>
+        </div>`).join('')
+    }        
+            
+            <div class="format-image-content">
+                <div id="upload-file">
+                <img src="/content/images/editor/icons/import.png"/>
+          </div>
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-common btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-common btn-submit" disabled id="save-selection">Save</button>
+        </div>
+      </div>
+    </div>`;
+
+  const formatFileSelector = $(changeImageUrlContainer.querySelectorAll('.format-file-selector'));
+  formatFileSelector.click((e) => {
+    const isSelectedFile = e.target.classList.contains('active');
+    if (!isSelectMulti) {
+      formatFileSelector.removeClass('active');
+    }
+    if (isSelectedFile) {
+      $(e.target).removeClass('active');
+    } else {
+      $(e.target).addClass('active');
+    }
+    const disabledSave = changeImageUrlContainer.querySelectorAll('.format-file-selector.active').length === 0;
+    changeImageUrlContainer.querySelector('#save-selection').disabled = disabledSave;
+  });
+
+  $(changeImageUrlContainer.querySelector('#save-selection')).click(function(e) {
+    const newSelected = [];
+    changeImageUrlContainer.querySelectorAll('.format-file-selector').forEach(v => {
+      if (v.classList.contains('active')) {
+        newSelected.push({
+          name: v.dataset.name,
+          url: v.dataset.url
+        });
+      }
+    });
+    if (callback && _.isFunction(callback)) {
+      callback(newSelected);
+    }
+    $('#myModal').modal('hide');
+  });
+  return changeImageUrlContainer;
 };
 
 const successModalLayout = function(message) {

@@ -294,9 +294,15 @@ body div {
   padding: 8px 20px;
 }
 
-.btn-submit {
+.btn-submit:hover{
+  opacity: 0.8;
   color: white;
   background-color: #4C7A81;
+}
+
+.btn-submit {
+  color: white;
+  background-color: #52A1A7;
 }
 
 .custom-modal-header {
@@ -361,8 +367,8 @@ body div {
 }
 
 .format-image-content > div {
-  width: 55px;
-  height: 55px;
+  width: 90px;
+  height: 90px;
   border: 1px solid #E8E8E8;
   display: flex;
   flex-wrap: wrap;
@@ -371,9 +377,10 @@ body div {
   border-radius: 3px;
   cursor: pointer;
   position: relative;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
+  background-color: #52a1a714;
 }
 
 .format-image-content > div.active {
@@ -384,8 +391,8 @@ body div {
   height: 15px;
   width: 15px;
   border-radius: 18px;
-  color: rgba(220, 7, 20, 0.62);
-  background-color: #dedede;
+  color: rgb(7, 153, 164);
+  background-color: #f5efef;
   font-size: 10px;
   display: flex;
   justify-content: center;
@@ -875,4 +882,8 @@ body div {
 
 .custom-dialog .modal-footer {
 
+}
+
+.g-font-size-12{
+  font-size: 12px;
 }

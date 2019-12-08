@@ -35,5 +35,67 @@ const customLayout = {
       layout,
       clickHandle
     };
+  },
+  customImageSelect: data => {
+    const { type, imageUrl, fileSelected, graph, _self } = data;
+    const modal = $('#myModal');
+    const layoutImageSelect = document.createElement('div');
+    layoutImageSelect.className = 'flex-fill';
+    if (type === 'url') {
+      layoutImageSelect.innerHTML = `
+      <div class="font-size-wrapper mt-2 flex-fill">
+            <input type="text" class="flex-fill ml-0 mr-2 image-url-input" readonly="true" placeholder="Image url" value="${imageUrl}" id="input-image-url"/>
+            <button class="btn btn-add-image g-font-size-12" id="change-image-url">Change</button>
+      </div>
+    `;
+
+      //handle save change image url
+      $(layoutImageSelect.querySelector('#change-image-url')).click(function() {
+        modal.empty();
+        modal.append(changeImageUrl(imageUrl, graph));
+        modal.modal('show');
+      });
+    } else if (type === 'library') {
+      const file = fileSelected[0] ? fileSelected[0] : null;
+      const url = file ? file.url : '/content/images/editor/img/defaultPicture.jpg';
+      layoutImageSelect.innerHTML = `
+      <div class="font-size-wrapper mt-2 flex-fill">
+            <div class="w-100 text-center mb-2">
+                <img src="${url}" class="image-preview"/>
+            </div>
+            <div class="w-100 text-center">
+                <button class="btn btn-add-image g-font-size-12" id="change-image-url">Change</button>     
+            </div>
+      </div>
+    `;
+      $(layoutImageSelect.querySelector('#change-image-url')).click(function() {
+        const displayData = {
+          fileType: 'image',
+          fileTypeAccept: 'image/*',
+          isSelectMulti: false,
+          fileSelected,
+          callback: (files) => {
+            const file = files[0] ? files[0] : null;
+            if (file) {
+              const updateData = {
+                shape: 'image',
+                imageAspect: 0,
+                image: file.url,
+                fileSelected: encodeURIComponent(JSON.stringify([{
+                  name: file.name,
+                  url: file.url
+                }]))
+              };
+              customUtils.setCellStyles(graph, updateData, false);
+            }
+          }
+        };
+        modal.empty();
+        modal.append(selectionFileModal(displayData));
+        modal.modal('show');
+      });
+    }
+
+    return { layoutImageSelect };
   }
 };

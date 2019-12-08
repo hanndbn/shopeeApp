@@ -22,14 +22,14 @@ export class Social extends React.Component<ISocialProps> {
 
   render() {
     const { shareSocialList, width } = this.props;
-    const elementWidth = shareSocialList.length > 0 ? ((width - shareSocialList.length * 5) / (shareSocialList.length)) : width;
+    const elementWidth = shareSocialList.length > 0 ? ((width - (shareSocialList.length - 1) * 5) / 4) : width;
     const ratioTransform: any = _.round(elementWidth / 55, 2);
     const shareFaceBook = this.props.shareSocialList.includes('facebook');
     const shareTwitter = this.props.shareSocialList.includes('twitter');
     const sharePinterest = this.props.shareSocialList.includes('pinterest');
     const shareLink = this.props.shareSocialList.includes('link');
     return (
-      <div className="row d-flex w-100 h-100 flex-nowrap social-container">
+      <div className="row d-flex w-100 h-100 social-container">
         {
           shareFaceBook &&
           <div

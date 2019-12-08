@@ -32,6 +32,11 @@
   }
 }
 
-.social-container{
-  justify-content: space-evenly;
+.social-container {
+  div {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }
