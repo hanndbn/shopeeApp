@@ -138,7 +138,7 @@ const publishAppModal = function() {
   );
 };
 
-const fileUpload = function(fileType, label = '', accept = '*') {
+const fileUpload = function(fileType, label = "", accept = "*") {
   return (
     `<div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -174,8 +174,9 @@ const fileUpload = function(fileType, label = '', accept = '*') {
   );
 };
 
-const changeImageUrl = function(imageUrl, graph) {
-  const changeImageUrlContainer = document.createElement('div');
+const changeImageUrl = function(data) {
+  const { imageUrl, callback } = data;
+  const changeImageUrlContainer = document.createElement("div");
   changeImageUrlContainer.innerHTML = `<div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header custom-modal-header">
@@ -203,42 +204,39 @@ const changeImageUrl = function(imageUrl, graph) {
         </div>
       </div>
     </div>`;
-  $(changeImageUrlContainer.querySelector('#save-image-url')).click(function(e) {
-    const imageUrl = changeImageUrlContainer.querySelector('#input-image-url').value;
-    const responseError = $(changeImageUrlContainer.querySelector('#responseError'));
+  $(changeImageUrlContainer.querySelector("#save-image-url")).click(function(e) {
+    const imageUrl = changeImageUrlContainer.querySelector("#input-image-url").value;
+    const responseError = $(changeImageUrlContainer.querySelector("#responseError"));
     const img = new Image();
     img.onload = function() {
-      const updateData = {
-        shape: 'image',
-        imageAspect: 0,
-        image: imageUrl,
-        imageUrl: encodeURIComponent(imageUrl)
-      };
-      customUtils.setCellStyles(graph, updateData, false);
-      $('#myModal').modal('hide');
+      if (callback && _.isFunction(callback)) {
+        callback(imageUrl);
+      }
+      $("#myModal").modal("hide");
     };
     img.onerror = function() {
-      responseError.html('URL invalid');
+      responseError.html("URL invalid");
     };
     img.src = imageUrl;
   });
-  $(changeImageUrlContainer.querySelector('#input-image-url')).keyup(function(e) {
-    const responseError = $(changeImageUrlContainer.querySelector('#responseError'));
-    const saveBtn = $(changeImageUrlContainer.querySelector('#save-image-url'));
-    if (e.target.value === '') {
-      responseError.html('Url must not empty');
-      saveBtn.prop('disabled', true);
+  $(changeImageUrlContainer.querySelector("#input-image-url")).keyup(function(e) {
+    const responseError = $(changeImageUrlContainer.querySelector("#responseError"));
+    const saveBtn = $(changeImageUrlContainer.querySelector("#save-image-url"));
+    if (e.target.value === "") {
+      responseError.html("Url must not empty");
+      saveBtn.prop("disabled", true);
     } else {
       responseError.empty();
-      saveBtn.prop('disabled', false);
+      saveBtn.prop("disabled", false);
     }
   });
   return changeImageUrlContainer;
 };
 
 const selectionFileModal = function(data) {
-  const { fileType = '', fileTypeAccept = '*', fileSelected = [], isSelectMulti = false, callback } = data;
-  const changeImageUrlContainer = document.createElement('div');
+  const { fileType = "", fileTypeAccept = "image/*", fileSelected = [], isSelectMulti = false, callback } = data;
+  const modal = $("#myModal");
+  const changeImageUrlContainer = document.createElement("div");
   changeImageUrlContainer.innerHTML = `<div class="modal-dialog image-library-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header custom-modal-header">
@@ -252,13 +250,13 @@ const selectionFileModal = function(data) {
          ${
     filesListing[fileType].map(file => `
         <div class="format-image-content">
-          <div style="background-image: url(${fileType === 'image' ? file.url : `/content/images/editor/icons/${fileType}.PNG`})" class="format-file-selector ${fileSelected && fileSelected === file.fileName ? 'active' : ''}"
+          <div style="background-image: url(${fileType === "image" ? file.url : `/content/images/editor/icons/${fileType}.PNG`})" class="format-file-selector ${fileSelected.find(v => v.name === file.fileName) ? "active" : ""}"
           data-url="${file.url}"
           data-name="${file.fileName}"
           >
-                <span class="file-close format-close" data-name="${file.fileName}">x</span>
+                <span class="file-close format-close" data-name="${file.name}">x</span>
           </div>
-        </div>`).join('')
+        </div>`).join("")
     }        
             
             <div class="format-image-content">
@@ -275,25 +273,25 @@ const selectionFileModal = function(data) {
       </div>
     </div>`;
 
-  const formatFileSelector = $(changeImageUrlContainer.querySelectorAll('.format-file-selector'));
+  const formatFileSelector = $(changeImageUrlContainer.querySelectorAll(".format-file-selector"));
   formatFileSelector.click((e) => {
-    const isSelectedFile = e.target.classList.contains('active');
+    const isSelectedFile = e.target.classList.contains("active");
     if (!isSelectMulti) {
-      formatFileSelector.removeClass('active');
+      formatFileSelector.removeClass("active");
     }
     if (isSelectedFile) {
-      $(e.target).removeClass('active');
+      $(e.target).removeClass("active");
     } else {
-      $(e.target).addClass('active');
+      $(e.target).addClass("active");
     }
-    const disabledSave = changeImageUrlContainer.querySelectorAll('.format-file-selector.active').length === 0;
-    changeImageUrlContainer.querySelector('#save-selection').disabled = disabledSave;
+    const disabledSave = changeImageUrlContainer.querySelectorAll(".format-file-selector.active").length === 0;
+    changeImageUrlContainer.querySelector("#save-selection").disabled = disabledSave;
   });
 
-  $(changeImageUrlContainer.querySelector('#save-selection')).click(function(e) {
+  $(changeImageUrlContainer.querySelector("#save-selection")).click(function(e) {
     const newSelected = [];
-    changeImageUrlContainer.querySelectorAll('.format-file-selector').forEach(v => {
-      if (v.classList.contains('active')) {
+    changeImageUrlContainer.querySelectorAll(".format-file-selector").forEach(v => {
+      if (v.classList.contains("active")) {
         newSelected.push({
           name: v.dataset.name,
           url: v.dataset.url
@@ -303,7 +301,46 @@ const selectionFileModal = function(data) {
     if (callback && _.isFunction(callback)) {
       callback(newSelected);
     }
-    $('#myModal').modal('hide');
+    $("#myModal").modal("hide");
+  });
+
+  $(changeImageUrlContainer.querySelector("#upload-file")).click(function() {
+    $("#myModal").html(fileUpload(fileType, fileType.toUpperCase(), fileTypeAccept));
+    $("#uploadFile").click(function(e) {
+      const formData = new FormData();
+      formData.append("file", $("#fileInput")[0].files[0]);
+      const userid = "hannd";
+      requestUploadFile(userid, formData, function() {
+        requestFilesWithType(userid, fileType, function() {
+          swal({
+            text: "Upload file success",
+            icon: "success",
+            closeOnClickOutside: false
+          }).then(() => {
+            modal.empty();
+            modal.append(selectionFileModal(data));
+            modal.modal("show");
+          });
+        });
+        modal.modal("hide");
+      });
+      // let imagesFile = e.target.files[i];
+    });
+    modal.modal("show");
+  });
+
+  $(changeImageUrlContainer.querySelectorAll(".format-close")).click(function(e) {
+    const fileName = e.target.dataset && e.target.dataset.name ? e.target.dataset.name : "";
+    if (fileName) {
+      requestDeleteImage(fileName, function() {
+        const userid = "hannd";
+        requestFilesWithType(userid, fileType, function() {
+          modal.empty();
+          modal.append(selectionFileModal(data));
+        });
+        swal("", "delete file success", "success");
+      });
+    }
   });
   return changeImageUrlContainer;
 };

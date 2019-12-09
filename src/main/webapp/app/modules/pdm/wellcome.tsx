@@ -7,6 +7,7 @@ import { withRouter } from 'react-router';
 
 export interface IWellComeProps extends StateProps, DispatchProps {
   fullName: any;
+  backgroundImage: any;
 }
 
 export class WellCome extends React.Component<IWellComeProps> {
@@ -18,10 +19,20 @@ export class WellCome extends React.Component<IWellComeProps> {
   }
 
   render() {
-    const { fullName } = this.props;
+    const { fullName, backgroundImage = '' } = this.props;
+    let stylePack = {};
+    if (backgroundImage) {
+      stylePack = {
+        ...stylePack,
+        backgroundImage: `url(${backgroundImage})`,
+        border: 'none'
+      };
+    }
     return (
       <div className="w-100 h-100 well-come-container">
-        <div className="well-come-wrapper">
+        <div className="well-come-wrapper"
+          style={stylePack}
+        >
           <div className="well-come-content">
             <div>Hi <span className="name">{fullName}</span>,</div>
             <div>This is your app</div>

@@ -158,7 +158,7 @@ export const requestHomeData = appName => (dispatch, getState) => {
           height: 400,
           id: 'well-come-card',
           name: 'mxCell',
-          style: `type=WELL_COME_CARD;fullName=${response.data.appDetail.fullName};container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;rotatable=0;`,
+          style: `type=WELL_COME_CARD;fullName=${response.data.appDetail.fullName};container=1;imageUrl=${response.data.appDetail.backgroundImage};rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;rotatable=0;`,
           value: '',
           width: 225,
           x: -320,
@@ -432,7 +432,7 @@ export const getStyle = (slide, slideStyle) => {
     backgroundColor: slideStyle['fillColor'] ? `${getColorWithOpacity(slideStyle['fillColor'], opacityHex)}` : ''
   };
   // add special style
-  if (slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE) {
+  if (slideStyle['elementStyle'] === ELEMENT_TYPE.IMAGE && !isPDM) {
     style = {
       ...style,
       backgroundImage: `url(${slideStyle['image']})`

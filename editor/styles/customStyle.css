@@ -294,7 +294,7 @@ body div {
   padding: 8px 20px;
 }
 
-.btn-submit:hover{
+.btn-submit:hover {
   opacity: 0.8;
   color: white;
   background-color: #4C7A81;
@@ -319,7 +319,7 @@ body div {
   font-family: 'Barlow', sans-serif;
   font-size: 16px;
   white-space: normal;
-  padding: 10px;
+  padding: 10px 10px 30px 10px;
   color: #535353;
 }
 
@@ -796,6 +796,44 @@ body div {
   /*margin-left: 10px;*/
 }
 
+.image-type-menu.input-select-content {
+  position: absolute;
+  font-size: 12px;
+  text-align: left;
+  background-color: white;
+  width: 100%;
+  padding: 0;
+  min-width: 100px;
+  top: 80%;
+  left: 80%;
+  box-shadow: 0 0 1px 0 grey;
+}
+
+.image-type-menu div {
+  padding: 5px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+
+.image-type-menu div:hover{
+
+}
+
+.image-type-menu div:last-child {
+  border-bottom: none;
+}
+
+.pdm-input-wrapper .image-preview {
+  width: 60px;
+  height: 60px;
+}
+
+.pdm-input-wrapper .image-preview:hover:after {
+  content: '123';
+  position: absolute;
+}
+
+
 .pdm-input-wrapper.font-size-wrapper input {
   border: 1px solid gray;
   height: 2rem;
@@ -884,6 +922,10 @@ body div {
 
 }
 
-.g-font-size-12{
+.g-font-size-12 {
   font-size: 12px;
+}
+
+.g-font-size-10 {
+  font-size: 10px;
 }

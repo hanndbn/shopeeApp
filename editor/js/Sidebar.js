@@ -883,7 +883,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         id: "add-link-icon",
         imageId: "img/LINK.png"
       }),
-    this.createVertexTemplateEntry("type=IMAGE;isConnectable=1;shape=image;imageAspect=0;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;rotatable=0;",
+    this.createVertexTemplateEntry("type=IMAGE;isConnectable=1;shape=image;verticalLabelPosition=bottom;verticalAlign=top;image=/content/images/editor/img/defaultPicture.jpg;rotatable=0;",
       207, 138, "", "", false, false, "image", {
         id: "add-image-icon",
         imageId: "img/IMAGE.png"
@@ -898,7 +898,7 @@ Sidebar.prototype.addGeneralPalette = function(expand) {
         imageId: "img/GAME.png"
       }),
     this.createVertexTemplateEntry("type=PERSONAL_DESIGN_MANAGER;container=1;rounded=0;whiteSpace=wrap;html=1;fillColor=#CCCCCC;rotatable=0;",
-      225, 400, "Personal Design Manager", "Personal Design Manager", false, false, "pdm", {
+      225, 400, "", "Personal Design Manager", false, false, "pdm", {
         id: "add-pdm-icon",
         imageId: "img/GAME.png"
       }),

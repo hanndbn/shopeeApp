@@ -12,6 +12,7 @@ import axios from 'axios';
 export interface IPdmProps extends StateProps, DispatchProps {
   pdmInfo: any;
   cardId: any;
+  backgroundImage: any;
   displayModalPDMSuccess: Function;
   displayModalPDMError: Function;
 }
@@ -42,7 +43,8 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, fullNam
       cardId: this.props.cardId,
       packIds,
       fullName: this.state.fullName,
-      phoneNumber: this.state.phoneNumber
+      phoneNumber: this.state.phoneNumber,
+      backgroundImage: this.props.backgroundImage ? this.props.backgroundImage : ''
     };
     axios.post(GENERATE_APP_API, data)
       .then(response => {
@@ -78,7 +80,15 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, fullNam
                 {
                   v.packs && v.packs.map((pack, idxPack) => {
                     const packId = pack.packId;
+                    let stylePack = {};
+                    if (pack.packImage) {
+                      stylePack = {
+                        ...stylePack,
+                        backgroundImage: `url(${pack.packImage})`
+                      };
+                    }
                     return (<div className={cn('pdm-pack', { selected: this.state.packSelected[ row ] === packId })} key={idxPack}
+                                 style={stylePack}
                                  onClick={() => {
                                    const packSelected = {
                                      ...this.state.packSelected,
@@ -88,7 +98,7 @@ export class Pdm extends React.Component<IPdmProps, { packSelected: any, fullNam
                                  }}
                     >
                       <span className="pdm-pack-check"/>
-                      <span>{pack.packName}</span>
+                      {/*<span>{pack.packName}</span>*/}
                     </div>);
                   })
                 }

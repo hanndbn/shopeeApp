@@ -276,7 +276,7 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
       shareSocialList = shareSocial ? shareSocial.split(',') : [];
     } else if (isPDM) {
       const pdmInfoStr = slideStyle['pdmInfo'] ? slideStyle['pdmInfo'] : '';
-      pdmInfo = pdmInfoStr ? JSON.parse(pdmInfoStr) : [];
+      pdmInfo = pdmInfoStr ? JSON.parse(decodeURIComponent(pdmInfoStr)) : [];
     } else if (isWellComeCard) {
       fullName = slideStyle['fullName'] ? slideStyle['fullName'] : '';
     }
@@ -366,8 +366,8 @@ export class Home extends React.Component<IHomeProp, { input: any, content: any 
                       (isMedia && !linkOpenInModal) ? <div className="w-100 h-100" dangerouslySetInnerHTML={{ __html: mediaContent }}/> :
                         isImageSlide ? <ImageSlide imageSlides={imageSlides}/> :
                           isSocial ? <Social shareSocialList={shareSocialList} width={style.widthValue}/> :
-                            isPDM ? <Pdm pdmInfo={pdmInfo} cardId={slide.id}/> :
-                              isWellComeCard ? <WellCome fullName={fullName}/> : ''
+                            isPDM ? <Pdm pdmInfo={pdmInfo} cardId={slide.id} backgroundImage={slideStyle['image']}/> :
+                              isWellComeCard ? <WellCome fullName={fullName} backgroundImage={slideStyle['imageUrl']}/> : ''
                   }
                 </div> :
                 slide.value ?

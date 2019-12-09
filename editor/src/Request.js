@@ -27,7 +27,6 @@ function requestSaveApp(requestData, editorUi) {
     dataType: "json",
     contentType: "application/json",
     success: function(data) {
-      $("#myModal").modal("hide");
       editorUi.editor.setModified(false);
       editorUi.editor.setFilename(`${requestData.appName}`);
       $("#header-app-name").html(`- ${requestData.appName}`);
@@ -120,6 +119,7 @@ function requestUploadFile(userid, data, callback) {
       }
     },
     error: function(xhr) {
+      $("#myModal").modal("hide");
     }
   });
 }
