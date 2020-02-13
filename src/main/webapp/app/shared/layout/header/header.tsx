@@ -21,7 +21,7 @@ class Header extends React.Component<IHeaderProps, IHeaderState> {
       <div className="header-container">
         <div className="row h-100">
           <div className="col-3 h-100">
-            <img className="h-100" src="content/images/logo/logo.png"/>
+            {/*<img className="h-100" src="content/images/logo/logo.png"/>*/}
           </div>
           <div className="col-6">
             <div>Search</div>
